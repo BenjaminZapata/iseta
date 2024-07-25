@@ -28,7 +28,7 @@ class crearProfesorRequest extends FormRequest
             'fecha_nacimiento' => ['required','date'],
             'ciudad' => ['required'],
             'calle' => ['required','alpha_num'],
-            'casa_numero' => ['required','numeric'],
+            'casa_numero' => ['numeric'],
             'dpto' => ['nullable'],
             'piso' => ['nullable'],
             'estado_civil' => ['required'],

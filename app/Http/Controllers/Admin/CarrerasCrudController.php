@@ -64,9 +64,8 @@ class CarrerasCrudController extends BaseController
      */
     public function edit(Request $request,Carrera $carrera)
     {
+        return view('Admin.Carreras.edit', ['carrera'=> Carrera::where('id',$carrera->id)->with('asignaturas')->first()]);
         
-        
-        return view('Admin.Carreras.edit', ['carrera'=>Carrera::where('id',$carrera->id)->with('asignaturas')->first()]);
     }
 
     /**

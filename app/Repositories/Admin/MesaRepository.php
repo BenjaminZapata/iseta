@@ -24,6 +24,7 @@ class MesaRepository
             ->leftJoin('asignaturas', 'asignaturas.id_carrera', 'carreras.id')
             ->leftJoin('examenes','examenes.id_mesa','mesas.id')
             ->leftJoin('alumnos', 'alumnos.id', 'examenes.id_alumno');
+            
 
         if($request->has('filter_carrera_id') && $request->input('filter_carrera_id') != 0){
             $idsQuery->where('mesas.id_carrera', $request->input('filter_carrera_id'));
@@ -80,10 +81,15 @@ class MesaRepository
         }
         $ids = $idsQuery->distinct('mesas.id')->get()->pluck('id');
 
-
+        
+    
+       
         $mesas = Mesa::select('mesas.*')->whereIn('mesas.id', $ids)
+            ->paginate($this->config['filas_por_tabla']); 
+            
+     
 
-        ->paginate($this->config['filas_por_tabla']); 
+
 
         
         return $mesas;
