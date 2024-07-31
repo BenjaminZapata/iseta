@@ -84,7 +84,7 @@ class CarrerasCrudController extends BaseController
         $carrera->update($datos);
 
         if(!$request->has('vigente')){
-            $carrera->vigente=false;
+            $carrera->vigente=true;
             $carrera->save();
         }
         if($request->has('redirect'))
