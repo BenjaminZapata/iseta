@@ -33,7 +33,7 @@ class InscripcionRepository
 
         if($request->has('filter_alumno_id') && $request->input('filter_alumno_id') != 0)
             $idsQuery->where('egresadoinscripto.id_alumno', $request->input('filter_alumno_id'));
-            
+
         if($request->has('filter_finalizada') && $request->input('filter_finalizada') != 0)
             if($request->input('filter_finalizada') == 1)
                 $idsQuery->whereRaw('egresadoinscripto.anio_finalizacion IS NOT NULL');
@@ -44,7 +44,7 @@ class InscripcionRepository
                 if($request->has('filter_search_box') && ''!=$request->input('filter_search_box') && in_array($request->input('filter_field'),$this->availableFiels)){
                     $idsQuery->where('alumnos.ciudad', $request->input('filter_ciudad'));
         }
-            
+
 
         if($request->has('filter_search_box') && in_array($request->input('filter_field'),$this->availableFiels)){
             $idsQuery->where($request->input('filter_field'), 'LIKE', '%'.$request->input('filter_search_box').'%');
@@ -54,10 +54,10 @@ class InscripcionRepository
 
         $cursadas = Egresado::with('alumno','carrera')
         ->whereIn('egresadoinscripto.id', $ids)
-        
-        ->paginate($this->config['filas_por_tabla']); 
 
-        
+        ->paginate($this->config['filas_por_tabla']);
+
+
         return $cursadas;
 
     }
@@ -95,21 +95,21 @@ class InscripcionRepository
             'correlativas' => null,
             'yaAnotado' => null,
         ];
-        
+
         if(count($asignatura->mesas) == 0) continue;
         if($asignatura->aproboExamen(Auth::user())) continue;
         if(!$asignatura->aproboCursada(Auth::user())) continue;
 
         $reg['asignatura'] = $asignatura;
 
-        foreach($asignatura->mesas as $mesa){      
+        foreach($asignatura->mesas as $mesa){
             if(in_array($mesa->id, $examenesInscriptos)) {
                 $reg['yaAnotado'] = $mesa; break;
             }
         }
 
         $correlativas = Correlativa::debeExamenesCorrelativos($asignatura);
-       
+
         if($correlativas){
             $reg['correlativas'] = $correlativas;
         }
@@ -118,5 +118,5 @@ class InscripcionRepository
 
     return $posibles;
     }
-   
+
 }

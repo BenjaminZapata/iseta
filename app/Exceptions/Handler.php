@@ -4,11 +4,10 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-
 class Handler extends ExceptionHandler
 {
     /**
-     * The list of the inputs that are never flashed to the session on validation exceptions.
+     * El listado de inputs que nunca son mostrados en la sesión en las excepciones de validación.
      *
      * @var array<int, string>
      */
@@ -23,7 +22,7 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
+        $this->reportable(reportUsing: function (Throwable $e): void {
             //
         });
     }

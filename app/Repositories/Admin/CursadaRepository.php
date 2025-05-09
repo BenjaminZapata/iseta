@@ -31,14 +31,14 @@ public $availableFiels = ['anio_cursada'];
 
         if($request->has('filter_alumno_id') && $request->input('filter_alumno_id') != 0)
             $idsQuery->where('alumnos.id', $request->input('filter_alumno_id'));
-        
+
         if($request->has('filter_condicion') && $request->input('filter_condicion') != 0)
             $idsQuery->where('cursadas.condicion', $request->input('filter_condicion')-1);
-        
+
         if($request->has('filter_aprobada') && $request->input('filter_aprobada') != 0)
             $idsQuery->where('cursadas.aprobada', $request->input('filter_aprobada'));
 
-            
+
 
             if($request->has('filter_search_box') && ''!=$request->input('filter_search_box') && in_array($request->input('filter_field'),$this->availableFiels)){
                 $idsQuery->where($request->input('filter_field'), 'LIKE', '%'.$request->input('filter_search_box').'%');
@@ -48,12 +48,10 @@ public $availableFiels = ['anio_cursada'];
 
         $cursadas = Cursada::with('alumno','asignatura')->whereIn('cursadas.id', $ids)
         ->orderBy('anio_cursada', 'DESC')
-        ->paginate($this->config['filas_por_tabla']); 
+        ->paginate($this->config['filas_por_tabla']);
 
-        
+
         return $cursadas;
 
     }
-
-   
 }

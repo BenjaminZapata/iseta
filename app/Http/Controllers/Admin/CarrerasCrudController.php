@@ -30,7 +30,7 @@ class CarrerasCrudController extends BaseController
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {       
+    {
         $this->setFilters($request);
         $this->data['carreras'] = $this->carreraRepo->index($request);
         return view('Admin.Carreras.index',$this->data);
@@ -65,7 +65,7 @@ class CarrerasCrudController extends BaseController
     public function edit(Request $request,Carrera $carrera)
     {
         return view('Admin.Carreras.edit', ['carrera'=> Carrera::where('id',$carrera->id)->with('asignaturas')->first()]);
-        
+
     }
 
     /**
@@ -91,7 +91,7 @@ class CarrerasCrudController extends BaseController
             return redirect()->to($request->input('redirect'))->with('mensaje','Se edito la carrera');
         else
             return redirect()->back()->with('mensaje','Se edito la carrera');
-    
+
 
         // return redirect()->back()->with('mensaje','Se edito la carrera');
     }

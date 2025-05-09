@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Carrera;
+use App\Models\CarreraAsignatura;
 use App\Models\Configuracion;
 
 
@@ -15,7 +16,7 @@ class CarreraRepository{
         $this->config = Configuracion::todas();
     }
 
-    function index($request){
+    public function index($request){
         $idsQuery = Carrera::select('carreras.id')
             ->leftJoin('asignaturas','asignaturas.id_carrera', 'carreras.id');
 
@@ -35,13 +36,17 @@ class CarreraRepository{
 
         $ids = $idsQuery->distinct()->get()->pluck('id');
 
-        $carreras = Carrera::select('carreras.*')->whereIn('carreras.id', $ids)
+        return Carrera::select('carreras.*')->whereIn('carreras.id', $ids)
         ->orderBy('nombre')
-        ->paginate($this->config['filas_por_tabla']); 
-
-        
-        return $carreras;
-
+        ->paginate($this->config['filas_por_tabla']);
     }
 
+    public function setAsignatura($asignatura, $carrera){
+        $data = [
+            'id_asignatura' => $asignatura->id,
+            'id_carrera' => $carrera->id
+        ];
+
+        CarreraAsignatura::updateOrInsert(['id_asignatura' => $asignatura->id], $data);
+    }
 }
