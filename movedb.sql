@@ -26,7 +26,8 @@ SET time_zone = "+00:00";
 --
 -- Estructura de tabla para la tabla `administradores`
 --
-
+create database movedb;
+use movedb;
 CREATE TABLE `administradores` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `username` varchar(255) NOT NULL,

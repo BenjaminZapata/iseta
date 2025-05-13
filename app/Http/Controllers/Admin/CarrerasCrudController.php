@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\CrearCarreraRequest;
 use App\Http\Requests\EditarCarreraRequest;
 use App\Models\Carrera;
-use App\Models\Configuracion;
 use App\Repositories\Admin\CarreraRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class CarrerasCrudController extends BaseController
 {
@@ -57,7 +54,10 @@ class CarrerasCrudController extends BaseController
         return redirect()->route('admin.carreras.index');
     }
 
-
+    public function show(Carrera $carrera)
+    {
+        return view('Admin.Carreras.show', ['carrera'=> Carrera::where('id',$carrera->id)->with('asignaturas')->first()]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -92,10 +92,8 @@ class CarrerasCrudController extends BaseController
         else
             return redirect()->back()->with('mensaje','Se edito la carrera');
 
-
-        // return redirect()->back()->with('mensaje','Se edito la carrera');
     }
-
+    //FIX ME: Falta desarrollar la funcionalidad de eliminar una carrera
     /**
      * Remove the specified resource from storage.
      */

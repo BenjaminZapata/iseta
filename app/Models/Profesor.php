@@ -43,7 +43,6 @@ class Profesor extends Authenticatable
 
     public function asignaturas(): BelongsToMany{
         return $this->belongsToMany(Asignatura::class, 'carrera_asignatura_profesor', 'id_profesor', 'id_asignatura')
-            -> withPivot('id_carrera')
             -> withTimestamps();
     }
 

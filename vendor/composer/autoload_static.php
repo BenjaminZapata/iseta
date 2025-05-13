@@ -400,8 +400,8 @@ class ComposerStaticInit983809bf9c510c5525293612f208c61a
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -705,9 +705,11 @@ class ComposerStaticInit983809bf9c510c5525293612f208c61a
         'App\\Http\\Requests\\AdminLoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/AdminLoginRequest.php',
         'App\\Http\\Requests\\AlumnoLoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/AlumnoLoginRequest.php',
         'App\\Http\\Requests\\AlumnoRegistroRequest' => __DIR__ . '/../..' . '/app/Http/Requests/AlumnoRegistroRequest.php',
+        'App\\Http\\Requests\\CrearAlumnoRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CrearAlumnoRequest.php',
         'App\\Http\\Requests\\CrearAsignaturaRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CrearAsignaturaRequest.php',
         'App\\Http\\Requests\\CrearCarreraRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CrearCarreraRequest.php',
         'App\\Http\\Requests\\CrearMesaRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CrearMesaRequest.php',
+        'App\\Http\\Requests\\CrearProfesorRequest' => __DIR__ . '/../..' . '/app/Http/Requests/CrearProfesorRequest.php',
         'App\\Http\\Requests\\EditarAlumnoRequest' => __DIR__ . '/../..' . '/app/Http/Requests/EditarAlumnoRequest.php',
         'App\\Http\\Requests\\EditarAsignaturaRequest' => __DIR__ . '/../..' . '/app/Http/Requests/EditarAsignaturaRequest.php',
         'App\\Http\\Requests\\EditarCarreraRequest' => __DIR__ . '/../..' . '/app/Http/Requests/EditarCarreraRequest.php',
@@ -717,8 +719,6 @@ class ComposerStaticInit983809bf9c510c5525293612f208c61a
         'App\\Http\\Requests\\ModificarPasswordRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ModificarPasswordRequest.php',
         'App\\Http\\Requests\\ProfesorLoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfesorLoginRequest.php',
         'App\\Http\\Requests\\ProfesorRegistroRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfesorRegistroRequest.php',
-        'App\\Http\\Requests\\crearAlumnoRequest' => __DIR__ . '/../..' . '/app/Http/Requests/crearAlumnoRequest.php',
-        'App\\Http\\Requests\\crearProfesorRequest' => __DIR__ . '/../..' . '/app/Http/Requests/crearProfesorRequest.php',
         'App\\Mail\\ProfeVerificationEmail' => __DIR__ . '/../..' . '/app/Mail/ProfeVerificationEmail.php',
         'App\\Mail\\RestablecerMail' => __DIR__ . '/../..' . '/app/Mail/RestablecerMail.php',
         'App\\Mail\\VerificacionEmail' => __DIR__ . '/../..' . '/app/Mail/VerificacionEmail.php',

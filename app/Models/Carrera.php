@@ -31,7 +31,9 @@ class Carrera extends Model
      * @return BelongsToMany
      */
     public function asignaturas(): BelongsToMany{
-        return $this -> belongsToMany(Asignatura::class, 'carrera_asignatura_profesor', 'id_carrera', 'id_asignatura');
+        return $this -> belongsToMany(Asignatura::class, 'carrera_asignatura_profesor', 'id_carrera', 'id_asignatura')
+            -> withPivot('id_carrera')
+            -> withTimestamps();
     }
 
     public function primeraAsignatura(){
@@ -43,10 +45,13 @@ class Carrera extends Model
     }
 
     public static function getAsignaturas($id_carrera){
-        $asignaturas = CarreraAsignatura::select("id_asignatura")
+        $asignaturas = Asignatura::select("id_asignatura")
             -> where('id_carrera',$id_carrera)
             -> get();
-        if ($asignaturas->isEmpty()) return null;
+        if ($asignaturas->isEmpty())
+        {
+            return null;
+        }
         return $asignaturas;
     }
 

@@ -3,7 +3,7 @@
         'name' => 'laravel/laravel',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'ab2417e6e13f22b793cdeefeef4da0f20d02ecd6',
+        'reference' => '3e3a3723c93e6d6b742f1b91e3ceb4b12a21f476',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'barryvdh/laravel-debugbar' => array(
-            'pretty_version' => 'v3.15.2',
-            'version' => '3.15.2.0',
-            'reference' => '0bc1e1361e7fffc2be156f46ad1fba6927c01729',
+            'pretty_version' => 'v3.15.4',
+            'version' => '3.15.4.0',
+            'reference' => 'c0667ea91f7185f1e074402c5788195e96bf8106',
             'type' => 'library',
             'install_path' => __DIR__ . '/../barryvdh/laravel-debugbar',
             'aliases' => array(),
@@ -472,7 +472,7 @@
         'laravel/laravel' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'ab2417e6e13f22b793cdeefeef4da0f20d02ecd6',
+            'reference' => '3e3a3723c93e6d6b742f1b91e3ceb4b12a21f476',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -955,8 +955,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '3.0.0',
+                0 => '3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache' => array(
