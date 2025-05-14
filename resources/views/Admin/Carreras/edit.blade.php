@@ -35,12 +35,10 @@
 
             </div>
         </div>
-
-
             <div class="table">
                 <div  class="perfil__header-alt">
                 <a href="{{route('admin.carreras.index')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar asignatura</button></a>
-                <a href="{{route('admin.asignaturas.create',['id_carrera'=>$carrera->id])}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear asignatura</button></a>
+                <a><button class="btn_blue" data-bs-toggle="modal" data-bs-target="#asignaturasModal"><x-modal><i class="ti ti-circle-plus"></i>Crear asignatura</button></a>
                 <a href="/admin/cursantes/carrera/{{$carrera->id}}"><button class="btn_blue"><i class="ti ti-file-download"></i>Exportar cursadas</button></a>
             </div>
                 <table class="table__body">

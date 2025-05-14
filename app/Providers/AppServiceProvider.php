@@ -13,9 +13,9 @@ use App\Services\Filter;
 use App\Services\FilterGenerator;
 use App\Services\Form;
 use App\Services\TextFormatService;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
-
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-       
+
     }
 
     /**
@@ -33,8 +33,8 @@ class AppServiceProvider extends ServiceProvider
     {
         // View::share('filtergen', new FilterGenerator());
         View::share('filtergen', new Filter());
-        
-        
+        Blade::component('modal');
+
         View::share('formatoFecha', new Fecha());
         View::share('config', Configuracion::todas());
         View::share('form', new Form());

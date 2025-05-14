@@ -6,7 +6,7 @@
   {{-- <div class="z-index-top flex.col right-3 bottom-3 fixed"> --}}
         @foreach ($lista as $msj)
           <div @class([
-            'up-not_green' => $tipo=='mensaje', 
+            'up-not_green' => $tipo=='mensaje',
             'up-not_yellow' => $tipo=='aviso',
             'up-not_red' => $tipo=='error',
             'toast px-3 py-2 gap-2 my-1 flex items-center rounded shadow-md' => true])>
@@ -94,5 +94,5 @@
   </div>
     <span class="pointer close">&times;</span>
   </div>
-    
+
 @endif

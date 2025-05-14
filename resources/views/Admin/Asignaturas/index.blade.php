@@ -3,31 +3,31 @@
 @section('content')
 
     <div>
-        
 
-    
+
+
             <a href="{{route('admin.asignaturas.create')}}"><button>Agregar carrera</button></a>
 
         <div>
             <form action="{{route('admin.asignaturas.index')}}">
-                <p>filtrar</p> 
+                <p>filtrar</p>
                  <input  name="filtro" type="text">
                  <input type="submit" value="Buscar">
             </form>
 
             <a href="{{route('admin.asignaturas.index')}}"><button>Quitar filtro</button></a>
-      
+
         </div>
 
-    </div>    
+    </div>
 
         {{-- @foreach ($alumnos->pagr as )
-            
+
         @endforeach
         <li class="page-item{{ $page == $alumnos->currentPage() ? ' active' : '' }}">
             <a class="page-link" href="{{ $url }}">{{ $page }}</a>
         </li> --}}
-        
+
         <div class="table">
         <table class="table__body">
             <thead>
@@ -56,6 +56,6 @@
             {{ $asignaturas->appends(request()->query())->links('Componentes.pagination') }}
         </div>
 
-   
-    
+
+
 @endsection
