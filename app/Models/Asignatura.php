@@ -17,7 +17,6 @@ class Asignatura extends Model
     public $timestamps = false;
 
     protected $fillable =  [
-        'id_carrera',
         'nombre',
         'tipo_modulo',
         'carga_horaria',
@@ -31,13 +30,13 @@ class Asignatura extends Model
     }
 
     public function profesor(): BelongsToMany{
-        return $this -> belongsToMany(related: Profesor::class, table: 'carrera_asignatura_profesor', foreignPivotKey: 'id_asignatura', relatedPivotKey: 'id_profesor')
-            -> withPivot('id_carrera')
+        return $this -> belongsToMany(Profesor::class)->using(CarreraAsignaturaProfesor::class)
+            -> withPivot('id_profesor')
             -> withTimestamps();
     }
 
     public function carrera(): BelongsToMany{
-        return $this -> belongsToMany(related: Carrera::class, table: 'carrera_asignatura_profesor', foreignPivotKey: 'id_asignatura', relatedPivotKey: 'id_carrera')
+        return $this -> belongsToMany(Carrera::class)->using(CarreraAsignaturaProfesor::class)
             -> withPivot('id_profesor')
             -> withTimestamps();
     }
