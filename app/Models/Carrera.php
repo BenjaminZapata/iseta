@@ -7,6 +7,7 @@ use App\Traits\ModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,13 +32,13 @@ class Carrera extends Model
      * @return BelongsToMany
      */
     public function asignaturas(): BelongsToMany{
-        return $this -> belongsToMany(Asignatura::class)->using(CarreraAsignaturaProfesor::class)
+        return $this -> belongsToMany(Asignatura::class, "carrera_asignatura_profesor", "id_asignatura", "id_carrera")
             -> withPivot('id_profesor')
             -> withTimestamps();
     }
 
     public function primeraAsignatura(){
-        return Asignatura::where('id_carrera', $this->id)->orderBy('anio')->first();
+        return Asignatura::Has('carrera', $this->id)->orderBy('anio')->first();
     }
 
     public function textForSelect(){

@@ -35,12 +35,12 @@ class EgresadosAdminController extends BaseController
      * Display a listing of the resource.
      */
     public function index(Request $request, InscripcionRepository $inscriptosRepo)
-    {       
+    {
         $this->setFilters($request);
         $this->data['inscripciones'] = $inscriptosRepo->index($request);
 
-        return view('Admin.inscriptos.index',$this->data);
-        
+        return view('Admin.Inscriptos.index',$this->data);
+
     }
 
     /**
@@ -48,7 +48,7 @@ class EgresadosAdminController extends BaseController
      */
     public function create()
     {
-        return view('Admin.inscriptos.create',[
+        return view('Admin.Inscriptos.create',[
             'alumnos'=>Alumno::orderBy('apellido')->orderBy('nombre')->get(),
             'carreras'=>Carrera::where('vigente','1')->get()
         ]);
@@ -66,13 +66,13 @@ class EgresadosAdminController extends BaseController
             'indice_libro_matriz' => ['nullable'],
             'anio_finalizacion' => ['nullable']
         ]);
-        
+
         Egresado::create($data);
 
         if($request->has('redirect'))
             return redirect()->to($request->input('redirect'))->with('mensaje','Se creo la inscripción');
         else
-            return redirect()->route('admin.inscriptos.index')->with('mensaje','Se creo la inscripción');
+            return redirect()->route('admin.Inscriptos.index')->with('mensaje','Se creo la inscripción');
 
     }
 
@@ -81,12 +81,12 @@ class EgresadosAdminController extends BaseController
      * Show the form for editing the specified resource.
      */
     public function edit(Request $request, $registro)
-    { 
+    {
         $registro = Egresado::find($registro);
-        if(!$registro) return \redirect()->route('admin.inscriptos.index')->with('aviso','La inscripcion no existe');
+        if(!$registro) return \redirect()->route('admin.Inscriptos.index')->with('aviso','La inscripcion no existe');
 
-       
-        return view('Admin.inscriptos.edit', [
+
+        return view('Admin.Inscriptos.edit', [
             'registro' => $registro,
         ]);
     }
@@ -98,7 +98,7 @@ class EgresadosAdminController extends BaseController
     {
         $registro = Egresado::find($registro);
         $registro->update($request->all());
-        return redirect()->back()->with('mensaje','Se actulizo correctamente');
+        return redirect()->back()->with('mensaje','Se actualizo correctamente');
     }
 
     /**
@@ -107,7 +107,7 @@ class EgresadosAdminController extends BaseController
     public function destroy($alumno)
     {
         Egresado::find($alumno)->delete();
-        return redirect() -> route('admin.inscriptos.index') -> with(['mensaje' => [
+        return redirect() -> route('admin.Inscriptos.index') -> with(['mensaje' => [
             'Se ha eliminado la inscripcion',
             'Recuerda que puedes volver a crearla en el apartado "crear inscripcion"'
         ]]);

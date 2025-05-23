@@ -4,6 +4,7 @@ namespace App\Repositories\Admin;
 
 use App\Models\Carrera;
 use App\Models\CarreraAsignatura;
+use App\Models\CarreraAsignaturaProfesor;
 use App\Models\Configuracion;
 
 
@@ -17,8 +18,7 @@ class CarreraRepository{
     }
 
     public function index($request){
-        $idsQuery = Carrera::select('carreras.id')
-            ->leftJoin('asignaturas','asignaturas.id_carrera', 'carreras.id');
+        $idsQuery = Carrera::with('asignaturas');
 
         if($request->has('filter_vigente') && $request->input('filter_vigente') != 0){
             $value = $request->input('filter_vigente');
@@ -47,6 +47,6 @@ class CarreraRepository{
             'id_carrera' => $carrera->id
         ];
 
-        CarreraAsignatura::updateOrInsert(['id_asignatura' => $asignatura->id], $data);
+        CarreraAsignaturaProfesor::updateOrInsert(['id_asignatura' => $asignatura->id], $data);
     }
 }

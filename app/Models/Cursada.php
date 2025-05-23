@@ -4,16 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cursada extends Model
 {
     protected $table = 'cursadas';
     use HasFactory;
 
-    protected $fillable = ['anio_cursada','aprobada','id_alumno','id_asignatura','condicion'];
+    protected $fillable = ['anio_cursada','aprobada','id_alumno','id_asignatura','id_carrera','condicion'];
 
     public function alumno(){
         return $this -> hasOne(Alumno::class,'id','id_alumno');
+    }
+
+    public function carrera(): BelongsTo{
+        return $this -> belongsTo(Carrera::class,'id_carrera','id');
     }
 
     public function asignatura(){
@@ -43,6 +48,5 @@ class Cursada extends Model
             return 'Cursando';
         }
     }
-
 
 }
