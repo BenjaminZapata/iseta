@@ -17,29 +17,23 @@
                         $form->textarea('observaciones', 'Observaciones:','label-input-y-75',$carrera),
                         $form->texthidden(url()->previous())
                     ]
-                    /*,
+<<<<<<< HEAD
+                    ,
+=======
+                    /*
+>>>>>>> 4e9754a5b53c5dba6abc454a88901906016b97bb
                     'Resolución' => [
-                            '<input class="campo_info3 rounded" type="file" name="resolucion_archivo">',
-                            $carrera->resolucion_archivo ? '
-                                <span class="font-3 font-400">' . $carrera->resolucion_archivo . '</span>
-                                <div class="flex gap-4">
-                                    <a class="font-3 blue-700" href="' . route('admin.carreras.resolucion', ['carrera' => $carrera->id]) . '">Descargar resolución</a>
-                                    <a class="font-3 red-600" href="' . route('admin.carreras.resolucion.borrar', ['carrera' => $carrera->id]) . '">Eliminar esta resolución</a>
-                                </div>' : ''
-                        ]
-                    */
+                        '<input class="campo_info3 rounded" type="file" name="resolucion_archivo">',
+                        $carrera->resolucion_archivo ? '
+                            <span class="font-3 font-400">' . $carrera->resolucion_archivo . '</span>
+                            <div class="flex gap-4">
+                                <a class="font-3 blue-700" href="' . route('admin.carreras.resolucion', ['carrera' => $carrera->id]) . '">Descargar resolución</a>
+                                <a class="font-3 red-600" href="' . route('admin.carreras.resolucion.borrar', ['carrera' => $carrera->id]) . '">Eliminar esta resolución</a>
+                            </div>' : ''
+                    ],
 
                 ]) ?>
 
-
-
-                <x-modal id="asignaturasModal" title="Crear Asignatura">
-                    <form method="POST" action="{{route('admin.asignaturas.store')}}">
-                        @csrf
-                        <input name="carrera" type="hidden" value="{{$carrera->id}}">
-                        <div class="modal-body">
-                            <div class="modal-body">
-                </x-modal>
             </div>
         </div>
             <div class="table">

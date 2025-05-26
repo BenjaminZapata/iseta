@@ -3,9 +3,13 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Carrera;
+<<<<<<< HEAD
+=======
 use App\Models\CarreraAsignatura;
 use App\Models\CarreraAsignaturaProfesor;
+>>>>>>> 4e9754a5b53c5dba6abc454a88901906016b97bb
 use App\Models\Configuracion;
+use PhpParser\Node\Expr\FuncCall;
 
 
 class CarreraRepository{
@@ -18,8 +22,7 @@ class CarreraRepository{
     }
 
     public function index($request){
-        $idsQuery = Carrera::select('carreras.id')
-            ->leftJoin('asignaturas','asignaturas.id_carrera', 'carreras.id');
+        $idsQuery = Carrera::with('asignaturas');
 
         if($request->has('filter_vigente') && $request->input('filter_vigente') != 0){
             $value = $request->input('filter_vigente');
@@ -43,19 +46,24 @@ class CarreraRepository{
     }
 
     public function setAsignatura($asignatura, $carrera){
+<<<<<<< HEAD
+        // Implement logic to associate asignatura with carrera if needed
+        // Example: return $carrera->asignaturas()->attach($asignatura->id);
+=======
         $data = [
             'id_asignatura' => $asignatura->id,
             'id_carrera' => $carrera->id
         ];
 
         CarreraAsignaturaProfesor::updateOrInsert(['id_asignatura' => $asignatura->id], $data);
+>>>>>>> 4e9754a5b53c5dba6abc454a88901906016b97bb
     }
 
-    public function getAsignaturas($carrera){
-        return CarreraAsignaturaProfesor::where('id_carrera', $carrera->id)->get();
-    }
+public function GETresolucion($carrera)
+{
+    return Carrera::where('id', $carrera->id)
+        ->select('nombre','resolucion', 'vigente', 'resolucion_archivo')
+        ->first();
+}
 
-    public function getCarreras(){
-        return Carrera::where('vigente', 1)->get();
-    }
 }

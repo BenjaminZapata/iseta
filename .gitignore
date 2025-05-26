@@ -1,5 +1,5 @@
-/vendor/
-node_modules/
+
+node_modules
 npm-debug.log
 yarn-error.log
 
@@ -16,7 +16,7 @@ public_html/storage
 public_html/hot
 
 storage/*.key
-.env
+
 Homestead.yaml
 Homestead.json
 /.vagrant
@@ -30,7 +30,6 @@ Homestead.json
 auth.json
 
 /bootstrap/compiled.php
-/vendor
 
 
 /build/logs
@@ -57,4 +56,5 @@ composer.phar
 /node_modules
 
 
-.env
+env
+vendor
