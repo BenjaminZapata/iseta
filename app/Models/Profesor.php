@@ -22,7 +22,7 @@ class Profesor extends Authenticatable
         'fecha_nacimiento',
         'ciudad',
         'calle',
-        'casa_numero' ,
+        'casa_numero',
         'dpto' ,
         'piso' ,
         'estado_civil' ,

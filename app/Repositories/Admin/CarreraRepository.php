@@ -4,6 +4,7 @@ namespace App\Repositories\Admin;
 
 use App\Models\Carrera;
 use App\Models\CarreraAsignatura;
+use App\Models\CarreraAsignaturaProfesor;
 use App\Models\Configuracion;
 
 
@@ -47,6 +48,14 @@ class CarreraRepository{
             'id_carrera' => $carrera->id
         ];
 
-        CarreraAsignatura::updateOrInsert(['id_asignatura' => $asignatura->id], $data);
+        CarreraAsignaturaProfesor::updateOrInsert(['id_asignatura' => $asignatura->id], $data);
+    }
+
+    public function getAsignaturas($carrera){
+        return CarreraAsignaturaProfesor::where('id_carrera', $carrera->id)->get();
+    }
+
+    public function getCarreras(){
+        return Carrera::where('vigente', 1)->get();
     }
 }

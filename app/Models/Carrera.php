@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
 
+
 class Carrera extends Model
 {
     use HasFactory, ModelTrait;
@@ -31,11 +32,23 @@ class Carrera extends Model
      * @return BelongsToMany
      */
     public function asignaturas(): BelongsToMany{
-        return $this -> belongsToMany(Asignatura::class)->using(CarreraAsignaturaProfesor::class)
+        return $this -> belongsToMany(Asignatura::class)
+            ->using(CarreraAsignaturaProfesor::class)
             -> withPivot('id_profesor')
             -> withTimestamps();
     }
 
+
+    public function profesores(): BelongsToMany{
+        return $this -> BelongsToMany(Profesor::class)
+            -> using(CarreraAsignaturaProfesor::class)
+            -> withPivot('id_asignatura')
+            -> withTimestamps();
+    }
+
+    public function resolucionArchivo(){
+        return Carrera::where('id',$this->id)->first()->resolucion_archivo;
+    }
     public function primeraAsignatura(){
         return Asignatura::where('id_carrera', $this->id)->orderBy('anio')->first();
     }

@@ -21,7 +21,7 @@ class MesaRepository
     function index($request){
         $idsQuery = Mesa::select('mesas.id')
             ->leftJoin('carreras', 'carreras.id', 'mesas.id_carrera')
-            ->leftJoin('carrera_asignatura_profesor', 'carrera_asignatura_profesor.id_asignatura', 'carreras.id', "profesor.id")
+            ->leftJoin('asignaturas', 'asignaturas.id',  "carreras.id")
             ->leftJoin('examenes','examenes.id_mesa','mesas.id')
             ->leftJoin('alumnos', 'alumnos.id', 'examenes.id_alumno');
 
