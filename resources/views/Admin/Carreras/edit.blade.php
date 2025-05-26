@@ -17,17 +17,16 @@
                         $form->textarea('observaciones', 'Observaciones:','label-input-y-75',$carrera),
                         $form->texthidden(url()->previous())
                     ]
-                    /*,
+                    ,
                     'Resolución' => [
-                            '<input class="campo_info3 rounded" type="file" name="resolucion_archivo">',
-                            $carrera->resolucion_archivo ? '
-                                <span class="font-3 font-400">' . $carrera->resolucion_archivo . '</span>
-                                <div class="flex gap-4">
-                                    <a class="font-3 blue-700" href="' . route('admin.carreras.resolucion', ['carrera' => $carrera->id]) . '">Descargar resolución</a>
-                                    <a class="font-3 red-600" href="' . route('admin.carreras.resolucion.borrar', ['carrera' => $carrera->id]) . '">Eliminar esta resolución</a>
-                                </div>' : ''
-                        ]
-                    */
+                        '<input class="campo_info3 rounded" type="file" name="resolucion_archivo">',
+                        $carrera->resolucion_archivo ? '
+                            <span class="font-3 font-400">' . $carrera->resolucion_archivo . '</span>
+                            <div class="flex gap-4">
+                                <a class="font-3 blue-700" href="' . route('admin.carreras.resolucion', ['carrera' => $carrera->id]) . '">Descargar resolución</a>
+                                <a class="font-3 red-600" href="' . route('admin.carreras.resolucion.borrar', ['carrera' => $carrera->id]) . '">Eliminar esta resolución</a>
+                            </div>' : ''
+                    ],
 
                 ]) ?>
 

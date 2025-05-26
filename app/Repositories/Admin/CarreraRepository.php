@@ -3,8 +3,8 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Carrera;
-use App\Models\CarreraAsignatura;
 use App\Models\Configuracion;
+use PhpParser\Node\Expr\FuncCall;
 
 
 class CarreraRepository{
@@ -42,11 +42,15 @@ class CarreraRepository{
     }
 
     public function setAsignatura($asignatura, $carrera){
-        $data = [
-            'id_asignatura' => $asignatura->id,
-            'id_carrera' => $carrera->id
-        ];
-
-        CarreraAsignatura::updateOrInsert(['id_asignatura' => $asignatura->id], $data);
+        // Implement logic to associate asignatura with carrera if needed
+        // Example: return $carrera->asignaturas()->attach($asignatura->id);
     }
+
+public function GETresolucion($carrera)
+{
+    return Carrera::where('id', $carrera->id)
+        ->select('nombre','resolucion', 'vigente', 'resolucion_archivo')
+        ->first();
+}
+
 }
