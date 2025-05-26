@@ -20,7 +20,7 @@ public $availableFiels = ['anio_cursada'];
         $idsQuery = Cursada::select('cursadas.id')
             ->leftJoin('asignaturas', 'asignaturas.id', 'cursadas.id_asignatura')
             ->leftJoin('alumnos', 'alumnos.id', 'cursadas.id_alumno')
-            ->leftJoin('carreras', 'carreras.id', 'asignaturas.id_carrera');
+            ->leftJoin('carreras', 'carreras.id', 'cursadas.id_carrera');
 
         if($request->has('filter_carrera_id') && $request->input('filter_carrera_id') != 0){
             $idsQuery->where('carreras.id', $request->input('filter_carrera_id'));

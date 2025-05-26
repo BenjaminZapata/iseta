@@ -17,7 +17,11 @@
                         $form->textarea('observaciones', 'Observaciones:','label-input-y-75',$carrera),
                         $form->texthidden(url()->previous())
                     ]
+<<<<<<< HEAD
                     ,
+=======
+                    /*
+>>>>>>> 4e9754a5b53c5dba6abc454a88901906016b97bb
                     'Resolución' => [
                         '<input class="campo_info3 rounded" type="file" name="resolucion_archivo">',
                         $carrera->resolucion_archivo ? '
@@ -30,15 +34,6 @@
 
                 ]) ?>
 
-
-
-                <x-modal id="asignaturasModal" title="Crear Asignatura">
-                    <form method="POST" action="{{route('admin.asignaturas.store')}}">
-                        @csrf
-                        <input name="carrera" type="hidden" value="{{$carrera->id}}">
-                        <div class="modal-body">
-                            <div class="modal-body">
-                </x-modal>
             </div>
         </div>
             <div class="table">

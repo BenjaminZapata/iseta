@@ -47,7 +47,7 @@ class MesasCrudController extends BaseController
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {       
+    {
         $this->setFilters($request);
         $this->data['mesas'] = $this->mesaRepo->index($request);
 
@@ -71,7 +71,7 @@ class MesasCrudController extends BaseController
 
         $carreras = Carrera::where('vigente', 1)->get();
         $profesores = Profesor::orderBy('apellido','asc')->orderBy('apellido','asc')->get();
-        
+
         return view('Admin.Mesas.create',[
             'carreras'=>$carreras,
             'profesores'=>$profesores,
@@ -95,14 +95,14 @@ class MesasCrudController extends BaseController
 
         if(!$esDiaValido['success']){
             return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
-        } 
+        }
 
         // se añade el id de la carrera al registro de mesa, ya que no viene en el formulario
         // no deberia ser necesario pero la base de datos anterior hacia uso de esta duplicidad
         $data['id_carrera'] = Asignatura::find($data['id_asignatura'])->carrera->id;
-        
+
         $llamadoYaExiste = $this->mesasService->llamadoYaExiste($data);
-        
+
         if($llamadoYaExiste['success']){
             return redirect()->back()->with('error',$llamadoYaExiste['mensaje'])->withInput();
         }
@@ -115,7 +115,7 @@ class MesasCrudController extends BaseController
         ){
             return redirect()->back()->with('error','Hay profesores repetidos');
         }
-    
+
         Mesa::create($data);
         return \redirect()->back()->with('mensaje','Se creo la mesa');
     }
@@ -127,7 +127,7 @@ class MesasCrudController extends BaseController
     public function edit(Request $request, $mesa)
     {
         $mesa = Mesa::where('id', $mesa)->with('asignatura.carrera','profesor','vocal1','vocal2','examenes.alumno')->first();
-        
+
         $inscribibles = $this->mesaRepo->inscribibles($mesa);
 
 
@@ -145,7 +145,7 @@ class MesasCrudController extends BaseController
     {
         //CAMIAR REQUEST ALL
         $data = $request->validated();
-        
+
         // verificar que no sea sabado ni domingo
         if(DiasHabiles::esFinDeSemana($data['fecha'])){
             return \redirect()->back()->with('error','La fecha es fin de semana');
