@@ -3,7 +3,13 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Carrera;
+<<<<<<< HEAD
+=======
+use App\Models\CarreraAsignatura;
+use App\Models\CarreraAsignaturaProfesor;
+>>>>>>> 4e9754a5b53c5dba6abc454a88901906016b97bb
 use App\Models\Configuracion;
+use PhpParser\Node\Expr\FuncCall;
 
 
 class CarreraRepository{
@@ -37,11 +43,28 @@ class CarreraRepository{
 
         $carreras = Carrera::select('carreras.*')->whereIn('carreras.id', $ids)
         ->orderBy('nombre')
-        ->paginate($this->config['filas_por_tabla']); 
-
-        
-        return $carreras;
-
+        ->paginate($this->config['filas_por_tabla']);
     }
+
+    public function setAsignatura($asignatura, $carrera){
+<<<<<<< HEAD
+        // Implement logic to associate asignatura with carrera if needed
+        // Example: return $carrera->asignaturas()->attach($asignatura->id);
+=======
+        $data = [
+            'id_asignatura' => $asignatura->id,
+            'id_carrera' => $carrera->id
+        ];
+
+        CarreraAsignaturaProfesor::updateOrInsert(['id_asignatura' => $asignatura->id], $data);
+>>>>>>> 4e9754a5b53c5dba6abc454a88901906016b97bb
+    }
+
+public function GETresolucion($carrera)
+{
+    return Carrera::where('id', $carrera->id)
+        ->select('nombre','resolucion', 'vigente', 'resolucion_archivo')
+        ->first();
+}
 
 }
