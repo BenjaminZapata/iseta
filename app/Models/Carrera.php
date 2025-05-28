@@ -33,15 +33,14 @@ class Carrera extends Model
      * @return BelongsToMany
      */
     public function asignaturas(): BelongsToMany{
-        return $this -> belongsToMany(Asignatura::class, "carrera_asignatura_profesor", "id_asignatura", "id_carrera")
+        return $this -> belongsToMany(Asignatura::class, "carrera_asignatura_profesor", "id_carrera", "id_asignatura")
             -> withPivot('id_profesor')
             -> withTimestamps();
     }
 
 
     public function profesores(): BelongsToMany{
-        return $this -> BelongsToMany(Profesor::class)
-            -> using(CarreraAsignaturaProfesor::class)
+        return $this -> BelongsToMany(Profesor::class, "carrera_asignatura_profesor", "id_carrera", "id_profesor")
             -> withPivot('id_asignatura')
             -> withTimestamps();
     }

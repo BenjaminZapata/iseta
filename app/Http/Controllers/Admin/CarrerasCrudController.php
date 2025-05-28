@@ -56,7 +56,8 @@ class CarrerasCrudController extends BaseController
 
     public function show(Carrera $carrera)
     {
-        return view('Admin.Carreras.show', ['carrera'=> Carrera::where('id',$carrera->id)->with('asignaturas')->first()]);
+        $carrera->load('asignaturas');
+        return view('Admin.Carreras.show',['carrera' => $carrera]);
     }
 
     /**
@@ -64,7 +65,8 @@ class CarrerasCrudController extends BaseController
      */
     public function edit(Request $request,Carrera $carrera)
     {
-        return view('Admin.Carreras.edit', ['carrera'=> Carrera::where('id',$carrera->id)->with('asignaturas')->first()]);
+        $carrera->load('asignaturas');
+        return view('Admin.Carreras.edit', ['carrera'=> $carrera]);
 
     }
 
@@ -72,6 +74,7 @@ class CarrerasCrudController extends BaseController
      * Update the specified resource in storage.
      */
     public function update(EditarCarreraRequest $request, Carrera $carrera)
+
     {
         $datos = $request->validated();
 
@@ -93,7 +96,7 @@ class CarrerasCrudController extends BaseController
             return redirect()->back()->with('mensaje','Se edito la carrera');
 
     }
-    //FIX ME: Falta desarrollar la funcionalidad de eliminar una carrera
+    //TODO: Falta desarrollar la funcionalidad de eliminar una carrera
     /**
      * Remove the specified resource from storage.
      */
