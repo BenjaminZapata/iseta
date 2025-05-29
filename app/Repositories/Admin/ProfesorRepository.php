@@ -35,13 +35,13 @@ class ProfesorRepository{
 
         $ids = $idsQuery->distinct()->get()->pluck('id');
 
-        $profesores = Profesor::select('profesores.*')->whereIn('profesores.id', $ids)
-        ->orderBy('nombre')
-        ->orderBy('apellido')
-        ->paginate($this->config['filas_por_tabla']);
+        $query = Profesor::select('profesores.*')
+            ->whereIn('profesores.id', $ids);
 
+        // ✅ ORDENAMIENTO FIJO POR APELLIDO Y NOMBRE
+        $query->orderBy('apellido')->orderBy('nombre');
 
-        return $profesores;
+        return $query->paginate($this->config['filas_por_tabla']);
 
     }
 
