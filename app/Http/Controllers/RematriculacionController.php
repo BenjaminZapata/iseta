@@ -42,11 +42,11 @@ class RematriculacionController extends Controller
         $esFechaDeRemat = $this->rematService->esFechaDeRematriculacion();
 
         if(!$esFechaDeRemat) return redirect()->back()->with('aviso','Aun no es fecha de rematriculacion');
-        
+
         $anotables = $this->rematService->matriculables(Auth::user(), $carrera);
 
         return view('Alumnos.datos.rematriculacion', [
-            'asignaturas' => $anotables, 
+            'asignaturas' => $anotables,
             'carrera'=>$carrera->id,
         ]);
     }
@@ -57,7 +57,7 @@ class RematriculacionController extends Controller
      | Post de rematriculacion
      | ---------------------------------------------
      */
-    
+
 
     public function rematriculacion(Request $request, Carrera $carrera){
 
@@ -77,11 +77,11 @@ class RematriculacionController extends Controller
                 $libres++;
             }
         }
-        
+
         if($libres>0 && !Configuracion::get('alumno_puede_anotarse_libre')){
             return redirect()->back()->with('error', 'El administrador no permite inscripciones como libres');
         }
-        
+
         $asignaturas = $this->rematService->validasParaRegistrar($carrera,$request->except('_token'),Auth::user());
 
         if(!$asignaturas['success']) return redirect()->back()->with('error',$asignaturas['mensaje']);
@@ -89,7 +89,7 @@ class RematriculacionController extends Controller
 
         // Año de la rematriculacion
         $anio_remat = Configuracion::get('anio_remat');
-    
+
         // Registrar las cursadas
         foreach($asignaturas as $asigId => $tipoCursada){
             Cursada::create([
@@ -101,7 +101,7 @@ class RematriculacionController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('mensaje','Te has rematriculado correctamente');       
+        return redirect()->back()->with('mensaje','Te has rematriculado correctamente');
     }
 
 
@@ -120,10 +120,10 @@ class RematriculacionController extends Controller
         if(!Gate::allows('delete-cursada', $cursada)){
             return \redirect()->back()->with('error', 'Esta cursada no te pertenece... &#129320;');
         }
-        
+
         // si es regular y tiene nota, ya la curso!
         if($cursada->aprobada != 3 && $cursada->condicion!=0) return redirect()->back()->with('error','Ya has terminado de cursar');
-        
+
         $config = Configuracion::todas();
 
         // Si aun no e termino el limite de tiempo para bajarse

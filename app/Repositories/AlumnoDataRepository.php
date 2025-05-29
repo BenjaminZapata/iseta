@@ -19,7 +19,7 @@ class AlumnoDataRepository
 
 
     function examenes($filtro,$campo,$orden){
-        $examenes = Examen::join('asignaturas', 'asignaturas.id','examenes.id_asignatura')
+        return Examen::join('asignaturas', 'asignaturas.id','examenes.id_asignatura')
         -> where('asignaturas.id_carrera', Carrera::getDefault()->id)
         -> where('examenes.id_alumno', Auth::id())
         -> when($filtro, fn($query) => $query->where('asignaturas.nombre','LIKE',"%$filtro%"))
@@ -30,20 +30,18 @@ class AlumnoDataRepository
         -> orderBy('examenes.fecha')
         -> orderBy('examenes.nota','desc')
         -> get();
-
-        return $examenes;
     }
-    
+
     function cursadas($filtro, $campo, $orden){
 
         $query = Cursada::with('asignatura')->select('cursadas.id_asignatura','cursadas.anio_cursada','cursadas.id','cursadas.aprobada','cursadas.condicion','asignaturas.nombre','asignaturas.anio')
             -> where('id_alumno', Auth::id())
-            -> where('asignaturas.id_carrera', Carrera::getDefault(Auth::id())->id) 
+            -> where('asignaturas.id_carrera', Carrera::getDefault(Auth::id())->id)
             -> join('asignaturas','asignaturas.id','cursadas.id_asignatura')
 
             // si tiene un filtro en el campo de texto
             -> when($filtro, fn($query,$filtro) => $query -> where('asignaturas.nombre','LIKE','%'.$filtro.'%'))
-            
+
             // Si se filtra por aprobadas
             -> when($campo == "aprobadas", function($query){
                 $query->where(function($sub){
@@ -70,13 +68,13 @@ class AlumnoDataRepository
 
         return $query->get();
     }
-        
+
     function setCarreraDefault($alumno,$carrera){
         $data = [
             'id_alumno' => $alumno,
             'id_carrera' => $carrera
         ];
 
-        CarreraDefault::updateOrInsert(['id_alumno' => $alumno], $data);   
+        CarreraDefault::updateOrInsert(['id_alumno' => $alumno], $data);
     }
 }

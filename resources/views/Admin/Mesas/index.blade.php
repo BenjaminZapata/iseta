@@ -22,8 +22,8 @@
         'profesor' => 'Presidente'
     ]
 ]) ?>
-        
-        
+
+
         <div class="table">
             <div class="perfil__header-alt">
                 <a href="{{route('admin.mesas.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar mesa</button></a>
@@ -31,7 +31,7 @@
         <table class="table__body">
             <thead>
                 <tr>
-                    
+
                     <th>Materia</th>
                     <th>Llamado</th>
                     <th>Carrera</th>
@@ -41,9 +41,9 @@
             <tbody>
                 @foreach ($mesas as $mesa)
                     <tr>
-                       
+
                     <td>
-                        
+
                         <p>{{$mesa->asignatura->nombre}}</p>
                     </td>
                     <td class="w-25p">
@@ -57,12 +57,12 @@
                         <p>{{$formatoFecha->dmahm($mesa->fecha)}}</p>
                     </td>
                     <td>
-                        <p>{{$mesa->asignatura->carrera->nombre}}</p>
-                        
+                        <p>{{$mesa->asignatura->carrera->first()?->nombre}}</p>
+
                         <p>Año: {{$mesa->asignatura->anio}}</p>
                     </td>
                     <td><a href="{{route('admin.mesas.edit', ['mesa' => $mesa->id])}}"><button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
-                    
+
                 </tr>
                 @endforeach
             </tbody>

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Services\TextFormatService;
 use App\Traits\ModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Profesor extends Authenticatable
@@ -21,7 +22,7 @@ class Profesor extends Authenticatable
         'fecha_nacimiento',
         'ciudad',
         'calle',
-        'casa_numero' ,
+        'casa_numero',
         'dpto' ,
         'piso' ,
         'estado_civil' ,
@@ -40,6 +41,12 @@ class Profesor extends Authenticatable
         'fecha_nacimiento' => 'datetime',
     ];
 
+    public function asignaturas(): BelongsToMany{
+        return $this->belongsToMany(Asignatura::class)-> using(CarreraAsignaturaProfesor::class)
+            -> withPivot('id_carrera')
+            -> withTimestamps();
+    }
+
     function firstItemsForSelect(){
         return ['0'=>'Vacio/A confirmar'];
     }
@@ -57,7 +64,7 @@ class Profesor extends Authenticatable
     function textForSelect(){
         return $this->apellidoNombre();
     }
-    
+
     static function existeSinPassword($data){
         return Profesor::where('email', $data['email'])
             -> where('password','0')
@@ -72,7 +79,7 @@ class Profesor extends Authenticatable
     public function nombreApellido(){
         return $this->nombre.' '.$this->apellido;
     }
-    
+
     public function apellidoNombre(){
         return $this->apellido.' '.$this->nombre;
     }

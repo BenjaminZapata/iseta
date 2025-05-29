@@ -86,7 +86,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         }else{
             return 'Otro';
         }
-        
+
     }
 
     public function cursadas(){
@@ -104,7 +104,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_carrera','carreras.id')
             ->where('egresadoinscripto.id_alumno',$alumno)
             ->get();
-        
+
     }
 
     public function examenes(){
@@ -124,7 +124,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     public function nombreApellido(){
         return $this->nombre.' '.$this->apellido;
     }
-    
+
     public function apellidoNombre(){
         return $this->apellido.' '.$this->nombre;
     }
@@ -140,7 +140,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     public function iniciales(){
         return "{$this->nombre[0]}.{$this->apellido[0]}.";
     }
-    
+
     public function setEmailAttribute($value)
     {
         $this->attributes['email'] = strtolower($value);

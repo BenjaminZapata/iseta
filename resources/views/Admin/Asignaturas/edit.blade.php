@@ -17,7 +17,7 @@
                 </div>
                 <div class="perfil_dataname">
                     <label>Carrera:</label>
-                    <span class="campo_info2">{{$asignatura->carrera->nombre}}</span>
+                    <span class="campo_info2">{{$asignatura->carrera->first()?->nombre}}</span>
                 </div>
                 <div class="perfil_dataname">
                     <label>Tipo modulo:</label>
@@ -27,7 +27,7 @@
                     </select>
                 </div>
                 <div class="perfil_dataname">
-                    <label>Carga horaria:</label> 
+                    <label>Carga horaria:</label>
                     <input class="campo_info rounded" value="{{$asignatura->carga_horaria}}" name="carga_horaria">
                 </div>
                 <div class="perfil_dataname">
@@ -44,28 +44,28 @@
             </form>
         </div>
     </div>
-    
+
 
         {{-- -------------------------- --}}
 
         @if ($asignatura->anio > 0)
         <div class="perfil_one br">
-            
+
             <div class="perfil__header">
                 <h2>Correlativas</h2>
             </div>
-            
+
             <div class="matricular">
- 
+
                 @foreach ($asignatura->correlativas as $correlativa)
                 <div class="flex items-center"><li>{{$correlativa->asignatura->nombre}}</li></div>
                 @if (!$config['modo_seguro'])
-    
+
                     <form method="post" class="form-eliminar" action="{{route('correlativa.eliminar', ['asignatura'=>$asignatura->id,'asignatura_correlativa'=>$correlativa->asignatura->id])}}">
                         <div class="flex">
                         @csrf
                         @method('delete')
-                           
+
                             <div class="flex items-center m-1 mx-4"><button class="btn_red"><i class="ti ti-backspace"></i>Quitar</button></div>
                         </div>
                     </form>
@@ -78,7 +78,7 @@
                     <div class="perfil_dataname1">
                         <label>Materia:</label>
                         <select class="campo_info rounded" id="asignatura_select" name="id_asignatura">
-                            @foreach ($asignatura->carrera->asignaturas->where('anio', '<=', $asignatura->anio) as $asignatura_carrera)
+                            @foreach ($asignatura->carrera->first()->asignaturas->where('anio', '<=', $asignatura->anio) as $asignatura_carrera)
                                 @if ($asignatura_carrera->id != $asignatura->id)
                                     <option value="{{$asignatura_carrera->id}}">{{$asignatura_carrera->nombre}}</option>
                                 @endif
@@ -88,10 +88,10 @@
                     <div class="upd"><a href=""><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar</button></a></div>
                 </form>
             </div>
-        </div>     
+        </div>
         @endif
-       
-       
+
+
     <div class="table">
         <div class="perfil__header-alt just-between">
             <p>Alumnos que cursan esta materia que aun no tienen un estado final (aprobado o desaprobado)</p>
@@ -107,7 +107,7 @@
             </tr>
         </thead>
         <tbody>
-                
+
             @foreach ($asignatura->cursadas as $cursada)
                 <tr>
                     <td> {{$cursada->alumno->apellidoNombre()}}</td>
@@ -124,7 +124,7 @@
     </table>
     </div>
     </div>
-    
+
     @if (!$config['modo_seguro'])
         <div class="upd">
             <form method="POST" class="form-eliminar" action="{{route('admin.asignaturas.destroy', ['asignatura'=>$asignatura->id])}}">
@@ -135,8 +135,8 @@
         </div>
     @endif
 
-    
-    
+
+
 </div>
 
 

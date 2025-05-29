@@ -14,7 +14,14 @@ class Mesa extends Model
     protected $table = "mesas";
 
     public $timestamps = false;
-    protected $fillable = ['id_carrera','id_asignatura','prof_presidente','prof_vocal_1','prof_vocal_2','llamado','fecha'];
+    protected $fillable = ['id_carrera',
+    'id_asignatura',
+    'prof_presidente',
+    'prof_vocal_1',
+    'prof_vocal_2',
+    'llamado',
+    'fecha'
+    ];
 
     // protected $casts = [
     //     'fecha' => 'datetime',
@@ -39,9 +46,9 @@ class Mesa extends Model
 
     function habilitada(){
         $horasHabiles = Configuracion::get('horas_habiles_inscripcion');
-        
+
         $horasMesa = DiasHabiles::desdeHoyHasta($this->fecha);
-        
+
         return $horasMesa >= $horasHabiles;
      }
 
@@ -58,7 +65,7 @@ class Mesa extends Model
             return $mensaje;
         }
     }
-    
+
     public function vocal1(){
         return $this -> hasOne(Profesor::class,'id','prof_vocal_1');
     }
