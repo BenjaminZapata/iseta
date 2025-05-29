@@ -45,10 +45,12 @@ class AlumnoRepository{
 
         $ids = $idsQuery->distinct()->get()->pluck('id');
 
-        return Alumno::select('alumnos.*')->whereIn('alumnos.id', $ids)
-        ->orderBy('nombre')
-        ->orderBy('apellido')
-        ->paginate($this->config['filas_por_tabla']);
+        $query = Alumno::select('alumnos.*')
+            ->whereIn('alumnos.id', $ids);
+
+        $query->orderBy('apellido')->orderBy('nombre');
+
+        return $query->paginate($this->config['filas_por_tabla']);
 
     }
 }
