@@ -81,18 +81,29 @@ class MesaRepository
         }
         $ids = $idsQuery->distinct('mesas.id')->get()->pluck('id');
 
-        
-    
-       
-        $mesas = Mesa::select('mesas.*')->whereIn('mesas.id', $ids)
-            ->paginate($this->config['filas_por_tabla']); 
-            
-     
 
+        //TODO: Esto busca las mesas proximas a la fecha actual.
+        $subquery = mesa::selectRaw('MAX(mesas.id) as id')
+            ->where('fecha', '>=', now()-> subDays($this->config['dias_mesas']))
+            ->groupBy('id_asignatura');
 
+        // Si no hay mesas proximas, buscamos las ultimas mesas de cada asignatura.
+        if($subquery->count() === 0){
+            $subquery = Mesa::selectRaw('MAX(mesas.id) as id')
+                ->where('fecha', '<=', now())
+                ->groupBy('id_asignatura');
+        }
 
-        
-        return $mesas;
+        // Traer las mesas con sus asignaturas y la nota del alumnpo si existe.
+        $ids = mesa::select('mesas.id.*','asignatura.nombre as asignatura_nombre, nota.alumno as alumno_nota')
+            ->leftJoin('asignaturas', 'asignatura.id', '=', 'mesas.id_asignatura')
+            ->leftJoin('mesa_alumno', 'mesa_alumno.id_mesa', '=','mesas.id')
+            ->whereIn('mesas.id', $ids)
+            ->orderBy('mesas.fecha', 'asc')
+            ->orderBy('mesas.llamado','asc')
+            ->paginate($this->config['filas_por_tabla']);
+
+        return $ids;
 
     }
 
