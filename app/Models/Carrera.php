@@ -24,6 +24,14 @@ class Carrera extends Model
         'resolucion_archivo'
     ];
 
+    
+    public function scopeOrdenVigentes($query)
+    {return $query ->orderByDesc('vigente') ->orderby('nombre');
+    
+    }
+
+
+
     public function asignaturas(){
         return $this -> hasMany(Asignatura::class, 'id_carrera');
     }

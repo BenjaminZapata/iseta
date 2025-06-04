@@ -36,6 +36,7 @@ class CarreraRepository{
         $ids = $idsQuery->distinct()->get()->pluck('id');
 
         $carreras = Carrera::select('carreras.*')->whereIn('carreras.id', $ids)
+        ->orderBy('vigente')
         ->orderBy('nombre')
         ->paginate($this->config['filas_por_tabla']); 
 
