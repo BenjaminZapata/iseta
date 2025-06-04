@@ -33,6 +33,8 @@ class Cursada extends Model
             2 => 'Promocion',
             3 => 'Equivalencia',
             4 => 'Desertor',
+            5 => 'Itinerante',
+            6 => 'Oyente',
             default => 'Otro',
         };
     }
