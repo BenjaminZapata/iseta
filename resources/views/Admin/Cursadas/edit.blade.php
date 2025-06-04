@@ -34,12 +34,35 @@
                     </div>
                     <div class="perfil_dataname">
                         <label>Condicion:</label>
+                        @php
+                            $condiciones = [
+                                0 => 'Libre',
+                                1 => 'Regular',
+                                2 => 'Promocion',
+                                3 => 'Equivalencia',
+                                4 => 'Desertor',
+                                5 => 'Itinerante',
+                                6 => 'Oyente',
+                            ];
+
+                            // Valores que NO deben mostrarse en el dropdown
+                            $condicionesExcluidas = [0, 2, 3]; // Por ejemplo: Desertor, Itinerante
+
+                            $condicionActual = $cursada->condicion;
+                        @endphp
+
                         <select class="campo_info rounded" name="condicion">
-                            <option @selected($cursada->condicion==0) value="0">Libre</option>
-                            <option @selected($cursada->condicion==1) value="1">Regular</option>
-                            <option @selected($cursada->condicion==2) value="2">Promocion</option>
-                            <option @selected($cursada->condicion==3) value="3">Equivalencia</option>
-                            <option @selected($cursada->condicion==4) value="4">Desertor</option>
+                            {{-- Mostrar la condición actual si está entre las excluidas --}}
+                            @if(in_array($condicionActual, $condicionesExcluidas))
+                                <option value="{{ $condicionActual }}" selected hidden>{{ $condiciones[$condicionActual] }}</option>
+                            @endif
+
+                            {{-- Mostrar las condiciones que NO están en las excluidas --}}
+                            @foreach($condiciones as $valor => $texto)
+                                @if(!in_array($valor, $condicionesExcluidas))
+                                    <option value="{{ $valor }}" @selected($condicionActual == $valor)>{{ $texto }}</option>
+                                @endif
+                            @endforeach
                         </select>
                     </div>
                     <div class="perfil_dataname">
@@ -48,6 +71,8 @@
                             <option @selected($cursada->aprobada==1) value="1">Si</option>
                             <option @selected($cursada->aprobada==2) value="2">No</option>
                             <option @selected($cursada->aprobada==3) value="3">Vacio/cursando</option>
+                            <option @selected($cursada->aprobada==4) value="4">Promocion</option>
+                            <option @selected($cursada->aprobada==5) value="5">Equivalencia</option>
                         </select>
                     </div>
 

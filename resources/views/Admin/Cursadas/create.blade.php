@@ -64,10 +64,8 @@
                         <option @selected(old('condicion') == 1) value="1">Regular</option>
                         //WARN: no eliminar campos "Promocion" y "Equivalencia"
                         <option @selected(old('condicion') == 0) value="0">Libre</option>
-                        <option @selected(old('condicion') == 2) value="2">Promocion</option>
-                        <option @selected(old('condicion') == 3) value="3">Equivalencia</option>
-                        <option @selected(old('condicion') == 4) value="2">Itinerante</option>
-                        <option @selected(old('condicion') == 5) value="3">Oyente</option>
+                        <option @selected(old('condicion') == 5) value="5">Itinerante</option>
+                        <option @selected(old('condicion') == 6) value="6">Oyente</option>
                     </select>
                 </div>
                 <div class="upd"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear</button></div>
