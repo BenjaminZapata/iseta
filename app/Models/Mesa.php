@@ -27,9 +27,10 @@ class Mesa extends Model
     //     'fecha' => 'datetime',
     // ];
 
-    public function asignatura(){
-        return $this -> hasOne(Asignatura::class,'id','id_asignatura');
-    }
+    public function asignatura() {
+    return $this->belongsTo(Asignatura::class, 'id_asignatura');
+}
+
 
     public function anotado(){
         return $this -> hasOne(Examen::class,'id_mesa')

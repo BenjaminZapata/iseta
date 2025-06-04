@@ -79,39 +79,54 @@ class MesaRepository
                 $idsQuery->where($request->input('filter_field'), 'LIKE', '%'.$request->input('filter_search_box').'%');
             }
         }
-        $ids = $idsQuery->distinct('mesas.id')->get()->pluck('id');
+        
 
 
-        //TODO: Esto busca las mesas proximas a la fecha actual.
-        $subquery = mesa::selectRaw('MAX(mesas.id) as id')
-            ->where('fecha', '>=', now()-> subDays($this->config['dias_mesas']))
-            ->groupBy('id_asignatura');
 
-        // Si no hay mesas proximas, buscamos las ultimas mesas de cada asignatura.
-        if($subquery->count() === 0){
-            $subquery = Mesa::selectRaw('MAX(mesas.id) as id')
-                ->where('fecha', '<=', now())
-                ->groupBy('id_asignatura');
-        }
+        //TODO: Buscar mesa futuras (una por asignatura)
+        // Paso 1: Obtener IDs de la última mesa futura
+    $idsMesas = Mesa::selectRaw('MAX(id) as id')
+        ->where('fecha', '>=', now())
+        ->groupBy('id_asignatura')
+        ->get()
+        ->pluck('id');
 
-        // Traer las mesas con sus asignaturas y la nota del alumnpo si existe.
-        $ids = mesa::select('mesas.id.*','asignatura.nombre as asignatura_nombre, nota.alumno as alumno_nota')
-            ->leftJoin('asignaturas', 'asignatura.id', '=', 'mesas.id_asignatura')
-            ->leftJoin('mesa_alumno', 'mesa_alumno.id_mesa', '=','mesas.id')
-            ->whereIn('mesas.id', $ids)
-            ->orderBy('mesas.fecha', 'asc')
-            ->orderBy('mesas.llamado','asc')
-            ->paginate($this->config['filas_por_tabla']);
-
-        return $ids;
-
+        // Paso 2: Si no hay futuras, buscar últimas pasadas
+    if ($idsMesas->isEmpty()) {
+        $idsMesas = Mesa::selectRaw('MAX(id) as id')
+            ->where('fecha', '<=', now())
+            ->groupBy('id_asignatura')
+            ->get()
+            ->pluck('id');
     }
 
-    public function inscribibles($mesa){
+        // Paso 3: Traer las mesas con asignatura y nota del examen
+    $mesas = Mesa::with(['asignatura'])
+        ->leftJoin('asignaturas', 'asignaturas.id', '=', 'mesas.id_asignatura')
+        ->leftJoin('examenes', 'examenes.id_mesa', '=', 'mesas.id')
+        ->select(
+        'mesas.*',
+        'asignaturas.nombre as asignatura_nombre',
+        'examenes.nota as alumno_nota'
+        )
+        ->whereIn('mesas.id', $idsMesas)
+        ->orderBy('mesas.fecha', 'desc')
+        ->orderBy('mesas.llamado', 'asc')
+        ->paginate($this->config['filas_por_tabla']);
+    return $mesas;
+    
+    }
+
+    public function inscribibles($mesaId){
+        $mesa = Mesa::find($mesaId);
+        if(!$mesa){
+            abort(404, 'Mesa no encontrada');
+        }
+        
         $inscribiblesCursada = Cursada::with('alumno')
             -> join('alumnos','cursadas.id_alumno','alumnos.id')
             -> whereRaw('(cursadas.aprobada=1 OR cursadas.condicion=0 OR cursadas.condicion=2 OR cursadas.condicion=3)')
-            -> where('cursadas.id_asignatura',$mesa->id_asignatura)
+            -> where('cursadas.id_asignatura', $mesa -> id_asignatura)
             -> orderBy('alumnos.apellido')
             -> orderBy('alumnos.nombre')
             -> get();

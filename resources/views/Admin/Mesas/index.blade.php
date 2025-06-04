@@ -57,7 +57,8 @@
                         <p>{{$formatoFecha->dmahm($mesa->fecha)}}</p>
                     </td>
                     <td>
-                        <p>{{$mesa->asignatura->carrera->first()?->nombre}}</p>
+                        <p>{{$mesa->asignatura->carreraDirecta?->nombre}}</p>
+
 
                         <p>Año: {{$mesa->asignatura->anio}}</p>
                     </td>

@@ -27,7 +27,7 @@ class AlumnoDataRepository
         -> when($campo=='desaprobadas',fn($query) => $query->where('examenes.nota','<',4))
         -> orderBy('asignaturas.anio')
         -> orderBy('asignaturas.id')
-        -> orderBy('examenes.fecha')
+        -> orderBy('examenes.fecha', 'asc')
         -> orderBy('examenes.nota','desc')
         -> get();
     }
