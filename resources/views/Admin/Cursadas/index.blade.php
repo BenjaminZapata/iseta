@@ -16,8 +16,8 @@
         'anio_cursada' => 'Año',
     ]
 ]) ?>
-       
-        
+
+
 
         <div class="table">
             <div class="perfil__header-alt">
@@ -32,28 +32,28 @@
                     <th class="center">Acción</th>
                 </tr>
             </thead>
-            
+
             <tbody>
                 {{-- @dd($cursadas) --}}
             @foreach ($cursadas as $cursada)
             <tr>
                 <td>{{$cursada->asignatura->nombre}}</td>
-                
+
                 <td>{{$cursada->alumno->apellidoNombre()}}</td>
                 <td>
                     {{$cursada->aprobado()}}
                 </td>
                 <td class="flex just-center"><a href="{{route('admin.cursadas.edit', ['cursada' => $cursada->id])}}"><button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
-                
+
 
             </tr>
             @endforeach
             </tbody>
         </table>
         </div>
-        
+
         <div class="w-1/2 mx-auto p-5 pagination">
             {{ $cursadas->appends(request()->query())->links('Componentes.pagination') }}
-        </div> 
+        </div>
         <script src="{{asset('js/obtener-materias.js')}}"></script>
 @endsection
