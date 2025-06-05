@@ -1,8 +1,7 @@
-<div class="w-100p flex-col p-2 gap-2 items-end">
+<div class="w-100p flex-row p-2 gap-2 just-end">
         
-        <div><button id="show-filters" class="p-2 rounded">Filtros</button></div>
-
-    <form action="{{route($url)}}" id="filters" class="none w-100p rounded bg-white">
+        <div class="flex-col items-end"><button id="show-filters" class="p-2 rounded">Filtros</button>
+        <form action="{{route($url)}}" id="filters" class="none w-100p rounded bg-white">
         @if ($dropdowns)
             <div class="grid-4 gap-3 w-100p p-2">
                 @foreach ($dropdowns as $dropdown)
@@ -18,7 +17,9 @@
                 </div>
                 
             </div>
-    </form>
+    </form></div>
+
+    
     <div class="flex items-end just-center">
         <a href="{{route($url)}}"><button class="p-2 rounded">Eliminar filtros</button></a>
     </div>
