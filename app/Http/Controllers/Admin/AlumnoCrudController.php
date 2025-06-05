@@ -86,8 +86,7 @@ class AlumnoCrudController extends BaseController
             -> where('examenes.id_alumno',$alumno->id)
             -> orderBy('carreras.id')
             -> orderBy('asignaturas.anio')
-            -> orderBy('asignaturas.id')
-            -> orderBy('examenes.fecha')
+            -> orderBy('examenes.fecha','desc')
             -> get();
 
         return view('Admin.Alumnos.edit', [
