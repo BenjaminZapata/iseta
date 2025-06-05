@@ -96,7 +96,7 @@ class CarrerasCrudController extends BaseController
             return redirect()->back()->with('mensaje','Se edito la carrera');
 
     }
-    //TODO: Falta desarrollar la funcionalidad de eliminar una carrera
+    //FIXME: Falta desarrollar la funcionalidad de eliminar una carrera
     /**
      * Remove the specified resource from storage.
      */

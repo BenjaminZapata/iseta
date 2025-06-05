@@ -21,7 +21,7 @@
                     <h2>{{$asignatura->carrera->nombre}}</h2>
                     <span>{{$asignatura->anioStr()}}</span>
                 </div>
-                
+
                 <div class="grid-3 gridx-center gap-4 selec-masivo">
                     <div>
                         <p>Anterior</p>
@@ -40,7 +40,7 @@
                         @endif
                     </div>
                 </div>
-            
+
                 <form method="POST" action="{{route('admin.cursadas.masivo.post')}}">
                     @csrf
                     @foreach($asignatura->cursadas as $cursada)
@@ -59,7 +59,7 @@
                       </div>
                     @endforeach
                     <div class="upd"><button class="btn_blue"><i class="ti ti-upload"></i>Cargar</button></div>
-                    
+
                 </form>
 
                   <br>
@@ -70,20 +70,20 @@
                         @if ($carrera->primeraAsignatura())
                             @if ($carrera->id == $asignatura->carrera->id)
                                 <p class="text-left gray-700 perfil_dataname-rem" href="{{route('admin.cursadas.masivo',['asignatura'=>$carrera->primeraAsignatura()->id])}}">
-                                    {{$carrera->nombre}}                       
-                                </p>    
+                                    {{$carrera->nombre}}
+                                </p>
                             @else
                                 <a class="text-left blue-700 perfil_dataname-rem" href="{{route('admin.cursadas.masivo',['asignatura'=>$carrera->primeraAsignatura()->id])}}">
-                                    {{$carrera->nombre}}                       
-                                </a>     
+                                    {{$carrera->nombre}}
+                                </a>
                             @endif
                         @endif
                     @endforeach
                   </div>
 
-                
+
             </div>
-  
+
         </div>
     </div>
 
