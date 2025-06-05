@@ -52,10 +52,27 @@ return [
     */
 
     'channels' => [
+
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['single', 'seq'],
             'ignore_exceptions' => false,
+        ],
+
+        //FIXME: no se envian los logs, revisar si funciona.
+        'seq' => [
+            'driver' => 'monolog',
+            'level' => env('LOG_LEVEL', 'debug'),
+            'handler' => \Pablo1Gustavo\MonologSeq\Handler\SeqHandler::class,
+            'with' => [
+                'url' => env('SEQ_URL'),
+                'apiKey' => env('SEQ_API_KEY', null),
+                'bubbºle' => true
+            ],
+            'formatter' =>  \Pablo1Gustavo\MonologSeq\Formatter\SeqJsonFormatter::class,
+            'formatter_with' => [
+                'batchMode' => 1, //1 OR 2
+            ],
         ],
 
         'single' => [
@@ -73,16 +90,16 @@ return [
             'replace_placeholders' => true,
         ],
 
-        'slack' => [
+        /*'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
             'level' => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
-        ],
+        ],*/
 
-        'papertrail' => [
+       /* 'papertrail' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
@@ -92,9 +109,9 @@ return [
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
-        ],
+        ], */
 
-        'stderr' => [
+        /* 'stderr' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
@@ -103,7 +120,7 @@ return [
                 'stream' => 'php://stderr',
             ],
             'processors' => [PsrLogMessageProcessor::class],
-        ],
+        ], */
 
         'syslog' => [
             'driver' => 'syslog',
