@@ -7,7 +7,7 @@
     <div class="table" data-name="tablaAlumnos">
         {{-- BOTON CREAR --}}
         
-        <div class="perfil__header-alt">
+        <div class="perfil__header-alt" style='align-items: flex-start'>
             <a href="{{route('admin.alumnos.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar alumno</button></a>     
             <?= $filtergen->generate('admin.alumnos.index',$filters,[
         'dropdowns' => [

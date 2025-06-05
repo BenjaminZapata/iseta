@@ -23,12 +23,29 @@ button{cursor: pointer;border: none;}
 table tbody tr td {
     padding: 6px;
 }
+
 table tbody tr td p {
     font-size: 14px;
 }
 
+.filterButton{
+    background: #140B5C;
+    color: whitesmoke;
+    padding: 8px 16px;
+}
+
+.filterButtonErase {
+    width: 125px;
+}
+
 .bold {
     font-weight: 700;
+}
+
+.perfil__header-alt div {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    align-items: flex-end;
 }
 
 fieldset {
@@ -160,6 +177,7 @@ table tbody tr.active-row {
 .items-around{align-items: space-around;}
 .items-between{align-items: space-between;}
 .items-evenly{align-items: space-evenly;}
+.self-start {align-self: flex-start;}
 
 .gridx-center{justify-items: center;}
 .gridx-end{justify-items: end;}
@@ -225,6 +243,17 @@ table tbody tr.active-row {
 .m-8 { margin: 2em; }
 .m-9 { margin: 2.25em; }
 .m-10 { margin: 2.5em; }
+
+.mb-1 { margin-bottom: 0.25em; }
+.mb-2 { margin-bottom: 0.5em; }
+.mb-3 { margin-bottom: 0.75em; }
+.mb-4 { margin-bottom: 1em; }
+.mb-5 { margin-bottom: 1.25em; }
+.mb-6 { margin-bottom: 1.5em; }
+.mb-7 { margin-bottom: 1.75em; }
+.mb-8 { margin-bottom: 2em; }
+.mb-9 { margin-bottom: 2.25em; }
+.mb-10 { margin-bottom: 2.5em; }
 
 .my-1 { margin-top: 0.25em; margin-bottom: 0.25em; }
 .my-2 { margin-top: 0.5em; margin-bottom: 0.5em; }
