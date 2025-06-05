@@ -35,13 +35,14 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'piso' ,
         'estado_civil' ,
         'email',
+        'nombre_institucion_secundario',
         'titulo_anterior' ,
         'becas',
         'observaciones',
         'telefono1',
         'telefono2' ,
         'telefono3',
-        'codigo_postal',
+        'codigo_postal',    
         'password'
     ];
 
@@ -181,4 +182,10 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         }
         return $ciudades;
     }
+
+    public function setNombreInstitucionSecundarioAttribute(){
+        $result = Alumno::select('nombre_institucion_secundario')->distinct('nombre_institucion_secundario')->get()->pluck('nombre_institucion_secundario');
+    }
+
+
 }
