@@ -15,7 +15,7 @@
 </head>
 <body>
     <div class="login-box">
- 
+
         <form method="POST" action="{{route('admin.login.post')}}">
             @csrf
           <div class="user-box">

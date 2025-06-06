@@ -11,6 +11,11 @@ use App\Services\Filter;
 use App\Services\Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Log;
+use Monolog\Logger;
+use Monolog\Handler\SocketHandler;
+use Monolog\Formatter\JsonFormatter;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -26,6 +31,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
         // View::share('filtergen', new FilterGenerator());
         View::share('filtergen', new Filter());
         View::share('formatoFecha', new Fecha());

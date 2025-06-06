@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 class AdminAuthController extends Controller
 {
@@ -28,7 +29,7 @@ class AdminAuthController extends Controller
      * Vista Logueo de administrador
      * @return \Illuminate\View\View
      */
-    function loginView(): View{
+    public function loginView(): View{
         return view(view: 'Admin.Auth.login');
     }
 
@@ -38,13 +39,13 @@ class AdminAuthController extends Controller
      * @param AdminLoginRequest $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    function login(AdminLoginRequest $request): RedirectResponse
+    public function login(AdminLoginRequest $request): RedirectResponse
     {
+
         $validateData = $request->validated();
 
         $usernameGiven = $validateData['username'];
         $passwordGiven = $validateData['password'];
-
         // Busca el administrador en la base de datos
         $admin = Admin::where('username', $usernameGiven)->first();
 
@@ -66,7 +67,7 @@ class AdminAuthController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    function logout(): RedirectResponse{
+    public function logout(): RedirectResponse{
         Auth::logout();
         return redirect()->route('admin.login');
     }
