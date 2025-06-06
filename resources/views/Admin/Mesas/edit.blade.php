@@ -4,7 +4,9 @@
     <div class="edit-form-container">
         <div class="perfil_one br">
             <div class="perfil__header">
-                <h2>{{$mesa->asignatura->nombre}}</h2>
+                <h2>{{ $mesa->asignatura?->nombre }}</h2>
+
+
             </div>
             <div class="perfil__info">
                 <div class="perfil_dataname">

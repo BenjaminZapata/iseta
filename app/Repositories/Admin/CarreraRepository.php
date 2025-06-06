@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Carrera;
+
 use App\Models\CarreraAsignatura;
 use App\Models\CarreraAsignaturaProfesor;
 use App\Models\Configuracion;
@@ -45,12 +46,6 @@ class CarreraRepository{
     public function setAsignatura($asignatura, $carrera){
         // Implement logic to associate asignatura with carrera if needed
         // Example: return $carrera->asignaturas()->attach($asignatura->id);
-        $data = [
-            'id_asignatura' => $asignatura->id,
-            'id_carrera' => $carrera->id
-        ];
-
-        CarreraAsignaturaProfesor::updateOrInsert(['id_asignatura' => $asignatura->id], $data);
     }
 
 public function GETresolucion($carrera)

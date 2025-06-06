@@ -53,4 +53,6 @@ class AlumnoRepository{
         return $query->paginate($this->config['filas_por_tabla']);
 
     }
+
+    
 }
