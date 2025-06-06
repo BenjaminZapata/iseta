@@ -3,6 +3,8 @@
 use Monolog\Handler\NullHandler;
 use App\Logging\LokiHandler;
 
+use function Laravel\Prompts\error;
+
 return [
 
     /*
@@ -53,23 +55,38 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'loki'],
+            'channels' => ['trace', 'nostack','loki'],
             'ignore_exceptions' => false,
         ],
 
-        //FIXME: no se envian los logs, revisar si funciona.
         'loki' => [
             'driver' => 'monolog',
             'level' => 'debug',
             'handler' => LokiHandler::class,
             'formatter' => Monolog\Formatter\JsonFormatter::class,
+            'bubble' => true,
         ],
 
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'level' => 'debug',
             'replace_placeholders' => true,
+        ],
+
+        'trace' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/stacktrace.log'),
+            'level' => 'warning',
+            'replace_placeholders' => true,
+        ],
+
+        'nostack' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/nostack.log'),
+            'level' => 'debug', // o el nivel mínimo que quieras
+            'tap' => [App\Logging\NoStacktraceFormatter::class],
+            'bubble' => true
         ],
 
         'daily' => [

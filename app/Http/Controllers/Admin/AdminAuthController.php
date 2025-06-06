@@ -30,7 +30,6 @@ class AdminAuthController extends Controller
      * @return \Illuminate\View\View
      */
     public function loginView(): View{
-        Log::debug('Intento de logueo de administrador');
         return view(view: 'Admin.Auth.login');
     }
 
