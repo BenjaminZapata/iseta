@@ -4,12 +4,14 @@
     <div class="edit-form-container">
         <div class="perfil_one br">
             <div class="perfil__header">
-                <h2>{{$mesa->asignatura->nombre}}</h2>
+                <h2>{{ $mesa->asignatura?->nombre }}</h2>
+
+
             </div>
             <div class="perfil__info">
                 <div class="perfil_dataname">
                     <label>Carrera:</label>
-                    <p class="px-2">{{$mesa->asignatura->carrera->nombre}} - {{$mesa->asignatura->anioStr()}}</p>
+                    <p class="px-2">{{$mesa->asignatura->carrera->first()?->nombre}} - {{$mesa->asignatura->anioStr()}}</p>
                 </div>
                 <form method="post" action="{{route('admin.mesas.update', ['mesa'=>$mesa->id])}}">
                 @csrf
@@ -68,9 +70,9 @@
                 </form>
             </div>
         </div>
-        
-        
-        
+
+
+
             <div class="perfil_one br">
                 {{-- <p>La funcion de agregar alumnos se elimino hasta que se arreglen algunos errores</p> --}}
                 <div class="perfil__header">
@@ -79,11 +81,11 @@
                 <div class="matricular">
                      @if(true || strtotime($mesa->fecha) > time())
                         <p class="py-2">Estos alumnos han aprobado la cursada de esta materia, luego se volvera a validar sobre correlativas y tiempos</p>
-                    
-                        <form method="POST" action="{{route('admin.examenes.store')}}">
-                            
 
-                            
+                        <form method="POST" action="{{route('admin.examenes.store')}}">
+
+
+
                     @csrf
                             <select class="rounded" name="id_alumno">
                                     <option value="">Selecciona un alumno</option>
@@ -92,14 +94,14 @@
                                 @endforeach
                             </select>
                             <input name="id_mesa" value="{{$mesa->id}}" type="hidden">
-                            
+
                             <div class="upd"><button class="btn_blue"><i class="ti ti-upload"></i>Cargar</button></div>
-                            
+
                         </form>
-                    
+
                     @else
-                        Ya no se pueden agregar alumnos    
-                    @endif 
+                        Ya no se pueden agregar alumnos
+                    @endif
                 </div>
 
             </div>
@@ -113,7 +115,7 @@
 
                     </div>
                 </div>
-        
+
                 <table class="table__body">
                     <thead>
                         <tr>
@@ -153,7 +155,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                
+
             </div>
 @if (!$config['modo_seguro'])
         <div class="upd">

@@ -18,11 +18,13 @@ class Correlativa extends Model
     }
 
     static function debeExamenesCorrelativos($asignatura, $alumno=null){
-        if(!$alumno) $alumno=Auth::user();
+        if(!$alumno) {
+            $alumno=Auth::user();
+        }
         $asignatura = Asignatura::with('correlativas.asignatura')
         ->where('id', $asignatura->id)
-        ->first();    
-     
+        ->first();
+
         $sinAprobar = [];
 
         foreach($asignatura->correlativas as $correlativa){
@@ -31,7 +33,7 @@ class Correlativa extends Model
            if($asigCorr->aproboExamen($alumno)) continue;
            else $sinAprobar[] = $asigCorr;
         }
-     
+
         if(count($sinAprobar)>0) return $sinAprobar;
         else return false;
      }
@@ -40,8 +42,8 @@ class Correlativa extends Model
         if(!$alumno) $alumno=Auth::user();
         $asignatura = Asignatura::with('correlativas.asignatura')
         ->where('id', $asignatura->id)
-        ->first();    
-     
+        ->first();
+
         $sinAprobar = [];
 
         foreach($asignatura->correlativas as $correlativa){
@@ -50,7 +52,7 @@ class Correlativa extends Model
            if($asigCorr->aproboCursada($alumno)) continue;
            else $sinAprobar[] = $asigCorr;
         }
-     
+
         if(count($sinAprobar)>0) return $sinAprobar;
         else return false;
      }

@@ -1,0 +1,100 @@
+name: iseta
+services:
+  web:
+      build:
+        context: .
+        dockerfile: ./docker/production/nginx/Dockerfile
+      restart: unless-stopped # Automatically restart unless the service is explicitly stopped
+      volumes:
+        # Mount the 'laravel-storage' volume to '/var/www/storage' inside the container.
+        # -----------------------------------------------------------
+        # This volume stores persistent data like uploaded files and cache.
+        # The ':ro' option mounts it as read-only in the 'web' service because Nginx only needs to read these files.
+        # The 'php-fpm' service mounts the same volume without ':ro' to allow write operations.
+        # -----------------------------------------------------------
+        - iseta-storage-production:/var/www/storage:ro
+      networks:
+        - iseta-production
+      ports:
+        # Map port 80 inside the container to the port specified by 'NGINX_PORT' on the host machine.
+        # -----------------------------------------------------------
+        # This allows external access to the Nginx web server running inside the container.
+        # For example, if 'NGINX_PORT' is set to '8080', accessing 'http://localhost:8080' will reach the application.
+        # -----------------------------------------------------------
+        - "${NGINX_PORT:-80}:80"
+      depends_on:
+        php-fpm:
+          condition: service_healthy # Wait for php-fpm health check
+  php-fpm:
+      # For the php-fpm service, we will create a custom image to install the necessary PHP extensions and setup proper permissions.
+      build:
+        context: .
+        dockerfile: ./docker/common/php-fpm/Dockerfile
+        target: production # Use the 'production' stage in the Dockerfile
+      restart: unless-stopped
+      volumes:
+        - iseta-storage-production:/var/www/storage # Mount the storage volume
+      env_file:
+        - .env
+      networks:
+        - iseta-production
+      healthcheck:
+        test: ["CMD-SHELL", "php-fpm-healthcheck || exit 1"]
+        interval: 10s
+        timeout: 5s
+        retries: 3
+      # The 'depends_on' attribute with 'condition: service_healthy' ensures that
+      # this service will not start until the 'postgres' service passes its health check.
+      # This prevents the application from trying to connect to the database before it's ready.
+      depends_on:
+        postgres:
+          condition: service_healthy
+
+  mysql:
+    image: mysql:lts 
+    ports:
+      - "8001:${DB_PORT}"
+    networks:
+      - iseta-production
+    environment:
+      MYSQL_HOST: ${DB_HOST}
+      MYSQL_TCP_PORT: ${DB_PORT}
+      MYSQL_USERNAME: ${DB_DATABASE}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    container_name: mysql_iseta
+    depends_on:
+      php-fpm:
+        condition: service_healthy # Wait for php-fpm health check
+    volumes:
+      - mysql-data-production:/var/lib/mysql/data
+
+  redis:
+    image: redis:alpine
+    restart: unless-stopped # Automatically restart unless the service is explicitly stopped
+    networks:
+      - iseta-production
+    # Health check for Redis
+    # -----------------------------------------------------------
+    # Checks if Redis is responding to the 'PING' command.
+    # This ensures that the service is not only running but also operational.
+    # -----------------------------------------------------------
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3  
+
+  visor:
+    image: adminer:latest
+    ports:
+      - "8004:80"
+    networks:
+      - iseta-production
+    container_name: visor_iseta
+
+networks:
+  iseta-production:
+  
+volumes:
+  mysql-data-production:
+  iseta-storage-production:

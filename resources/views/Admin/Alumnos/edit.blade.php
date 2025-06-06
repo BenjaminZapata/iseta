@@ -39,14 +39,14 @@
     </div>
 </div>
 
-    
-    
+
+
     <div class="perfil_one br">
 
         <div class="perfil__header">
             <h2>Rematriculación manual</h2>
         </div>
-        
+
         <div class="matricular">
             <form action="{{route('admin.alumno.rematricular',['alumno' => $alumno->id])}}">
                 <select name="carrera">
@@ -59,8 +59,8 @@
             <a href="{{route('admin.inscriptos.create')}}" style="display:block;width:190px"><button class="btn_blue" style="margin-top:-40px">Inscribir a otra carrera</button></a>
         </div>
     </div>
-   
-    
+
+
 
     <div class="table">
         <div class="table__header">
@@ -89,12 +89,12 @@
                     <tr>
                         <td class="center font-600 tit-year2" colspan=5>{{$cursada->carrera}}</td>
                     </tr>
-                    @php  
+                    @php
                         $carrera_actual = $cursada->carrera;
                         $anio_actual = "";
                     @endphp
                 @endif
-  
+
 
                 @if ($anio_actual != $cursada->anio_asig)
                     <tr>
@@ -106,24 +106,29 @@
                             $anio_actual = $cursada->anio_asig
                     @endphp
                 @endif
-  
+
 
                 <tr data-name="MateriaCursada">
                     <td>{{$cursada->asignatura}}</td>
                     <td>{{$cursada->condicionString()}}</td>
                     <td class="center">{{$cursada->aprobado()}}</td>
-                    
+
                     <td class="flex just-center">
                         <a href="{{route('admin.cursadas.edit', ['cursada' => $cursada->id,])}}">
                             <button class="btn_blue"><i class="ti ti-edit"></i>Editar</button>
                         </a>
                     </td>
                 </tr>
-                           
+
             @endforeach
             
             </tbody>
         </table>
+<<<<<<< HEAD
+
+
+    </div>
+=======
         
         
     </div> 
@@ -253,6 +258,7 @@
     
     echo '</div>'; // Cierra #accordionCarreras
 ?> -->
+>>>>>>> master
 
     <div class="table">
         <div class="table__header">
@@ -270,7 +276,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php  
+                    @php
                         $carrera_actual = "";
                         $anio_actual = "";
                     @endphp
@@ -281,12 +287,12 @@
                             <tr>
                                 <td class="center font-600 tit-year2" colspan=4>{{$examen->carrera}}</td>
                             </tr>
-                            @php  
+                            @php
                                 $carrera_actual = $examen->carrera;
                                 $anio_actual = "";
                             @endphp
                         @endif
-    
+
 
                         @if ($anio_actual != $examen->anio_asig)
                             <tr>
@@ -301,14 +307,14 @@
 
                         <tr>
                             <td>{{$examen->asignatura}}</td>
-    
+
                             <td>
-                                
+
                                 {{$formatoFecha->dma($examen->fecha())}}
                             </td>
-                            
+
                             <td>
-                        
+
                             @if ($examen->aprobado==3)
                                 Ausente
                             @elseif($examen->nota<=0)
@@ -322,10 +328,10 @@
                     @endforeach
                 </tbody>
             </table>
-       
-    </div> 
+
+    </div>
     @if ($alumno->verificado == 0)
-        <a href="{{route('admin.alumnos.verificar', ['alumno' => $alumno->id])}}">Verificar alumno</a>        
+        <a href="{{route('admin.alumnos.verificar', ['alumno' => $alumno->id])}}">Verificar alumno</a>
     @endif
 </div>
 

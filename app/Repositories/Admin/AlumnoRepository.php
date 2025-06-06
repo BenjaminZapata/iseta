@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class AlumnoRepository{
 
-    public $config; 
+    public $config;
     public $availableFiels = ['alumno','dni','email','ciudad','telefono1'];
 
     public function __construct() {
@@ -19,7 +19,7 @@ class AlumnoRepository{
     function index($request){
         $idsQuery = Alumno::select('alumnos.id')
         ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id')
-        ->leftJoin('carreras','carreras.id', '=', 'egresadoinscripto.id_carrera'); 
+        ->leftJoin('carreras','carreras.id', '=', 'egresadoinscripto.id_carrera');
 
         if($request->has('filter_carrera_id') && $request->input('filter_carrera_id') != 0){
             $idsQuery->where('egresadoinscripto.id_carrera', $request->input('filter_carrera_id'));
@@ -37,22 +37,22 @@ class AlumnoRepository{
             if($request->input('filter_field') == 'alumno'){
                 $word = str_replace(' ','%',$request->input('filter_search_box'));
                 $idsQuery->whereRaw("(CONCAT(alumnos.nombre,' ',alumnos.apellido) LIKE '%$word%' OR (CONCAT(alumnos.apellido,' ',alumnos.nombre) LIKE '%$word%'))");
-            }else{ 
+            }else{
                 $idsQuery->where($request->input('filter_field'), 'LIKE', '%'.$request->input('filter_search_box').'%');
             }
-            
+
         }
 
         $ids = $idsQuery->distinct()->get()->pluck('id');
 
-        $alumnos = Alumno::select('alumnos.*')->whereIn('alumnos.id', $ids)
-        ->orderBy('nombre')
-        ->orderBy('apellido')
-        ->paginate($this->config['filas_por_tabla']); 
+        $query = Alumno::select('alumnos.*')
+            ->whereIn('alumnos.id', $ids);
 
-        
-        return $alumnos;
+        $query->orderBy('apellido')->orderBy('nombre');
+
+        return $query->paginate($this->config['filas_por_tabla']);
 
     }
 
+    
 }

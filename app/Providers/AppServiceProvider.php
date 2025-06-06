@@ -6,15 +6,15 @@ use App\Models\Alumno;
 use App\Models\Carrera;
 use App\Models\Configuracion;
 use App\Models\Profesor;
-use App\Repositories\AdminCursadaRepository;
-use App\Services\AlumnoInscripcionService;
 use App\Services\Fecha;
 use App\Services\Filter;
-use App\Services\FilterGenerator;
 use App\Services\Form;
-use App\Services\TextFormatService;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Log;
+use Monolog\Logger;
+use Monolog\Handler\SocketHandler;
+use Monolog\Formatter\JsonFormatter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-       
+
     }
 
     /**
@@ -31,10 +31,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
         // View::share('filtergen', new FilterGenerator());
         View::share('filtergen', new Filter());
-        
-        
         View::share('formatoFecha', new Fecha());
         View::share('config', Configuracion::todas());
         View::share('form', new Form());

@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 /**
- * 
+ *
  * Verificacion de mail
- * 
+ *
  */
 
 class MailVerifController extends Controller
@@ -30,7 +30,7 @@ class MailVerifController extends Controller
         Session::put('__alumno_verificacion_token', $token);
 
         Mail::to(Auth::user())->send(new VerificacionEmail($token));
-        
+
         return redirect() -> route('token.ingreso') -> with('mensaje','Se ha enviado el correo');
     }
 
@@ -66,7 +66,7 @@ class MailVerifController extends Controller
         Session::put('__profe_verificacion_token', $token);
 
         Mail::to(Auth::guard('profesor')->user())->send(new VerificacionEmail($token));
-        
+
         return redirect() -> route('token.ingreso.profe') -> with('mensaje','Se ha enviado el correo');
     }
 
@@ -93,7 +93,7 @@ class MailVerifController extends Controller
             $request->session()->forget('__alumno_verificacion_token');
             return redirect()->route('profesor.mesas')->with('mensaje','estas verificado');
         }
-        
+
         return redirect()->back()->with('error','token incorrecto o no valido');
     }
 }

@@ -23,7 +23,7 @@ class AlumnoController extends BaseController
         $this->alumnoRepository = $alumnoDataRepository;
 
         $this -> middleware('auth:web');
-        
+
         $this -> middleware('verificado')->only([
             'info',
             'setCarreraDefault'
@@ -67,11 +67,11 @@ class AlumnoController extends BaseController
      | ---------------------------------------------
      */
 
-    function cursadas(Request $request){        
+    function cursadas(Request $request){
         $filtro = $request->filtro ? $request->filtro: '';
         $campo = $request->campo ? $request->campo: '';
         $orden = $request->orden ? $request->orden: 'fecha';
-        
+
         // cursadas del alumno de la carrera seleccionada
         $cursadas = $this->alumnoRepository->cursadas($filtro, $campo, $orden);
 
@@ -79,11 +79,11 @@ class AlumnoController extends BaseController
         $examenesAprobados = Examen::select('examenes.id_asignatura')
             -> where('examenes.nota','>=',4)
             -> where('examenes.id_alumno',Auth::id())
-            -> orderBy('examenes.id_asignatura')            
+            -> orderBy('examenes.id_asignatura')
             -> get()-> pluck('id_asignatura')-> toArray();
-        
+
         return view('Alumnos.Datos.cursadas', [
-            'cursadas' => $cursadas, 
+            'cursadas' => $cursadas,
             'examenesAprobados' => $examenesAprobados,
             'puedeBajarse' => Configuracion::puedeDesinscribirCursada(),
             'filtros'=>[
@@ -94,20 +94,19 @@ class AlumnoController extends BaseController
         ]);
     }
 
-    /*
-     | ---------------------------------------------
-     | Examanes rendidos por el alumno
-     | ---------------------------------------------
+    /**
+     * Examenes rendidos por el alumno
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
-
     function examenes(Request $request){
 
         $filtro = $request->filtro ? $request->filtro: '';
         $campo = $request->campo ? $request->campo: '';
         $orden = $request->orden ? $request->orden: 'fecha';
-                
+
         $examenes = $this->alumnoRepository->examenes($filtro,$campo,$orden);
-        
+
         return view('Alumnos.Datos.examenes', [
             'examenes'=>$examenes,
             'filtros'=>[

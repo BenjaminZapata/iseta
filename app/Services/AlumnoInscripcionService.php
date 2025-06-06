@@ -10,7 +10,7 @@ use App\Models\Examen;
 use Illuminate\Support\Facades\Auth;
 
 class AlumnoInscripcionService{
-    public $config;   
+    public $config;
 
     public function __construct() {
         $this->config = Configuracion::todas();
@@ -23,20 +23,23 @@ class AlumnoInscripcionService{
      */
 
     public function puedeInscribirse($mesa, $alumno){
- 
-        // Existe la mesa
-        if(!$mesa) return ['success'=>false, 'mensaje'=>'No se encontro la mesa'];
 
+        // Existe la mesa
+        if(!$mesa) {
+            return ['success'=>false, 'mensaje'=>'No se encontro la mesa'];
+        }
         // No esta anotado
-        if($mesa->anotado) return ['success'=>false, 'mensaje'=>'Ya anotado en esta asignatura'];
-        
+        if($mesa->anotado) {
+            return ['success'=>false, 'mensaje'=>'Ya anotado en esta asignatura'];
+        }
         // Hay 48hs habiles
-        if(!$mesa->habilitada() && !(Auth::guard()->name == 'admin')) return ['success'=>false, 'mensaje'=>'Ha caducado el tiempo de inscripcion'];
-        
+        if(!$mesa->habilitada() && !(Auth::guard()->name == 'admin')) {
+            return ['success'=>false, 'mensaje'=>'Ha caducado el tiempo de inscripcion'];
+        }
         // Aprobo cursada y aun no el examen
         if($mesa->asignatura->aproboExamen($alumno)) return ['success'=>false, 'mensaje'=>'Ya se aprobo esta asignatura'];
         if(!$mesa->asignatura->aproboCursada($alumno)) return ['success'=>false, 'mensaje'=>'Aun no se aprobo la cursada de esta asignatura'];
-        
+
         // Tiene correlativas sin rendir?
         $correlativas = Correlativa::debeExamenesCorrelativos($mesa->asignatura, $alumno);
 
@@ -45,14 +48,14 @@ class AlumnoInscripcionService{
 
             foreach ($correlativas as $correlativa) {
                 $mensajes[] = "Se debe la correlativa: $correlativa->nombre";
-            }            
+            }
             return ['success'=>false, 'mensaje'=>$mensajes];
         }
 
         // Puede anotarse :D
         return ['success'=>true, 'mensaje'=>0];
     }
-    
+
     /**
      * --------------------------------------
      * Comprueba si puede bajarse de la mesa
@@ -60,10 +63,10 @@ class AlumnoInscripcionService{
      */
 
     public function puedeBajarse($mesa,$examen){
-    
+
         // Esta inscripto en esta mesa
         if(!$examen) return ['success'=>false,'mensaje'=>'No estas inscripto en esta mesa.'];
-        
+
         // Hay 24 hs habiles
         if(DiasHabiles::desdeHoyHasta($mesa->fecha) <= $this->config['horas_habiles_desinscripcion']){
             return ['success'=>false,'mensaje'=>'Timpo de desincripcion caducado.'];
@@ -87,7 +90,7 @@ class AlumnoInscripcionService{
             -> where('mesas.llamado', 1)
             -> where('examenes.id_alumno', $alumno->id)
             -> first();
-            
+
         // Es del mismo periodo que el llamado 2
         if($yaAnotadoAllamado1){
             $diferencia = DiasHabiles::desdeHoyHasta($yaAnotadoAllamado1->fecha, $mesa->fecha)*-1;
@@ -108,7 +111,7 @@ class AlumnoInscripcionService{
      */
 
     public function inscribiblesDelAlumno($alumno){
-        
+
         // Todas las asignaturas de la carrera seleccionada del alumno
         $asignaturas = Asignatura::with('mesas.anotado')
             -> where('id_carrera', Carrera::getDefault()->id)
@@ -128,7 +131,7 @@ class AlumnoInscripcionService{
                 'correlativas' => null,
                 'yaAnotado' => null,
             ];
-            
+
             // no se muestran en pantalla
             if(count($asignatura->mesas) == 0) continue;        // si la asignatura no tiene mesas
             if($asignatura->aproboExamen($alumno)) continue;    // el alumno ya aprobo el examen
@@ -137,9 +140,9 @@ class AlumnoInscripcionService{
             $reg['asignatura'] = $asignatura;   // sino, si se agrega
 
             // Comprobar si de las mesas de la asignatura, el alumno ya esta inscripto en alguna
-            foreach($asignatura->mesas as $mesa){      
+            foreach($asignatura->mesas as $mesa){
                 if(in_array($mesa->id, $examenesInscriptos)) {
-                    $reg['yaAnotado'] = $mesa; 
+                    $reg['yaAnotado'] = $mesa;
                     break;
                 }
             }
@@ -147,7 +150,7 @@ class AlumnoInscripcionService{
             // Si debe correlativas se registran y se muestran en pantalla
             $correlativas = Correlativa::debeExamenesCorrelativos($asignatura);
             if($correlativas) $reg['correlativas'] = $correlativas;
-            
+
             $posibles[] = $reg;
         }
 

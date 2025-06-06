@@ -3,14 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\CrearCarreraRequest;
 use App\Http\Requests\EditarCarreraRequest;
 use App\Models\Carrera;
-use App\Models\Configuracion;
 use App\Repositories\Admin\CarreraRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class CarrerasCrudController extends BaseController
 {
@@ -30,7 +27,7 @@ class CarrerasCrudController extends BaseController
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {       
+    {
         $this->setFilters($request);
         $this->data['carreras'] = $this->carreraRepo->index($request);
         return view('Admin.Carreras.index',$this->data);
@@ -57,21 +54,27 @@ class CarrerasCrudController extends BaseController
         return redirect()->route('admin.carreras.index');
     }
 
-
+    public function show(Carrera $carrera)
+    {
+        $carrera->load('asignaturas');
+        return view('Admin.Carreras.show',['carrera' => $carrera]);
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Request $request,Carrera $carrera)
     {
-        return view('Admin.Carreras.edit', ['carrera'=> Carrera::where('id',$carrera->id)->with('asignaturas')->first()]);
-        
+        $carrera->load('asignaturas');
+        return view('Admin.Carreras.edit', ['carrera'=> $carrera]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(EditarCarreraRequest $request, Carrera $carrera)
+
     {
         $datos = $request->validated();
 
@@ -91,11 +94,9 @@ class CarrerasCrudController extends BaseController
             return redirect()->to($request->input('redirect'))->with('mensaje','Se edito la carrera');
         else
             return redirect()->back()->with('mensaje','Se edito la carrera');
-    
 
-        // return redirect()->back()->with('mensaje','Se edito la carrera');
     }
-
+    //FIXME: Falta desarrollar la funcionalidad de eliminar una carrera
     /**
      * Remove the specified resource from storage.
      */
