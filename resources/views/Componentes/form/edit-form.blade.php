@@ -1,4 +1,4 @@
-<form class="flex-col gap-8" method="post" action="{{$url}}">
+<form class="flex-col gap-2" method="post" action="{{$url}}">
     @csrf
     @if ($method=='put')
         @method('put')
@@ -7,7 +7,7 @@
     @foreach ($fieldsets as $legend => $inputs)
         <fieldset class="p-2">
             <legend class="font-600 font-7">{{$legend}}</legend>
-            <div class="grid-2 gap-2 p-2">
+            <div class="grid-2 gap-2 p-0">
             @foreach ($inputs as $input)
                 <?= $input ?>
             @endforeach
