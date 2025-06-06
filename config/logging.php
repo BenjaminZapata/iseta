@@ -1,9 +1,7 @@
 <?php
 
 use Monolog\Handler\NullHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
-use Monolog\Processor\PsrLogMessageProcessor;
+use App\Logging\LokiHandler;
 
 return [
 
@@ -55,24 +53,16 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'seq'],
+            'channels' => ['single', 'loki'],
             'ignore_exceptions' => false,
         ],
 
         //FIXME: no se envian los logs, revisar si funciona.
-        'seq' => [
+        'loki' => [
             'driver' => 'monolog',
-            'level' => env('LOG_LEVEL', 'debug'),
-            'handler' => \Pablo1Gustavo\MonologSeq\Handler\SeqHandler::class,
-            'with' => [
-                'url' => env('SEQ_URL'),
-                'apiKey' => env('SEQ_API_KEY', null),
-                'bubbºle' => true
-            ],
-            'formatter' =>  \Pablo1Gustavo\MonologSeq\Formatter\SeqJsonFormatter::class,
-            'formatter_with' => [
-                'batchMode' => 1, //1 OR 2
-            ],
+            'level' => 'debug',
+            'handler' => LokiHandler::class,
+            'formatter' => Monolog\Formatter\JsonFormatter::class,
         ],
 
         'single' => [

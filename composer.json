@@ -12,8 +12,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.6",
-        "maatwebsite/excel": "^3.1",
-        "pablo1gustavo/monolog-seq": "^1.0"
+        "maatwebsite/excel": "^3.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.15",
