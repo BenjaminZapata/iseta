@@ -183,9 +183,18 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         return $ciudades;
     }
 
-    public function setNombreInstitucionSecundarioAttribute(){
-        $result = Alumno::select('nombre_institucion_secundario')->distinct('nombre_institucion_secundario')->get()->pluck('nombre_institucion_secundario');
-    }
+public static function getInstitucionesSecundariasDisponibles()
+{
+    $result = self::select('nombre_institucion_secundario')
+                ->distinct()
+                ->pluck('nombre_institucion_secundario')
+                ->filter(function ($value) {
+                    return !is_null($value) && trim($value) !== '';
+                });
 
+    $instituciones = ['Cualquiera'];
 
+    // Combina y elimina duplicados, asegurando que el array sea indexado correctamente
+    return array_values(array_unique(array_merge($instituciones, $result->toArray())));
+}
 }
