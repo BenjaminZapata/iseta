@@ -5,14 +5,7 @@
 
 
 <div class="edit-form-container">
-        <p>
-            <a href="/admin/alumnos">Alumnos</a>/
-            <a href="/admin/alumnos/{{$alumno->id}}/edit">{{$alumno->id}}</a>
-        </p>
     <div class="perfil_one br">
-        <div class="perfil__header">
-            <h2>Historia academica</h2>
-        </div>
         <div class="perfil__info">
 
     <?= $form->generate(route('admin.alumnos.update',['alumno'=>$alumno->id]),'put',[
@@ -64,7 +57,7 @@
                 </select>
                 <div class="upd"><button class="btn_blue"><i class="ti ti-paperclip"></i>Matricular</button></div>
             </form>
-            <a href="{{route('admin.inscriptos.create')}}">Inscribir a otra carrera</a>
+            <a href="{{route('admin.inscriptos.create')}}" style="display:block;width:190px"><button class="btn_blue" style="margin-top:-40px">Inscribir a otra carrera</button></a>
         </div>
     </div>
 
@@ -116,7 +109,7 @@
                 @endif
 
 
-                <tr>
+                <tr data-name="MateriaCursada">
                     <td>{{$cursada->asignatura}}</td>
                     <td>{{$cursada->condicionString()}}</td>
                     <td class="center">{{$cursada->aprobado()}}</td>
@@ -129,11 +122,144 @@
                 </tr>
 
             @endforeach
+            
             </tbody>
         </table>
+<<<<<<< HEAD
 
 
     </div>
+=======
+        
+        
+    </div> 
+    
+    
+    <!-- <?php
+    use Illuminate\Support\Str;
+        
+    // --- Variables de estado y contadores ---
+    $carrera_actual_nombre = "";
+    $carrera_actual_slug = "";
+    $anio_actual_valor = "";
+        
+    $id_counter_carrera = 0;
+    $id_counter_anio = 0; // Este contador será para IDs únicos globales de año
+        
+    $carrera_item_abierto = false;
+    $anio_item_abierto = false;
+        
+    // --- Inicio del Acordeón Principal de Carreras ---
+    echo '<div class="vanilla-accordion" id="accordionCarreras">';
+        
+    foreach ($cursadas as $index => $cursada) {
+        // Asegúrate de que $cursada->carrera y $cursada->anio_asig existen
+        $nombre_carrera_actual_iter = $cursada->carrera ?? 'Carrera Desconocida';
+        $anio_asignatura_actual_iter = $cursada->anio_asig ?? 0;
+    
+        // Generar slug para la carrera actual
+        $nueva_carrera_slug = Str::slug($nombre_carrera_actual_iter); 
+        // $nueva_carrera_slug = strtolower(preg_replace('/[^A-Za-z0-9-]+/', '-', $nombre_carrera_actual_iter));
+    
+    
+        // =======================
+        // CAMBIO DE CARRERA
+        // =======================
+        if ($carrera_actual_slug != $nueva_carrera_slug) {
+            if ($anio_item_abierto) {
+                // Cerrar tabla y contenido del año anterior
+                echo '</tbody></table>';
+                echo '</div></div>'; // Cierra .vanilla-accordion-content y .vanilla-accordion-item del año
+                $anio_item_abierto = false;
+            }
+        
+            if ($carrera_item_abierto) {
+                // Cerrar contenido de la carrera anterior (que contiene el acordeón de años)
+                echo '</div></div>'; // Cierra .vanilla-accordion-content y .vanilla-accordion-item de la carrera
+            }
+        
+            $id_counter_carrera++;
+            $carrera_actual_nombre = $nombre_carrera_actual_iter;
+            $carrera_actual_slug = $nueva_carrera_slug;
+            $anio_actual_valor = ""; // Resetear el año
+            $carrera_item_abierto = true;
+        
+            $id_content_carrera = "contentCarrera" . $id_counter_carrera;
+        
+            echo '<div class="vanilla-accordion-item">'; // Inicio item carrera
+            echo '<button class="vanilla-accordion-header" aria-expanded="false" aria-controls="' . $id_content_carrera . '">';
+            echo htmlspecialchars($carrera_actual_nombre);
+            echo '<span class="vanilla-accordion-icon">+</span>';
+            echo '</button>';
+            echo '<div class="vanilla-accordion-content" id="' . $id_content_carrera . '">';
+            // Contenedor para el acordeón de Años (anidado)
+            echo '<div class="vanilla-accordion" id="accordionAnios' . $id_counter_carrera . '">';
+        }
+    
+        // ==========================================
+        // CAMBIO DE AÑO (dentro de la misma carrera)
+        // ==========================================
+        if ($anio_actual_valor !== $anio_asignatura_actual_iter) { // Usar !== para comparación estricta
+            if ($anio_item_abierto) {
+                // Cerrar tabla y contenido del año anterior
+                echo '</tbody></table>';
+                echo '</div></div>'; // Cierra .vanilla-accordion-content y .vanilla-accordion-item del año
+            }
+        
+            $id_counter_anio++; // Contador global para IDs de año únicos
+            $anio_actual_valor = $anio_asignatura_actual_iter;
+            $anio_item_abierto = true;
+        
+            $id_content_anio = "contentAnio" . $id_counter_anio;
+        
+            echo '<div class="vanilla-accordion-item">'; // Inicio item año
+            echo '<button class="vanilla-accordion-header" aria-expanded="false" aria-controls="' . $id_content_anio . '">';
+            echo 'Año: ' . htmlspecialchars($anio_actual_valor + 1);
+            echo '<span class="vanilla-accordion-icon">+</span>';
+            echo '</button>';
+            echo '<div class="vanilla-accordion-content" id="' . $id_content_anio . '">';
+            // Inicio tabla para materias
+            echo '<table class="simple-table">';
+            echo '<thead><tr><th>Asignatura</th><th>Condición</th><th class="text-center">Aprobado</th><th class="text-center">Acciones</th></tr></thead>';
+            echo '<tbody>';
+        }
+    
+        // =======================
+        // FILA DE MATERIA CURSADA
+        // =======================
+        if ($anio_item_abierto) { // Solo imprimir si estamos dentro de un año
+            echo '<tr>';
+            echo '<td>' . htmlspecialchars($cursada->asignatura ?? 'N/A') . '</td>';
+            // Asumiendo que condicionString y aprobado son métodos o existen como propiedades.
+            // Necesitarás adaptarlo si son métodos: $cursada->condicionString()
+            echo '<td>' . htmlspecialchars(is_callable([$cursada, 'condicionString']) ? $cursada->condicionString() : ($cursada->condicion ?? 'N/A')) . '</td>';
+            echo '<td class="text-center">' . htmlspecialchars(is_callable([$cursada, 'aprobado']) ? $cursada->aprobado() : ($cursada->aprobado ?? 'N/A')) . '</td>';
+            echo '<td class="text-center">';
+            // Asegúrate de que route() está disponible o genera el enlace de otra manera
+            $url_editar = route('admin.cursadas.edit', ['cursada' => $cursada->id]); 
+            // $url_editar = 'editar_cursada.php?id=' . ($cursada->id ?? ''); // Ejemplo sin Laravel
+            echo '<a href="' . htmlspecialchars($url_editar) . '" class="btn-edit">Editar</a>';
+            echo '</td>';
+            echo '</tr>';
+        }
+    } // Fin del bucle @foreach
+    
+    // ====================================================
+    // Cerrar las etiquetas restantes después del bucle
+    // ====================================================
+    if ($anio_item_abierto) {
+        echo '</tbody></table>';
+        echo '</div></div>'; // Cierra .vanilla-accordion-content y .vanilla-accordion-item del último año
+    }
+    
+    if ($carrera_item_abierto) {
+        echo '</div>'; // Cierra el contenedor .vanilla-accordion de los años
+        echo '</div></div>'; // Cierra .vanilla-accordion-content y .vanilla-accordion-item de la última carrera
+    }
+    
+    echo '</div>'; // Cierra #accordionCarreras
+?> -->
+>>>>>>> master
 
     <div class="table">
         <div class="table__header">

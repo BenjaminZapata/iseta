@@ -1,9 +1,9 @@
 <?php
 
 use Monolog\Handler\NullHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogUdpHandler;
-use Monolog\Processor\PsrLogMessageProcessor;
+use App\Logging\LokiHandler;
+
+use function Laravel\Prompts\error;
 
 return [
 
@@ -52,17 +52,41 @@ return [
     */
 
     'channels' => [
+
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['trace', 'nostack','loki'],
             'ignore_exceptions' => false,
+        ],
+
+        'loki' => [
+            'driver' => 'monolog',
+            'level' => 'debug',
+            'handler' => LokiHandler::class,
+            'formatter' => Monolog\Formatter\JsonFormatter::class,
+            'bubble' => true,
         ],
 
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),
-            'level' => env('LOG_LEVEL', 'debug'),
+            'level' => 'debug',
             'replace_placeholders' => true,
+        ],
+
+        'trace' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/stacktrace.log'),
+            'level' => 'warning',
+            'replace_placeholders' => true,
+        ],
+
+        'nostack' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/nostack.log'),
+            'level' => 'debug', // o el nivel mínimo que quieras
+            'tap' => [App\Logging\NoStacktraceFormatter::class],
+            'bubble' => true
         ],
 
         'daily' => [
@@ -73,16 +97,16 @@ return [
             'replace_placeholders' => true,
         ],
 
-        'slack' => [
+        /*'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Laravel Log',
             'emoji' => ':boom:',
             'level' => env('LOG_LEVEL', 'critical'),
             'replace_placeholders' => true,
-        ],
+        ],*/
 
-        'papertrail' => [
+       /* 'papertrail' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
@@ -92,9 +116,9 @@ return [
                 'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
-        ],
+        ], */
 
-        'stderr' => [
+        /* 'stderr' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => StreamHandler::class,
@@ -103,7 +127,7 @@ return [
                 'stream' => 'php://stderr',
             ],
             'processors' => [PsrLogMessageProcessor::class],
-        ],
+        ], */
 
         'syslog' => [
             'driver' => 'syslog',
