@@ -34,14 +34,7 @@
         'Academico' => [
             $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',null),
             $form->text('becas','Becas:','label-input-y-75',null),
-           $form->select(
-    'nombre_institucion_secundario',
-    'Institución secundaria:',
-    'label-input-y-75',
-    null,
-    $instituciones
-)
-
+            $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',null),
         ],
         'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', null)]
     ]) ?>
