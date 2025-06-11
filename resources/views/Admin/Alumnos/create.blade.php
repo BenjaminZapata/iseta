@@ -14,7 +14,8 @@
             $form->text('apellido','Apellido:','label-input-y-75',null),
             $form->text('dni','DNI:','label-input-y-75',null),
             $form->date('fecha_nacimiento','Fecha de nacimiento:','label-input-y-75',null,['inputclass'=>'p-1 w-75p']),
-            $form->select('estado_civil','Estado civil:','label-input-y-75',null,['Vacio','Soltero','Casado','Divorciado','Viudo','Conyuge','Otro'])
+            $form->select('estado_civil','Estado civil:','label-input-y-75',null,['Vacio','Soltero','Casado','Divorciado','Viudo','Conyuge','Otro']),
+
         ],
         'Dirección' => [
             $form->text('ciudad','Ciudad:','label-input-y-75',null),
@@ -32,7 +33,8 @@
         ],
         'Academico' => [
             $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',null),
-            $form->text('becas','Becas:','label-input-y-75',null)
+            $form->text('becas','Becas:','label-input-y-75',null),
+            $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',null),
         ],
         'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', null)]
     ]) ?>

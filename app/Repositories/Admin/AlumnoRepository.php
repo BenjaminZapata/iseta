@@ -6,6 +6,7 @@ use App\Models\Alumno;
 use App\Models\Carrera;
 use App\Models\Configuracion;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class AlumnoRepository{
 
@@ -49,10 +50,28 @@ class AlumnoRepository{
             ->whereIn('alumnos.id', $ids);
 
         $query->orderBy('apellido')->orderBy('nombre');
-
         return $query->paginate($this->config['filas_por_tabla']);
-
     }
 
-    
+    // agregar una institucion secundaraia a un alumno
+    public function agregarInstitucionSecundaria(string $nombre): Alumno
+    {
+        return Alumno::create([
+            'nombre_institucion_secundaria' => $nombre
+        ]);
+    }
+
+    //actualizr una institucion secundaria de un alumno
+    public function actualizarInstitucionSecundaria(int $id, string $nuevoNombre): ?Alumno
+    {
+        $alumno = Alumno::query()->find($id);
+        if (!$alumno){
+            return null;
+        }
+
+        $alumno->nombre_institucion_secundaria = $nuevoNombre;
+        $alumno->save();
+
+        return $alumno;
+    }
 }

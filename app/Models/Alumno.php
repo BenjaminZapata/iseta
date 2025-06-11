@@ -35,13 +35,14 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'piso' ,
         'estado_civil' ,
         'email',
+        'nombre_institucion_secundario',
         'titulo_anterior' ,
         'becas',
         'observaciones',
         'telefono1',
         'telefono2' ,
         'telefono3',
-        'codigo_postal',
+        'codigo_postal',    
         'password'
     ];
 
