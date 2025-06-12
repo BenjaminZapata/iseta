@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Services\DiasHabiles;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
-
+/**
+ * Tabla con datos de configuracion; apesar de tener 2 campos llamados "key", "value"
+ */
 class Configuracion extends Model
 {
     use HasFactory;
@@ -29,7 +29,7 @@ class Configuracion extends Model
             session(['config',$config]);
             return $config;
         }
-        
+
     }
 
 
@@ -39,6 +39,6 @@ class Configuracion extends Model
         }
         return true;
     }
-    
-     
+
+
 }

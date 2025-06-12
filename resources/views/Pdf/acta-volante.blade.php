@@ -42,7 +42,7 @@
         border: 1px solid black;
         border-collapse: collapse;
         }
-        
+
         .acta_contenedor {
             /* border: 0.3px solid black; */
             page-break-inside: avoid !important;
@@ -105,12 +105,12 @@
                     {{ str_replace('-','/',explode(' ',$mesa->fecha)[0]) }}
                 </td>
                 <td>
-                    
+
                     {{ substr(explode(' ', $mesa->fecha)[1],0,5) }}
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Carrera: {{$mesa->asignatura->carrera->nombre}}</td>
+                <td colspan="4">Carrera: {{$mesa->asignatura->carrera->first()->nombre}}</td>
             </tr>
             <tr class="acta_info-carrera_bottom">
                 <td>Año: {{$mesa->asignatura->anio}}</td>
@@ -132,9 +132,9 @@
                                 <th>Prom.</th>
                             </tr>
                         </thead>
-                        
-                        
-                        
+
+
+
                         <tbody>
                             @php
                                 $actual = 1;
@@ -224,8 +224,8 @@
                     </table>
                 </td>
             </tr>
-            
-            
+
+
             </tbody>
         </table>
 </body>

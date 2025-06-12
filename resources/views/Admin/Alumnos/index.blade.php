@@ -1,7 +1,15 @@
 @extends('Admin.template')
 
 @section('content')
-    <?= $filtergen->generate('admin.alumnos.index',$filters,[
+
+
+    {{-- CONTENT --}}
+    <div class="table" data-name="tablaAlumnos">
+        {{-- BOTON CREAR --}}
+        
+        <div class="perfil__header-alt" style='align-items: flex-start'>
+            <a href="{{route('admin.alumnos.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar alumno</button></a>     
+            <?= $filtergen->generate('admin.alumnos.index',$filters,[
         'dropdowns' => [
             $carreraM->dropdown('filter_carrera_id','Carrera:', 'label-input-y-100',$filters, ['first_items' => ['Todas']]),
             $form->select('filter_ciudad', 'Ciudad:','label-input-y-100',$filters,$alumnoM->ciudades()),
@@ -15,13 +23,6 @@
             'telefono1' => 'Telefono'
         ]
     ]) ?>
-
-    {{-- CONTENT --}}
-    <div class="table">
-        {{-- BOTON CREAR --}}
-        
-        <div class="perfil__header-alt">
-            <a href="{{route('admin.alumnos.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar alumno</button></a>
         </div>
 
         {{-- TABLA --}}
@@ -43,7 +44,7 @@
                 @foreach ($alumnos as $alumno)
                     <tr>
                         <td class="capitalize">
-                            <p>{{$alumno->apellidoNombre()}}</p>
+                            <p class="bold">{{$alumno->apellidoNombre()}}</p>
                             <p>dni: {{$alumno->dniPuntos()}}</p>
                         </td>
                         

@@ -1,0 +1,36 @@
+{
+    "todo-tree.general.tags": [
+        "FIXME",
+        "WARN",
+        "COMPLETE",
+        "TODO"
+    ],
+
+    "todo-tree.highlights.defaultHighlight": {
+        "icon": "alert",
+        "type": "text",
+        "foreground": "red",
+        "opacity": 50,
+        "iconColour": "yellow"
+    },
+
+     "todo-tree.highlights.customHighlight": {
+        "TODO": {
+            "icon": "check",
+            "type": "line"
+        },
+        "WARN": {
+            "icon": "alert",
+            "type": "line"
+        },
+        "COMPLETE": {
+            "icon": "check",
+            "type": "line"
+        },
+        "FIXME": {
+            "iconColour": "yellow",
+            "gutterIcon": true
+        }
+    }
+
+}

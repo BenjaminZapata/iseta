@@ -25,9 +25,9 @@ class AdminsCrudController extends Controller
 
         if($request->has('filtro')){
             $filtro = $request->filtro;
- 
+
             $admins = Admin::where('username','LIKE','%'.$filtro.'%') -> paginate($porPagina);
-            
+
         }else{
             $admins = Admin::paginate($porPagina);
         }
@@ -49,7 +49,7 @@ class AdminsCrudController extends Controller
     public function store(Request $request)
     {
         $data = $request->only('username','password');
-        $data['password'] = bcrypt($data['password']); 
+        $data['password'] = bcrypt($data['password']);
         Admin::create($data);
         return redirect()->back();
     }

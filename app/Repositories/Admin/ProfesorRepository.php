@@ -27,21 +27,21 @@ class ProfesorRepository{
             if($request->input('filter_field') == 'profesor'){
                 $word = str_replace(' ','%',$request->input('filter_search_box'));
                 $idsQuery->whereRaw("(CONCAT(profesores.nombre,' ',profesores.apellido) LIKE '%$word%' OR profesores.email  LIKE '%$word%')");
-            }else{  
+            }else{
                 $idsQuery->where($request->input('filter_field'), 'LIKE', '%'.$request->input('filter_search_box').'%');
             }
-            
+
         }
 
         $ids = $idsQuery->distinct()->get()->pluck('id');
 
-        $profesores = Profesor::select('profesores.*')->whereIn('profesores.id', $ids)
-        ->orderBy('nombre')
-        ->orderBy('apellido')
-        ->paginate($this->config['filas_por_tabla']); 
+        $query = Profesor::select('profesores.*')
+            ->whereIn('profesores.id', $ids);
 
-        
-        return $profesores;
+        // ✅ ORDENAMIENTO FIJO POR APELLIDO Y NOMBRE
+        $query->orderBy('apellido')->orderBy('nombre');
+
+        return $query->paginate($this->config['filas_por_tabla']);
 
     }
 

@@ -6,7 +6,11 @@ use App\Services\TextFormatService;
 use App\Traits\ModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
+
 
 class Carrera extends Model
 {
@@ -24,6 +28,7 @@ class Carrera extends Model
         'resolucion_archivo'
     ];
 
+<<<<<<< HEAD
     
     public function scopeOrdenVigentes($query)
     {return $query ->orderByDesc('vigente') ->orderby('nombre');
@@ -34,20 +39,50 @@ class Carrera extends Model
 
     public function asignaturas(){
         return $this -> hasMany(Asignatura::class, 'id_carrera');
+=======
+    /**
+     * Asignaturas que pertenecen a la carrera
+     * @return BelongsToMany
+     */
+    public function asignaturas(): BelongsToMany{
+        return $this -> belongsToMany(Asignatura::class, "carrera_asignatura_profesor", "id_carrera", "id_asignatura")
+            -> withPivot('id_profesor')
+            -> withTimestamps();
+>>>>>>> 94e90b2f667dbf1ce9dc40b62a48bd3657d5630b
     }
 
+
+    public function profesores(): BelongsToMany{
+        return $this -> BelongsToMany(Profesor::class, "carrera_asignatura_profesor", "id_carrera", "id_profesor")
+            -> withPivot('id_asignatura')
+            -> withTimestamps();
+    }
+
+    public function resolucionArchivo(){
+        return Carrera::where('id',$this->id)->first()->resolucion_archivo;
+    }
     public function primeraAsignatura(){
-        return Asignatura::where('id_carrera', $this->id)->orderBy('anio')->first();
+        return Asignatura::Has('carrera', $this->id)->orderBy('anio')->first();
     }
 
     public function textForSelect(){
         return $this->nombre;
     }
 
-    static function getDefault($alumno_id=null){
-        if($alumno_id) $alumno = Alumno::find($alumno_id);
-        else $alumno = Auth::user();
+    public static function getAsignaturas($id_carrera){
+        $asignaturas = Asignatura::select("id_asignatura")
+            -> where('id_carrera',$id_carrera)
+            -> get();
+        if ($asignaturas->isEmpty())
+        {
+            return null;
+        }
+        return $asignaturas;
+    }
 
+    public static function getDefault($alumno_id=null){
+
+        $alumno = $alumno_id ? Alumno::find($alumno_id) : Auth::user();
         $carrera = CarreraDefault::select('id_carrera')
             -> where('id_alumno',$alumno->id)
             -> first();
@@ -64,13 +99,14 @@ class Carrera extends Model
     }
 
     function estaInscripto($alumno=null){
-        if(!$alumno) $alumno=Auth::user();
 
-        $existe=Egresado::where('id_alumno',$alumno->id)
+        if  (!$alumno) {
+            $alumno=Auth::user();
+        }
+
+        return Egresado::where('id_alumno',$alumno->id)
             ->where('id_carrera', $this->id)
             ->exists();
-
-        return $existe;
     }
 
     static function vigentes(){

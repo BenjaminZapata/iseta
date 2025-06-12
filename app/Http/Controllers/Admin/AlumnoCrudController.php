@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\crearAlumnoRequest;
 use App\Http\Requests\EditarAlumnoRequest;
 use App\Models\Alumno;
-use App\Models\Carrera;
-use App\Models\Configuracion;
 use App\Models\Cursada;
-use App\Models\Egresado;
 use App\Models\Examen;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use stdClass;
 
 class AlumnoCrudController extends BaseController
@@ -34,37 +31,37 @@ class AlumnoCrudController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    
+
     public function index(Request $request)
     {
-        $this->setFilters($request);        
+        $this->setFilters($request);
         $this->data['alumnos'] = $this->alumnosRepo->index($request);
-        
+
         return view('Admin.Alumnos.index', $this->data);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    { 
+    public function create(): View
+    {
         return view('Admin.Alumnos.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Guarda un nuevo alumno creado
      */
     public function store(crearAlumnoRequest $request)
     {
         $data = $request->validated();
         $response = redirect()->back();
         
-        if(Alumno::where('telefono1', strtolower($data['telefono1']))->first()){
-            $response -> with('aviso','Ya hay un usuario con ese numero de telefono')->withInput();
-        };
-
-        Alumno::create($data);
-        return $response->with('mensaje','Se creo el alumno');
+        if(Alumno::where('dni', strtolower($data['dni']))->first()){
+            return $response -> with('aviso','Ya hay un usuario con ese numero de documento')->withInput();
+        } else {
+            Alumno::create($data);
+            return $response->with('mensaje','Se creo el alumno');
+        }
     }
 
     /**
@@ -88,8 +85,7 @@ class AlumnoCrudController extends BaseController
             -> where('examenes.id_alumno',$alumno->id)
             -> orderBy('carreras.id')
             -> orderBy('asignaturas.anio')
-            -> orderBy('asignaturas.id')
-            -> orderBy('examenes.fecha')
+            -> orderBy('examenes.fecha','desc')
             -> get();
 
         return view('Admin.Alumnos.edit', [
@@ -108,7 +104,7 @@ class AlumnoCrudController extends BaseController
         $data = $request->validated();
 
         $mensajes = ['aviso'=>[],'error'=>[],'mensaje'=>[]];
-        
+
         if($data['telefono1'] && Alumno::where('id','!=',$alumno->id)->where('telefono1', strtolower($data['telefono1']))->exists()){
             $mensajes['aviso'][] = 'Ya hay un usuario con ese numero de telefono';
         };
@@ -127,14 +123,14 @@ class AlumnoCrudController extends BaseController
      */
     public function destroy(Alumno $alumno)
     {
-        
+
         $alumno->delete();
         return redirect() -> route('admin.alumnos.index') -> with('mensaje', 'Se ha eliminado el alumno');
     }
 
 
     public function verificar(Request $request, Alumno $alumno){
-        
+
         if( 1 != $alumno->verificado){
             $alumno->verificar();
             $this->mensajes['mensaje'][] = 'Se ha verificado al alumno';

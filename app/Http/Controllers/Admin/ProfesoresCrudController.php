@@ -13,7 +13,7 @@ use App\Repositories\Admin\ProfesorRepository;
 use Illuminate\Http\Request;
 
 class ProfesoresCrudController extends BaseController
-{   
+{
     public $profeRepo;
 
     function __construct(ProfesorRepository $profeRepo)
@@ -26,12 +26,12 @@ class ProfesoresCrudController extends BaseController
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {       
-        $config = Configuracion::todas();    
+    {
+        $config = Configuracion::todas();
         $this->setFilters($request);
 
         $this->data['profesores'] = $this->profeRepo->index($request);
-        
+
         return view('Admin.Profesores.index',$this->data);
 
     }
@@ -93,6 +93,6 @@ class ProfesoresCrudController extends BaseController
         return redirect() -> route('admin.profesores.index') -> with('mensaje', 'Se ha eliminado el profesor');
     }
 
-    
+
 
 }

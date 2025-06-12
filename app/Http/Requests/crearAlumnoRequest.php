@@ -4,13 +4,13 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class crearAlumnoRequest extends FormRequest
+class CrearAlumnoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
-    {   
+    {
         return true;
     }
 
@@ -33,6 +33,7 @@ class crearAlumnoRequest extends FormRequest
             'piso' => ['nullable'],
             'estado_civil' => ['required'],
             'email' => ['nullable','unique:alumnos'],
+            'nombre_institucion_secundario' => ['required'],
             'titulo_anterior' => ['nullable'],
             'becas' => ['numeric','nullable'],
             'observaciones' => ['nullable'],

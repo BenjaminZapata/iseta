@@ -6,7 +6,7 @@
     <a href="/admin/alumnos">Alumnos</a>/
     <a href="/admin/alumnos/{{$examen->alumno->id}}/edit">{{$examen->alumno->id}}</a>/ Examen/
     <a>{{$examen->asignatura->nombre}}</a>
-</p> 
+</p>
 <div class="edit-form-container">
     <div class="perfil_one br">
         <div class="perfil__header">
@@ -46,8 +46,8 @@
                 <div class="perfil_dataname">
                     <label>Carrera:</label>
                     <span class="campo_info2">
-                        <a class="flex items-center" href="{{route('admin.carreras.edit',['carrera'=>$examen->asignatura->carrera->id])}}">
-                            {{$examen->asignatura->carrera->nombre}} <i class="ti ti-info-circle"></i>
+                        <a class="flex items-center" href="{{route('admin.carreras.edit',['carrera'=>$examen->asignatura->carrera->first()->id])}}">
+                            {{$examen->asignatura->carrera->first()->nombre}} <i class="ti ti-info-circle"></i>
                         </a>
                     </span>
                 </div>
@@ -61,43 +61,43 @@
             </div>
             <div class=".h-auto">
                 <div id="border-none">
-                    
+
                 @if (isset($examen->mesa))
                 <div class="perfil_dataname">
-                    <label>Presidente:</label> 
-                    <span class="campo_info2">@if($examen->mesa->profesor) 
+                    <label>Presidente:</label>
+                    <span class="campo_info2">@if($examen->mesa->profesor)
                         {{$examen->mesa->profesor->nombre . ' '.$examen->mesa->profesor->apellido}}</span>
                 @else
                     <label>Sin profesor confirmado</label>
                     </div>
-                @endif  
-                    
+                @endif
+
                 </div>
                 <div class="perfil_dataname">
-                    <label>Vocal 1:</label> 
+                    <label>Vocal 1:</label>
                     <span class="campo_info2 capitalize">{{$examen->mesa->vocal1? $examen->mesa->vocal1->nombre . ' ' . $examen->mesa->vocal1->apellido : 'No hay'}}</span>
                 </div>
                 <div class="perfil_dataname">
                     <label>Vocal 2:</label>
                     <span class="campo_info2">{{$examen->mesa->vocal2? $examen->mesa->vocal2->nombre . ' ' . $examen->mesa->vocal2->apellido : 'No hay'}}</span>
                 </div>
-                    
+
                 <div class="perfil_dataname">
                     <label>Llamado:</label>
                     <span class="campo_info2">{{$examen->mesa->llamado? $examen->mesa->llamado : 'No hay datos sobre el llamado'}}</span>
                 </div>
-                    
+
                 <div class="perfil_dataname border-none">
                     <label>Fecha de mesa:</label>
                     <span class="campo_info2">{{$examen->mesa->fecha? $formatoFecha->dmahm($examen->mesa->fecha) : 'No hay datos sobre la fecha'}}</span>
                 </div>
-                
+
                 @else
                 <div class="campo_info3 font-400 border-none">
-                    <label>No hay informacion de la mesa, esto es debido a que cuando se registro la inscripcion, no se especifico una mesa por parte de iseta</label>    
+                    <label>No hay informacion de la mesa, esto es debido a que cuando se registro la inscripcion, no se especifico una mesa por parte de iseta</label>
                 </div>
                     @endif
-                
+
             </div>
             <div class="perfil_tit_dataname rounded">
                 <h3>Examen</h3>
@@ -116,11 +116,11 @@
                     <input class="campo_info3" @checked($examen->aprobado == 3) name="ausente" type="checkbox">
                 </div>
                 <div class="perfil_dataname">
-                    <label>Tipo de final:</label>      
+                    <label>Tipo de final:</label>
                     <select class="campo_info rounded" name="tipo_final">
                         <option value="1">Escrito</option>
                         <option value="2">Oral</option>
-                        <option value="3">Promocionado</option> 
+                        <option value="3">Promocionado</option>
                     </select>
                 </div>
                 <div class="perfil_dataname">
@@ -142,12 +142,12 @@
 </div>
 @if (!$config['modo_seguro'])
 <div class="upd">
-        
+
             <form class="form-eliminar" c method="post" action="{{route('admin.examenes.destroy', ['examen'=>$examen->id])}}">
                 @csrf
                 @method('delete')
                 <button class="btn_red"><i class="ti ti-trash"></i>Eliminar examen</button>
-            </form>    
+            </form>
 
 </div>
 @endif

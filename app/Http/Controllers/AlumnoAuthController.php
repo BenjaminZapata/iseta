@@ -8,17 +8,18 @@ use App\Models\Alumno;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
 /**
- * 
+ *
  * Autenticacion (login, registro, etc) de los alumnos
  * Utilizan el guard: alumno
- * 
+ *
  */
 
 class AlumnoAuthController extends Controller
 {
-   
+
     /**
      * Debes ser guest para acceder a las rutas
      * excepto para cerrar sesion
@@ -33,7 +34,7 @@ class AlumnoAuthController extends Controller
     /**
      * muestra la ruta de registro
      */
-    function registroView(){
+    public function registroView(){
         return view('Alumnos.Auth.registro');
     }
 
@@ -44,14 +45,14 @@ class AlumnoAuthController extends Controller
         $validated = $request->validated();
 
         $passwordGiven = $validated['password'];
-        
+
         // si existe el correo y tiene password a 0
         $alumno = Alumno::existeSinPassword($validated);
-        
-        if(!$alumno ) 
+
+        if(!$alumno )
             return redirect()->back()->withInput()->with('error','mail y dni no coinciden o ya esta registrado');
 
-        // setea password 
+        // setea password
         $alumno -> password = bcrypt($passwordGiven);
         $alumno -> save();
 
@@ -63,7 +64,7 @@ class AlumnoAuthController extends Controller
     /**
      * muestra vista de login
      */
-    function loginView(){
+    function loginView(): View{
         return view('Alumnos.Auth.login');
     }
 
@@ -78,9 +79,9 @@ class AlumnoAuthController extends Controller
 
         $alumno = Alumno::where('email',$emailGiven)->first();
 
-        if(!$alumno || !Hash::check($passwordGiven, $alumno->password)) 
+        if(!$alumno || !Hash::check($passwordGiven, $alumno->password))
             return redirect()->route('alumno.login')->withInput()->with('error','Datos de usuario incorrectos');
-        
+
         Auth::guard('admin')->logout();
 
         Auth::login($alumno);
@@ -97,7 +98,8 @@ class AlumnoAuthController extends Controller
 
 
 
-    function cambiarPassword(ModificarPasswordRequest $request){
+   private function cambiarPassword(ModificarPasswordRequest $request){
+        /** @var \App\Models\Alumno $alumno **/
         $alumno = Auth::user();
 
         if(!Hash::check($request->oldPassword, $alumno->password)){
@@ -107,10 +109,10 @@ class AlumnoAuthController extends Controller
         if($request->newPassword != $request->newPassword_confirmation){
             return redirect()->back()->with('error','Las contraseñas no coinciden');
         }
-        
+
         $alumno->password = bcrypt($request->newPassword);
         $alumno->save();
-        
+
         return redirect()->back()->with('mensaje','Se ha restablecido la contraseña');
     }
 }

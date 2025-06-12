@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class ExamenesCrudController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
         $this -> middleware('auth:admin');
     }
@@ -26,15 +26,15 @@ class ExamenesCrudController extends Controller
 
         if(!$request->has('id_alumno'))
             return redirect() -> back() -> with('error','No has seleccionado ningun alumno');
-        
+
         $mesa = Mesa::find($request->input('id_mesa'));
         $alumno = Alumno::find($request->input('id_alumno'));
-        
+
         $comprobacion = $inscripcionService->puedeInscribirse($mesa, $alumno);
 
-        if(!$comprobacion['success']) 
+        if(!$comprobacion['success'])
             return \redirect()->back()->with('error',$comprobacion['mensaje']);
-      
+
         Examen::create([
             'id_alumno' => $alumno->id,
             'id_mesa' => $mesa->id,
@@ -42,7 +42,7 @@ class ExamenesCrudController extends Controller
             'nota'=> 0,
             'aprobado' => 0,
             'fecha' => now()
-        ]); 
+        ]);
 
         return redirect() -> back() -> with('mensaje','Se ha inscrito al alumno');
     }
@@ -52,7 +52,7 @@ class ExamenesCrudController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Request $request, Examen $examen)
-    {   
+    {
         return view('Admin.Examenes.edit', compact('examen'));
     }
 
@@ -61,27 +61,25 @@ class ExamenesCrudController extends Controller
      */
     public function update(Request $request, Examen $examen)
     {
-        
+
         $examen->update($request->all());
-        
+
         if($request->ausente){
             $examen->nota = 0;
             $examen->aprobado = 3;
-        }else if($request->nota > 4){
+        }elseif($request->nota > 4){
             $examen->aprobado = 1;
-        }else 
+        }else
             $examen->aprobado = 2;
 
         $examen->save();
 
-        
+
         if($request->has('redirect'))
             return redirect()->to($request->input('redirect'))->with('mensaje','Se modificó el examen');
         else
             return redirect()->back()->with('mensaje','Se modificó el examen');
-        
 
-        //return redirect()->back();
     }
 
     /**
@@ -92,7 +90,7 @@ class ExamenesCrudController extends Controller
         $mesa = Mesa::where('id', $examen->id_mesa)->first();
         $examen->delete();
 
-        if(!$mesa) 
+        if(!$mesa)
             return redirect() -> route('admin.mesas.edit',['mesa'=>$mesa->id]) -> with('mensaje', 'Se ha eliminado el examen');
         else
             return redirect() -> route('admin.mesas.index') -> with('mensaje', 'Se ha eliminado el examen');
