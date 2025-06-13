@@ -5,40 +5,41 @@
 
 
 <div class="edit-form-container">
+
     <div class="perfil_one br">
         <div class="perfil__info">
 
-    <?= $form->generate(route('admin.alumnos.update',['alumno'=>$alumno->id]),'put',[
-        'Alumno' => [
-            $form->text('nombre','Nombre:','label-input-y-75',$alumno),
-            $form->text('apellido','Apellido:','label-input-y-75',$alumno),
-            $form->text('dni','DNI:','label-input-y-75',$alumno),
-            $form->date('fecha_nacimiento','Fecha de nacimiento:','label-input-y-75',$alumno,['default' => $alumno->fecha_nacimiento->format('Y-m-d'),'inputclass'=>'p-1 w-75p']),
-            $form->select('estado_civil','Estado civil:','label-input-y-75',$alumno,['Vacio','Soltero','Casado','Divorciado','Viudo','Conyuge','Otro'])
-        ],
-        'Dirección' => [
-            $form->text('ciudad','Ciudad:','label-input-y-75',$alumno),
-                $form->text('codigo_postal','Codigo postal:','label-input-y-75',$alumno),
-                $form->text('calle','Calle:','label-input-y-75',$alumno),
-                $form->text('casa_numero','Altura:','label-input-y-75',$alumno),
-                $form->text('dpto','Departamento:','label-input-y-75',$alumno),
-                $form->text('piso','Piso:','label-input-y-75',$alumno)
-        ],
-        'Contacto' => [
-            $form->text('email','Email:','label-input-y-75',$alumno),
-            $form->text('telefono1','Telefono 1:','label-input-y-75',$alumno),
-            $form->text('telefono2','Telefono 2:','label-input-y-75',$alumno),
-            $form->text('telefono3','Telefono 3:','label-input-y-75',$alumno)
-        ],
-        'Academico' => [
-            $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',$alumno),
-            $form->text('becas','Becas:','label-input-y-75',$alumno),
-            $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',$alumno),
-        ],
-        'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
-    ]) ?>
+            <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
+                'Alumno' => [
+                    $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno),
+                    $form->text('apellido', 'Apellido:', 'label-input-y-75', $alumno),
+                    $form->text('dni', 'DNI:', 'label-input-y-75', $alumno),
+                    $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $alumno, ['default' => $alumno->fecha_nacimiento->format('Y-m-d'), 'inputclass' => 'p-1 w-75p']),
+                    $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, ['Vacio', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])
+                ],
+                'Dirección' => [
+                    $form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno),
+                    $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', $alumno),
+                    $form->text('calle', 'Calle:', 'label-input-y-75', $alumno),
+                    $form->text('casa_numero', 'Altura:', 'label-input-y-75', $alumno),
+                    $form->text('dpto', 'Departamento:', 'label-input-y-75', $alumno),
+                    $form->text('piso', 'Piso:', 'label-input-y-75', $alumno)
+                ],
+                'Contacto' => [
+                    $form->text('email', 'Email:', 'label-input-y-75', $alumno),
+                    $form->text('telefono1', 'Telefono 1:', 'label-input-y-75', $alumno),
+                    $form->text('telefono2', 'Telefono 2:', 'label-input-y-75', $alumno),
+                    $form->text('telefono3', 'Telefono 3:', 'label-input-y-75', $alumno)
+                ],
+                'Academico' => [
+                    $form->text('titulo_anterior', 'Titulo anterior:', 'label-input-y-75', $alumno),
+                    $form->text('becas', 'Becas:', 'label-input-y-75', $alumno),
+                    $form->text('nombre_institucion_secundario', 'Secundaria:', 'label-input-y-75', $alumno),
+                ],
+                'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
+            ]) ?>
+        </div>
     </div>
-</div>
 
 
 
@@ -52,7 +53,7 @@
             <form action="{{route('admin.alumno.rematricular',['alumno' => $alumno->id])}}">
                 <select name="carrera">
                     @foreach ($carreras as $carrera)
-                        <option value="{{$carrera->carrera_id}}">{{$carrera->carrera_nombre}}</option>
+                    <option value="{{$carrera->carrera_id}}">{{$carrera->carrera_nombre}}</option>
                     @endforeach
                 </select>
                 <div class="upd"><button class="btn_blue"><i class="ti ti-paperclip"></i>Matricular</button></div>
@@ -78,34 +79,34 @@
             </thead>
             <tbody class="table__body">
 
-            @php
+                @php
                 $carrera_actual = "";
                 $anio_actual = "";
-            @endphp
+                @endphp
 
-            @foreach($cursadas as $cursada)
+                @foreach($cursadas as $cursada)
 
                 {{-- @dd($cursada) --}}
                 @if ($carrera_actual != $cursada->carrera)
-                    <tr>
-                        <td class="center font-600 tit-year2" colspan=5>{{$cursada->carrera}}</td>
-                    </tr>
-                    @php
-                        $carrera_actual = $cursada->carrera;
-                        $anio_actual = "";
-                    @endphp
+                <tr>
+                    <td class="center font-600 tit-year2" colspan=5>{{$cursada->carrera}}</td>
+                </tr>
+                @php
+                $carrera_actual = $cursada->carrera;
+                $anio_actual = "";
+                @endphp
                 @endif
 
 
                 @if ($anio_actual != $cursada->anio_asig)
-                    <tr>
-                        <td class="center font-600 tit-year" colspan=5>
-                            Año: {{$cursada->anio_asig+1}}
-                        </td>
-                    </tr>
-                    @php
-                            $anio_actual = $cursada->anio_asig
-                    @endphp
+                <tr>
+                    <td class="center font-600 tit-year" colspan=5>
+                        Año: {{$cursada->anio_asig+1}}
+                    </td>
+                </tr>
+                @php
+                $anio_actual = $cursada->anio_asig
+                @endphp
                 @endif
 
 
@@ -121,8 +122,8 @@
                     </td>
                 </tr>
 
-            @endforeach
-            
+                @endforeach
+
             </tbody>
         </table>
 
@@ -135,73 +136,90 @@
             <p>Importante: algunos examanes de alumnos mas antiguos podrian no tener datos sobre las mesas.
             </p>
         </div>
-            <table class="table__body">
-                <thead>
-                    <tr>
-                        <th>Materia</th>
-                        <th>Fecha</th>
-                        <th>Nota</th>
-                        <th class="center">Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $carrera_actual = "";
-                        $anio_actual = "";
-                    @endphp
+        <table class="table__body">
+            <thead>
+                <tr>
+                    <th>Materia</th>
+                    <th>Fecha</th>
+                    <th>Nota</th>
+                    <th class="center">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                $carrera_actual = "";
+                $anio_actual = "";
+                @endphp
 
-                    @foreach($examenes as $examen)
+                @foreach($examenes as $examen)
 
-                        @if ($carrera_actual != $examen->carrera)
-                            <tr>
-                                <td class="center font-600 tit-year2" colspan=4>{{$examen->carrera}}</td>
-                            </tr>
-                            @php
-                                $carrera_actual = $examen->carrera;
-                                $anio_actual = "";
-                            @endphp
-                        @endif
+                @if ($carrera_actual != $examen->carrera)
+                <tr>
+                    <td class="center font-600 tit-year2" colspan=4>{{$examen->carrera}}</td>
+                </tr>
+                @php
+                $carrera_actual = $examen->carrera;
+                $anio_actual = "";
+                @endphp
+                @endif
 
 
-                        @if ($anio_actual != $examen->anio_asig)
-                            <tr>
-                                <td class="center font-600 tit-year" colspan=4>
-                                    Año: {{$examen->anio_asig+1}}
-                                </td>
-                            </tr>
-                            @php
-                                    $anio_actual = $examen->anio_asig
-                            @endphp
-                        @endif
+                @if ($anio_actual != $examen->anio_asig)
+                <tr>
+                    <td class="center font-600 tit-year" colspan=4>
+                        Año: {{$examen->anio_asig+1}}
+                    </td>
+                </tr>
+                @php
+                $anio_actual = $examen->anio_asig
+                @endphp
+                @endif
 
-                        <tr>
-                            <td>{{$examen->asignatura}}</td>
+                <tr>
+                    <td>{{$examen->asignatura}}</td>
 
-                            <td>
+                    <td>
 
-                                {{$formatoFecha->dma($examen->fecha())}}
-                            </td>
+                        {{$formatoFecha->dma($examen->fecha())}}
+                    </td>
 
-                            <td>
+                    <td>
 
-                            @if ($examen->aprobado==3)
-                                Ausente
-                            @elseif($examen->nota<=0)
-                                Sin nota
+                        @if ($examen->aprobado==3)
+                        Ausente
+                        @elseif($examen->nota<=0)
+                            Sin nota
                             @else
-                                {{$examen->nota}}
+                            {{$examen->nota}}
                             @endif
                             </td>
-                            <td class="flex just-center"><a href="{{route('admin.examenes.edit', ['examen' => $examen->id,])}}"><button class="btn_blue"><i class="ti ti-edit"></i>Editar</button></a></td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    <td class="flex just-center"><a href="{{route('admin.examenes.edit', ['examen' => $examen->id,])}}"><button class="btn_blue"><i class="ti ti-edit"></i>Editar</button></a></td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
 
     </div>
     @if ($alumno->verificado == 0)
-        <a href="{{route('admin.alumnos.verificar', ['alumno' => $alumno->id])}}">Verificar alumno</a>
+    <div style="display: flex; justify-content: flex-end; margin-top: 15px; padding-right: 8px; margin-bottom: 15px;">
+    <a href="{{ route('admin.alumnos.verificar', ['alumno' => $alumno->id]) }}"
+       class="btn_green"
+       style="
+            display: flex;
+            align-items: center;
+            padding: 8px 18px;
+            font-size: 1em;
+            height: 36px;
+            text-decoration: none;
+            gap: 8px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px #0001;
+       ">
+        <i class="ti ti-mail"></i> Verificar alumno
+    </a>
+    </div>
     @endif
+
 </div>
 
 @endsection
