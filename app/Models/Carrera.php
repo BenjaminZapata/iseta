@@ -28,18 +28,6 @@ class Carrera extends Model
         'resolucion_archivo'
     ];
 
-<<<<<<< HEAD
-    
-    public function scopeOrdenVigentes($query)
-    {return $query ->orderByDesc('vigente') ->orderby('nombre');
-    
-    }
-
-
-
-    public function asignaturas(){
-        return $this -> hasMany(Asignatura::class, 'id_carrera');
-=======
     /**
      * Asignaturas que pertenecen a la carrera
      * @return BelongsToMany
@@ -48,7 +36,6 @@ class Carrera extends Model
         return $this -> belongsToMany(Asignatura::class, "carrera_asignatura_profesor", "id_carrera", "id_asignatura")
             -> withPivot('id_profesor')
             -> withTimestamps();
->>>>>>> 94e90b2f667dbf1ce9dc40b62a48bd3657d5630b
     }
 
 

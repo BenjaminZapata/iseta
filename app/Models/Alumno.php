@@ -43,7 +43,8 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'telefono2' ,
         'telefono3',
         'codigo_postal',    
-        'password'
+        'password',
+        'estado'
     ];
 
     /**
@@ -88,6 +89,14 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             return 'Otro';
         }
 
+    }
+
+    public function estado(){
+        $estado = ['Cursando','Egresado/a','Desertor/ar'];
+        
+        if(isset($estado[$this->estado_civil])){
+            return $estado[$this->estado_civil];
+        }
     }
 
     public function cursadas(){

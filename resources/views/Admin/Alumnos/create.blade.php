@@ -35,6 +35,7 @@
             $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',null),
             $form->text('becas','Becas:','label-input-y-75',null),
             $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',null),
+            $form->select('estado','Estado:','label-input-y-75',null,['Cursando','Egresado','Desertor'])
         ],
         'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', null)]
     ]) ?>

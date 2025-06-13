@@ -12,7 +12,7 @@ class estados extends Migration
     public function up(): void
     {
            Schema::table('alumnos', function (Blueprint $table){
-            $table->enum('estado',['Cursando','Egresado','Desertor'])->required();
+            $table->tinyInteger('estado')->required();
         });
     }
 
