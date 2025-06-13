@@ -94,8 +94,10 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     public function estado(){
         $estado = ['Cursando','Egresado/a','Desertor/ar'];
         
-        if(isset($estado[$this->estado_civil])){
-            return $estado[$this->estado_civil];
+        if(isset($estado[$this->estado])){
+            return $estado[$this->estado];
+        }else{
+            return 'Otro';
         }
     }
 
