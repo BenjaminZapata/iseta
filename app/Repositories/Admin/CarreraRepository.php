@@ -39,7 +39,8 @@ class CarreraRepository{
         $ids = $idsQuery->distinct()->get()->pluck('id');
 
         return Carrera::select('carreras.*')->whereIn('carreras.id', $ids)
-        ->orderBy('nombre')
+        ->orderBy('
+        nombre')
         ->paginate($this->config['filas_por_tabla']);
     }
 
@@ -48,11 +49,12 @@ class CarreraRepository{
         // Example: return $carrera->asignaturas()->attach($asignatura->id);
     }
 
-public function GETresolucion($carrera)
-{
-    return Carrera::where('id', $carrera->id)
-        ->select('nombre','resolucion', 'vigente', 'resolucion_archivo')
-        ->first();
-}
+    public function GETresolucion($carrera)
+    {
+        return Carrera::where('id', $carrera->id)
+            ->select('nombre','resolucion', 'vigente', 'resolucion_archivo')
+            ->first();
+    }
 
 }
+
