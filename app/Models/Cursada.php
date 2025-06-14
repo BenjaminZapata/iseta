@@ -43,7 +43,7 @@ class Cursada extends Model
         return match($this->aprobada) {
             1 => 'Aprobada',
             2 => 'Reprobada',
-            default => 'cursando',
+            default => 'Cursando',
         };
     }
 }
