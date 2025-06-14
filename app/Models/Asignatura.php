@@ -52,7 +52,7 @@ class Asignatura extends Model
         return $value + 1;
     }
 
-    public function estaCursando($alumno): Model{
+    public function estaCursando($alumno) {
         return Cursada::where(column: 'id_alumno', operator: $alumno->id)
             -> where(column: 'id_asignatura', operator: $this->id)
             -> where(column: 'aprobada', operator: 3)
@@ -76,14 +76,14 @@ class Asignatura extends Model
 
     public function aproboCursada($alumno){
         $cursada = Cursada::where(column: 'id_alumno', operator: $alumno->id)
-            -> where(column: 'id_asignatura',operator: $this->id)
-            -> where(column: function($subQuery): void{
-                $subQuery -> where('aprobada', 1)
-                -> orWhere('condicion', 0)
-                -> orWhere('condicion', 2)
-                -> orWhere('condicion', 3);
-            })
-            -> first();
+        -> where(column: 'id_asignatura',operator: $this->id)
+        -> where(column: function($subQuery): void{
+            $subQuery -> where('aprobada', 1)
+            -> orWhere('condicion', 0)
+            -> orWhere('condicion', 2)
+            -> orWhere('condicion', 3);
+        })
+        ->first();
 
         if($cursada) {
             return $cursada;

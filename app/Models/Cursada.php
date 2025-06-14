@@ -40,15 +40,10 @@ class Cursada extends Model
     }
 
     public function aprobado(): string{
-        if ($this->aprobada==1) {
-            return 'Aprobada';
-        }
-        elseif($this->aprobada==2) {
-            return 'Reprobada';
-        }
-        else {
-            return 'Cursando';
-        }
+        return match($this->aprobada) {
+            1 => 'Aprobada',
+            2 => 'Reprobada',
+            default => 'cursando',
+        };
     }
-
 }
