@@ -82,41 +82,41 @@ class InscripcionRepository
         -> where('id_carrera', Carrera::getDefault()->id)
         -> get();
 
-    $examenesInscriptos = Examen::select('id_mesa')
-        -> where('id_alumno', $alumno->id)
-        -> get() -> pluck('id_mesa') -> toArray();
+        $examenesInscriptos = Examen::select('id_mesa')
+            -> where('id_alumno', $alumno->id)
+            -> get() -> pluck('id_mesa') -> toArray();
 
-    $posibles = [];
-    $reg = [];
+        $posibles = [];
+        $reg = [];
 
-    foreach ($asignaturas as $key=>$asignatura) {
-        $reg = [
-            'asignatura' => null,
-            'correlativas' => null,
-            'yaAnotado' => null,
-        ];
+        foreach ($asignaturas as $key=>$asignatura) {
+            $reg = [
+                'asignatura' => null,
+                'correlativas' => null,
+                'yaAnotado' => null,
+            ];
 
-        if(count($asignatura->mesas) == 0) continue;
-        if($asignatura->aproboExamen(Auth::user())) continue;
-        if(!$asignatura->aproboCursada(Auth::user())) continue;
+            if(count($asignatura->mesas) == 0) continue;
+            if($asignatura->aproboExamen(Auth::user())) continue;
+            if(!$asignatura->aproboCursada(Auth::user())) continue;
 
-        $reg['asignatura'] = $asignatura;
+            $reg['asignatura'] = $asignatura;
 
-        foreach($asignatura->mesas as $mesa){
-            if(in_array($mesa->id, $examenesInscriptos)) {
-                $reg['yaAnotado'] = $mesa; break;
+            foreach($asignatura->mesas as $mesa){
+                if(in_array($mesa->id, $examenesInscriptos)) {
+                    $reg['yaAnotado'] = $mesa; break;
+                }
             }
+
+            $correlativas = Correlativa::debeExamenesCorrelativos($asignatura);
+
+            if($correlativas){
+                $reg['correlativas'] = $correlativas;
+            }
+            $posibles[] = $reg;
         }
 
-        $correlativas = Correlativa::debeExamenesCorrelativos($asignatura);
-
-        if($correlativas){
-            $reg['correlativas'] = $correlativas;
-        }
-        $posibles[] = $reg;
-    }
-
-    return $posibles;
+        return $posibles;
     }
 
 }
