@@ -18,29 +18,29 @@
                 <tbody>
             <form id="formulario" method="POST" action="{{route('alumno.rematriculacion.post', ['carrera'=>$carrera])}}">
                 @csrf
-                
+
                 @if (count($asignaturas)<=0)
                     <tr>
                         <span>No tienes asignaturas para rendir de esta carrera.</span>
                         <span>Si crees que se trata de un error, comunicate con la institucion para solucionarlo.</span>
                     </tr>
-    
+
                 @else
                 @foreach ($asignaturas as $asignatura)
                     <tr @class([
                         'gray-600' => $asignatura->equivalencias_previas
                         ])>
-                        
+
                         <td> {{$asignatura->anio}}</td>
                         <td>{{$asignatura->nombre}}
                         </td>
-                        <td class="flex just-end"> 
+                        <td class="flex just-end">
                             @if ($asignatura->equivalencias_previas)
-                                <div>  
+                                <div>
                                     <div class="flex just-end gap-3">
                                         <p class="font-600 salto">Debes correlativas</p>
                                         <label class="blue-600 px-1 rounded pointer ver-equiv" data-element="{{$asignatura->id}}">Detalles...</label>
-                                    </div>   
+                                    </div>
                                     <ul class="none id-{{$asignatura->id}}">
                                     @foreach ($asignatura->equivalencias_previas as $asignatura)
                                     <li class="salto"><span class="font-600">{{$asignatura->anioStr()}}:</span> {{$asignatura->nombre}}</li>
@@ -51,7 +51,7 @@
                                 <select class="campo_info rounded pointer" name="{{$asignatura->id}}">
                                     <option value="">No matricular</option>
                                     @if ($config['alumno_puede_anotarse_libre'])
-                                        <option value="1">Libre</option>
+                                        <option value="0">Libre</option>
                                     @endif
                                     <option value="2">Regular</option>
                                     </select>
