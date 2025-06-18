@@ -41,13 +41,12 @@ class RematriculacionController extends Controller
         $carrera = Carrera::getDefault();
         $esFechaDeRemat = $this->rematService->esFechaDeRematriculacion();
 
-        //if(!$esFechaDeRemat) return redirect()->back()->with('aviso','Aun no es fecha de rematriculacion');
-
         $anotables = $this->rematService->matriculables(Auth::user(), $carrera);
 
         return view('Alumnos.datos.rematriculacion', [
             'asignaturas' => $anotables,
             'carrera'=>$carrera->id,
+            'esFechaDeRemat'=>$esFechaDeRemat
         ]);
     }
 

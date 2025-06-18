@@ -31,7 +31,7 @@
                         'gray-600' => $asignatura->equivalencias_previas
                         ])>
 
-                        <td> {{$asignatura->anio}}</td>
+                        <td>{{$asignatura->anio}}</td>
                         <td>{{$asignatura->nombre}}
                         </td>
                         <td class="flex just-end">
@@ -53,8 +53,10 @@
                                     @if ($config['alumno_puede_anotarse_libre'])
                                         <option value="0">Libre</option>
                                     @endif
-                                    <option value="2">Regular</option>
-                                    </select>
+                                    @if ($esFechaDeRemat)
+                                        <option value="2">Regular</option>
+                                    @endif
+                                </select>
                             @endif
                         </td>
                     </tr>
