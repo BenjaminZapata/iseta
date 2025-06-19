@@ -51,10 +51,6 @@ class AlumnoRepository{
 
         $query->orderBy('apellido')->orderBy('nombre');
         return $query->paginate($this->config['filas_por_tabla']);
-
-        if($request->has('filter_estado') && $request->input('filter_estado') != 0){
-           $idsQuery->where('alumnos.estado', $request->input('filter_estado'));
-        }
     }
 
     // agregar una institucion secundaraia a un alumno

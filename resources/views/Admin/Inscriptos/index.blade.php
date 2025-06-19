@@ -8,8 +8,9 @@
         $carreraM->dropdown('filter_carrera_id', 'Carrera:','label-input-y-75',$filters,['first_items'=>['Todas'],'id'=>'carrera_select']),
         $form->select('filter_vigente','Carreras vigentes: ', 'label-input-y-75',$filters,['Todas','No Vigentes','Vigentes']),
         $alumnoM->dropdown('filter_alumno_id', 'Alumno:','label-input-y-75',$filters,['first_items'=>['Todos'],'filter'=>'orderByApellidoNombre']),
-        $form->select('filter_finalizada','Estado: ', 'label-input-y-75',$filters,['Cualquiera','Finalizadas','No finalizadas']),
-        $form->select('filter_ciudad', 'Ciudad:','label-input-y-75',$filters,$alumnoM->ciudades())
+        $form->select('filter_estado','Estado: ', 'label-input-y-75',$filters,['Cualquiera','Cursando','Egresado','Desertor']),
+        $form->select('filter_ciudad', 'Ciudad:','label-input-y-75',$filters,$alumnoM->ciudades()),
+        
 
 
     ],
@@ -32,7 +33,7 @@
                     <th>Apellido y nombre</th>
                     {{-- <th>Dni</th> --}}
                     <th>Carrera</th>
-                    <th>Periodo</th>
+                    <th>Estado</th>
                     <th class="center">Acción</th>
                 </tr>
             </thead>
@@ -46,11 +47,9 @@
                 {{-- <td>{{$alumno->dni}}</td> --}}
                 <td>{{$inscripcion->carrera->nombre}}</td>
                 <td>
-                    {{$inscripcion->anio_inscripcion?$inscripcion->anio_inscripcion:'Sin datos'}}
-                    -
-                    {{$inscripcion->anio_finalizacion? $inscripcion->anio_finalizacion:'Presente'}}
-                </td>
-                
+    {{ $inscripcion->estado() }}
+</td>
+
                 <td class="flex just-center"><a href="{{route('admin.inscriptos.edit', ['inscripto' => $inscripcion->id])}}"><button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
                 
             </tr>

@@ -34,11 +34,11 @@ class InscripcionRepository
         if($request->has('filter_alumno_id') && $request->input('filter_alumno_id') != 0)
             $idsQuery->where('egresadoinscripto.id_alumno', $request->input('filter_alumno_id'));
 
-        if($request->has('filter_finalizada') && $request->input('filter_finalizada') != 0)
-            if($request->input('filter_finalizada') == 1)
-                $idsQuery->whereRaw('egresadoinscripto.anio_finalizacion IS NOT NULL');
+        if($request->has('filter_estado') && $request->input('filter_estado') != 0)
+            if($request->input('filter_estado') == 1)
+                $idsQuery->whereRaw('egresadoinscripto.estado IS NOT NULL');
             else if($request->input('filter_finalizada') == 2)
-                $idsQuery->whereRaw('egresadoinscripto.anio_finalizacion IS NULL');
+                $idsQuery->whereRaw('egresadoinscripto.estado IS NULL');
 
 
                 if($request->has('filter_search_box') && ''!=$request->input('filter_search_box') && in_array($request->input('filter_field'),$this->availableFiels)){

@@ -11,7 +11,7 @@ class estados extends Migration
      */
     public function up(): void
     {
-           Schema::table('alumnos', function (Blueprint $table){
+           Schema::table('egresadoinscripto', function (Blueprint $table){
             $table->tinyInteger('estado')->required();
         });
     }
@@ -21,8 +21,8 @@ class estados extends Migration
      */
     public function down(): void
     {
-        Schema::table('alumnos', function (Blueprint $table){
-            if(Schema::hasColumn('alumnos', 'estado')) {
+        Schema::table('egresadoinscripto', function (Blueprint $table){
+            if(Schema::hasColumn('egresadoinscripto', 'estado')) {
                 $table->dropColumn('estado');
             }
         });
