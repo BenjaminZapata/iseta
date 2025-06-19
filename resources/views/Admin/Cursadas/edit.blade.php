@@ -46,7 +46,7 @@
                             ];
 
                             // Valores que NO deben mostrarse en el dropdown
-                            $condicionesExcluidas = [0, 2, 3]; // Por ejemplo: Desertor, Itinerante
+                            $condicionesExcluidas = [0, 2, 3];
 
                             $condicionActual = $cursada->condicion;
                         @endphp
