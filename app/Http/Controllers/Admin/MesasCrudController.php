@@ -99,7 +99,7 @@ class MesasCrudController extends BaseController
 
         // se añade el id de la carrera al registro de mesa, ya que no viene en el formulario
         // no deberia ser necesario pero la base de datos anterior hacia uso de esta duplicidad
-        $data['id_carrera'] = Asignatura::find($data['id_asignatura'])->carrera->id;
+        $data['id_carrera'] = Asignatura::find($data['id_asignatura'])->carrera->first()->id;
 
         $llamadoYaExiste = $this->mesasService->llamadoYaExiste($data);
 

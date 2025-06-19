@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-                    // Migrar los datos existentes de asignaturas.id_carrera a la tabla pivote
+        // Migrar los datos existentes de asignaturas.id_carrera a la tabla pivote
         DB::table('asignaturas')
         ->whereNotNull('id_carrera')
         ->get()
