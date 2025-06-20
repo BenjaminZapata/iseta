@@ -39,6 +39,13 @@
                         <label>Año finalizacion:</label>
                         <input class="campo_info rounded" name="anio_finalizacion">
                     </div>
+                        </div>
+                    <div class="perfil_dataname">
+                        <label>Estado:</label>
+                        <input class="campo_info rounded" type="text" name="estado_texto" value="Cursando" readonly>
+                        <input type="hidden" name="estado" value="0">
+                    </div>
+
                     <input name="redirect" type="hidden" value="{{url()->previous()}}">
                     <div class="upd"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear</button></div>
                 </form>

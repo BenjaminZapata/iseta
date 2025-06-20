@@ -22,7 +22,7 @@ class CursadasAdminController extends BaseController
         'filter_condicion' => 0,
         'filter_aprobada' => 0
     ];
-    
+
     function __construct()
     {
         parent::__construct();
@@ -30,12 +30,12 @@ class CursadasAdminController extends BaseController
     }
 
     public function index(Request $request, CursadaRepository $cursadaRepo)
-    {       
+    {
         $this->setFilters($request);
         $this->data['cursadas'] = $cursadaRepo->index($request);
         return view('Admin.Cursadas.index', $this->data);
     }
-   
+
     function delete(Cursada $cursada){
         $cursada -> delete();
         return redirect() -> route('admin.alumnos.index');
@@ -50,11 +50,11 @@ class CursadasAdminController extends BaseController
         $data = $request->except('_token','_method');
         $mensajes = [];
 
-        if( $request->input('condicion') == 0 || 
+        if( $request->input('condicion') == 0 ||
             $request->input('condicion') == 2 ||
             $request->input('condicion') == 3){
-            
-            
+
+
             if($cursada->aprobada == 1 && ($request->aprobada==2 || $request->aprobada==3)){
                 $mensajes[] = "No puedes desaprobar una cursada libre, promocionada o aprobada por equivalencias";
             }
@@ -64,19 +64,19 @@ class CursadasAdminController extends BaseController
 
         $cursada -> update($data);
         $mensajes[] = 'Se ha editado correctamente';
-        
+
         if($request->has('redirect'))
             return redirect()->to($request->input('redirect'))->with('mensaje',$mensajes);
         else
             return redirect()->back()->with('mensaje',$mensajes);
-            
+
 
     }
 
     function create(){
         $alumnos = Alumno::orderBy('nombre','asc')->orderBy('apellido','asc')->get();
         $carreras = Carrera::vigentes();
-        
+
         return view('Admin/Cursadas/create',[
             'alumnos' => $alumnos,
             'carreras' => $carreras
@@ -85,7 +85,7 @@ class CursadasAdminController extends BaseController
 
     function store(Request $request){
 
-        $asignatura = Asignatura::where('id',$request->id_asignatura)->with('correlativas.asignatura')->first();       
+        $asignatura = Asignatura::where('id',$request->id_asignatura)->with('correlativas.asignatura')->first();
         $alumno = Alumno::find($request->id_alumno);
 
 
@@ -110,7 +110,7 @@ class CursadasAdminController extends BaseController
             }
             return \redirect()->back()->with(['error'=>$mensajes])->withInput();
         }
-        
+
 
         $aprobada=3;
         if($request->condicion == 0 ||$request->condicion == 2||$request->condicion == 3){
@@ -124,7 +124,7 @@ class CursadasAdminController extends BaseController
             'condicion' => $request->condicion,
             'aprobada' => $aprobada
         ]);
-        
-        return redirect() -> back() -> with('mensaje','Se creo la cursada');
+
+        return redirect()->back()->with('mensaje','Se creo la cursada');
     }
 }
