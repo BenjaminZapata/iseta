@@ -44,7 +44,8 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'telefono3',
         'codigo_postal',    
         'password',
-        'estado'
+        'estado',
+        'titulo'
     ];
 
     /**
@@ -90,8 +91,6 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         }
 
     }
-
-
 
     public function cursadas(){
         return $this -> hasMany(Cursada::class,'id_alumno');
@@ -185,4 +184,18 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         }
         return $ciudades;
     }
+
+    public function titulo(){
+        $titulo = [ 
+            'Fotocopia del título original secundario', 
+            'Certificado de constancia de título en trámite',
+            'Constancia de alumno del último año del nivel secundario',
+            'No entregado'];
+        if(isset($titulo [$this->titulo])){
+            return $titulo [$this->titulo];
+        }else{
+            return 'Otro';
+        }
+    }
 }
+
