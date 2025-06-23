@@ -20,6 +20,16 @@
         <div class="botones-derecha">
             <button class="btn_sky" >
                 <a href="{{ route('admin.alumnos.index') }}">
+                    <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
+                </a>
+            </button>
+            <button class="btn_sky" >
+                <a href="{{ route('admin.alumnos.index') }}">
+                    <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analítico
+                </a>
+            </button>
+            <button class="btn_sky" >
+                <a href="{{ route('admin.alumnos.index') }}">
                     <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar
                 </a>
             </button>
