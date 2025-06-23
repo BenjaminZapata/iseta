@@ -78,7 +78,7 @@ class InscripcionController extends Controller
      | ---------------------------------------------
      */
 
-    function bajarse(Request $request){
+    public function bajarse(Request $request){
 
         if(!Configuracion::get('alumno_puede_bajarse_mesa')){
             return redirect()->back()->with('error', 'El administrador ha desactivado esta caracteristica');

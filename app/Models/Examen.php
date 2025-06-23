@@ -51,8 +51,6 @@ class Examen extends Model
         return $mesa->fecha;
      }
 
-
-
     public function tipoFinal(){
         return match($this->tipo_final){
             1 => "Escrito",

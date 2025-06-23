@@ -28,8 +28,8 @@ class Egresado extends Model
 
         $existe=Egresado::where('id_alumno',$alumno->id)
             -> where('id_carrera', $carrera)
-            -> exists();        
-        
+            -> exists();
+
         return $existe;
     }
 
