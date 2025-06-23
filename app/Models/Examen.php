@@ -8,7 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Examen extends Model
 {
     protected $table = "examenes";
-    protected $fillable = ['id_mesa','id_asignatura','id_alumno','libro','acta','nota','fecha','aprobado'];
+    protected $fillable = [
+        'id_mesa',
+        'id_asignatura',
+        'id_alumno',
+        'libro',
+        'acta',
+        'nota',
+        'fecha',
+        'aprobado'
+    ];
     public $timestamps = false;
     use HasFactory;
 
@@ -44,6 +53,7 @@ class Examen extends Model
             1 => "Escrito",
             2 => "Oral",
             3 => "Promocionado",
+            4 => "Equivalencia",
             default => "Sin especificar"
         };
     }

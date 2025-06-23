@@ -32,7 +32,8 @@ class Cursada extends Model
         return $this -> belongsTo(Asignatura::class,'id_asignatura','id');
     }
 
-    // WARN: no eliminar campos "Promocion", "Equivalencia"
+    /** INFO: no eliminar campos "Promocion", "Desertor" y "Equivalencia"
+     * son utilizados para mantener funcionalidades antiguas */
     public function condicionString(): string{
         return match ($this->condicion) {
             0 => 'Libre',
@@ -53,6 +54,7 @@ class Cursada extends Model
             3 => 'Cursando',
             4 => 'Promocion',
             5 => 'Equivalencia',
+            default => 'Otro',
         };
     }
 }

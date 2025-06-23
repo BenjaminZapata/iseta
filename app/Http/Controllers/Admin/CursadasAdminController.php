@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\Alumno;
+use App\Models\Examen;
 use App\Models\Asignatura;
 use App\Models\Carrera;
 use App\Models\Correlativa;
@@ -38,7 +39,7 @@ class CursadasAdminController extends BaseController
 
     function delete(Cursada $cursada){
         $cursada -> delete();
-        return redirect() -> route('admin.alumnos.index');
+        return redirect() -> route('Admin.Cursadas.index');
     }
 
     function edit(Request $request, Cursada $cursada){
@@ -81,6 +82,7 @@ class CursadasAdminController extends BaseController
             'alumnos' => $alumnos,
             'carreras' => $carreras
         ]);
+
     }
 
     function store(Request $request){
@@ -111,18 +113,17 @@ class CursadasAdminController extends BaseController
             return \redirect()->back()->with(['error'=>$mensajes])->withInput();
         }
 
-
-        $aprobada=3;
-        if($request->condicion == 0 ||$request->condicion == 2||$request->condicion == 3){
-            $aprobada = 1;
+        if ($request->aprobada == 5) {
+            Examen::create($request->all()); // Equivalencia
         }
 
         Cursada::create([
+            'id_carrera' => $request->id_carrera,
             'id_asignatura' => $request->id_asignatura,
             'id_alumno' => $request->id_alumno,
             'anio_cursada' => $request->anio_cursada,
             'condicion' => $request->condicion,
-            'aprobada' => $aprobada
+            'aprobada' => $request->aprobada
         ]);
 
         return redirect()->back()->with('mensaje','Se creo la cursada');

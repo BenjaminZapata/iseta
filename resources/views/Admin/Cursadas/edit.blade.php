@@ -66,12 +66,12 @@
                         </select>
                     </div>
                     <div class="perfil_dataname">
-                        <label>Aprobada:</label>
+                        <label>Estado:</label>
                         <select class="campo_info rounded" name="aprobada">
-                            <option @selected($cursada->aprobada==1) value="1">Si</option>
-                            <option @selected($cursada->aprobada==2) value="2">No</option>
-                            <option @selected($cursada->aprobada==3) value="3">Vacio/cursando</option>
-                            <option @selected($cursada->aprobada==4) value="4">Promocion</option>
+                            <option @selected($cursada->aprobada==1) value="1">Aprobada</option>
+                            <option @selected($cursada->aprobada==2) value="2">Desaprobada</option>
+                            <option @selected($cursada->aprobada==3) value="3">Cursando</option>
+                            <option @selected($cursada->aprobada==4) value="4">Promocionada</option>
                             <option @selected($cursada->aprobada==5) value="5">Equivalencia</option>
                         </select>
                     </div>
