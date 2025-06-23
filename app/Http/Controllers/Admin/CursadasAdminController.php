@@ -113,6 +113,7 @@ class CursadasAdminController extends BaseController
             return \redirect()->back()->with(['error'=>$mensajes])->withInput();
         }
 
+        // WARN: Aprobado por equivalencia se crea un examen sin mesa (faltan datos)
         if ($request->aprobada == 5) {
             Examen::create([
                 'id_carrera' => $request->id_carrera,
