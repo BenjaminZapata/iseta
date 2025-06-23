@@ -13,7 +13,7 @@ class Egresado extends Model
     protected $table = "egresadoinscripto";
     public $timestamps = false;
 
-    protected $fillable = ['id_alumno','id_carrera','anio_inscripcion','indice_libro_matriz','anio_finalizacion'];
+    protected $fillable = ['id_alumno','id_carrera','anio_inscripcion','indice_libro_matriz','anio_finalizacion','estado'];
 
     public function alumno(){
         return $this -> hasOne(Alumno::class,'id','id_alumno');
@@ -31,6 +31,16 @@ class Egresado extends Model
             -> exists();
 
         return $existe;
+    }
+
+    public function estado(){
+        $estado = ['Cursando','Egresado','Desertor'];
+        
+        if(isset($estado[$this->estado])){
+            return $estado[$this->estado];
+        }else{
+            return 'Otro';
+        }
     }
 
 }

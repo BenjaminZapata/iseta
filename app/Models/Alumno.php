@@ -42,7 +42,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'telefono1',
         'telefono2' ,
         'telefono3',
-        'codigo_postal',
+        'codigo_postal',    
         'password'
     ];
 
@@ -89,6 +89,8 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         }
 
     }
+
+
 
     public function cursadas(){
         return $this -> hasMany(Cursada::class,'id_alumno');

@@ -32,6 +32,15 @@
                         <label>Año finalizacion:</label>
                         <input class="campo_info rounded" value="{{$registro->anio_finalizacion}}" name="anio_finalizacion">
                     </div>
+                    <div class="perfil_dataname">
+                        <label>Estado:</label>
+                        <select class="campo_info rounded" name="estado" id="estado">
+        <option value="0" {{ $registro->estado == 0 ? 'selected' : '' }}>Cursando</option>
+        <option value="1" {{ $registro->estado == 1 ? 'selected' : '' }}>Egresado/a</option>
+        <option value="2" {{ $registro->estado == 2 ? 'selected' : '' }}>Desertor/ar</option>
+    </select>
+
+                    </div>
 
                     <div class="upd"><button class="btn_blue"><i class="ti ti-refresh"></i>Actualizar</button></div>
                 </form>
