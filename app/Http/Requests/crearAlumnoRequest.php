@@ -41,7 +41,8 @@ class CrearAlumnoRequest extends FormRequest
             'telefono2' => ['nullable','numeric'],
             'telefono3' => ['nullable','numeric'],
             'codigo_postal' => ['nullable','alpha_num'],
-            'estado' => ['required']
+            'estado' => ['nullable'],
+            'titulo' => ['required']
         ];
     }
     public function messages()
