@@ -11,6 +11,7 @@ class Examen extends Model
     protected $fillable = [
         'id_mesa',
         'id_asignatura',
+        'id_carrera',
         'id_alumno',
         'libro',
         'acta',
@@ -23,6 +24,10 @@ class Examen extends Model
 
     public function mesa(){
         return $this -> belongsTo(Mesa::class,'id_mesa');
+    }
+
+    public function carrera(){
+        return $this -> belongsTo(Carrera::class,'id_carrera');
     }
 
     public function alumno(){

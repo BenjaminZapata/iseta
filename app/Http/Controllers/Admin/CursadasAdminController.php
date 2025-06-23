@@ -114,8 +114,19 @@ class CursadasAdminController extends BaseController
         }
 
         if ($request->aprobada == 5) {
-            Examen::create($request->all()); // Equivalencia
+            Examen::create([
+                'id_carrera' => $request->id_carrera,
+                'id_asignatura' => $request->id_asignatura,
+                'id_alumno' => $request->id_alumno,
+                'tipo_final' => 4, // Equivalencia
+               // 'libro' => $request->libro,
+               // 'acta' => $request->acta,
+                'nota' => $request->nota,
+              //  'fecha' => $request->fecha,
+                'aprobado' => 1
+            ]);
         }
+
 
         Cursada::create([
             'id_carrera' => $request->id_carrera,
