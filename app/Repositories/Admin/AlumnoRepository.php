@@ -44,6 +44,11 @@ class AlumnoRepository{
 
         }
 
+        if($request->has('filter_titulo') && $request->input('filter_titulo') != 0){
+           $idsQuery->where('alumnos.titulo', $request->input('filter_titulo'));
+        }
+
+
         $ids = $idsQuery->distinct()->get()->pluck('id');
 
         $query = Alumno::select('alumnos.*')

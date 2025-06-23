@@ -54,15 +54,9 @@ class InscripcionRepository
     $idsQuery->where('egresadoinscripto.anio_inscripcion', $request->input('anio_inscripcion'));
     }
 
-
     if ($request->filled('anio_finalizacion')) {
     $idsQuery->where('egresadoinscripto.anio_finalizacion', $request->input('anio_finalizacion'));
     }
-
-
-
-
-
 
     if($request->has('filter_search_box') && in_array($request->input('filter_field'),$this->availableFiels)){
         $idsQuery->where($request->input('filter_field'), 'LIKE', '%'.$request->input('filter_search_box').'%');
