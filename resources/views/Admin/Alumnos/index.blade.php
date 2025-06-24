@@ -71,7 +71,7 @@
                             </a>
                         </td>
                         <td >
-                            <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno])}}">
+                            <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno->id])}}">
                                 <button class="btn_blue">
                                     <i class="ti ti-file-download">
 

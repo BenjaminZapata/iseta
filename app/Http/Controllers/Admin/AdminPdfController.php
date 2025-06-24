@@ -8,7 +8,7 @@ use App\Models\Alumno;
 use App\Models\Cursada;
 use App\Models\Examen;
 use App\Models\Mesa;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon;
 use function Spatie\LaravelPdf\Support\pdf;
 
 use Illuminate\Http\Request;
@@ -90,18 +90,13 @@ class AdminPdfController extends Controller
         $pdf = Pdf::loadView('pdf.acta-volante', ['alumnos' => $alumnos,'mesa' => $mesa,'condicion'=>'LIBRE']);
         return $pdf->stream('acta-volante.pdf');
     }
-    function constanciaRegular(Request $request){
-        $alumno = $request->alumno;
-        $cursadas = Asignatura::selectRaw('asignaturas.id, asignaturas.nombre, asignaturas.anio, MAX(cursadas.aprobada) as aprobada')
-            -> from('asignaturas')
-            -> join('cursadas','cursadas.id_asignatura','=','asignaturas.id')
-            -> where('cursadas.id_alumno', $alumno)
-            -> where('cursadas.aprobada', '>=', 1)
-            -> groupBy('asignaturas.id','asignaturas.nombre','asignaturas.anio')
-            -> get();
-
+    function constanciaRegular(Alumno $alumno){
+        $fecha = Carbon\Carbon::now();
         return pdf()
-        ->view('Pdf.alumno-regular', ['cursadas' => $cursadas])
+        ->view('Pdf.alumno-regular', compact('alumno') + ['fecha' => $fecha])
         ->name('constancia-regular.pdf');
+        //->download();
+
+        //return view('Pdf.alumno-regular', compact('alumno') + ['fecha' => $fecha]);
     }
 }
