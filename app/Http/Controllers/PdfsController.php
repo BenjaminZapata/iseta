@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Asignatura;
 use App\Models\Carrera;
 use App\Models\Examen;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\LaravelPdf\Facades\Pdf;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -19,7 +19,7 @@ class PdfsController extends Controller
         $this -> middleware('verificado');
     }
     
-    function constanciaMesas(){
+    function constanciaMesas(Invoice $invoice){
         $alumno = Auth::id();
 
 
@@ -29,12 +29,16 @@ class PdfsController extends Controller
             -> get();
 
 
-        $pdf = Pdf::loadView('pdf.constanciaMesas', ['mesas' => $mesas]);
-        return $pdf->stream('invoice.pdf');
+        // Define $invoice or replace with appropriate data
+        $invoice = []; // Replace with actual data as needed
+
+        return Pdf::view('pdfs.invoice',['invoice'=> $invoice])
+            ->format('a4')
+            ->save('invoice.pdf');
     }
 
 
-    function analitico(){
+    function analitico(Invoice $invoice){
         $alumno = Auth::id();
 
 
@@ -70,12 +74,8 @@ class PdfsController extends Controller
             $materiasExamenes[] = $materia;
         }
         
-        $pdf = Pdf::loadView('pdf.analitico', [
-            'materias' => $materias,
-            'carrera' => Carrera::where('id',$id_carrera)->first(),
-            'porcentaje' => $porcentaje
-        ]);
-
-        return $pdf->stream('invoice.pdf');
+        return Pdf::view('pdfs.invoice', ['invoice' => $invoice])
+            ->format('a4')
+            ->name('your-invoice.pdf');
     }
 }
