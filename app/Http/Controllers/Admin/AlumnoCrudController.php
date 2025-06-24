@@ -55,7 +55,7 @@ class AlumnoCrudController extends BaseController
     {
         $data = $request->validated();
         $response = redirect()->back();
-        
+
         if(Alumno::where('dni', strtolower($data['dni']))->first()){
             return $response -> with('aviso','Ya hay un usuario con ese numero de documento')->withInput();
         } else {
