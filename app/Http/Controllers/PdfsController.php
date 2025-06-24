@@ -19,7 +19,7 @@ class PdfsController extends Controller
         $this -> middleware('verificado');
     }
     
-    function constanciaMesas(Invoice $invoice){
+    function constanciaMesas($invoice){
         $alumno = Auth::id();
 
 
@@ -38,7 +38,7 @@ class PdfsController extends Controller
     }
 
 
-    function analitico(Invoice $invoice){
+    function analitico($invoice){
         $alumno = Auth::id();
 
 
