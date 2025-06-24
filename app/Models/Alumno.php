@@ -42,7 +42,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'telefono1',
         'telefono2' ,
         'telefono3',
-        'codigo_postal',    
+        'codigo_postal',
         'password',
         'titulo'
     ];
@@ -184,9 +184,10 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         return $ciudades;
     }
 
-    public function titulo(){
-        $titulo = [ 
-            'Fotocopia del título original secundario', 
+    // FIXME: fijate que esto no anda y tira error, te lo dejo en un comentario por el momento asi no jode y dsp create una rama para arreglarlo
+   /**  public function titulo(){
+        $titulo = [
+            'Fotocopia del título original secundario',
             'Certificado de constancia de título en trámite',
             'Constancia de alumno del último año del nivel secundario',
             'No entregado'];
@@ -196,5 +197,6 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             return 'Otro';
         }
     }
+    */
 }
 

@@ -43,15 +43,11 @@ class CursadasAdminController extends BaseController
     }
 
     function edit(Request $request, Cursada $cursada){
-        if ($cursada->aprobada == 5) {
-           $nota = Examen::where('id_carrera', $cursada->id_carrera)
-                -> where('id_asignatura', $cursada->id_asignatura)
-                -> where('id_alumno', $cursada->id_alumno)
-                -> value('nota'); // Equivalencia
-            return view('Admin.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
-        }
-        //$cursada = Cursada::where('id_asignatura',$asignatura)->where('id_alumno',$alumno)->first();
-        return view('Admin.Cursadas.edit', compact('cursada'));
+        $nota = Examen::where('id_carrera', $cursada->id_carrera)
+            -> where('id_asignatura', $cursada->id_asignatura)
+            -> where('id_alumno', $cursada->id_alumno)
+            -> value('nota'); // Equivalencia
+        return view('Admin.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
     }
 
     function update(Request $request, Cursada $cursada){
