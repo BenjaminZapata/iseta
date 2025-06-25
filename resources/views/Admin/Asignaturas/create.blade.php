@@ -15,16 +15,6 @@
                         <input class="campo_info rounded" name="nombre">
                     </div>
                     <div class="perfil_dataname">
-                        <label>Carrera:</label>
-                        <select class="campo_info rounded" name="id_carrera">
-                            @foreach($carreras as $carrera)
-                                <option @selected($id_carrera==$carrera->id) value="{{$carrera->id}}">
-                                    {{$carrera->nombre}}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="perfil_dataname">
                         <label>Tipo modulo:</label>
                         <select class="campo_info rounded"  name="tipo_modulo">
                             <option value="1">Modulos</option>
