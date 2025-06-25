@@ -18,17 +18,17 @@
 
     <div class="botones-derecha">
         <div class="botones-derecha">
-            <button class="btn_sky" >
-                <a href="{{ route('admin.alumnos.index') }}">
-                    <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
+            <button class="btn_sky">
+                <a href="ruta/al/certificado.pdf">
+                    <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
                 </a>
             </button>
-            <button class="btn_sky" >
-                <a href="{{ route('admin.alumnos.index') }}">
-                    <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analítico
+            <button class="btn_sky">
+                <a href="ruta/al/certificado.pdf">
+                    <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analitico
                 </a>
             </button>
-            <button class="btn_sky" >
+            <button class="btn_cancelar">
                 <a href="{{ route('admin.alumnos.index') }}">
                     <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar
                 </a>

@@ -248,6 +248,39 @@ table td {
     color: black;
 }
 
+/* ...existing code... */
+.btn_cancelar {
+  background-color: #b71f14;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.4s;
+}
+
+.btn_cancelar::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0; right: 0;
+  background: linear-gradient(90deg, transparent 100%);
+  width: 0;
+  transition: width 0.4s;
+  z-index: 0;
+}
+
+.btn_cancelar:hover::before {
+  width: 100%;
+}
+
+.btn_cancelar span {
+  position: relative;
+  z-index: 1;
+}
+/* ...existing code... */
+
 .btn_blue::after {
     background-color: var(--facebook);
 }
