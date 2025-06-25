@@ -186,6 +186,7 @@ Route::middleware(['web'])->prefix('admin')->group(function(){
     Route::get('copia',[AdminCopiaDB::class,'crearCopia']);
     Route::get('restaurar',[AdminCopiaDB::class,'restaurarCopia']);
 
-  
+    Route::get('asignaturas/add', [App\Http\Controllers\Admin\AsignaturasCrudController::class, 'add'])
+    ->name('admin.asignaturas.add');
 
 });
