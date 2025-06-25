@@ -69,9 +69,18 @@ class AlumnoCrudController extends BaseController
      */
     public function edit(Request $request, Alumno $alumno)
     {
-        $cursadas = Cursada::select('asignaturas.nombre as asignatura', 'cursadas.aprobada' ,'cursadas.condicion' ,'cursadas.anio_cursada' ,'cursadas.id' ,'carreras.nombre as carrera','asignaturas.anio as anio_asig')
+        $cursadas = Cursada::select(
+                'asignaturas.nombre as asignatura',
+                'cursadas.aprobada' ,
+                'cursadas.condicion' ,
+                'cursadas.anio_cursada' ,
+                'cursadas.id' ,
+                'carreras.nombre as carrera',
+                'asignaturas.anio as anio_asig'
+            )
             ->join('asignaturas', 'cursadas.id_asignatura','asignaturas.id')
-            -> join('carreras','carreras.id','asignaturas.id_carrera')
+            ->join('carrera_asignatura_profesor as cap','asignaturas.id','cap.id_asignatura')
+            ->join('carreras','cap.id_carrera','carreras.id')
             -> where('cursadas.id_alumno',$alumno->id)
             -> orderBy('carreras.id')
             -> orderBy('asignaturas.anio')
@@ -81,7 +90,8 @@ class AlumnoCrudController extends BaseController
 
             $examenes = Examen::select('examenes.fecha','asignaturas.nombre as asignatura', 'examenes.nota' ,'examenes.id' ,'carreras.nombre as carrera','asignaturas.anio as anio_asig')
             ->join('asignaturas', 'examenes.id_asignatura','asignaturas.id')
-            -> join('carreras','carreras.id','asignaturas.id_carrera')
+            -> join('carrera_asignatura_profesor as cap','asignaturas.id','cap.id_asignatura')
+            -> join('carreras', 'cap.id_carrera','carreras.id')
             -> where('examenes.id_alumno',$alumno->id)
             -> orderBy('carreras.id')
             -> orderBy('asignaturas.anio')
