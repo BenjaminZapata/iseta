@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\ConfigController;
 use App\Http\Controllers\Admin\ExamenesCrudController;
 use App\Http\Controllers\Admin\CursadasAdminController;
 use App\Http\Controllers\Admin\EgresadosAdminController;
+use App\Http\Controllers\PdfsController;
 use App\Http\Controllers\AlumnoController;
 use App\Models\Alumno;
 use App\Models\Asignatura;
@@ -54,7 +55,10 @@ Route::middleware(['web'])->prefix('admin')->group(function(){
     Route::resource('alumnos', AlumnoCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->missing(function(){
         return redirect()->route('admin.alumnos.index')->with('aviso','El alumno no existe o ha sido eliminado');
     })->except('show');
+   
 
+Route::get('/admin/alumnos/{alumno}/analitico-pdf', [PdfsController::class, 'analitico'])
+    ->name('admin.alumnos.analitico.pdf');
 
     Route::resource('inscriptos', EgresadosAdminController::class, ['as' => 'admin'])->missing(function(){
         return redirect()->route('admin.inscriptos.index')->with('aviso','La inscripcion no existe o ha sido eliminada');
@@ -185,7 +189,4 @@ Route::middleware(['web'])->prefix('admin')->group(function(){
         
     Route::get('copia',[AdminCopiaDB::class,'crearCopia']);
     Route::get('restaurar',[AdminCopiaDB::class,'restaurarCopia']);
-
-  
-
 });

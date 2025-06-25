@@ -140,6 +140,15 @@
             <p>Importante: algunos examanes de alumnos mas antiguos podrian no tener datos sobre las mesas.
             </p>
         </div>
+        <div style="text-align: right; margin-bottom: 10px;">
+   <a href="{{ route('admin.alumnos.analitico.pdf', ['alumno' => $alumno->id]) }}" target="_blank">
+    <button class="btn_blue">
+        <i class="ti ti-download"></i> Descargar Analítico PDF
+    </button>
+</a>
+
+</div>
+
             <table class="table__body">
                 <thead>
                     <tr>
