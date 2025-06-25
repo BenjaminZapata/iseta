@@ -45,7 +45,7 @@ public $availableFiels = ['anio_cursada'];
             }
         )
         ->orderBy('anio_cursada', 'DESC')
-        ->paginate(25);
+        ->paginate($this->config['filas_por_tabla']);
 
         return $cursadas;
     }
