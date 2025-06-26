@@ -79,7 +79,7 @@ class MesaRepository
                 $idsQuery->where($request->input('filter_field'), 'LIKE', '%'.$request->input('filter_search_box').'%');
             }
         }
-        
+
 
 
 
@@ -114,22 +114,25 @@ class MesaRepository
         ->orderBy('mesas.llamado', 'asc')
         ->paginate($this->config['filas_por_tabla']);
     return $mesas;
-    
+
     }
 
     public function inscribibles($mesaId){
-        $mesa = Mesa::find($mesaId);
+        $mesa = Mesa::find($mesaId)->first();
         if(!$mesa){
             abort(404, 'Mesa no encontrada');
         }
-        
-        $inscribiblesCursada = Cursada::with('alumno')
-            -> join('alumnos','cursadas.id_alumno','alumnos.id')
-            -> whereRaw('(cursadas.aprobada=1 OR cursadas.condicion=0 OR cursadas.condicion=2 OR cursadas.condicion=3)')
-            -> where('cursadas.id_asignatura', $mesa -> id_asignatura)
-            -> orderBy('alumnos.apellido')
-            -> orderBy('alumnos.nombre')
-            -> get();
+
+        $inscribiblesCursada = Cursada::select('cursadas.*') // Evita ambigüedad si hay campos con el mismo nombre
+            ->join('alumnos', 'cursadas.id_alumno', '=', 'alumnos.id')
+            ->where(function($query) {
+                $query->where('cursadas.aprobada', 1)
+                    ->orWhereIn('cursadas.condicion', [0, 2, 3]);
+            })
+            ->where('cursadas.id_asignatura', $mesa->id_asignatura)
+            ->orderBy('alumnos.apellido')
+            ->orderBy('alumnos.nombre')
+            ->get();
 
             $inscribibles=[];
 

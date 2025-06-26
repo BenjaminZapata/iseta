@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Validator;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearAlumnoRequest;
 use App\Http\Requests\EditarAlumnoRequest;
@@ -109,7 +110,7 @@ class AlumnoCrudController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditarAlumnoRequest $request, Alumno $alumno)
+    public function update(EditarAlumnoRequest $request, Alumno $alumno): RedirectResponse
     {
         $data = $request->validated();
 
