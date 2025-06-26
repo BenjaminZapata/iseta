@@ -40,7 +40,6 @@
         'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
     ]) ?>
     </div>
-    
 </div>
 
 
