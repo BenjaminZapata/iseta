@@ -33,14 +33,16 @@ class CrearAlumnoRequest extends FormRequest
             'piso' => ['nullable'],
             'estado_civil' => ['required'],
             'email' => ['nullable','unique:alumnos'],
-            'nombre_institucion_secundario' => ['required'],
+            'nombre_institucion_secundario' => ['required','string','max:255','^[A-Za-záéíóúÁÉÍÓÚÑñ\s\d]+$'],
             'titulo_anterior' => ['nullable'],
             'becas' => ['numeric','nullable'],
             'observaciones' => ['nullable'],
             'telefono1' => ['nullable','numeric'],
             'telefono2' => ['nullable','numeric'],
             'telefono3' => ['nullable','numeric'],
-            'codigo_postal' => ['nullable','alpha_num']
+            'codigo_postal' => ['nullable','alpha_num'],
+            'estado' => ['nullable'],
+            'titulo' => ['required']
         ];
     }
     public function messages()

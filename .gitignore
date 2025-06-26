@@ -60,3 +60,4 @@ composer.phar
 /vendor/*
 /vendor
 /docker-compose.yml
+vendor

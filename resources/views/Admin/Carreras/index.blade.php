@@ -45,13 +45,16 @@
                     </a>
                 @endif
                 </td>
-                <td><a href="/admin/cursantes/carrera/{{$carrera->id}}"><button class="btn_blue"><i class="ti ti-file-download"></i>Cursadas</button></a></td>
+                <td>
+                    <a href="/admin/cursantes/carrera/{{$carrera->id}}">
+                        <button class="btn_blue">
+                            <i class="ti ti-file-download"></i>Cursadas</button></a></td>
             </tr>
             @endforeach
         </tbody>
     </table>
     </div>
-    
+
     <div class="w-1/2 mx-auto p-5 pagination">
         {{ $carreras->appends(request()->query())->links('Componentes.pagination') }}
     </div>

@@ -43,7 +43,7 @@ class InscripcionController extends Controller
 
     /*
      | ---------------------------------------------
-     | Solicitud de inscripcion a mesa [post] 
+     | Solicitud de inscripcion a mesa [post]
      | ---------------------------------------------
      */
 
@@ -62,7 +62,9 @@ class InscripcionController extends Controller
 
         if($mesa->llamado == 2){
             $rindioLlamado1 = $this->inscripcionService->rindioLlamado1($mesa,Auth::user());
-            if($rindioLlamado1) return redirect()->back()->with('error','Ya has rendido el llamado 1');
+            if($rindioLlamado1){
+                return redirect()->back()->with('error','Ya has rendido el llamado 1');
+            }
         }
 
         $this->inscripcionRepo->crearInscripcion($mesa, Auth::user());
@@ -72,20 +74,20 @@ class InscripcionController extends Controller
 
     /*
      | ---------------------------------------------
-     | Solicitud para bajarse de una mesa [post] 
+     | Solicitud para bajarse de una mesa [post]
      | ---------------------------------------------
      */
 
-    function bajarse(Request $request){
+    public function bajarse(Request $request){
 
         if(!Configuracion::get('alumno_puede_bajarse_mesa')){
             return redirect()->back()->with('error', 'El administrador ha desactivado esta caracteristica');
         }
 
         if(!$request->has('mesa')) return redirect()->back()->with('error','Selecciona una mesa');
-        
+
         $mesa = Mesa::find($request->mesa);
-        
+
         if(!$mesa) return redirect()->back()->with('error','No se encontro la mesa');
 
         $examen = Examen::select('id')

@@ -62,11 +62,26 @@
                     <label>Condicion:</label>
                     <select class="campo_info rounded" name="condicion">
                         <option @selected(old('condicion') == 1) value="1">Regular</option>
-                        //WARN: no eliminar campos "Promocion" y "Equivalencia"
                         <option @selected(old('condicion') == 0) value="0">Libre</option>
                         <option @selected(old('condicion') == 5) value="5">Itinerante</option>
                         <option @selected(old('condicion') == 6) value="6">Oyente</option>
                     </select>
+                </div>
+                <div x-data="{ aprobada: '{{ old('aprobada', '') }}' }">
+                    <div class="perfil_dataname">
+                        <label>Estado:</label>
+                        <select class="campo_info rounded" name="aprobada" x-model="aprobada">
+                            <option value="1">Aprobada</option>
+                            <option value="2">Desaprobada</option>
+                            <option value="3">Cursando</option>
+                            <option value="4">Promocionada</option>
+                            <option value="5">Equivalencia</option>
+                        </select>
+                    </div>
+                    <div class="perfil_dataname" x-show="aprobada === '5'" x-transition>
+                        <label>Nota:</label>
+                        <input class="campo_info rounded" name="nota" type="number"/>
+                    </div>
                 </div>
                 <div class="upd"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear</button></div>
             </form>

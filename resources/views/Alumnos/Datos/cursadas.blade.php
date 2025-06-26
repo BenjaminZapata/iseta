@@ -18,7 +18,7 @@
                   </select>
                   <i class="ti ti-arrows-down-up i_ordenar"></i>
                 </div>
-                
+
                 <div class="contenedor_filtrar">
                   <span>Filtrar por</span>
                   <select class="filtrar" name="campo">
@@ -37,11 +37,11 @@
                 <div class="contenedor_btn-busqueda">
                   <input class="btn-buscador" type="submit" value="Buscar">
                 </div>
-                
+
                 </div>
             </form>
-          
-        
+
+
         </div>
         <div class="table__body">
           <table>
@@ -56,7 +56,7 @@
                 @endif
             </thead>
             <tbody>
-              
+
               @php
                 $actual = "";
                 $primero = true;
@@ -64,7 +64,7 @@
               @endphp
 
               @foreach($cursadas as $key=>$cursada)
-                
+
                 @if($filtros['campo'] == 'final_aprobado' && !in_array($cursada->id_asignatura,$examenesAprobados))
                   @continue
                 @elseif($filtros['campo'] == 'final_desaprobado' && in_array($cursada->id_asignatura,$examenesAprobados))
@@ -82,7 +82,7 @@
                   @endphp
                 @endif
 
-                @php  
+                @php
                   if ($actual == $cursada->id_asignatura) {
                     echo '<tr id="td-'.$cursada->id_asignatura.'" class="none">';
                   }else{
@@ -95,22 +95,22 @@
                   <td data-label="Materia">
                     <p>{{$cursada->nombre}}</p>
                     <p>Año de cursada: {{$cursada->anio_cursada}}</p>
-                    <button class="pointer bg-transparent px-2 mx-5 rounded desplegable" data-element="{{$cursada->id_asignatura}}">↓</button> 
+                    <button class="pointer bg-transparent px-2 mx-5 rounded desplegable" data-element="{{$cursada->id_asignatura}}">↓</button>
                   </td>
                 @else
                   <td data-label="Materia">
                     <p>{{$cursada->nombre}}</p>
                     <p>Año de cursada: {{$cursada->anio_cursada}}</p>
-                  </td>    
+                  </td>
                 @endif
                 @php
                   $actual = $cursada->id_asignatura;
-                @endphp  
+                @endphp
 
 
 
                 <td data-label="Cursada">
-        
+
                     <p @class([
                         'status' => true,
                         'aprobada' => $cursada->aprobada == 1 || $cursada->condicion == 0 || $cursada->condicion == 2 || $cursada->condicion == 3,
@@ -121,7 +121,7 @@
                     </p>
                 </td>
                   <td data-label="Condicion" class="text-center mb-left">{{$cursada->condicionString()}}</td>
-                
+
                 <p class="center">
                   @php
                       $examen = $cursada->asignatura->aproboExamen(auth()->user());
@@ -140,14 +140,14 @@
                       @csrf
                       @method('delete')
                       <button class="rounded px-2 py-1 bg-red-400 bajarse2">Bajarse</button>
-                    </form>    
+                    </form>
                     @endif
                   </td>
                 @endif
-             
+
               </tr>
             @endforeach
-              
+
             </tbody>
           </table>
         </div>
@@ -157,13 +157,13 @@
       <script>
         // const button = document.querySelector('#ver-equiv')
         window.onclick = function(e){
-          
+
             if(!e.target.classList.contains('desplegable')) return
-            
+
             let id = e.target.dataset.element
             console.log(document.querySelector('#td-'+id));
             let list = document.querySelector('#td-'+id)
-            
+
             list.classList.toggle('none')
         }
       </script>

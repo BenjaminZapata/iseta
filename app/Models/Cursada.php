@@ -11,7 +11,14 @@ class Cursada extends Model
     protected $table = 'cursadas';
     use HasFactory;
 
-    protected $fillable = ['anio_cursada','aprobada','id_alumno','id_asignatura','id_carrera','condicion'];
+    protected $fillable = [
+        'anio_cursada',
+        'aprobada',
+        'id_alumno',
+        'id_asignatura',
+        'id_carrera',
+        'condicion'
+    ];
 
     public function alumno(){
         return $this -> hasOne(Alumno::class,'id','id_alumno');
@@ -25,7 +32,8 @@ class Cursada extends Model
         return $this -> belongsTo(Asignatura::class,'id_asignatura','id');
     }
 
-
+    /** INFO: no eliminar campos "Promocion", "Desertor" y "Equivalencia"
+     * son utilizados para mantener funcionalidades antiguas */
     public function condicionString(): string{
         return match ($this->condicion) {
             0 => 'Libre',
@@ -40,15 +48,13 @@ class Cursada extends Model
     }
 
     public function aprobado(): string{
-        if ($this->aprobada==1) {
-            return 'Aprobada';
-        }
-        elseif($this->aprobada==2) {
-            return 'Reprobada';
-        }
-        else {
-            return 'Cursando';
-        }
+        return match($this->aprobada) {
+            1 => 'Aprobada',
+            2 => 'Reprobada',
+            3 => 'Cursando',
+            4 => 'Promocion',
+            5 => 'Equivalencia',
+            default => 'Otro',
+        };
     }
-
 }
