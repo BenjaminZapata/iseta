@@ -46,7 +46,7 @@
                             ];
 
                             // Valores que NO deben mostrarse en el dropdown
-                            $condicionesExcluidas = [0, 2, 3]; // Por ejemplo: Desertor, Itinerante
+                            $condicionesExcluidas = [0, 2, 3];
 
                             $condicionActual = $cursada->condicion;
                         @endphp
@@ -65,17 +65,22 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="perfil_dataname">
-                        <label>Aprobada:</label>
-                        <select class="campo_info rounded" name="aprobada">
-                            <option @selected($cursada->aprobada==1) value="1">Si</option>
-                            <option @selected($cursada->aprobada==2) value="2">No</option>
-                            <option @selected($cursada->aprobada==3) value="3">Vacio/cursando</option>
-                            <option @selected($cursada->aprobada==4) value="4">Promocion</option>
-                            <option @selected($cursada->aprobada==5) value="5">Equivalencia</option>
-                        </select>
+                    <div x-data="{ aprobada: '{{ (string) $cursada->aprobada }}' }">
+                        <div class="perfil_dataname">
+                            <label>Estado:</label>
+                            <select class="campo_info rounded" name="aprobada" x-model="aprobada">
+                                <option value="1">Aprobada</option>
+                                <option value="2">Desaprobada</option>
+                                <option value="3">Cursando</option>
+                                <option value="4">Promocionada</option>
+                                <option value="5">Equivalencia</option>
+                            </select>
+                        </div>
+                        <div class="perfil_dataname" x-show="aprobada === '5'" x-transition>
+                            <label>Nota:</label>
+                            <input class="campo_info rounded" value="{{$nota}}" name="nota" type="number"/>
+                        </div>
                     </div>
-
                     <input type="hidden" value="{{url()->previous()}}" name="redirect">
 
                     <div class="upd"><button class="btn_blue"><i class="ti ti-refresh"></i>Actualizar</button></div>

@@ -18,6 +18,7 @@
 
     <div class="botones-derecha">
         <div class="botones-derecha">
+            @if ($method == 'put' && str_contains(request()->path(), 'alumnos'))
             <button class="btn_sky">
                 <a href="ruta/al/certificado.pdf">
                     <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
@@ -28,6 +29,8 @@
                     <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analitico
                 </a>
             </button>
+            @endif
+
             <button class="btn_cancelar">
                 <a href="{{ route('admin.alumnos.index') }}">
                     <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar

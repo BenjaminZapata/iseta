@@ -80,11 +80,6 @@ class AsignaturasCrudController extends Controller
     {
         $data = $request->validated();
 
-        if (!Carrera::where('id', $data['id_carrera'])->exists()) {
-            return redirect()->back()->with('error', 'La carrera seleccionada no existe');
-        }
-
-
         Asignatura::create($data);
 
         return redirect()->back()->with('mensaje', 'Se creo la asignatura');

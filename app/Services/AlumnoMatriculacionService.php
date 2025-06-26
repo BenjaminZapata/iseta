@@ -11,7 +11,7 @@ use App\Models\Examen;
 use Illuminate\Support\Carbon;
 
 class AlumnoMatriculacionService{
-    public $config;   
+    public $config;
 
     public function __construct() {
         $this->config = Configuracion::todas();
@@ -23,19 +23,19 @@ class AlumnoMatriculacionService{
      * -------------------------------
      */
 
-    
-     function matriculables($alumno, $carrera){ 
+
+     function matriculables($alumno, $carrera){
 
         // todas las materias de esa carrera
         $asignaturas = Asignatura::where('id_carrera',$carrera->id)->get();
-        
+
         $anotables = [];
 
-        // para cada asignatura 
+        // para cada asignatura
         foreach($asignaturas as $asignatura){
 
             // array para almancenar equivalencias, solo en caso de que deba equivalencias.
-            $asignatura->{'equivalencias_previas'} = array();
+            $asignatura->{'equivalencias_previas'} = [];
 
             // Chequear que no este ya en la cursada
             $yaAnotadoEnCursada = $asignatura->estaCursando($alumno);
@@ -46,15 +46,15 @@ class AlumnoMatriculacionService{
 
             // Si la materia tiene correlativas
             $asignatura->equivalencias_previas = Correlativa::debeCursadasCorrelativos($asignatura,$alumno);
-           
+
             $anotables[] = $asignatura;
         }
-        
+
         return $anotables;
     }
 
     function validasParaRegistrar($carrera,$inputs,$alumno){
-                
+
         //todas la materias de esa carrera
         $asignaturas_de_carrera = $carrera->asignaturas()->pluck('id')->toArray();
 
@@ -64,7 +64,7 @@ class AlumnoMatriculacionService{
 
             // si no se selecciono ignora, si no es de la carrera
             if($value == 0) continue;
-            
+
             // Si la asignatura no es de esta carrera, error
             if(!in_array($asig_id, $asignaturas_de_carrera)){
                 return ['success' => false,'mensaje' => 'Ha habido un error'];
@@ -83,7 +83,7 @@ class AlumnoMatriculacionService{
 
             // Obtener datos de la asignatura con sus correlativas
             $asignatura = Asignatura::with('correlativas.asignatura')->where('id', $asig_id)->first();
-            
+
             // verifica equivalencias
             if(Correlativa::debeCursadasCorrelativos($asignatura,$alumno)){
                 return ['success' => false,'mensaje' => 'Debes 1 o mas correlativas'];
@@ -95,7 +95,7 @@ class AlumnoMatriculacionService{
     }
 
     function esFechaDeRematriculacion(){
-                
+
         $hoy = Carbon::now();
 
         $inicio = Carbon::parse($this->config['fecha_inicial_rematriculacion']);

@@ -83,7 +83,7 @@ class DiasHabiles{
 
     }
     static function obtenerFestivos() {
-        // Aquí puedes agregar o mantener una lista de días festivos para el año dado
+        // Aquí puedes agregar o mantener una lista de días festivos para el año dado'
         // Los días festivos pueden variar según la ubicación y el año
         // Este es solo un ejemplo de lista ficticia de días festivos
     

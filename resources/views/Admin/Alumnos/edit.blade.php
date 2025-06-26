@@ -10,37 +10,38 @@
     <div class="perfil_one br">
         <div class="perfil__info">
 
-            <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
-                'Alumno' => [
-                    $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno),
-                    $form->text('apellido', 'Apellido:', 'label-input-y-75', $alumno),
-                    $form->text('dni', 'DNI:', 'label-input-y-75', $alumno),
-                    $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $alumno, ['default' => $alumno->fecha_nacimiento->format('Y-m-d'), 'inputclass' => 'p-1 w-75p']),
-                    $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, ['Vacio', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])
-                ],
-                'Dirección' => [
-                    $form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno),
-                    $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', $alumno),
-                    $form->text('calle', 'Calle:', 'label-input-y-75', $alumno),
-                    $form->text('casa_numero', 'Altura:', 'label-input-y-75', $alumno),
-                    $form->text('dpto', 'Departamento:', 'label-input-y-75', $alumno),
-                    $form->text('piso', 'Piso:', 'label-input-y-75', $alumno)
-                ],
-                'Contacto' => [
-                    $form->text('email', 'Email:', 'label-input-y-75', $alumno),
-                    $form->text('telefono1', 'Telefono 1:', 'label-input-y-75', $alumno),
-                    $form->text('telefono2', 'Telefono 2:', 'label-input-y-75', $alumno),
-                    $form->text('telefono3', 'Telefono 3:', 'label-input-y-75', $alumno)
-                ],
-                'Academico' => [
-                    $form->text('titulo_anterior', 'Titulo anterior:', 'label-input-y-75', $alumno),
-                    $form->text('becas', 'Becas:', 'label-input-y-75', $alumno),
-                    $form->text('nombre_institucion_secundario', 'Secundaria:', 'label-input-y-75', $alumno),
-                ],
-                'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
-            ]) ?>
-        </div>
+    <?= $form->generate(route('admin.alumnos.update',['alumno'=>$alumno->id]),'put',[
+        'Alumno' => [
+            $form->text('nombre','Nombre:','label-input-y-75',$alumno),
+            $form->text('apellido','Apellido:','label-input-y-75',$alumno),
+            $form->text('dni','DNI:','label-input-y-75',$alumno),
+            $form->date('fecha_nacimiento','Fecha de nacimiento:','label-input-y-75',$alumno,['default' => $alumno->fecha_nacimiento->format('Y-m-d'),'inputclass'=>'p-1 w-75p']),
+            $form->select('estado_civil','Estado civil:','label-input-y-75',$alumno,['Vacio','Soltero','Casado','Divorciado','Viudo','Conyuge','Otro'])
+        ],
+        'Dirección' => [
+            $form->text('ciudad','Ciudad:','label-input-y-75',$alumno),
+                $form->text('codigo_postal','Codigo postal:','label-input-y-75',$alumno),
+                $form->text('calle','Calle:','label-input-y-75',$alumno),
+                $form->text('casa_numero','Altura:','label-input-y-75',$alumno),
+                $form->text('dpto','Departamento:','label-input-y-75',$alumno),
+                $form->text('piso','Piso:','label-input-y-75',$alumno)
+        ],
+        'Contacto' => [
+            $form->text('email','Email:','label-input-y-75',$alumno),
+            $form->text('telefono1','Telefono 1:','label-input-y-75',$alumno),
+            $form->text('telefono2','Telefono 2:','label-input-y-75',$alumno),
+            $form->text('telefono3','Telefono 3:','label-input-y-75',$alumno)
+        ],
+        'Academico' => [
+            $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',$alumno),
+            $form->text('becas','Becas:','label-input-y-75',$alumno),
+            $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',$alumno),
+        ],
+        'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
+    ]) ?>
     </div>
+    
+</div>
 
 
 
