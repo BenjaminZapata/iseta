@@ -16,36 +16,4 @@
     </fieldset>
     @endforeach
 
-    <div class="botones-derecha">
-        <div class="botones-derecha">
-            @if ($method == 'put' && str_contains(request()->path(), 'alumnos'))
-            <button class="btn_sky">
-                <a href="ruta/al/certificado.pdf">
-                    <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
-                </a>
-            </button>
-            <button class="btn_sky">
-                <a href="ruta/al/certificado.pdf">
-                    <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analitico
-                </a>
-            </button>
-            @endif
-
-            <button class="btn_cancelar">
-                <a href="{{ route('admin.alumnos.index') }}">
-                    <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar
-                </a>
-            </button>
-            <button class="btn_blue">
-                @if ($method == 'put')
-                <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                Actualizar
-                @else
-                <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                Guardar
-                @endif
-            </button>
-
-        </div>
-
 </form>

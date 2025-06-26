@@ -105,6 +105,8 @@ class AlumnoCrudController extends BaseController
             'examenes' => $examenes,
             'carreras' => $alumno->carrerasIncriptas(),
             'esAlumno' => true,
+            'method' => 'put',
+
         ]);
     }
 
