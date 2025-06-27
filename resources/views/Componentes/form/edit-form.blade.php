@@ -15,5 +15,23 @@
         </div>
     </fieldset>
     @endforeach
+    <div class="botones-derecha">
+            <div class="botones-derecha">
 
+                <a href="{{ route('admin.alumnos.index') }}">
+                    <button class="btn_cancelar" type="button">
+                        <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar
+                    </button>
+                </a>
+                <button type="submit" class="btn_blue">
+                    @if ($method == 'put')
+                        <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
+                        Actualizar
+                    @else
+                        <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+                        Guardar
+                    @endif
+                </button>
+            </div>
+        </div>
 </form>
