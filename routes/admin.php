@@ -193,6 +193,5 @@ Route::get('/admin/alumnos/{alumno}/analitico-pdf', [PdfsController::class, 'ana
     Route::get('copia',[AdminCopiaDB::class,'crearCopia']);
     Route::get('restaurar',[AdminCopiaDB::class,'restaurarCopia']);
 
-  
 
 });

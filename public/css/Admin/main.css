@@ -14,6 +14,7 @@
     --gris-body-tabla: #fffb;
     --gris-titulo: #d5d1defe;
     --gris-hover: #fff6;
+    --green-iseta: #25d366;
     --dark: #181818;
     --dark2: #212121;
     --dark3: #323232;
@@ -237,10 +238,48 @@ table td {
     color: black;
 }
 
+.btn_green {
+    background: var(--green-iseta);
+    color: black;
+}
+
 .btn_sky {
     background-color: var(--gris-header-tabla);
     color: black;
 }
+
+/* ...existing code... */
+.btn_cancelar {
+  background-color: #b71f14;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.4s;
+}
+
+.btn_cancelar::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0; right: 0;
+  background: linear-gradient(90deg, transparent 100%);
+  width: 0;
+  transition: width 0.4s;
+  z-index: 0;
+}
+
+.btn_cancelar:hover::before {
+  width: 100%;
+}
+
+.btn_cancelar span {
+  position: relative;
+  z-index: 1;
+}
+/* ...existing code... */
 
 .btn_blue::after {
     background-color: var(--facebook);
@@ -259,12 +298,12 @@ table td {
     background-color: var(--gris-titulo);
 }
 
-.btn_blue i, .btn_red i, .btn_grey i, .btn_sky i {
-    margin-right: 5px;
-    font-size: 20px;
+.btn_green::after {
+    background-color: var(--facebook);
+    color: white;
 }
 
-.btn_blue:hover::after, .btn_red:hover::after, .btn_grey:hover::after, .btn_sky:hover::after {
+.btn_blue:hover::after, .btn_red:hover::after, .btn_grey:hover::after, .btn_sky:hover::after, .btn_green:hover::after {
     left: 0;
     right: 0;
     top: 0;
@@ -309,6 +348,11 @@ table td {
     color: var(--dark3);
 }
 
+.botones-derecha {
+    justify-content: flex-end;
+    display: flex;
+    gap: 0.5rem;
+}
 /*---------------------------------------------- E  D  I  T  ,   C  R  E  A  T  E    y    R  E  M  A  T  ---------------------------------------------------------------*/
 
 .nwt {
