@@ -35,7 +35,6 @@
                     <th>Contacto</th>
                     <th>Dirección</th>
                     <th class="center">Acción</th>
-                    <th>Exportar</th>
                 </tr>
             </thead>
 
@@ -68,15 +67,6 @@
                         <td class="flex just-center">
                             <a href="{{route('admin.alumnos.edit', ['alumno' => $alumno->id])}}">
                                 <button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button>
-                            </a>
-                        </td>
-                        <td >
-                            <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno->id])}}">
-                                <button class="btn_blue">
-                                    <i class="ti ti-file-download">
-
-                                    </i>Cursadas
-                                </button>
                             </a>
                         </td>
                     </tr>

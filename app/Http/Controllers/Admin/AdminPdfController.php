@@ -87,9 +87,10 @@ class AdminPdfController extends Controller
                 }
             }
         }
+        return pdf()
+        ->view('Pdf.acta-volante', compact('alumnos') + ['mesa' => $mesa,'condicion'=>'LIBRE'])
+        ->name('acta-volante.pdf');
 
-        $pdf = Pdf::loadView('pdf.acta-volante', ['alumnos' => $alumnos,'mesa' => $mesa,'condicion'=>'LIBRE']);
-        return $pdf->stream('acta-volante.pdf');
     }
     public function constanciaRegular(Alumno $alumno){
         $regular = new CursadaRegularService($alumno, config('app'));
