@@ -10,7 +10,7 @@
     <div class="perfil_one br">
         <div class="perfil__info">
 
-    <?= $form->generate(route('admin.alumnos.update',['alumno'=>$alumno->id]),'put',[
+       <?= $form->generate(route('admin.alumnos.update',['alumno'=>$alumno->id]),'put',[
         'Alumno' => [
             $form->text('nombre','Nombre:','label-input-y-75',$alumno),
             $form->text('apellido','Apellido:','label-input-y-75',$alumno),
@@ -36,6 +36,11 @@
             $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',$alumno),
             $form->text('becas','Becas:','label-input-y-75',$alumno),
             $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',$alumno),
+             $form->select('titulo','Titulo secundario:','label-input-y-75',$alumno,['vacio',
+            'Fotocopia del título original secundario',
+            'Certificado de constancia de título en trámite',
+            'Constancia de alumno del último año del nivel secundario',
+            'No entregado'])
         ],
         'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
     ]) ?>
@@ -45,11 +50,9 @@
                     <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno->id])}}">
                         <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
                 </button>
-                <button class="btn_sky">
-                    <a href="ruta/al/certificado.pdf">
-                        <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analitico
-                    </a>
-                </button>
+                 <a href="{{ route('admin.alumnos.analitico.pdf', ['alumno' => $alumno->id]) }}" target="_blank" class="btn_sky">
+    <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analítico
+</a>
             </div>
         </div>
     </div>

@@ -60,7 +60,7 @@ Route::middleware(['web'])->prefix('admin')->group(function(){
     })->except('show');
    
 
-Route::get('/admin/alumnos/{alumno}/analitico-pdf', [PdfsController::class, 'analitico'])
+Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
     ->name('admin.alumnos.analitico.pdf');
 
     Route::resource('inscriptos', EgresadosAdminController::class, ['as' => 'admin'])->missing(function(){
