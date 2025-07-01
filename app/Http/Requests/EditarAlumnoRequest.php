@@ -42,7 +42,7 @@ class EditarAlumnoRequest extends FormRequest
             'telefono3' => ['nullable','numeric'],
             'codigo_postal' => ['nullable','alpha_num'],
             'estado' => ['nullable'],
-            'titulo' => ['required']
+            'titulo_secundario' => ['required']
         ];
     }
     public function messages()
