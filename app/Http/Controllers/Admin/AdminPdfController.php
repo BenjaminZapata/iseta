@@ -11,6 +11,7 @@ use App\Models\Mesa;
 use App\Models\Carrera;
 use Carbon;
 use function Spatie\LaravelPdf\Support\pdf;
+use App\Services\Admin\CursadaRegularService;
 
 use Illuminate\Http\Request;
 
@@ -87,18 +88,21 @@ class AdminPdfController extends Controller
                 }
             }
         }
+        return pdf()
+        ->view('Pdf.acta-volante', compact('alumnos') + ['mesa' => $mesa,'condicion'=>'LIBRE'])
+        ->name('acta-volante.pdf');
 
-        $pdf = Pdf::loadView('pdf.acta-volante', ['alumnos' => $alumnos,'mesa' => $mesa,'condicion'=>'LIBRE']);
-        return $pdf->stream('acta-volante.pdf');
     }
-    function constanciaRegular(Alumno $alumno){
+    public function constanciaRegular(Alumno $alumno){
+        $regular = new CursadaRegularService($alumno, config('app'));
+        if (!$regular->esCursadaRegular()) {
+            return redirect()->back()->with('aviso', 'El alumno no tiene condicion de regular');
+        }
         $fecha = Carbon\Carbon::now();
         return pdf()
         ->view('Pdf.alumno-regular', compact('alumno') + ['fecha' => $fecha])
         ->name('constancia-regular.pdf');
         //->download();
-
-        //return view('Pdf.alumno-regular', compact('alumno') + ['fecha' => $fecha]);
     }
 
      public function analitico(Alumno $alumno)

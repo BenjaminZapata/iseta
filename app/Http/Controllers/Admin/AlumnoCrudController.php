@@ -113,7 +113,7 @@ class AlumnoCrudController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditarAlumnoRequest $request, Alumno $alumno): RedirectResponse
+    public function update(EditarAlumnoRequest $request, Alumno $alumno)
     {
         $data = $request->validated();
 
