@@ -44,7 +44,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'telefono3',
         'codigo_postal',
         'password',
-        'titulo'
+        'titulo_secundario'
     ];
 
     /**
@@ -184,8 +184,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         return $ciudades;
     }
 
-    // FIXME: fijate que esto no anda y tira error en la parte de editar alumno, te lo dejo en un comentario por el momento asi no jode y dsp create una rama para arreglarlo
-   /**  public function titulo(){
+    public function titulo_secundario(){
         $titulo = [
             'Fotocopia del título original secundario',
             'Certificado de constancia de título en trámite',
@@ -197,6 +196,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             return 'Otro';
         }
     }
-    */
+    
+    
 }
 
