@@ -96,7 +96,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     }
 
     public function carreras(){
-        return Egresado::with('carrera')->where('id_alumno',$this->id)->get();
+        return Egresado::with('carrera')->where('id_alumno',$this->id);
     }
 
     public function carrerasIncriptas(){
@@ -196,7 +196,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             return 'Otro';
         }
     }
-    
-    
+
+
 }
 

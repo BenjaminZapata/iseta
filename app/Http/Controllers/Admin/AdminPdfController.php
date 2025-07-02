@@ -9,11 +9,13 @@ use App\Models\Cursada;
 use App\Models\Examen;
 use App\Models\Mesa;
 use App\Models\Carrera;
+use App\Models\Configuracion;
 use Carbon;
 use function Spatie\LaravelPdf\Support\pdf;
 use App\Services\Admin\CursadaRegularService;
 
 use Illuminate\Http\Request;
+use PSpell\Config;
 
 class AdminPdfController extends Controller
 {
@@ -93,8 +95,8 @@ class AdminPdfController extends Controller
         ->name('acta-volante.pdf');
 
     }
-    public function constanciaRegular(Alumno $alumno){
-        $regular = new CursadaRegularService($alumno, config('app'));
+    public function constanciaRegular(Alumno $alumno, Configuracion $config) {
+        $regular = new CursadaRegularService($alumno, $config);
         if (!$regular->esCursadaRegular()) {
             return redirect()->back()->with('aviso', 'El alumno no tiene condicion de regular');
         }

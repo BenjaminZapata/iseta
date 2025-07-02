@@ -22,6 +22,7 @@ class AlumnoCrudController extends BaseController
         'filter_ciudad' => 0,
         'filter_estado_civil' => 0
     ];
+
     public $mensajes = ['mensaje'=>[],'error'=>[],'aviso'=>[]];
 
     public function __construct(AlumnoRepository $alumnosRepo) {
@@ -101,6 +102,7 @@ class AlumnoCrudController extends BaseController
 
         return view('Admin.Alumnos.edit', [
             'alumno' => $alumno,
+            'config' => $this->config,
             'cursadas' => $cursadas,
             'examenes' => $examenes,
             'carreras' => $alumno->carrerasIncriptas(),
