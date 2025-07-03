@@ -102,7 +102,6 @@ class AlumnoCrudController extends BaseController
 
         return view('Admin.Alumnos.edit', [
             'alumno' => $alumno,
-            'config' => $this->config,
             'cursadas' => $cursadas,
             'examenes' => $examenes,
             'carreras' => $alumno->carrerasIncriptas(),
