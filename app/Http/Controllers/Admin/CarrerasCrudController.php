@@ -100,8 +100,10 @@ class CarrerasCrudController extends BaseController
 
     }
 
-        public function addAsignaturaView(Request $request, Carrera $carrera)
+    public function addAsignaturaView(Request $request)
     {
+        log::debug($request);
+        $carrera = Carrera::find($request->id_carrera);
         $id_carrera = $request->id_carrera ?? null;
         $asignaturas = Asignatura::orderBy('nombre')->get();
         $id_asignatura = $request->id_asignatura ?? null;
@@ -112,8 +114,7 @@ class CarrerasCrudController extends BaseController
             'id_asignatura' => $id_asignatura,
         ]);
     }
-    public function addAsignatura(Request $request){
-        log::debug($carrera);
+    public function addAsignatura(Request $request, Carrera $carrera){
         $carrera->asignaturas()->attach($request->asignatura);
         return redirect()->back()->with('mensaje','Se agrego la asignatura');
     }

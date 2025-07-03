@@ -67,29 +67,23 @@ class Carrera extends Model
         return $asignaturas;
     }
 
-    public static function getDefault($alumno_id = null)
-{
-    if (!$alumno_id) {
-        return null; // o lanzar excepción si querés
+    public static function getDefault($alumno_id=null)
+    {
+        $alumno = $alumno_id ? Alumno::find($alumno_id) : Auth::user();
+        $carrera = CarreraDefault::select('id_carrera')
+            -> where('id_alumno',$alumno->id)
+            -> first();
+
+        if($carrera) return Carrera::find($carrera->id_carrera);
+
+        $carrera = Egresado::select('carreras.id', 'carreras.nombre')
+            -> join('carreras','egresadoinscripto.id_carrera','carreras.id')
+            -> where('egresadoinscripto.id_alumno',$alumno->id)
+            -> first();
+
+        if(!$carrera) return null;
+        return $carrera;
     }
-
-    $alumno = Alumno::find($alumno_id);
-
-    if (!$alumno) {
-        return null;
-    }
-
-    $carrera = CarreraDefault::where('id_alumno', $alumno->id)->first();
-
-    if ($carrera) return Carrera::find($carrera->id_carrera);
-
-    $carrera = Egresado::select('carreras.id', 'carreras.nombre')
-        ->join('carreras', 'egresadoinscripto.id_carrera', 'carreras.id')
-        ->where('egresadoinscripto.id_alumno', $alumno->id)
-        ->first();
-
-    return $carrera ?: null;
-}
 
 
     function estaInscripto($alumno=null){

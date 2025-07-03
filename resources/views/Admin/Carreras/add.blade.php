@@ -22,13 +22,7 @@
                     </div>
                     <div class="perfil_dataname">
                         <label>Carrera:</label>
-                        <select class="campo_info rounded" name="id_carrera">
-                            @foreach($carreras as $carrera)
-                                <option @selected($id_carrera==$carrera->id) value="{{$carrera->id}}">
-                                    {{$carrera->nombre}}
-                                </option>
-                            @endforeach
-                        </select>
+                        {{$carrera->nombre}}
                     </div>
 
                     <div class="upd"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar</button></div>

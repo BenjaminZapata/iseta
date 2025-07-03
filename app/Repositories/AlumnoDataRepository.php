@@ -19,8 +19,10 @@ class AlumnoDataRepository
 
 
     function examenes($filtro,$campo,$orden){
+        $defaultCarreraId = Carrera::getDefault()?->id;
         return Examen::join('asignaturas', 'asignaturas.id','examenes.id_asignatura')
-        -> where('asignaturas.id_carrera', Carrera::getDefault()->id)
+        ->join('carrera_asignatura_profesor', 'carrera_asignatura_profesor.id_asignatura', '=', 'asignaturas.id')
+        ->where('carrera_asignatura_profesor.id_carrera', $defaultCarreraId)
         -> where('examenes.id_alumno', Auth::id())
         -> when($filtro, fn($query) => $query->where('asignaturas.nombre','LIKE',"%$filtro%"))
         -> when($campo=='aprobadas',fn($query) => $query->where('examenes.nota','>=',4))
@@ -35,10 +37,10 @@ class AlumnoDataRepository
     function cursadas($filtro, $campo, $orden){
 
         $query = Cursada::with('asignatura')->select('cursadas.id_asignatura','cursadas.anio_cursada','cursadas.id','cursadas.aprobada','cursadas.condicion','asignaturas.nombre','asignaturas.anio')
-            -> where('id_alumno', Auth::id())
-            -> where('asignaturas.id_carrera', Carrera::getDefault(Auth::id())->id)
+            ->where('id_alumno', Auth::id())
             -> join('asignaturas','asignaturas.id','cursadas.id_asignatura')
-
+            ->join('carrera_asignatura_profesor as cap', 'cap.id_asignatura', 'asignaturas.id')
+            ->where('cap.id_carrera', Carrera::getDefault(Auth::id())->id)
             // si tiene un filtro en el campo de texto
             -> when($filtro, fn($query,$filtro) => $query -> where('asignaturas.nombre','LIKE','%'.$filtro.'%'))
 

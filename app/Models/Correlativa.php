@@ -56,13 +56,20 @@ class Correlativa extends Model
 
         foreach($asignatura->correlativas as $correlativa){
            $asigCorr = $correlativa->asignatura;
-           if(!$asigCorr) return false;
-           if($asigCorr->aproboCursada($alumno)) continue;
-           else $sinAprobar[] = $asigCorr;
+           if(is_null($asigCorr)) {
+                return false;
+           }
+           log:debug($asigCorr->aproboCursada($alumno));
+           if($asigCorr->aproboCursada($alumno)) {
+                continue;
+           } else
+           $sinAprobar[] = $asigCorr;
         }
 
-        if(count($sinAprobar)>0) return $sinAprobar;
-        else return false;
+        if(count($sinAprobar)>0) {
+            return $sinAprobar;
+        }
+        return false;
      }
 
 }

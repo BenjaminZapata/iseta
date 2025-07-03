@@ -83,15 +83,8 @@ class AsignaturasCrudController extends Controller
 
         $asignatura = Asignatura::with('cursadas.alumno')->find($asignatura);
 
-        $alumnos = $asignatura->cursantes();
-
-        //$correlativas = Asignatura::where('id_carrera', $asignatura->carrera->id)
-        //   ->where('anio', '>=', $asignatura->anio);
-
-
         return view('Admin.Asignaturas.edit', [
             'asignatura' => $asignatura,
-            // 'alumnos' => $alumnos
         ]);
     }
 

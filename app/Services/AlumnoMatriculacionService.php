@@ -9,6 +9,7 @@ use App\Models\Correlativa;
 use App\Models\Cursada;
 use App\Models\Examen;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AlumnoMatriculacionService{
     public $config;
@@ -27,15 +28,18 @@ class AlumnoMatriculacionService{
      function matriculables($alumno, $carrera){
 
         // todas las materias de esa carrera
-        $asignaturas = Asignatura::where('id_carrera',$carrera->id)->get();
-
+        $asignaturas = Asignatura::whereHas('carrera', function ($query) use ($carrera) {
+            $query->where('id', $carrera->id);
+        })->get();
         $anotables = [];
+
 
         // para cada asignatura
         foreach($asignaturas as $asignatura){
 
             // array para almancenar equivalencias, solo en caso de que deba equivalencias.
             $asignatura->{'equivalencias_previas'} = [];
+
 
             // Chequear que no este ya en la cursada
             $yaAnotadoEnCursada = $asignatura->estaCursando($alumno);
@@ -46,6 +50,7 @@ class AlumnoMatriculacionService{
 
             // Si la materia tiene correlativas
             $asignatura->equivalencias_previas = Correlativa::debeCursadasCorrelativos($asignatura,$alumno);
+
 
             $anotables[] = $asignatura;
         }
