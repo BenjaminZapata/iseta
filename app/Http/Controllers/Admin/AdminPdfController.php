@@ -43,9 +43,9 @@ class AdminPdfController extends Controller
         // -> get();
 
 
-
-        $pdf = Pdf::loadView('pdf.acta-volante', ['alumnos' => $alumnos,'mesa' => $mesa,'condicion'=>'']);
-        return $pdf->stream('invoice.pdf');
+        return pdf()
+        ->view('pdf.acta-volante', compact('alumnos') + ['mesa' => $mesa,'condicion'=>''])
+        ->name('acta-volante-regular.pdf');
     }
 
     function actaVolantePromocion(Request $request,Mesa $mesa){
@@ -65,11 +65,12 @@ class AdminPdfController extends Controller
             }
         }
 
-        $pdf = Pdf::loadView('pdf.acta-volante', ['alumnos' => $alumnos,'mesa' => $mesa,'condicion'=>'PROMOCION']);
-        return $pdf->stream('acta-volante.pdf');
+        return pdf()
+        ->view('pdf.acta-volante', compact('alumnos') + ['mesa' => $mesa,'condicion'=>'PROMOCION'])
+        ->name('acta-volante-promocion.pdf');
     }
 
-    function actaVolanteLibre(Request $request,Mesa $mesa){
+    public function actaVolanteLibre(Request $request,Mesa $mesa){
         $alumnos = [];
 
         // Todos los registros de alumnos en esa mesa
@@ -92,7 +93,7 @@ class AdminPdfController extends Controller
         }
         return pdf()
         ->view('Pdf.acta-volante', compact('alumnos') + ['mesa' => $mesa,'condicion'=>'LIBRE'])
-        ->name('acta-volante.pdf');
+        ->name('acta-volante-libre.pdf');
 
     }
     public function constanciaRegular(Alumno $alumno, Configuracion $config) {
