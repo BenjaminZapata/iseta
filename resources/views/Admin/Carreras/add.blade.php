@@ -7,7 +7,7 @@
                 <h2>Agregar asignatura</h2>
             </div>
             <div class="perfil__info">
-                <form method="post" action="{{route('admin.asignaturas.store')}}">
+                <form method="post" action="{{route('admin.carreras.add.post')}}">
                 @csrf
 
                     <div class="perfil_dataname">
