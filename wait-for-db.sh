@@ -1,9 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "Esperando a que la base de datos esté lista..."
 
-until mysql -h"$DB_HOST" -u"$DB_USERNAME" -p"$DB_PASSWORD" -e 'SELECT 1;' &> /dev/null
-do
+until mysql -h"$DB_HOST" -u"$DB_USERNAME" -p"$DB_PASSWORD" -e 'SELECT 1;' > /dev/null 2>&1; do
   echo "DB aún no responde... esperando 2s"
   sleep 2
 done
