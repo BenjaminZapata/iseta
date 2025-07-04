@@ -18,104 +18,90 @@ class MesaRepository
         $this->config = Configuracion::todas();
     }
 
-    function index($request){
-        $idsQuery = Mesa::select('mesas.id')
-            ->leftJoin('carreras', 'carreras.id', 'mesas.id_carrera')
-            ->leftJoin('carrera_asignatura_profesor', 'carrera_asignatura_profesor.id_asignatura', 'carreras.id')
-            ->leftJoin('examenes','examenes.id_mesa','mesas.id')
-            ->leftJoin('alumnos', 'alumnos.id', 'examenes.id_alumno');
+   public function index($request)
+{
+    // Inicia el query base con relaciones necesarias
+    $query = Mesa::with('asignatura')
+        ->leftJoin('carreras', 'carreras.id', 'mesas.id_carrera')
+        ->leftJoin('examenes', 'examenes.id_mesa', 'mesas.id')
+        ->leftJoin('alumnos', 'alumnos.id', 'examenes.id_alumno');
 
-
-        if($request->has('filter_carrera_id') && $request->input('filter_carrera_id') != 0){
-            $idsQuery->where('mesas.id_carrera', $request->input('filter_carrera_id'));
-            if($request->has('filter_asignatura_id') && $request->input('filter_asignatura_id') != 0){
-                $idsQuery->where('mesas.id_asignatura', $request->input('filter_asignatura_id'));
-            }
-        }
-
-        if($request->has('filter_alumno_id') && $request->input('filter_alumno_id') != 0)
-            $idsQuery->where('alumnos.id', $request->input('filter_alumno_id'));
-
-        if($request->has('filter_llamado') && $request->input('filter_llamado') != 0)
-            $idsQuery->where('mesas.llamado', $request->input('filter_llamado'));
-
-        if($request->has('filter_presidente') && $request->input('filter_presidente') != 0)
-            $idsQuery->where('mesas.prof_presidente', $request->input('filter_presidente'));
-
-        if($request->has('filter_vocal1') && $request->input('filter_vocal1') != 0)
-            $idsQuery->where('mesas.prof_vocal_1', $request->input('filter_vocal1'));
-
-        if($request->has('filter_vocal2') && $request->input('filter_vocal2') != 0)
-            $idsQuery->where('mesas.prof_vocal_2', $request->input('filter_vocal2'));
-
-        if($request->has('filter_from') && $request->input('filter_from') != 0){
-            $idsQuery->whereDate('mesas.fecha', '>=',$request->input('filter_from'));
-        }
-
-        if($request->has('filter_to') && $request->input('filter_to') != 0){
-            $idsQuery->whereDate('mesas.fecha', '<=',$request->input('filter_to'));
-        }
-
-
-
-
-        if($request->has('filter_search_box') && ''!=$request->input('filter_search_box') && in_array($request->input('filter_field'),$this->availableFiels)){
-            $word = str_replace(' ','%',$request->input('filter_search_box'));
-
-            if($request->input('filter_field') == 'alumno'){
-                $idsQuery->whereRaw("(CONCAT(alumnos.nombre,' ',alumnos.apellido) LIKE '%$word%')");
-            }
-            else if($request->input('filter_field') == 'profesor'){
-                $prof_ids = Profesor::select('id')->whereRaw("(CONCAT(nombre,' ',apellido) LIKE '%$word%')")->get()->pluck('id');
-                $idsQuery->whereIn('mesas.prof_presidente',$prof_ids);
-            }
-            else if($request->input('filter_field') == 'carrera'){
-                $idsQuery->where('carreras.nombre','LIKE','%'.$word.'%');
-            }
-            else if($request->input('filter_field') == 'asignatura'){
-                $asig_ids = Asignatura::select('id')->where('nombre','LIKE','%'.$word.'%')->get()->pluck('id');
-                $idsQuery->whereIn('mesas.id_asignatura',$asig_ids);
-            }else{
-                $idsQuery->where($request->input('filter_field'), 'LIKE', '%'.$request->input('filter_search_box').'%');
-            }
-        }
-
-
-
-
-        //TODO: Buscar mesa futuras (una por asignatura)
-        // Paso 1: Obtener IDs de la última mesa futura
-    $idsMesas = Mesa::selectRaw('MAX(id) as id')
-        ->where('fecha', '>=', now())
-        ->groupBy('id_asignatura')
-        ->get()
-        ->pluck('id');
-
-        // Paso 2: Si no hay futuras, buscar últimas pasadas
-    if ($idsMesas->isEmpty()) {
-        $idsMesas = Mesa::selectRaw('MAX(id) as id')
-            ->where('fecha', '<=', now())
-            ->groupBy('id_asignatura')
-            ->get()
-            ->pluck('id');
+    // Filtro por carrera
+    if ($request->filled('filter_carrera_id') && $request->input('filter_carrera_id') != 0) {
+        $query->where('mesas.id_carrera', $request->input('filter_carrera_id'));
     }
 
-        // Paso 3: Traer las mesas con asignatura y nota del examen
-    $mesas = Mesa::with(['asignatura'])
-        ->leftJoin('asignaturas', 'asignaturas.id', '=', 'mesas.id_asignatura')
-        ->leftJoin('examenes', 'examenes.id_mesa', '=', 'mesas.id')
-        ->select(
-        'mesas.*',
-        'asignaturas.nombre as asignatura_nombre',
-        'examenes.nota as alumno_nota'
-        )
-        ->whereIn('mesas.id', $idsMesas)
+    // Filtro por asignatura
+    if ($request->filled('filter_asignatura_id') && $request->input('filter_asignatura_id') != 0) {
+        $query->where('mesas.id_asignatura', $request->input('filter_asignatura_id'));
+    }
+
+    // Filtro por alumno
+    if ($request->filled('filter_alumno_id') && $request->input('filter_alumno_id') != 0) {
+        $query->where('alumnos.id', $request->input('filter_alumno_id'));
+    }
+
+    // Filtro por llamado
+    if ($request->filled('filter_llamado') && $request->input('filter_llamado') != 0) {
+        $query->where('mesas.llamado', $request->input('filter_llamado'));
+    }
+
+    // Filtro por presidente y vocales
+    if ($request->filled('filter_presidente') && $request->input('filter_presidente') != 0) {
+        $query->where('mesas.prof_presidente', $request->input('filter_presidente'));
+    }
+
+    if ($request->filled('filter_vocal1') && $request->input('filter_vocal1') != 0) {
+        $query->where('mesas.prof_vocal_1', $request->input('filter_vocal1'));
+    }
+
+    if ($request->filled('filter_vocal2') && $request->input('filter_vocal2') != 0) {
+        $query->where('mesas.prof_vocal_2', $request->input('filter_vocal2'));
+    }
+
+    // Filtro por rango de fechas
+    if ($request->filled('filter_from')) {
+        $query->whereDate('mesas.fecha', '>=', $request->input('filter_from'));
+    }
+
+    if ($request->filled('filter_to')) {
+        $query->whereDate('mesas.fecha', '<=', $request->input('filter_to'));
+    }
+
+    // Búsqueda general (alumno, profesor, carrera o asignatura)
+    if ($request->filled('filter_search_box') && in_array($request->input('filter_field'), $this->availableFiels)) {
+        $word = str_replace(' ', '%', $request->input('filter_search_box'));
+
+        switch ($request->input('filter_field')) {
+            case 'alumno':
+                $query->whereRaw("CONCAT(alumnos.nombre, ' ', alumnos.apellido) LIKE ?", ["%$word%"]);
+                break;
+
+            case 'profesor':
+                $prof_ids = Profesor::select('id')
+                    ->whereRaw("CONCAT(nombre, ' ', apellido) LIKE ?", ["%$word%"])
+                    ->pluck('id');
+                $query->whereIn('mesas.prof_presidente', $prof_ids);
+                break;
+
+            case 'carrera':
+                $query->where('carreras.nombre', 'LIKE', "%$word%");
+                break;
+
+            case 'asignatura':
+                $asig_ids = Asignatura::where('nombre', 'LIKE', "%$word%")->pluck('id');
+                $query->whereIn('mesas.id_asignatura', $asig_ids);
+                break;
+        }
+    }
+
+    // Devolver resultados con paginación
+    return $query
+        ->select('mesas.*') // evita ambigüedades por los joins
         ->orderBy('mesas.fecha', 'desc')
         ->orderBy('mesas.llamado', 'asc')
         ->paginate($this->config['filas_por_tabla']);
-    return $mesas;
-
-    }
+}
 
     public function inscribibles($mesaId){
         $mesa = Mesa::find($mesaId)->first();
