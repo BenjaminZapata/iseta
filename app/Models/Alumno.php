@@ -184,7 +184,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         return $ciudades;
     }
 
-    // FIXME: fijate que esto no anda y tira error, te lo dejo en un comentario por el momento asi no jode y dsp create una rama para arreglarlo
+    // FIXME: fijate que esto no anda y tira error en la parte de editar alumno, te lo dejo en un comentario por el momento asi no jode y dsp create una rama para arreglarlo
    /**  public function titulo(){
         $titulo = [
             'Fotocopia del título original secundario',

@@ -148,7 +148,7 @@ class AlumnoInscripcionService{
             }
 
             // Si debe correlativas se registran y se muestran en pantalla
-            $correlativas = Correlativa::debeExamenesCorrelativos($asignatura);
+            $correlativas = Correlativa::debeExamenesCorrelativos($asignatura, $alumno);
             if($correlativas) $reg['correlativas'] = $correlativas;
 
             $posibles[] = $reg;

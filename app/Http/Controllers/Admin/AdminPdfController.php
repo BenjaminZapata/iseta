@@ -8,8 +8,10 @@ use App\Models\Alumno;
 use App\Models\Cursada;
 use App\Models\Examen;
 use App\Models\Mesa;
+use App\Models\Carrera;
 use Carbon;
 use function Spatie\LaravelPdf\Support\pdf;
+use App\Services\Admin\CursadaRegularService;
 
 use Illuminate\Http\Request;
 
@@ -86,17 +88,67 @@ class AdminPdfController extends Controller
                 }
             }
         }
+        return pdf()
+        ->view('Pdf.acta-volante', compact('alumnos') + ['mesa' => $mesa,'condicion'=>'LIBRE'])
+        ->name('acta-volante.pdf');
 
-        $pdf = Pdf::loadView('pdf.acta-volante', ['alumnos' => $alumnos,'mesa' => $mesa,'condicion'=>'LIBRE']);
-        return $pdf->stream('acta-volante.pdf');
     }
-    function constanciaRegular(Alumno $alumno){
+    public function constanciaRegular(Alumno $alumno){
+        $regular = new CursadaRegularService($alumno, config('app'));
+        if (!$regular->esCursadaRegular()) {
+            return redirect()->back()->with('aviso', 'El alumno no tiene condicion de regular');
+        }
         $fecha = Carbon\Carbon::now();
         return pdf()
         ->view('Pdf.alumno-regular', compact('alumno') + ['fecha' => $fecha])
         ->name('constancia-regular.pdf');
         //->download();
-
-        //return view('Pdf.alumno-regular', compact('alumno') + ['fecha' => $fecha]);
     }
+
+     public function analitico(Alumno $alumno)
+{
+    $carrera = Carrera::getDefault($alumno->id);
+    $id_carrera = $carrera?->id;
+    $materias = Asignatura::where('id_carrera', $id_carrera)->get();
+
+    $examenes = Examen::selectRaw('examenes.id_asignatura, asignaturas.nombre, MAX(examenes.nota) as nota, asignaturas.anio, examenes.fecha')
+        ->from('asignaturas')
+        ->join('examenes', 'examenes.id_asignatura', '=', 'asignaturas.id')
+        ->where('examenes.id_alumno', $alumno->id)
+        ->where('asignaturas.id_carrera', $id_carrera)
+        ->where('examenes.nota', '>=', 4)
+        ->groupBy('examenes.id_asignatura', 'asignaturas.nombre', 'asignaturas.anio', 'examenes.fecha')
+        ->get();
+
+    $porcentaje = number_format(count($examenes) / max(count($materias), 1) * 100, 2, '.', '') . '%';
+
+    $materiasExamenes = [];
+    foreach ($materias as $materia) {
+        foreach ($examenes as $examen) {
+            if ($materia->id == $examen->id_asignatura) {
+                $copia = clone $materia;
+                $copia->examen = $examen;
+                $materiasExamenes[] = $copia;
+                break;
+            }
+        }
+    }
+
+    // Imagen en base64
+    $imgPath = public_path('img/pdf.png');
+    $src = 'data:image/png;base64,' . base64_encode(file_get_contents($imgPath));
+
+    // Mostrar el PDF en el navegador
+    return pdf()
+        ->view('Pdf.analitico', [
+            'alumno' => $alumno,
+            'carrera' => $carrera,
+            'materias' => $materiasExamenes,
+            'porcentaje' => $porcentaje,
+            'src' => $src,
+        ])
+        ->format('a4')
+        ->name("analitico_{$alumno->apellido}_{$alumno->nombre}.pdf");
+}
+
 }
