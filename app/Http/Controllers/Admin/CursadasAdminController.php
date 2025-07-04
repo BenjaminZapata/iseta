@@ -13,6 +13,7 @@ use App\Models\Cursada;
 use App\Repositories\Admin\CursadaRepository;
 use App\Repositories\AdminCursadaRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\log;
 
 class CursadasAdminController extends BaseController
 {
@@ -47,6 +48,7 @@ class CursadasAdminController extends BaseController
             -> where('id_asignatura', $cursada->id_asignatura)
             -> where('id_alumno', $cursada->id_alumno)
             -> value('nota'); // Equivalencia
+        Log::debug("message",['cursada' => $cursada]);
         return view('Admin.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
     }
 
@@ -65,14 +67,30 @@ class CursadasAdminController extends BaseController
 
             $data['aprobada'] = 1;
         }
+        if ($request->aprobada == 5) {
+            Examen::updateOrInsert(
+            [
+                'id_carrera' => $cursada->id_carrera,
+                'id_asignatura' => $cursada->id_asignatura,
+                'id_alumno' => $cursada->id_alumno
+            ],
+            [
+                'id_carrera' => $cursada->id_carrera,
+                'id_asignatura' => $cursada->id_asignatura,
+                'id_alumno' => $cursada->id_alumno,
+                'tipo_final' => 4, // Equivalencia
+               // 'libro' => $request->libro,
+               // 'acta' => $request->acta,
+                'nota' => $request->nota,
+              //  'fecha' => $request->fecha,
+                'aprobado' => 1
+            ]);
+        }
 
         $cursada -> update($data);
         $mensajes[] = 'Se ha editado correctamente';
 
-        if($request->has('redirect'))
-            return redirect()->to($request->input('redirect'))->with('mensaje',$mensajes);
-        else
-            return redirect()->back()->with('mensaje',$mensajes);
+        return redirect()->back()->with('mensaje',$mensajes);
 
 
     }
@@ -115,11 +133,10 @@ class CursadasAdminController extends BaseController
             }
             return \redirect()->back()->with(['error'=>$mensajes])->withInput();
         }
-
         // WARN: Aprobado por equivalencia se crea un examen sin mesa (faltan datos)
         if ($request->aprobada == 5) {
             Examen::create([
-                'id_carrera' => $request->id_carrera,
+                'id_carrera' => $request->carrera,
                 'id_asignatura' => $request->id_asignatura,
                 'id_alumno' => $request->id_alumno,
                 'tipo_final' => 4, // Equivalencia
@@ -133,7 +150,7 @@ class CursadasAdminController extends BaseController
 
 
         Cursada::create([
-            'id_carrera' => $request->id_carrera,
+            'id_carrera' => $request->carrera,
             'id_asignatura' => $request->id_asignatura,
             'id_alumno' => $request->id_alumno,
             'anio_cursada' => $request->anio_cursada,

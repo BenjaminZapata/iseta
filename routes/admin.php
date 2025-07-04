@@ -90,8 +90,10 @@ Route::middleware(['web'])->prefix('admin')->group(function(){
     })->except('show');
 
     Route::get('cursadas', [CursadasAdminController::class,'index'])->name('admin.cursadas.index');
-    Route::get('cursadas/{cursada}/edit', [CursadasAdminController::class,'edit'])->name('admin.cursadas.edit');
-    Route::put('cursadas/{cursada}/edit', [CursadasAdminController::class,'update'])->name('admin.cursadas.update');
+    Route::get('cursadas/{cursada}/edit', [CursadasAdminController::class,'edit'])
+    ->name('admin.cursadas.edit');
+    Route::put('cursadas/{cursada}/edit', [CursadasAdminController::class,'update'])
+    ->name('admin.cursadas.update');
     Route::delete('cursadas/{cursada}', [CursadasAdminController::class,'delete'])->name('admin.cursadas.destroy');
     Route::get('cursadas/create', [CursadasAdminController::class,'create'])->name('admin.cursadas.create');
     Route::post('cursadas/create', [CursadasAdminController::class,'store'])->name('admin.cursadas.store');

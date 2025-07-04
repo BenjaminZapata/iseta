@@ -13,7 +13,7 @@
                 </div>
                 <div class="perfil__info">
 
-                    <form method="post" action="{{route('admin.cursadas.update', ['cursada'=>$cursada->id])}}">
+                    <form method="POST" action="{{route('admin.cursadas.update', ['cursada'=>$cursada->id])}}">
                     @csrf
                     @method('put')
                     <div class="perfil_dataname">
@@ -83,7 +83,7 @@
                     </div>
                     <input type="hidden" value="{{url()->previous()}}" name="redirect">
 
-                    <div class="upd"><button class="btn_blue"><i class="ti ti-refresh"></i>Actualizar</button></div>
+                    <div class="upd"><button type="submit" class="btn_blue"><i class="ti ti-refresh"></i>Actualizar</button></div>
                     </form>
                 </div>
             </div>
