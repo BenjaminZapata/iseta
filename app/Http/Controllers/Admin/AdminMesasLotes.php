@@ -11,20 +11,20 @@ use Illuminate\Http\Request;
 
 class AdminMesasLotes extends Controller
 {
-    
+
 
     function vista(Request $request,Asignatura $asignatura){
         $siguiente = null;
         $asignaturas = $asignatura->carrera->asignaturas;
         $anterior = null;
-    
+
         foreach ($asignaturas as $key=>$asig) {
             if($asig->id == $asignatura->id){
                 $siguiente = $key+1;
                 $anterior = $key-1;
             }
         }
-    
+
         return view('Admin.Mesas.create-dual', [
             'asignatura' => $asignatura,
             'siguiente' => $siguiente<count($asignaturas)? $asignaturas[$siguiente]:null,
@@ -32,17 +32,17 @@ class AdminMesasLotes extends Controller
             'profesores' => Profesor::orderBy('apellido','asc')->orderBy('apellido','asc')->get()
         ]);
     }
-    
+
     function store(Request $request, Asignatura $asignatura,MesasCheckerService $mesasService){
-    
-        
+
+
 
        $data= ['id_asignatura'=>$asignatura->id,'fecha'=>null,'llamado'=>null];
 
         // se añade el id de la carrera al registro de mesa, ya que no viene en el formulario
         // no deberia ser necesario pero la base de datos anterior hacia uso de esta duplicidad
-        
-        
+
+
 
         // Que los profes no sean los mismos
         if(
@@ -61,12 +61,12 @@ class AdminMesasLotes extends Controller
 
             if(!$esDiaValido['success']){
                 return redirect()->back()->with('error', 'Llamado 1: '.$esDiaValido['mensaje'])->withInput();
-            } 
+            }
 
             $data['fecha'] = $request->input('fecha1');
             $data['llamado'] = 1;
             $llamadoYaExiste = $mesasService->llamadoYaExiste($data);
-            
+
             if($llamadoYaExiste['success']){
                 return redirect()->back()->with('error',$llamadoYaExiste['mensaje'])->withInput();
             }
@@ -81,7 +81,7 @@ class AdminMesasLotes extends Controller
                 'prof_vocal_2' => $request->input('prof_vocal_2')
             ]);
         }
-    
+
         // --------------------
 
         if($request->input('fecha2')){
@@ -89,12 +89,12 @@ class AdminMesasLotes extends Controller
 
             if(!$esDiaValido['success']){
                 return redirect()->back()->with('error', 'Llamado 2: '.$esDiaValido['mensaje'])->withInput();
-            } 
+            }
 
             $data['fecha'] = $request->input('fecha2');
             $data['llamado'] = 2;
             $llamadoYaExiste = $mesasService->llamadoYaExiste($data);
-            
+
             if($llamadoYaExiste['success']){
                 return redirect()->back()->with('error',$llamadoYaExiste['mensaje'])->withInput();
             }
@@ -109,9 +109,9 @@ class AdminMesasLotes extends Controller
                 'prof_vocal_2' => $request->input('prof_vocal_2')
             ]);
         }
-    
-    
+
+
         return redirect()->back()->with('Se crearon correctamente');
-    
+
     }
 }
