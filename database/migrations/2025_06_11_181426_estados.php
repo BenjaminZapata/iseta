@@ -9,12 +9,19 @@ class estados extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-           Schema::table('egresadoinscripto', function (Blueprint $table){
-            $table->tinyInteger('estado')->required();
-        });
-    }
+   public function up()
+{
+    Schema::table('egresadoinscripto', function (Blueprint $table) {
+        $table->integer('estado')->default(0);
+    });
+
+    // Agregá este delay para asegurarte que la columna fue creada antes del update (opcional)
+    DB::statement('SET SESSION sql_mode = ""'); // Por si tenés modo estricto
+
+    // Ahora hacé el update
+    DB::table('egresadoinscripto')->whereNotNull('anio_finalizacion')->update(['estado' => 1]);
+}
+
 
     /**
      * Reverse the migrations.
