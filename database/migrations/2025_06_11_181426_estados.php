@@ -13,6 +13,11 @@ class estados extends Migration
     {
            Schema::table('egresadoinscripto', function (Blueprint $table){
             $table->tinyInteger('estado')->required();
+
+                    // Actualizar los registros existentes después de agregar la columna
+        DB::table('egresadoinscripto')
+            ->whereNotNull('anio_finalizacion')
+            ->update(['estado' => 1]);
         });
     }
 
