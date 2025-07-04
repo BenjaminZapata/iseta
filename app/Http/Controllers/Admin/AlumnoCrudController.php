@@ -22,6 +22,7 @@ class AlumnoCrudController extends BaseController
         'filter_ciudad' => 0,
         'filter_estado_civil' => 0
     ];
+
     public $mensajes = ['mensaje'=>[],'error'=>[],'aviso'=>[]];
 
     public function __construct(AlumnoRepository $alumnosRepo) {

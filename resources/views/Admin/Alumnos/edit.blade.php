@@ -36,7 +36,7 @@
             $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',$alumno),
             $form->text('becas','Becas:','label-input-y-75',$alumno),
             $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',$alumno),
-             $form->select('titulo','Titulo secundario:','label-input-y-75',$alumno,['vacio',
+             $form->select('titulo_secundario','Titulo secundario:','label-input-y-75',$alumno,['vacio',
             'Fotocopia del título original secundario',
             'Certificado de constancia de título en trámite',
             'Constancia de alumno del último año del nivel secundario',
@@ -47,7 +47,7 @@
         <div class="botones-derecha">
             <div class="botones-derecha">
                 <button class="btn_sky">
-                    <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno->id])}}">
+                    <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno->id], ['config' => $config])}}">
                         <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
                 </button>
                  <a href="{{ route('admin.alumnos.analitico.pdf', ['alumno' => $alumno->id]) }}" target="_blank" class="btn_sky">

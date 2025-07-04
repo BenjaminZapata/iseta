@@ -34,7 +34,7 @@
                 {{--<td class="center">{{$carrera->resolucion}}</td>--}}
                 <td class="center">{{$carrera->anio_apertura}}</td>
                 <td class="center">{{$carrera->vigente == 1? "Vigente":$carrera->anio_fin}}</td>
-                <td><a href="{{route('admin.carreras.edit', ['carrera' => $carrera->id])}}"><button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
+                <td><a href="{{route('admin.carreras.edit', ['carrera' => $carrera])}}"><button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
                 <td class="flex-col items-center just-center spe">
                 @if ($carrera->primeraAsignatura())
                     <a class="flex just-center" href="{{route('admin.cursadas.masivo',['asignatura'=>$carrera->primeraAsignatura()->id])}}">

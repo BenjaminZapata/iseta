@@ -6,8 +6,10 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\CrearCarreraRequest;
 use App\Http\Requests\EditarCarreraRequest;
 use App\Models\Carrera;
+use App\Models\Asignatura;
 use App\Repositories\Admin\CarreraRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CarrerasCrudController extends BaseController
 {
@@ -70,6 +72,7 @@ class CarrerasCrudController extends BaseController
 
     }
 
+
     /**
      * Update the specified resource in storage.
      */
@@ -96,6 +99,26 @@ class CarrerasCrudController extends BaseController
             return redirect()->back()->with('mensaje','Se edito la carrera');
 
     }
+
+    public function addAsignaturaView(Request $request)
+    {
+        log::debug($request);
+        $carrera = Carrera::find($request->id_carrera);
+        $id_carrera = $request->id_carrera ?? null;
+        $asignaturas = Asignatura::orderBy('nombre')->get();
+        $id_asignatura = $request->id_asignatura ?? null;
+        return view('Admin.Carreras.add', [
+            'carrera' => $carrera,
+            'id_carrera' => $id_carrera,
+            'asignaturas' => $asignaturas,
+            'id_asignatura' => $id_asignatura,
+        ]);
+    }
+    public function addAsignatura(Request $request, Carrera $carrera){
+        $carrera->asignaturas()->attach($request->asignatura);
+        return redirect()->back()->with('mensaje','Se agrego la asignatura');
+    }
+
     //FIXME: Falta desarrollar la funcionalidad de eliminar una carrera
     /**
      * Remove the specified resource from storage.

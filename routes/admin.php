@@ -52,15 +52,16 @@ Route::middleware(['web'])->prefix('admin')->group(function(){
     Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class,'actaVolanteLibre'])->name('admin.mesas.actalibre');
 
     // CERTIFICADOS
-    Route::get('/alumnos/regular/{alumno}', [AdminPdfController::class,'constanciaRegular'])->name('admin.alumnos.regular');
+    Route::get('/alumnos/regular/{alumno}', [AdminPdfController::class,'constanciaRegular'])
+    ->name('admin.alumnos.regular');
 
     // RESOURCES
     Route::resource('alumnos', AlumnoCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->missing(function(){
         return redirect()->route('admin.alumnos.index')->with('aviso','El alumno no existe o ha sido eliminado');
     })->except('show');
-   
 
-Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
+
+    Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
     ->name('admin.alumnos.analitico.pdf');
 
     Route::resource('inscriptos', EgresadosAdminController::class, ['as' => 'admin'])->missing(function(){
@@ -77,6 +78,12 @@ Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 
     Route::resource('carreras', CarrerasCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->missing(function(){
         return redirect()->route('admin.carreras.index')->with('aviso','La carrera no existe o ha sido eliminada');
     })->except('show');
+
+    Route::post('carreras/add', [CarrerasCrudController::class, 'addAsignatura'])
+    ->name('admin.carreras.add.post');
+    Route::get('carreras/add', [CarrerasCrudController::class, 'addAsignaturaView'])
+    ->name('admin.carreras.add');
+
 
     Route::resource('asignaturas', AsignaturasCrudController::class, ['as' => 'admin'])->missing(function(){
         return redirect()->route('admin.asignaturas.index')->with('aviso','La asignatura no existe o ha sido eliminada');

@@ -35,7 +35,7 @@
             $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',null),
             $form->text('becas','Becas:','label-input-y-75',null),
             $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',null),
-            $form->select('titulo','Titulo secundario:','label-input-y-75',null,
+            $form->select('titulo_secundario','Titulo secundario:','label-input-y-75',null,
             ['vacio',
             'Fotocopia del título original secundario',
             'Certificado de constancia de título en trámite',

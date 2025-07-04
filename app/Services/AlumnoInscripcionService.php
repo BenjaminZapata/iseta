@@ -113,9 +113,10 @@ class AlumnoInscripcionService{
     public function inscribiblesDelAlumno($alumno){
 
         // Todas las asignaturas de la carrera seleccionada del alumno
-        $asignaturas = Asignatura::with('mesas.anotado')
-            -> where('id_carrera', Carrera::getDefault()->id)
-            -> get();
+        $asignaturas = Carrera::getDefault($alumno->id)
+            ->asignaturas()
+            ->with('mesas.anotado')
+            ->get();
 
         // mesas a las que ya esta anotado
         $examenesInscriptos = Examen::select('id_mesa')

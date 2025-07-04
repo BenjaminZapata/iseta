@@ -47,19 +47,7 @@ class AsignaturasCrudController extends Controller
         return view('Admin.Asignaturas.index', ['asignaturas' => $asignaturas, 'filtro' => $filtro]);
     }
 
-    public function add(Request $request)
-    {
-        $carreras = Carrera::orderBy('nombre')->get();
-        $id_carrera = $request->id_carrera ?? null;
-        $asignaturas = Asignatura::orderBy('nombre')->get();
-        $id_asignatura = $request->id_asignatura ?? null;
-        return view('Admin.Asignaturas.add', [
-            'carreras' => $carreras,
-            'id_carrera' => $id_carrera,
-            'asignaturas' => $asignaturas,
-            'id_asignatura' => $id_asignatura,
-        ]);
-    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -95,15 +83,8 @@ class AsignaturasCrudController extends Controller
 
         $asignatura = Asignatura::with('cursadas.alumno')->find($asignatura);
 
-        $alumnos = $asignatura->cursantes();
-
-        //$correlativas = Asignatura::where('id_carrera', $asignatura->carrera->id)
-        //   ->where('anio', '>=', $asignatura->anio);
-
-
         return view('Admin.Asignaturas.edit', [
             'asignatura' => $asignatura,
-            // 'alumnos' => $alumnos
         ]);
     }
 
