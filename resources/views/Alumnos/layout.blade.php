@@ -37,8 +37,6 @@
     <script src="nav.js" defer></script>
     
     <script src="{{asset('js/confirmacion.js')}}"></script>
-    <script src="{{asset('js/accordion.js')}}"></script>
-    
     <script src="{{asset('js/ocultar-mensaje.js')}}"></script>
 </body>
 
