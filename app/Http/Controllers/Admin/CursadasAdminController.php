@@ -68,6 +68,10 @@ class CursadasAdminController extends BaseController
             $data['aprobada'] = 1;
         }
         if ($request->aprobada == 5) {
+            if ($request->nota < 4 || $request->nota > 10) {
+                $mensajes[] = "La nota debe estar entre 4 y 10";
+                return redirect()->back()->with('error', $mensajes)->withInput();
+            }
             Examen::updateOrInsert(
             [
                 'id_carrera' => $cursada->id_carrera,
