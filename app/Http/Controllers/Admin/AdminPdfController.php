@@ -96,14 +96,16 @@ class AdminPdfController extends Controller
         ->name('acta-volante-libre.pdf');
 
     }
-    public function constanciaRegular(Alumno $alumno, Configuracion $config) {
-        $regular = new CursadaRegularService($alumno, $config);
-        if (!$regular->esCursadaRegular()) {
+    public function constanciaRegular(Alumno $alumno, Carrera $carrera, Configuracion $config) {
+        $checker = new CursadaRegularService($alumno, $config);
+        $regular = $checker->esCursadaRegular();
+        if (!$regular) {
             return redirect()->back()->with('aviso', 'El alumno no tiene condicion de regular');
         }
         $fecha = Carbon\Carbon::now();
         return pdf()
-        ->view('Pdf.alumno-regular', compact('alumno') + ['fecha' => $fecha])
+        ->view('Pdf.alumno-regular', compact('alumno') + ['fecha' => $fecha] + compact('carrera'))
+        ->format('a4')
         ->name('constancia-regular.pdf');
         //->download();
     }

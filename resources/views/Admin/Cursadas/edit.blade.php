@@ -46,7 +46,7 @@
                             ];
 
                             // Valores que NO deben mostrarse en el dropdown
-                            $condicionesExcluidas = [0, 2, 3];
+                            $condicionesExcluidas = [2, 3, 4]; // Promocion, Equivalencia, Desertor
 
                             $condicionActual = $cursada->condicion;
                         @endphp

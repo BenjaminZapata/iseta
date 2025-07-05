@@ -57,7 +57,7 @@ class CursadaRegularService
 
         foreach ($cursadas as $cursada) {
             if (($cursada->aprobada == '5' || $cursada->aprobada == '1' || $cursada->aprobada == '4') && ($this->regular($cursada)) ){
-                return true;
+                return $cursada->id_carrera;
             }
         }
         return false;
