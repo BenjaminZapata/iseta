@@ -55,7 +55,7 @@ return [
 
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['trace', 'nostack','loki'],
+            'channels' => ['trace', 'nostack'],
             'ignore_exceptions' => false,
         ],
 

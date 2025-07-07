@@ -107,7 +107,54 @@
               ]
             ) ?>
         </div>
+       <?= $form->generate(route('admin.alumnos.update',['alumno'=>$alumno->id]),'put',[
+        'Alumno' => [
+            $form->text('nombre','Nombre:','label-input-y-75',$alumno),
+            $form->text('apellido','Apellido:','label-input-y-75',$alumno),
+            $form->text('dni','DNI:','label-input-y-75',$alumno),
+            $form->date('fecha_nacimiento','Fecha de nacimiento:','label-input-y-75',$alumno,['default' => $alumno->fecha_nacimiento->format('Y-m-d'),'inputclass'=>'p-1 w-75p']),
+            $form->select('estado_civil','Estado civil:','label-input-y-75',$alumno,['Vacio','Soltero','Casado','Divorciado','Viudo','Conyuge','Otro'])
+        ],
+        'Dirección' => [
+            $form->text('ciudad','Ciudad:','label-input-y-75',$alumno),
+                $form->text('codigo_postal','Codigo postal:','label-input-y-75',$alumno),
+                $form->text('calle','Calle:','label-input-y-75',$alumno),
+                $form->text('casa_numero','Altura:','label-input-y-75',$alumno),
+                $form->text('dpto','Departamento:','label-input-y-75',$alumno),
+                $form->text('piso','Piso:','label-input-y-75',$alumno)
+        ],
+        'Contacto' => [
+            $form->text('email','Email:','label-input-y-75',$alumno),
+            $form->text('telefono1','Telefono 1:','label-input-y-75',$alumno),
+            $form->text('telefono2','Telefono 2:','label-input-y-75',$alumno),
+            $form->text('telefono3','Telefono 3:','label-input-y-75',$alumno)
+        ],
+        'Academico' => [
+            $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',$alumno),
+            $form->text('becas','Becas:','label-input-y-75',$alumno),
+            $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',$alumno),
+             $form->select('titulo_secundario','Titulo secundario:','label-input-y-75',$alumno,['vacio',
+            'Fotocopia del título original secundario',
+            'Certificado de constancia de título en trámite',
+            'Constancia de alumno del último año del nivel secundario',
+            'No entregado'])
+        ],
+        'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
+    ]) ?>
+        <div class="botones-derecha">
+            <div class="botones-derecha">
+                <button class="btn_sky">
+                    <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno->id], ['config' => $config])}}">
+                        <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
+                </button>
+                 <a href="{{ route('admin.alumnos.analitico.pdf', ['alumno' => $alumno->id]) }}" target="_blank" class="btn_sky">
+    <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analítico
+</a>
+            </div>
+        </div>
     </div>
+
+</div>
 
     <div class="perfil_one br">
 
@@ -119,7 +166,7 @@
             <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}">
                 <select name="carrera">
                     @foreach ($carreras as $carrera)
-                        <option value="{{ $carrera->carrera_id }}">{{ $carrera->carrera_nombre }}</option>
+                    <option value="{{$carrera->carrera_id}}">{{$carrera->carrera_nombre}}</option>
                     @endforeach
                 </select>
                 <div class="upd"><button class="btn_blue"><i class="ti ti-paperclip"></i>Matricular</button></div>
@@ -174,6 +221,7 @@
                     $carrera_actual = $cursada->carrera;
                     $anio_actual = '';
                 @endphp
+
                 @endif
 
                 @if ($anio_actual != $cursada->anio_asig)
@@ -239,6 +287,7 @@
     </div>
     </div>
 
+    </div>
     <div class="table">
         <div class="table__header">
             <h2>Examenes</h2>
@@ -253,7 +302,6 @@
                 $carrera_index = 0;
                 $anio_index = 0;
             @endphp
-
             @foreach ($examenes as $examen)
                 @if ($carrera_actual != $examen->carrera)
                     @if ($carrera_actual != '')
@@ -358,7 +406,6 @@
     </div>
     </div>
     @endif
-
     </div>
 
     @if ($alumno->verificado == 0)

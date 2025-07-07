@@ -35,6 +35,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'piso' ,
         'estado_civil' ,
         'email',
+        'nombre_institucion_secundario',
         'titulo_anterior' ,
         'becas',
         'observaciones',
@@ -42,7 +43,8 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'telefono2' ,
         'telefono3',
         'codigo_postal',
-        'password'
+        'password',
+        'titulo_secundario'
     ];
 
     /**
@@ -94,7 +96,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     }
 
     public function carreras(){
-        return Egresado::with('carrera')->where('id_alumno',$this->id)->get();
+        return Egresado::with('carrera')->where('id_alumno',$this->id);
     }
 
     public function carrerasIncriptas(){
@@ -181,4 +183,20 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         }
         return $ciudades;
     }
+
+    public function titulo_secundario(){
+        $titulo = [
+            'Fotocopia del título original secundario',
+            'Certificado de constancia de título en trámite',
+            'Constancia de alumno del último año del nivel secundario',
+            'No entregado'];
+        if(isset($titulo [$this->titulo])){
+            return $titulo [$this->titulo];
+        }else{
+            return 'Otro';
+        }
+    }
+
+
 }
+

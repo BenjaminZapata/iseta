@@ -97,7 +97,9 @@ class ExamenesCrudController extends Controller
     }
 
     function modificarNota(Request $request, Examen $examen){
-        if(!$request->has('nota')) return \redirect()->back()->with('Ingresa una nota');
+        if(!$request->has('nota')) {
+            return \redirect()->back()->with('Ingresa una nota');
+        }
 
         if($request->input('nota') == 'a'){
             $examen->aprobado = 3;
@@ -105,11 +107,12 @@ class ExamenesCrudController extends Controller
             return \redirect()->back()->with('Se ha actualizado la nota');
         }
 
-        if($request->input('nota') <0 && $request->input('nota') > 10) return \redirect()->back()->with('La nota debe estar entre 0 y 10');
-
+        if(!is_numeric($request->input('nota')) || ($request->input('nota') <0 && $request->input('nota') > 10)) {
+            return \redirect()->back()->with('error', 'La nota debe estar entre 0 y 10');
+        }
         $examen->nota = $request->input('nota');
         $examen->aprobado = $request->input('nota')>=4? 1 : 2;
         $examen->save();
-        return \redirect()->back()->with('Se ha actualizado la nota');
+        return \redirect()->back()->with('mensaje', 'Se ha actualizado la nota');
     }
 }

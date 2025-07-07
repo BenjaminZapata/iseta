@@ -28,23 +28,23 @@
               $correlativas = $disponible['correlativas'];
               $yaAnotado = $disponible['yaAnotado'];
               $path = $yaAnotado? "alumno.bajarse":"alumno.inscribirse";
-              $btnTexto = $yaAnotado? "Desinscribirme":"Inscribirme"; 
+              $btnTexto = $yaAnotado? "Desinscribirme":"Inscribirme";
               $btnTexto = $correlativas? "No disponible":$btnTexto;
               if($asignatura->mesas[0]) $key = 0;
               else $key=1;
-            @endphp 
-            
+            @endphp
+
 
             <tr>
               <td data-label="Año" class="text-center mb-left">{{$asignatura->anio}}</td>
-              
+
               <td data-label="Materia">{{$asignatura->nombre}}</td>
               <td data-label="Profesores">
                 <p><i class="ti ti-user-filled"></i> {{$asignatura->mesas[$key]->profesorNombre('presidente')}}</p>
                 <p><i class="ti ti-user-filled"></i> {{$asignatura->mesas[$key]->profesorNombre('vocal1')}}</p>
                 @if ($asignatura->mesas[$key]->prof_vocal_2)
                   <p>-> {{$asignatura->mesas[$key]->profesorNombre('vocal2')}}</p>
-                @endif  
+                @endif
               </td>
               @include('Componentes.inscripcion-form')
             @endforeach
@@ -54,7 +54,7 @@
 
       </div>
     </section>
-    
+
   </main>
 
 @endsection

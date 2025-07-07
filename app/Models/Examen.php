@@ -8,12 +8,26 @@ use Illuminate\Database\Eloquent\Model;
 class Examen extends Model
 {
     protected $table = "examenes";
-    protected $fillable = ['id_mesa','id_asignatura','id_alumno','libro','acta','nota','fecha','aprobado'];
+    protected $fillable = [
+        'id_mesa',
+        'id_asignatura',
+        'id_carrera',
+        'id_alumno',
+        'libro',
+        'acta',
+        'nota',
+        'fecha',
+        'aprobado'
+    ];
     public $timestamps = false;
     use HasFactory;
 
     public function mesa(){
         return $this -> belongsTo(Mesa::class,'id_mesa');
+    }
+
+    public function carrera(){
+        return $this -> belongsTo(Carrera::class,'id_carrera');
     }
 
     public function alumno(){
@@ -37,13 +51,12 @@ class Examen extends Model
         return $mesa->fecha;
      }
 
-
-
     public function tipoFinal(){
         return match($this->tipo_final){
             1 => "Escrito",
             2 => "Oral",
             3 => "Promocionado",
+            4 => "Equivalencia",
             default => "Sin especificar"
         };
     }

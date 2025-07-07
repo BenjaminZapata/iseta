@@ -39,6 +39,7 @@ class EgresadosAdminController extends BaseController
         $this->setFilters($request);
         $this->data['inscripciones'] = $inscriptosRepo->index($request);
 
+
         return view('Admin.Inscriptos.index',$this->data);
 
     }
@@ -64,7 +65,8 @@ class EgresadosAdminController extends BaseController
             'id_carrera' => ['required'],
             'anio_inscripcion' => ['required'],
             'indice_libro_matriz' => ['nullable'],
-            'anio_finalizacion' => ['nullable']
+            'anio_finalizacion' => ['nullable'],
+            'estado' => ['required']
         ]);
 
         Egresado::create($data);

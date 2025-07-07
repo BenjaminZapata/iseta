@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\Alumno;
+use App\Models\Examen;
 use App\Models\Asignatura;
 use App\Models\Carrera;
 use App\Models\Correlativa;
@@ -12,6 +13,7 @@ use App\Models\Cursada;
 use App\Repositories\Admin\CursadaRepository;
 use App\Repositories\AdminCursadaRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\log;
 
 class CursadasAdminController extends BaseController
 {
@@ -22,7 +24,7 @@ class CursadasAdminController extends BaseController
         'filter_condicion' => 0,
         'filter_aprobada' => 0
     ];
-    
+
     function __construct()
     {
         parent::__construct();
@@ -30,62 +32,87 @@ class CursadasAdminController extends BaseController
     }
 
     public function index(Request $request, CursadaRepository $cursadaRepo)
-    {       
+    {
         $this->setFilters($request);
         $this->data['cursadas'] = $cursadaRepo->index($request);
         return view('Admin.Cursadas.index', $this->data);
     }
-   
+
     function delete(Cursada $cursada){
         $cursada -> delete();
-        return redirect() -> route('admin.alumnos.index');
+        return redirect() -> route('Admin.Cursadas.index');
     }
 
     function edit(Request $request, Cursada $cursada){
-        //$cursada = Cursada::where('id_asignatura',$asignatura)->where('id_alumno',$alumno)->first();
-        return view('Admin.Cursadas.edit',compact('cursada'));
+        $nota = Examen::where('id_carrera', $cursada->id_carrera)
+            -> where('id_asignatura', $cursada->id_asignatura)
+            -> where('id_alumno', $cursada->id_alumno)
+            -> value('nota'); // Equivalencia
+        Log::debug("message",['cursada' => $cursada]);
+        return view('Admin.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
     }
 
     function update(Request $request, Cursada $cursada){
         $data = $request->except('_token','_method');
         $mensajes = [];
 
-        if( $request->input('condicion') == 0 || 
+        if( $request->input('condicion') == 0 ||
             $request->input('condicion') == 2 ||
             $request->input('condicion') == 3){
-            
-            
+
+
             if($cursada->aprobada == 1 && ($request->aprobada==2 || $request->aprobada==3)){
                 $mensajes[] = "No puedes desaprobar una cursada libre, promocionada o aprobada por equivalencias";
             }
 
             $data['aprobada'] = 1;
         }
+        if ($request->aprobada == 5) {
+            if ($request->nota < 4 || $request->nota > 10) {
+                $mensajes[] = "La nota debe estar entre 4 y 10";
+                return redirect()->back()->with('error', $mensajes)->withInput();
+            }
+            Examen::updateOrInsert(
+            [
+                'id_carrera' => $cursada->id_carrera,
+                'id_asignatura' => $cursada->id_asignatura,
+                'id_alumno' => $cursada->id_alumno
+            ],
+            [
+                'id_carrera' => $cursada->id_carrera,
+                'id_asignatura' => $cursada->id_asignatura,
+                'id_alumno' => $cursada->id_alumno,
+                'tipo_final' => 4, // Equivalencia
+               // 'libro' => $request->libro,
+               // 'acta' => $request->acta,
+                'nota' => $request->nota,
+              //  'fecha' => $request->fecha,
+                'aprobado' => 1
+            ]);
+        }
 
         $cursada -> update($data);
         $mensajes[] = 'Se ha editado correctamente';
-        
-        if($request->has('redirect'))
-            return redirect()->to($request->input('redirect'))->with('mensaje',$mensajes);
-        else
-            return redirect()->back()->with('mensaje',$mensajes);
-            
+
+        return redirect()->back()->with('mensaje',$mensajes);
+
 
     }
 
     function create(){
         $alumnos = Alumno::orderBy('nombre','asc')->orderBy('apellido','asc')->get();
         $carreras = Carrera::vigentes();
-        
+
         return view('Admin/Cursadas/create',[
             'alumnos' => $alumnos,
             'carreras' => $carreras
         ]);
+
     }
 
     function store(Request $request){
 
-        $asignatura = Asignatura::where('id',$request->id_asignatura)->with('correlativas.asignatura')->first();       
+        $asignatura = Asignatura::where('id',$request->id_asignatura)->with('correlativas.asignatura')->first();
         $alumno = Alumno::find($request->id_alumno);
 
 
@@ -110,21 +137,31 @@ class CursadasAdminController extends BaseController
             }
             return \redirect()->back()->with(['error'=>$mensajes])->withInput();
         }
-        
-
-        $aprobada=3;
-        if($request->condicion == 0 ||$request->condicion == 2||$request->condicion == 3){
-            $aprobada = 1;
+        // WARN: Aprobado por equivalencia se crea un examen sin mesa (faltan datos)
+        if ($request->aprobada == 5) {
+            Examen::create([
+                'id_carrera' => $request->carrera,
+                'id_asignatura' => $request->id_asignatura,
+                'id_alumno' => $request->id_alumno,
+                'tipo_final' => 4, // Equivalencia
+               // 'libro' => $request->libro,
+               // 'acta' => $request->acta,
+                'nota' => $request->nota,
+              //  'fecha' => $request->fecha,
+                'aprobado' => 1
+            ]);
         }
 
+
         Cursada::create([
+            'id_carrera' => $request->carrera,
             'id_asignatura' => $request->id_asignatura,
             'id_alumno' => $request->id_alumno,
             'anio_cursada' => $request->anio_cursada,
             'condicion' => $request->condicion,
-            'aprobada' => $aprobada
+            'aprobada' => $request->aprobada
         ]);
-        
-        return redirect() -> back() -> with('mensaje','Se creo la cursada');
+
+        return redirect()->back()->with('mensaje','Se creo la cursada');
     }
 }

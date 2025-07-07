@@ -41,7 +41,7 @@ class Asignatura extends Model
             -> withTimestamps();
     }
     public function correlativas(): HasMany{
-        return $this -> hasMany(related: Correlativa::class, foreignKey: 'id_asignatura');
+        return $this -> hasMany(Correlativa::class, 'id_asignatura');
     }
 
     public function mesas(): HasMany{
@@ -52,7 +52,7 @@ class Asignatura extends Model
         return $value + 1;
     }
 
-    public function estaCursando($alumno): Model{
+    public function estaCursando($alumno) {
         return Cursada::where(column: 'id_alumno', operator: $alumno->id)
             -> where(column: 'id_asignatura', operator: $this->id)
             -> where(column: 'aprobada', operator: 3)
@@ -76,14 +76,11 @@ class Asignatura extends Model
 
     public function aproboCursada($alumno){
         $cursada = Cursada::where(column: 'id_alumno', operator: $alumno->id)
-            -> where(column: 'id_asignatura',operator: $this->id)
-            -> where(column: function($subQuery): void{
-                $subQuery -> where('aprobada', 1)
-                -> orWhere('condicion', 0)
-                -> orWhere('condicion', 2)
-                -> orWhere('condicion', 3);
-            })
-            -> first();
+        -> where(column: 'id_asignatura',operator: $this->id)
+        -> where(column: function($subQuery): void{
+            $subQuery -> where('aprobada', 1);
+        })
+        ->first();
 
         if($cursada) {
             return $cursada;

@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 
 class CursadasCarreraExcelExport implements FromView
-{ 
+{
     protected $carrera;
 
     public function __construct($carrera)
@@ -19,8 +19,10 @@ class CursadasCarreraExcelExport implements FromView
     */
     public function view(): View
     {
-        $asignaturas = Asignatura::where('id_carrera',$this->carrera->id)->get();
-        
+        $asignaturas = Asignatura::whereHas('carrera', function ($query) {
+            $query->where('id', $this->carrera->id);
+        })->get();
+
         return view('Admin.Excel.cursadas-carrera',[
             'asignaturas'=>$asignaturas,
             'carrera'=>$this->carrera

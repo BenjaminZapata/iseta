@@ -69,7 +69,7 @@ class ProfesoresCrudController extends BaseController
         ->whereRaw('fecha > NOW()')
         ->get();
 
-        return view('admin.profesores.edit', [
+        return view('Admin.Profesores.edit', [
             'profesor' => $profesor,
             'mesas' => $mesas
         ]);

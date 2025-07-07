@@ -54,5 +54,4 @@ Route::prefix('alumno')->group(function(){
     Route::get('/rematriculacion', [RematriculacionController::class,'rematriculacion_vista'])->name('alumno.rematriculacion.asignaturas');
     Route::post('/rematriculacion/{carrera}', [RematriculacionController::class,'rematriculacion'])->name('alumno.rematriculacion.post');
     Route::delete('/rematriculacion/{cursada}', [RematriculacionController::class,'bajar_rematriculacion'])->name('alumno.rematriculacion.delete');
-
 });

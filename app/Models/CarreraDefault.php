@@ -11,6 +11,5 @@ class CarreraDefault extends Model
     protected $table = 'carreras_default';
 
     protected $fillable = ['id_carrera','id_alumno'];
-    
-    
+
 }

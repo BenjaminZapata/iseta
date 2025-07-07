@@ -2,17 +2,17 @@
 @section('content')
 
 <main id="fondo-estudiantes">
-  <section class="perfil">   
+  <section class="perfil">
     <div class="perfil_header just-end gap-2">
       <h1>Perfil</h1>
         <div class="w-100p contenedor_select_carrera">
-        
+
         <form class="flex just-end gap-2" method="POST" action="{{route('alumno.set.default')}}">
           @csrf
           {{-- <select class="w-50p lg-w-auto select-carrera" name="carrera"> --}}
           <select class="w-50p lg-w-auto border-none p-2 bg-white rounded shadow-sm select-carrera" name="carrera">
-            
-            @foreach ($alumno->carreras() as $inscripcion)
+
+            @foreach ($alumno->carreras()->get() as $inscripcion)
                 <option @selected($inscripcion->carrera->id==$default->id) value="{{$inscripcion->carrera->id}}">
                   {{$inscripcion->carrera->nombre}}
                 </option>
@@ -43,8 +43,8 @@
         <div class="perfil_second shadow">
             <form action="{{route('cambio.password')}}" method="POST">
           @csrf
-      
-      
+
+
         <div class="perfil_subtop"><h2>Editar contraseña</h2></div>
         <div class="w-100p sm-w-75p md-w-50p  perfil_password">
           <input class="w-100p" type="password" name="oldPassword"  required placeholder="Contraseña actual">
@@ -66,7 +66,7 @@
         </div>
     </form>
      </div>
-    
+
 
       <div class="perfil_third shadow">
         <div class="perfil_subtop"><h2>Academico</h2></div>
@@ -76,14 +76,14 @@
 
         </div>
         <div class="perfil_descargable"> <!--flex just-between items-center-->
-          <span class="md-none">Const. inscripción</span> 
+          <span class="md-none">Const. inscripción</span>
           <span class="none md-block">Constancia de inscripción a mesas de examen</span> <!-- class="none md-block font-3"--->
           <a href="{{route('alumno.constancia')}}" target="_blank"><button><i class="ti ti-eye"></i>Observar</button></a> <!--- class="white rounded-1 border-none p-3  bg-indigo-900"--->
         </div>
-        
+
       </div>
     </div>
   </section>
-  
+
 </main>
 @endsection

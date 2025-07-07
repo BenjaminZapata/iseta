@@ -15,20 +15,22 @@ class AlumnoInscripcionTest extends TestCase
      */
     public function test_informacion_mostrada_es_correcta(): void
     {
-        Auth::guard('web')->login(Alumno::where('email','test@gmail.com')->first());
- 
+
+
+        Auth::guard('web')->login(Alumno::where('email','juan@example.com')->first());
+
          $response = $this->get('/alumno/inscripciones');
 
          $response->assertStatus(200)
              ->assertSee('Test_asignatura_4')
              ->assertSee('Debes correlativas')
-             ->assertSee(' Test_asignatura_mismo_anio_3')
-             ->assertSee(' Test_asignatura_4')
+             ->assertSee('Test_asignatura_mismo_anio_3')
+             ->assertSee('Test_asignatura_4')
              ->assertSee('No disponible')
              ->assertSee('Inscribirme')
              ->assertSee('Desinscribirme')
              ->assertDontSee('Test_asignatura_1')
              ->assertDontSee('No hay llamado');
-        
+
     }
 }
