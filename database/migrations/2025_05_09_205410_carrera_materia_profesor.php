@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('id_carrera');
             $table->integer('id_asignatura');
             $table->integer('id_profesor')->nullable(true);
+            $table->integer('carga_horaria');
+            $table->tinyInteger('tipo_modulo');
 
             $table->primary(['id_carrera', 'id_asignatura']);
 
@@ -33,6 +35,8 @@ return new class extends Migration
         ->each(function ($asignatura) {
             DB::table('carrera_asignatura_profesor')->insert([
                 'id_asignatura' => $asignatura->id,
+                'carga_horaria' => $asignatura->carga_horaria,
+                'tipo_modulo' => $asignatura->tipo_modulo,
                 'id_carrera' => $asignatura->id_carrera,
             ]);
         });

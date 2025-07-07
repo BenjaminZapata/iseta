@@ -102,14 +102,12 @@ class CarrerasCrudController extends BaseController
 
     public function addAsignaturaView(Request $request)
     {
-        log::debug($request);
-        $carrera = Carrera::find($request->id_carrera);
-        $id_carrera = $request->id_carrera ?? null;
+        log::debug($request->all());
+        $carrera = Carrera::find($request->carrera);
         $asignaturas = Asignatura::orderBy('nombre')->get();
         $id_asignatura = $request->id_asignatura ?? null;
         return view('Admin.Carreras.add', [
             'carrera' => $carrera,
-            'id_carrera' => $id_carrera,
             'asignaturas' => $asignaturas,
             'id_asignatura' => $id_asignatura,
         ]);

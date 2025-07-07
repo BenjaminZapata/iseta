@@ -7,6 +7,9 @@ class CarreraAsignaturaProfesor extends Pivot
     protected $fillable =  [
         'id_carrera',
         'id_asignatura',
-        'id_profesor'
+        'id_profesor',
+        'tipo_modulo',
+        'carga_horaria',
+        'anio'
     ];
 }

@@ -21,10 +21,24 @@
                         </select>
                     </div>
                     <div class="perfil_dataname">
-                        <label>Carrera:</label>
+                        <label>Carrera:&nbsp;</label>
                         {{$carrera->nombre}}
                     </div>
-
+                    <div class="perfil_dataname">
+                        <label>Tipo modulo:</label>
+                        <select class="campo_info rounded" name="tipo_modulo">
+                            <option @selected($asignatura->tipo_modulo==1) value="1">Modulos</option>
+                            <option @selected($asignatura->tipo_modulo==2) value="2">Horas</option>
+                        </select>
+                    </div>
+                    <div class="perfil_dataname">
+                        <label>Carga horaria:</label>
+                        <input class="campo_info rounded" value="{{$asignatura->carga_horaria}}" name="carga_horaria">
+                    </div>
+                    <div class="perfil_dataname">
+                        <label>Año:</label>
+                        <input class="campo_info rounded"  name="anio">
+                    </div>
                     <div class="upd"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar</button></div>
                 </form>
             </div>
