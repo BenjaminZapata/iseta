@@ -22,7 +22,7 @@
                     </div>
                     <div class="perfil_dataname">
                         <label>Carrera:&nbsp;</label>
-                        {{$carrera->nombre}}
+                        <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
                     </div>
                     <div class="perfil_dataname">
                         <label>Tipo modulo:</label>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="perfil_dataname">
                         <label>Año:</label>
-                        <input class="campo_info rounded"  name="anio">
+                        <p class="campo_info-noinput rounded"> {{ $asignatura->anio }} </p>
                     </div>
                     <div class="upd"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar</button></div>
                 </form>
