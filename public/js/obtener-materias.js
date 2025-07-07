@@ -3,9 +3,10 @@ const carreraSelect = _find('#carrera_select')
 const asignaturaSelect = _find('#asignatura_select')
 
 if(carreraSelect.element.value != 0){
-    let url = new URL(window.location.href);
-    let parametros = new URLSearchParams(url.search);
-    let valorParametro1 = parametros.get('filter_asignatura_id');
+    var url = new URL(window.location.href);
+    var parametros = new URLSearchParams(url.search);
+    var valorParametro1 = parametros.get('filter_asignatura_id');
+
     callback(valorParametro1)
 }
 
@@ -16,6 +17,7 @@ carreraSelect.when('change', function(){
 function callback(asigSelected){
     asignaturaSelect.clear()
     if(carreraSelect.valueIs('any')) return
+    
     fetch(`/api/a/${carreraSelect.value()}`)
     .then(asig => asig.json())
     .then(asig => {
@@ -30,7 +32,7 @@ function callback(asigSelected){
                 asignaturaSelect.withAttrs({selected:true})
             }
             });
-
+            
             asignaturaSelect.insert()
     })
     .catch(e=>console.log(e))

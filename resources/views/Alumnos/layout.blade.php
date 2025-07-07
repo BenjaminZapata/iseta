@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-
     <link rel="icon" type="image/png" href="img/icono-iseta.png">
 
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
@@ -40,7 +39,6 @@
     <script src="nav.js" defer></script>
 
     <script src="{{asset('js/confirmacion.js')}}"></script>
-
     <script src="{{asset('js/ocultar-mensaje.js')}}"></script>
 </body>
 
