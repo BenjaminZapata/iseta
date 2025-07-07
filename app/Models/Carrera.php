@@ -76,7 +76,7 @@ class Carrera extends Model
 
         if($carrera) return Carrera::find($carrera->id_carrera);
 
-        $carrera = Egresado::select('carreras.id', 'carreras.nombre')
+        $carrera = Egresado::select('carreras.id', 'carreras.nombre', 'carreras.resolucion')
             -> join('carreras','egresadoinscripto.id_carrera','carreras.id')
             -> where('egresadoinscripto.id_alumno',$alumno->id)
             -> first();

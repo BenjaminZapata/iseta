@@ -110,53 +110,60 @@ class AdminPdfController extends Controller
         //->download();
     }
 
-    public function analitico(Alumno $alumno)
-    {
-        $carrera = Carrera::getDefault($alumno->id);
-        $id_carrera = $carrera?->id;
-        $materias = Asignatura::whereHas('carrera', function ($query) use ($id_carrera) {
-            $query->where('id', $id_carrera);
-        })->get();
+ public function analitico(Alumno $alumno)
+{
+    $carrera = Carrera::getDefault($alumno->id);
+    $id_carrera = $carrera?->id;
 
-        $examenes = Examen::selectRaw('examenes.id_asignatura, asignaturas.nombre, MAX(examenes.nota) as nota, asignaturas.anio, examenes.fecha')
-            ->from('asignaturas')
-            ->join('examenes', 'examenes.id_asignatura', '=', 'asignaturas.id')
-            ->where('examenes.id_alumno', $alumno->id)
-            ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', '=', 'cap.id_asignatura')
-            ->where('cap.id_carrera', $id_carrera)
-            ->where('examenes.nota', '>=', 4)
-            ->groupBy('examenes.id_asignatura', 'asignaturas.nombre', 'asignaturas.anio', 'examenes.fecha')
-            ->get();
+    $materias = Asignatura::whereHas('carrera', function ($query) use ($id_carrera) {
+        $query->where('id', $id_carrera);
+    })->get();
 
-        $porcentaje = number_format(count($examenes) / max(count($materias), 1) * 100, 2, '.', '') . '%';
+    $examenes = Examen::selectRaw('examenes.id_asignatura, asignaturas.nombre, MAX(examenes.nota) as nota, asignaturas.anio, examenes.fecha')
+        ->from('asignaturas')
+        ->join('examenes', 'examenes.id_asignatura', '=', 'asignaturas.id')
+        ->where('examenes.id_alumno', $alumno->id)
+        ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', '=', 'cap.id_asignatura')
+        ->where('cap.id_carrera', $id_carrera)
+        ->where('examenes.nota', '>=', 4)
+        ->groupBy('examenes.id_asignatura', 'asignaturas.nombre', 'asignaturas.anio', 'examenes.fecha')
+        ->get();
 
-        $materiasExamenes = [];
-        foreach ($materias as $materia) {
-            foreach ($examenes as $examen) {
-                if ($materia->id == $examen->id_asignatura) {
-                    $copia = clone $materia;
-                    $copia->examen = $examen;
-                    $materiasExamenes[] = $copia;
-                    break;
-                }
+    $porcentaje = number_format(count($examenes) / max(count($materias), 1) * 100, 2, '.', '') . '%';
+
+    $materiasExamenes = [];
+    foreach ($materias as $materia) {
+        foreach ($examenes as $examen) {
+            if ($materia->id == $examen->id_asignatura) {
+                $copia = clone $materia;
+                $copia->examen = $examen;
+                $materiasExamenes[] = $copia;
+                break;
             }
         }
-
-        // Imagen en base64
-        $imgPath = public_path('img/pdf.png');
-        $src = 'data:image/png;base64,' . base64_encode(file_get_contents($imgPath));
-
-        // Mostrar el PDF en el navegador
-        return pdf()
-            ->view('Pdf.analitico', [
-                'alumno' => $alumno,
-                'carrera' => $carrera,
-                'materias' => $materiasExamenes,
-                'porcentaje' => $porcentaje,
-                'src' => $src,
-            ])
-            ->format('a4')
-            ->name("analitico_{$alumno->apellido}_{$alumno->nombre}.pdf");
     }
+
+    // Detectar formato de hoja según la cantidad de años
+    $maxAnio = $materias->max('anio');
+    $formato = $maxAnio > 5 ? 'legal' : 'a4';
+
+    // Imagen en base64
+    $imgPath = public_path('img/pdf.png');
+    $src = 'data:image/png;base64,' . base64_encode(file_get_contents($imgPath));
+
+    // Mostrar el PDF en el navegador
+    return pdf()
+        ->view('Pdf.analitico', [
+            'alumno' => $alumno,
+            'carrera' => $carrera,
+            'resolucion' => $carrera->resolucion,
+            'materias' => $materiasExamenes,
+            'porcentaje' => $porcentaje,
+            'src' => $src,
+        ])
+        ->format($formato)
+        ->name("analitico_{$alumno->apellido}_{$alumno->nombre}.pdf");
+}
+
 
 }
