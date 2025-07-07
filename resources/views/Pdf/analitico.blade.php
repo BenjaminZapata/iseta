@@ -7,41 +7,68 @@
         body {
             font-family: sans-serif;
             font-size: 12px;
+            margin: 40px 50px 120px 50px; /* Margen para impresión y firma */
         }
+
         .acta_contenedor {
             width: 100%;
         }
+
         .tabla1 {
             width: 100%;
             border: 1px solid black;
             border-collapse: collapse;
         }
+
         .tabla1 th, .tabla1 td {
             border: 2.5px solid black;
+            padding: 5px;
         }
+
         .analitico-content, p {
             font-size: 15px;
+            margin-bottom: 10px;
         }
+
         .analitico-content span, .pos1, .pos2, .pos3 {
             text-transform: uppercase;
         }
+
         .pos2, .pos3 {
             text-align: center;
         }
+
         .tabla1 th {
             text-align: center;
             font-style: italic;
             font-size: 14px;
         }
+
         .pos1 { width: 450px; }
         .pos2 { width: 100px; }
         .pos3 { width: 130px; }
+
         .footer-analitico {
-            font-size: 12px; 
+            font-size: 12px;
             text-align: center;
+            margin-top: 50px;
         }
+
         .pad {
             margin: 0 10px;
+        }
+
+        .firma-sello-dual {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+            font-size: 13px;
+        }
+
+        .firma-sello-dual .sello,
+        .firma-sello-dual .firma {
+            width: 45%;
+            text-align: center;
         }
     </style>
 </head>
@@ -90,14 +117,14 @@
                                         @if(isset($materia->examen))
                                             {{ \Carbon\Carbon::parse($materia->examen->fecha)->format('d/m/Y') }}
                                         @else
-                                            -----------
+                                            ----------- 
                                         @endif
                                     </td>
                                     <td class="pos3">
                                         @if(isset($materia->examen))
                                             {{ $materia->examen->nota }}
                                         @else
-                                            -----------
+                                            ----------- 
                                         @endif
                                     </td>
                                 </tr>
@@ -120,6 +147,17 @@
     @endphp
 
     <p>Se extiende la presente en la ciudad de 9 de Julio a los {{ $dia }} días del mes de {{ $mes }} de {{ $anio }}.</p>
+
+    <div class="firma-sello-dual">
+        <div class="sello">
+            <p>.......................................................</p>
+            <p>Sello</p>
+        </div>
+        <div class="firma">
+            <p>.......................................................</p>
+            <p>Firma</p>
+        </div>
+    </div>
 
     <p class="footer-analitico">
         <span>H. Yrigoyen 931 - Tel/Fax (02317) 4225507/422305 - C.P.: 6500 - 9 de Julio (Bs As) República Argentina</span><br>
