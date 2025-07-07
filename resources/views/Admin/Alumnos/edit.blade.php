@@ -168,7 +168,7 @@
             $form->text('titulo_anterior','Titulo anterior:','label-input-y-75',$alumno),
             $form->text('becas','Becas:','label-input-y-75',$alumno),
             $form->text('nombre_institucion_secundario','Secundaria:','label-input-y-75',$alumno),
-             $form->select('titulo_secundario','Titulo secundario:','label-input-y-75',$alumno,['vacio',
+            $form->select('titulo_secundario','Titulo secundario:','label-input-y-75',$alumno,['vacio',
             'Fotocopia del título original secundario',
             'Certificado de constancia de título en trámite',
             'Constancia de alumno del último año del nivel secundario',
@@ -272,11 +272,9 @@
 
             </tbody>
         </table>
-<<<<<<< HEAD
 
 
     </div>
-=======
 
 
     </div>
@@ -406,7 +404,6 @@
 
     echo '</div>'; // Cierra #accordionCarreras
 ?> -->
->>>>>>> master
 
     <div class="table">
         <div class="table__header">
@@ -473,7 +470,7 @@
                             </td>
                             <td class="flex just-center"><a href="{{route('admin.examenes.edit', ['examen' => $examen->id,])}}"><button class="btn_blue"><i class="ti ti-edit"></i>Editar</button></a></td>
                         </tr>
-                    @endforeach
+
                 </tbody>
             </table>
         @if ($alumno->verificado == 0)
