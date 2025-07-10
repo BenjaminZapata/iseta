@@ -74,7 +74,7 @@
                 </select>
                 <div class="upd"><button class="btn_blue"><i class="ti ti-paperclip"></i>Matricular</button></div>
             </form>
-            <a href="{{route('admin.inscriptos.create')}}" style="display:block;width:190px"><button class="btn_blue" style="margin-top:-40px">Inscribir a otra carrera</button></a>
+            <a href="{{route('admin.inscriptos.create', ['alumno_id' => $alumno->id])}}" style="display:block;width:190px"><button class="btn_blue" style="margin-top:-40px">Inscribir a otra carrera</button></a>
         </div>
     </div>
 
