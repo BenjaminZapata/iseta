@@ -29,6 +29,7 @@ class Profesor extends Authenticatable
         'email',
         'formacion_academica' ,
         'titulo',
+        'anio_ingreso',
         'observaciones',
         'telefono1',
         'telefono2' ,
