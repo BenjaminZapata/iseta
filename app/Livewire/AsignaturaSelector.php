@@ -13,14 +13,12 @@ class AsignaturaSelector extends Component
     public $tipo_modulo;
     public $carga_horaria;
     public $anio;
+    public $carrera;
 
-    public function mount($asignaturas, $selectedId = null)
+    public function mount($asignaturas, $carrera)
     {
         $this->asignaturas = $asignaturas;
-        $this->selectedId = $selectedId;
-        if ($selectedId) {
-            $this->updateAsignatura($selectedId);
-        }
+        $this->carrera = $carrera;
     }
 
     public function updatedSelectedId($value)
@@ -32,6 +30,7 @@ class AsignaturaSelector extends Component
     {
         $asignatura = Asignatura::find($id);
         if ($asignatura) {
+            $this->selectedId = $asignatura->id;
             $this->tipo_modulo = $asignatura->tipo_modulo;
             $this->carga_horaria = $asignatura->carga_horaria;
             $this->anio = $asignatura->anio;
