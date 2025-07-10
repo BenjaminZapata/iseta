@@ -22,25 +22,25 @@ class EditarProfesorRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'dni' => ['required','numeric','max:999999999'],
-            'nombre' => ['required','regex:/[a-zA-Z0-9\s]+/'],
-            'apellido' => ['required','regex:/[a-zA-Z0-9\s]+/'],
-            'fecha_nacimiento' => ['required','date','before:now'],
-            'ciudad' => ['nullable'],
-            'calle' => ['nullable'],
-            'casa_numero' => ['nullable','numeric','max:100000'],
-            'dpto' => ['nullable'],
-            'piso' => ['nullable'],
-            'estado_civil' => ['required'],
-            'email' => ['required'],
-            'formacion_academica' => ['nullable'],
-            'titulo' => ['nullable','numeric'],
-            'observaciones' => ['nullable'],
-            'telefono1' => ['nullable','numeric'],
-            'telefono2' => ['nullable','numeric'],
-            'telefono3' => ['nullable','numeric'],
-            'codigo_postal' => ['nullable','alpha_num']
-        ];
+          return [
+    'dni' => ['required', 'numeric'],
+    'nombre' => ['required', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'],
+    'apellido' => ['required', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'],
+    'fecha_nacimiento' => ['required', 'date'],
+    'ciudad' => ['required', 'string', 'max:100'],
+    'calle' => ['required', 'regex:/^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$/u'],
+    'casa_numero' => ['numeric'],
+    'dpto' => ['nullable', 'string', 'max:10'],
+    'piso' => ['nullable', 'numeric'],
+    'estado_civil' => ['required', 'string'], 
+    'email' => ['required', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'],
+    'formacion_academica' => ['required', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'],
+    'titulo' => ['nullable', 'numeric'],
+    'observaciones' => ['nullable', 'string'],
+    'telefono1' => ['nullable', 'numeric'],
+    'telefono2' => ['nullable', 'numeric'],
+    'telefono3' => ['nullable', 'numeric'],
+    'codigo_postal' => ['required', 'alpha_num'],
+    ];
     }
 }

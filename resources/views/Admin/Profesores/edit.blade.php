@@ -19,7 +19,7 @@
                         $form->text('ciudad','Ciudad:','label-input-y-75',$profesor),
                         $form->text('codigo_postal','Codigo postal:','label-input-y-75',$profesor),
                         $form->text('calle','Calle:','label-input-y-75',$profesor),
-                        $form->text('numero','Altura:','label-input-y-75',$profesor),
+                        $form->text('casa_numero','Altura:','label-input-y-75',$profesor),
                         $form->text('departamento','Departamento:','label-input-y-75',$profesor),
                         $form->text('piso','Piso:','label-input-y-75',$profesor)
                     ], 'Academico' => [
@@ -27,9 +27,9 @@
                         $form->text('anio_ingreso','Año de ingreso:','label-input-y-75',$profesor)
                     ], 'Contacto' => [
                         $form->text('email','Email:','label-input-y-75',$profesor),
-                        $form->text('telefeono1','Telefeono 1:','label-input-y-75',$profesor),
-                        $form->text('telefeono2','Telefeono 2:','label-input-y-75',$profesor),
-                        $form->text('telefeono3','Telefeono 3:','label-input-y-75',$profesor)
+                        $form->text('telefono1','Telefono 1:','label-input-y-75',$profesor),
+                        $form->text('telefono2','Telefono 2:','label-input-y-75',$profesor),
+                        $form->text('telefono3','Telefono 3:','label-input-y-75',$profesor)
                     ], 'Otros' => [
                         $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $profesor)
                     ]
