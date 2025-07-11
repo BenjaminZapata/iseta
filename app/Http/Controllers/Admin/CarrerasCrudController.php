@@ -114,7 +114,15 @@ class CarrerasCrudController extends BaseController
     public function addAsignatura(Request $request, Carrera $carrera)
     {
         try {
-            $carrera->asignaturas()->attach($request->asignatura);
+            $data = [
+                'id_carrera' => $request->carrera_id,
+                'id_asignatura' => $request->asignatura_id,
+                'anio' => $request->anio,
+                'tipo_modulo' => $request->tipo_modulo,
+                'carga_horaria' => $request->carga_horaria,
+            ];
+            log::debug($data);
+            $carrera->asignaturas()->attach(["asignatura" => $data]);
         } catch (\Exception $e) {
             Log::error($e);
             return redirect()->back()->with('error', 'No se pudo agregar la asignatura');
@@ -130,5 +138,11 @@ class CarrerasCrudController extends BaseController
     public function destroy(Carrera $carrera)
     {
         return redirect()->route('admin.carreras.index')->with('error', 'Las carreras no se pueden eliminar');
+    }
+
+    public function deleteAsignatura(Request $request, Carrera $carrera, Asignatura $asignatura)
+    {
+        $carrera->asignaturas()->detach($asignatura);
+        return redirect()->back()->with('mensaje', 'Se elimino la asignatura');
     }
 }
