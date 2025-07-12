@@ -8,7 +8,7 @@
             </div>
             <div class="perfil__info">
 
-                <form method="post" action="{{route('admin.mesas.dualpost', ['asignatura'=>$asignatura->id])}}">
+                <form method="post" action="{{route('admin.mesas.dualpost', ['carrera'=>$carrera->id, 'asignatura'=>$asignatura->id])}}">
                 @csrf
 
                 <div class="perfil_dataname">
@@ -77,10 +77,10 @@
                 </div>
 
                 @if ($anterior)
-                    <div><a href="{{route('admin.mesas.dual', ['asignatura'=>$anterior->id])}}">Anterior: {{$anterior->nombre}}</a></div>
+                    <div><a href="{{route('admin.mesas.dual', ['carrera'=>$carrera->id, 'asignatura'=>$anterior->id])}}">Anterior: {{$anterior->nombre}}</a></div>
                 @endif
                 @if ($siguiente)
-                    <div><a href="{{route('admin.mesas.dual', ['asignatura'=>$siguiente->id])}}">Siguiente: {{$siguiente->nombre}}</a></div>
+                    <div><a href="{{route('admin.mesas.dual', ['carrera'=>$carrera->id, 'asignatura'=>$siguiente->id])}}">Siguiente: {{$siguiente->nombre}}</a></div>
                 @endif
             </div>
   

@@ -22,28 +22,26 @@ return new class extends Migration
 
             $table->primary(['id_carrera', 'id_asignatura']);
 
-            $table->foreign('id_carrera')->references('id')->on('carreras');
-            $table->foreign('id_asignatura')->references('id')->on('asignaturas');
-            $table->foreign('id_profesor')->references('id')->on('profesores');
+            $table->foreign('id_carrera')->references('id')->on('carreras')->onDelete('cascade');
+            $table->foreign('id_asignatura')->references('id')->on('asignaturas')->onDelete('cascade');
+            $table->foreign('id_profesor')->references('id')->on('profesores')->onDelete('cascade');
 
             $table->timestamps();
         });
 
         // Migrar los datos existentes de asignaturas.id_carrera a la tabla pivote
         DB::table('asignaturas')
-        ->whereNotNull('id_carrera')
-        ->get()
-        ->each(function ($asignatura) {
-            DB::table('carrera_asignatura_profesor')->insert([
-                'id_asignatura' => $asignatura->id,
-                'carga_horaria' => $asignatura->carga_horaria,
-                'tipo_modulo' => $asignatura->tipo_modulo,
-                'anio' => $asignatura->anio,
-                'id_carrera' => $asignatura->id_carrera,
-            ]);
-        });
-
-
+            ->whereNotNull('id_carrera')
+            ->get()
+            ->each(function ($asignatura) {
+                DB::table('carrera_asignatura_profesor')->insert([
+                    'id_asignatura' => $asignatura->id,
+                    'carga_horaria' => $asignatura->carga_horaria,
+                    'tipo_modulo' => $asignatura->tipo_modulo,
+                    'anio' => $asignatura->anio,
+                    'id_carrera' => $asignatura->id_carrera,
+                ]);
+            });
     }
 
     /**

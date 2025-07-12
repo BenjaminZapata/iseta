@@ -18,7 +18,7 @@
     <div class="botones-derecha">
             <div class="botones-derecha">
 
-                <a href="{{ route('admin.alumnos.index') }}">
+                <a href="{{ url()->current() }}">
                     <button class="btn_cancelar" type="button">
                         <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar
                     </button>
