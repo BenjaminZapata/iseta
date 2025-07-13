@@ -83,10 +83,7 @@
                         <p class="py-2">Estos alumnos han aprobado la cursada de esta materia, luego se volvera a validar sobre correlativas y tiempos</p>
 
                         <form method="POST" action="{{route('admin.examenes.store')}}">
-
-
-
-                    @csrf
+                        @csrf
                             <select class="rounded" name="id_alumno">
                                     <option value="">Selecciona un alumno</option>
                                 @foreach ($inscribibles as $inscribible)

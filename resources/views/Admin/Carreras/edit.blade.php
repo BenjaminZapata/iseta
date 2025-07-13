@@ -70,7 +70,7 @@
                                     </form>
                                 </td>
                                 <td>
-                                    <a href="{{route('admin.mesas.dual', ['asignatura'=>$asignatura->id])}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Mesas</button></a>
+                                    <a href="{{route('admin.mesas.dual', ['carrera'=>$carrera->id, 'asignatura'=>$asignatura->id])}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Mesas</button></a>
                                 </td>
                             </tr>
                         @endforeach

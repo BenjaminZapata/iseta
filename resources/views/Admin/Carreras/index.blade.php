@@ -40,7 +40,7 @@
                     <a class="flex just-center" href="{{route('admin.cursadas.masivo',['asignatura'=>$carrera->primeraAsignatura()->id])}}">
                         <button class="spe-b1"><i class="ti ti-file-plus"></i>Cursadas</button>
                     </a>
-                    <a class="flex just-center" href="{{route('admin.mesas.dual',['asignatura'=>$carrera->primeraAsignatura()->id])}}">
+                    <a class="flex just-center" href="{{route('admin.mesas.dual',['carrera'=>$carrera->id, 'asignatura'=>$carrera->primeraAsignatura()->id])}}">
                         <button class="spe-b2"><i class="ti ti-file-plus"></i>Mesas</button>
                     </a>
                 @endif
