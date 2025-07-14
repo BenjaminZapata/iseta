@@ -1,8 +1,8 @@
 <aside class="none lg-block admin-aside">
     <h1>
-        <div>
+        <a href="{{route('admin.alumnos.index')}}" class="text-blue-600">
             <img src="{{ asset('img/logo.png') }}" alt="" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-        </div>
+        </a>
     </h1>
     <ul>
         <li><a class="text-blue-600" href="{{route('admin.alumnos.index')}} " style="display: block;"><i class="ti ti-user"></i>Alumnos</a></li>
