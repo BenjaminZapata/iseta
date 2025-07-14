@@ -89,7 +89,7 @@
                     $alumno
                 ),
             ],
-            'Academico' => [
+            'Datos académicos' => [
                 $form->text(
                     'titulo_anterior',
                     'Titulo anterior:',

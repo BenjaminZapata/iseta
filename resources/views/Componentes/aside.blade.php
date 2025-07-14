@@ -1,5 +1,9 @@
 <aside class="none lg-block admin-aside">
-    <h1 class="logo-iseta">ISETA Admin</h1>
+    <h1>
+        <div>
+            <img src="{{ asset('img/logo.png') }}" alt="" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
+        </div>
+    </h1>
     <ul>
         <li><a class="text-blue-600" href="{{route('admin.alumnos.index')}} " style="display: block;"><i class="ti ti-user"></i>Alumnos</a></li>
         <li><a class="text-blue-600" href="{{route('admin.profesores.index')}}" style="display: block;"><i class="ti ti-users"></i> Profesores </a></li>
