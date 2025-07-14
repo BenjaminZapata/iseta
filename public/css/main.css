@@ -41,7 +41,7 @@ section.perfil {
 .perfil_body {
     display: flex;
     flex-direction: column;
-    
+
     align-items: center;
     width: 100%;
     margin: .8rem auto;
@@ -54,7 +54,9 @@ section.perfil {
 }
 
 
-.perfil_one, .perfil_second, .perfil_third {
+.perfil_one,
+.perfil_second,
+.perfil_third {
     display: flex;
     flex-direction: column;
     height: 600px;
@@ -77,7 +79,7 @@ section.perfil {
 }
 
 .perfil_subtop {
-    
+
     padding-bottom: .8rem;
     display: flex;
     align-items: center;
@@ -98,9 +100,10 @@ section.perfil {
 .perfil_password {
     position: relative;
     width: 100%;
-    
+
     height: 50px;
 }
+
 .perfil_password input {
     position: relative;
     /* width: 50%; */
@@ -123,7 +126,7 @@ section.perfil {
 
 .perfil_password i.check_pos {
     color: var(--verde-2);
-    
+
 }
 
 .perfil_password i.check_neg {
@@ -141,14 +144,16 @@ section.perfil {
 
 .perfil_descargable {
     height: 50px;
-    
+
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 17px;
 }
 
-.perfil_descargable a, .perfil_descargable button, .perfil_password_refresh button {
+.perfil_descargable a,
+.perfil_descargable button,
+.perfil_password_refresh button {
     width: 120px;
     height: 40px;
     background: var(--azul-iseta);
@@ -159,17 +164,22 @@ section.perfil {
 }
 
 
-.perfil_descargable a:hover, .perfil_descargable button:hover, .perfil_password_refresh button:hover {
+.perfil_descargable a:hover,
+.perfil_descargable button:hover,
+.perfil_password_refresh button:hover {
     background: var(--facebook);
 }
 
-.perfil_descargable i, .perfil_password_refresh i {
+.perfil_descargable i,
+.perfil_password_refresh i {
     padding-right: 10px;
 }
 
-.nuevo_alumno, .quitar_filtro, .buscar_filtro {
+.nuevo_alumno,
+.quitar_filtro,
+.buscar_filtro {
     background: var(--azul-iseta);
-    color: white; 
+    color: white;
     font-size: 500;
     border: none;
     padding: 15px 20px;
@@ -179,7 +189,7 @@ section.perfil {
     overflow: hidden;
     display: inline-block;
     cursor: pointer;
-  }
+}
 
 .btn_edit {
     background: var(--azul-iseta);
@@ -189,9 +199,12 @@ section.perfil {
     border-radius: 6px;
 }
 
-.btn_edit:hover, .btn_borrar:hover {
+.btn_edit:hover,
+.btn_borrar:hover {
     background: var(--facebook);
 }
+
+
 
 /*------------------------------------------- T   A   B   L   A   -------------------------------------------------------------*/
 
@@ -263,7 +276,9 @@ tbody tr:hover {
     color: white;
 }
 
-table, th, td {
+table,
+th,
+td {
     border-collapse: collapse;
     padding: 1rem;
     text-align: left;
@@ -321,11 +336,11 @@ th {
 
 
 /*------------------------------------------- F   I   L   T   R   A   R   ------------------------------------------------------------*/
- .promedio {
+.promedio {
     display: flex;
-    
+
     align-items: center;
-    margin-right: 20px; 
+    margin-right: 20px;
     padding: 0 10px;
     background-color: var(--gris-header-tabla);
     height: 40px;
@@ -357,18 +372,21 @@ th {
     align-items: center;
 }
 
-.contenedor_ordenar, .contenedor_filtrar, .contenedor_filtrado {
+.contenedor_ordenar,
+.contenedor_filtrar,
+.contenedor_filtrado {
     position: relative;
     font-size: 13px;
     display: flex;
     align-items: center;
 }
 
-.filtrar, .ordenar {
+.filtrar,
+.ordenar {
     position: relative;
     appearance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
     border: none;
     outline: none;
     width: 180px;
@@ -386,7 +404,8 @@ th {
     width: 150px;
 }
 
-.i_filtrar, .i_ordenar {
+.i_filtrar,
+.i_ordenar {
     color: #000;
     position: absolute;
     align-items: center;
@@ -453,9 +472,9 @@ th {
     left: 12px;
     top: 50%;
     transform: translateY(-50%);
-  }
+}
 
-  .i_borrar {
+.i_borrar {
     color: #000;
     position: absolute;
     width: 20px;
@@ -463,13 +482,13 @@ th {
     right: 12px;
     bottom: 50%;
     transform: translateY(50%);
-  }
+}
 
-  .leyend {
+.leyend {
     display: flex;
     justify-content: end;
     font-size: 14px;
-  }
+}
 
 /*-------------------------------------------   L   L   A   M   A   D   O   S   ----------------------------------------------------*/
 
@@ -484,7 +503,8 @@ th {
 --------------------------------------------------- */
 
 
-.llamado_1 label, .llamado_2 label {
+.llamado_1 label,
+.llamado_2 label {
     position: relative;
     display: flex;
     justify-content: center;
@@ -495,10 +515,11 @@ th {
     width: 80px;
     padding-left: 30%;
     cursor: pointer;
-   
+
 }
 
-.llamado_1 label::before, .llamado_2 label::before {
+.llamado_1 label::before,
+.llamado_2 label::before {
     position: absolute;
     content: "";
     height: 12px;
@@ -511,12 +532,14 @@ th {
     transform: translateY(-50%);
 }
 
-.llamado_1 input[type="radio"]:checked + label, .llamado_2 input[type="radio"]:checked + label  {
+.llamado_1 input[type="radio"]:checked+label,
+.llamado_2 input[type="radio"]:checked+label {
     background: var(--azul-iseta);
     color: white;
 }
 
-.llamado_1 input[type="radio"]:checked + label::before, .llamado_2 input[type="radio"]:checked + label::before {
+.llamado_1 input[type="radio"]:checked+label::before,
+.llamado_2 input[type="radio"]:checked+label::before {
     height: 9px;
     width: 9px;
     border: 3px solid white;
@@ -590,7 +613,7 @@ button.bajarse:hover {
     border-bottom: 1px solid;
     font-size: 16px;
     font-weight: 600;
-   
+
 }
 
 .salto {
@@ -604,7 +627,7 @@ button.bajarse:hover {
     align-items: center;
 }
 
-.campo_info { 
+.campo_info {
     border: none;
     outline: none;
     width: 120px;
@@ -641,12 +664,15 @@ tbody tr:hover .campo_info {
         text-align: left;
     }
 
-    
+
     table thead {
         display: none;
     }
 
-    table, table tbody, table tr, table td {
+    table,
+    table tbody,
+    table tr,
+    table td {
         display: block;
         width: 100%;
     }
@@ -670,5 +696,9 @@ tbody tr:hover .campo_info {
         padding-left: 15px;
         font-weight: bold;
         text-align: left;
+    }
+
+    .filters-visible-space {
+        padding-bottom: 300px;
     }
 }
