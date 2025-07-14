@@ -6,7 +6,7 @@
     @endif
 
     @foreach ($fieldsets as $legend => $inputs)
-    <fieldset class="p-2">
+    <fieldset class="p-2" style="margin: 10px;">
         <legend class="font-600 font-7">{{$legend}}</legend>
         <div class="grid-2 gap-2 p-0">
             @foreach ($inputs as $input)
@@ -16,22 +16,36 @@
     </fieldset>
     @endforeach
     <div class="botones-derecha">
-            <div class="botones-derecha">
 
-                <a href="{{ route('admin.alumnos.index') }}">
-                    <button class="btn_cancelar" type="button">
-                        <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar
-                    </button>
-                </a>
-                <button type="submit" class="btn_blue">
-                    @if ($method == 'put')
-                        <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                        Actualizar
-                    @else
-                        <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                        Guardar
-                    @endif
-                </button>
-            </div>
+        <div class="botones-derecha" style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+            <x-botones-alumno />
+            <x-btn-cancelar />
+            <button type="submit" class="btn_blue">
+                @if ($method == 'put')
+                <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
+                Actualizar
+                @else
+                <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+                Guardar
+                @endif
+            </button>
         </div>
+    </div>
 </form>
+
+<script>
+    function toggleExportar() {
+        const opciones = document.getElementById('exportar-opciones');
+        opciones.style.display = opciones.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Opcional: cerrar si clickean fuera
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('exportar-opciones');
+        const button = event.target.closest('.dropdown');
+
+        if (!button) {
+            dropdown.style.display = 'none';
+        }
+    });
+</script>

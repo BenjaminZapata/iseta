@@ -127,11 +127,20 @@
 
     @if (!$config['modo_seguro'])
         <div class="upd">
-            <form method="POST" class="form-eliminar" action="{{route('admin.asignaturas.destroy', ['asignatura'=>$asignatura->id])}}">
-                @csrf
-                @method('delete')
-                <button class="btn_red"><i class="ti ti-trash"></i>Eliminar asignatura</button>
-            </form>
+            <div>
+                <form method="POST" class="form-eliminar" action="{{route('admin.asignaturas.destroy', ['asignatura'=>$asignatura->id])}}">
+                    @csrf
+                    @method('delete')
+                    <button class="btn_red"><i class="ti ti-trash"></i>Eliminar asignatura</button>
+                </form>
+            </div>
+            <div>
+                <form method="POST" class="form-eliminar" action="{{route('admin.asignaturas.destroy', ['asignatura'=>$asignatura->id])}}">
+                    @csrf
+                    @method('delete')
+                    <button class="btn_red"><i class="ti ti-trash"></i>Desligar asignatura</button>
+                </form>
+            </div>
         </div>
     @endif
 

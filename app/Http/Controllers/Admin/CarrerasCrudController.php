@@ -131,7 +131,6 @@ class CarrerasCrudController extends BaseController
             return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la carrera');
         else
             return redirect()->back()->with('mensaje', 'Se edito la carrera');
-
     }
 
     public function addAsignaturaView(Request $request)
@@ -161,4 +160,9 @@ class CarrerasCrudController extends BaseController
         return redirect()->route('admin.carreras.index')->with('error', 'Las carreras no se pueden eliminar');
     }
 
+    public function deleteAsignatura(Request $request, Carrera $carrera, Asignatura $asignatura)
+    {
+        $carrera->asignaturas()->detach($asignatura);
+        return redirect()->back()->with('mensaje', 'Se elimino la asignatura');
+    }
 }

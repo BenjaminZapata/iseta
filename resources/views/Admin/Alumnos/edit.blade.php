@@ -1,14 +1,16 @@
 @extends('Admin.template')
 
-@section('content')
+@section(section: 'content')
     <div class="perfil_one br">
-        <div class="perfil__info">
+        <div class="perfil__header">
+            <h2>Modificar Alumno</h2>
+        </div>
 
-            <?= $form->generate(
+        <?= $form->generate(
         route('admin.alumnos.update', ['alumno' => $alumno->id]),
         'put',
         [
-            'Alumno' => [
+            'Datos personales' => [
                 $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno),
                 $form->text(
                     'apellido',
@@ -106,8 +108,8 @@
             ],
         ]
     ) ?>
-        </div>
-        <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
+    </div>
+    <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
         'Alumno' => [
             $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno),
             $form->text('apellido', 'Apellido:', 'label-input-y-75', $alumno),
@@ -144,40 +146,31 @@
         ],
         'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
     ]) ?>
+    <div class="botones-derecha">
         <div class="botones-derecha">
-            <div class="botones-derecha">
-                <button class="btn_sky">
-                    <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno->id], ['config' => $config])}}">
-                        <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
-                </button>
-                <a href="{{ route('admin.alumnos.analitico.pdf', ['alumno' => $alumno->id]) }}" target="_blank"
-                    class="btn_sky">
-                    <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analítico
-                </a>
-            </div>
+            <button class="btn_sky">
+                <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno->id], ['config' => $config])}}">
+                    <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
+            </button>
+            <a href="{{ route('admin.alumnos.analitico.pdf', ['alumno' => $alumno->id]) }}" target="_blank" class="btn_sky">
+                <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analítico
+            </a>
         </div>
     </div>
-
     </div>
 
-    <div class="perfil_one br">
-
-        <div class="perfil__header">
-            <h2>Rematriculación manual</h2>
-        </div>
-
-        <div class="matricular">
-            <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}">
-                <select name="carrera">
-                    @foreach ($carreras as $carrera)
-                        <option value="{{$carrera->carrera_id}}">{{$carrera->carrera_nombre}}</option>
-                    @endforeach
-                </select>
-                <div class="upd"><button class="btn_blue"><i class="ti ti-paperclip"></i>Matricular</button></div>
-            </form>
-            <a href="{{ route('admin.inscriptos.create') }}" style="display:block;width:190px"><button class="btn_blue"
-                    style="margin-top:-40px">Inscribir a otra carrera</button></a>
-        </div>
+    <div class="matricular">
+        <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}">
+            <select name="carrera">
+                @foreach ($carreras as $carrera)
+                    <option value="{{$carrera->carrera_id}}">{{$carrera->carrera_nombre}}</option>
+                @endforeach
+            </select>
+            <div class="upd"><button class="btn_blue"><i class="ti ti-paperclip"></i>Matricular</button></div>
+        </form>
+        <a href="{{ route('admin.inscriptos.create') }}" style="display:block;width:190px"><button class="btn_blue"
+                style="margin-top:-40px">Inscribir a otra carrera</button></a>
+    </div>
     </div>
 
     <!--//? CURSADAS -->
