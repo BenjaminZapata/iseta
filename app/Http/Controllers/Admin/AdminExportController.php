@@ -28,10 +28,29 @@ class AdminExportController extends Controller
         return Excel::download(
             new CursadasCarreraWrapperExport(
                 $carrera,
-                $request->only(['genero', 'anio', 'condicion']) // ← filtros se conservan
+                [
+                    'genero' => strtolower($request->input('genero', '')),
+                    'anio' => $request->input('anio', ''),
+                    'condicion' => strtolower($request->input('condicion', '')),
+                ]
+
             ),
             $archivo . '.xlsx'
         );
+    }
+
+    public function mostrarFormularioExportacionCursadas(Carrera $carrera)
+    {
+        $aniosCalendario = \DB::table('cursadas')
+            ->where('id_carrera', $carrera->id)
+            ->whereNotNull('anio_cursada')
+            ->select('anio_cursada')
+            ->distinct()
+            ->orderByDesc('anio_cursada')
+            ->pluck('anio_cursada')
+            ->toArray();
+
+        return view('Admin.Exportar.cursadas', compact('carrera', 'aniosCalendario'));
     }
 
 }

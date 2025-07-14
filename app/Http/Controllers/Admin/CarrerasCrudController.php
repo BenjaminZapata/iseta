@@ -20,7 +20,8 @@ class CarrerasCrudController extends BaseController
 
     public $carreraRepo;
 
-    public function __construct(CarreraRepository $carreraRepo) {
+    public function __construct(CarreraRepository $carreraRepo)
+    {
         parent::__construct();
         $this->carreraRepo = $carreraRepo;
     }
@@ -31,9 +32,30 @@ class CarrerasCrudController extends BaseController
     public function index(Request $request)
     {
         $this->setFilters($request);
-        $this->data['carreras'] = $this->carreraRepo->index($request);
-        return view('Admin.Carreras.index',$this->data);
+
+        $carreras = $this->carreraRepo->index($request);
+
+        // Obtener años disponibles para cada carrera
+        $aniosPorCarrera = [];
+
+        foreach ($carreras as $carrera) {
+            $anios = \DB::table('cursadas')
+                ->where('id_carrera', $carrera->id)
+                ->whereNotNull('anio_cursada')
+                ->distinct()
+                ->orderByDesc('anio_cursada')
+                ->pluck('anio_cursada')
+                ->toArray();
+
+            $aniosPorCarrera[$carrera->id] = $anios;
+        }
+
+        $this->data['carreras'] = $carreras;
+        $this->data['aniosPorCarrera'] = $aniosPorCarrera;
+
+        return view('Admin.Carreras.index', $this->data);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -59,44 +81,56 @@ class CarrerasCrudController extends BaseController
     public function show(Carrera $carrera)
     {
         $carrera->load('asignaturas');
-        return view('Admin.Carreras.show',['carrera' => $carrera]);
+        return view('Admin.Carreras.show', ['carrera' => $carrera]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request,Carrera $carrera)
+    public function edit(Request $request, Carrera $carrera)
     {
         $carrera->load('asignaturas');
-        return view('Admin.Carreras.edit', ['carrera'=> $carrera]);
 
+        // Obtener los años disponibles de cursadas para esta carrera
+        $anios = \DB::table('cursadas')
+            ->where('id_carrera', $carrera->id)
+            ->whereNotNull('anio_cursada')
+            ->distinct()
+            ->orderByDesc('anio_cursada')
+            ->pluck('anio_cursada')
+            ->toArray();
+
+        return view('Admin.Carreras.edit', [
+            'carrera' => $carrera,
+            'aniosPorCarrera' => [$carrera->id => $anios],
+        ]);
     }
+
 
 
     /**
      * Update the specified resource in storage.
      */
     public function update(EditarCarreraRequest $request, Carrera $carrera)
-
     {
         $datos = $request->validated();
 
-        if($request->has('resolucion_archivo')){
-            $request->file('resolucion_archivo')->storeAs(str_replace(' ','_',$datos['nombre']).'.pdf');
-            $datos['resolucion_archivo'] = str_replace(' ','_',$datos['nombre']).'.pdf';
+        if ($request->has('resolucion_archivo')) {
+            $request->file('resolucion_archivo')->storeAs(str_replace(' ', '_', $datos['nombre']) . '.pdf');
+            $datos['resolucion_archivo'] = str_replace(' ', '_', $datos['nombre']) . '.pdf';
         }
 
 
         $carrera->update($datos);
 
-        if(!$request->has('vigente')){
-            $carrera->vigente=true;
+        if (!$request->has('vigente')) {
+            $carrera->vigente = true;
             $carrera->save();
         }
-        if($request->has('redirect'))
-            return redirect()->to($request->input('redirect'))->with('mensaje','Se edito la carrera');
+        if ($request->has('redirect'))
+            return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la carrera');
         else
-            return redirect()->back()->with('mensaje','Se edito la carrera');
+            return redirect()->back()->with('mensaje', 'Se edito la carrera');
 
     }
 
@@ -112,9 +146,10 @@ class CarrerasCrudController extends BaseController
             'id_asignatura' => $id_asignatura,
         ]);
     }
-    public function addAsignatura(Request $request, Carrera $carrera){
+    public function addAsignatura(Request $request, Carrera $carrera)
+    {
         $carrera->asignaturas()->attach($request->asignatura);
-        return redirect()->back()->with('mensaje','Se agrego la asignatura');
+        return redirect()->back()->with('mensaje', 'Se agrego la asignatura');
     }
 
     //FIXME: Falta desarrollar la funcionalidad de eliminar una carrera
@@ -123,7 +158,7 @@ class CarrerasCrudController extends BaseController
      */
     public function destroy(Carrera $carrera)
     {
-        return redirect() -> route('admin.carreras.index') -> with('error', 'Las carreras no se pueden eliminar');
+        return redirect()->route('admin.carreras.index')->with('error', 'Las carreras no se pueden eliminar');
     }
 
 }

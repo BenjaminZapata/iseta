@@ -21,35 +21,43 @@ class CursadasCarreraExcelExport implements FromCollection, WithHeadings, WithTi
 
     public function collection(): Collection
     {
+        $filtros = $this->filtros;
+
+        $anio = isset($filtros['anio']) ? (int) $filtros['anio'] : null;
+        $genero = $this->mapGenero($filtros['genero'] ?? null);
+        $condicion = $this->mapCondicionToInt($filtros['condicion'] ?? null);
+
         $asignaturas = Asignatura::whereHas('carrera', fn($q) => $q->where('id', $this->carrera->id))
-            ->with([
-                'cursadas' => function ($query) {
-                    if (!empty($this->filtros['genero'])) {
-                        $query->whereHas('alumno', function ($q) {
-                            $q->where('genero', $this->filtros['genero']);
-                        });
-                    }
-                    if (!empty($this->filtros['anio'])) {
-                        $query->where('anio_cursada', $this->filtros['anio']);
-                    }
-                    if (!empty($this->filtros['condicion'])) {
-                        $query->where('condicion', $this->filtros['condicion']);
-                    }
-                },
-                'cursadas.alumno'
-            ])
+            ->with(['cursadas.alumno'])
             ->get();
 
         $rows = [];
 
         foreach ($asignaturas as $asignatura) {
             foreach ($asignatura->cursadas as $cursada) {
+                $alumno = $cursada->alumno;
+
+                if (!$alumno)
+                    continue;
+
+                // Filtros manuales
+                if (!empty($anio) && $cursada->anio_cursada != $anio)
+                    continue;
+
+                if (!is_null($condicion) && $cursada->condicion != $condicion)
+                    continue;
+
+                if (!is_null($genero) && (int) $alumno->genero !== $genero)
+                    continue;
+
+
                 $rows[] = [
                     $asignatura->nombre,
-                    $cursada->alumno->apellidoNombre(),
-                    $cursada->alumno->dni,
+                    $alumno->apellidoNombre(),
+                    $alumno->dni,
                     $cursada->condicionString(),
                     $cursada->anio_cursada,
+                    $alumno->generoString()
                 ];
             }
         }
@@ -59,11 +67,37 @@ class CursadasCarreraExcelExport implements FromCollection, WithHeadings, WithTi
 
     public function headings(): array
     {
-        return ['Asignatura', 'Alumno', 'DNI', 'Condición', 'Año'];
+        return ['Asignatura', 'Alumno', 'DNI', 'Condición', 'Año', 'Genero'];
     }
 
     public function title(): string
     {
         return 'Cursadas';
     }
+
+    protected function mapCondicionToInt($value)
+    {
+        return match (strtolower($value)) {
+            'libre' => 0,
+            'regular' => 1,
+            'promocion' => 2,
+            'equivalencia' => 3,
+            'desertor' => 4,
+            'itinerante' => 5,
+            'oyente' => 6,
+            default => null,
+        };
+    }
+
+    protected function mapGenero($value): ?int
+    {
+        return match (strtolower($value)) {
+            'm', 'masculino' => 1,
+            'f', 'femenino' => 2,
+            'o', 'otro' => 3,
+            default => null,
+        };
+    }
 }
+
+

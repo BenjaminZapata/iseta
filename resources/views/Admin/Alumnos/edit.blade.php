@@ -113,7 +113,8 @@
             $form->text('apellido', 'Apellido:', 'label-input-y-75', $alumno),
             $form->text('dni', 'DNI:', 'label-input-y-75', $alumno),
             $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $alumno, ['default' => $alumno->fecha_nacimiento->format('Y-m-d'), 'inputclass' => 'p-1 w-75p']),
-            $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, ['Vacio', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])
+            $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, ['Vacio', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
+            $form->select('genero', 'Género:', 'label-input-y-75', $alumno, ['Vacio', 'Masculino', 'Femenino', 'Otro'])
         ],
         'Dirección' => [
             $form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno),

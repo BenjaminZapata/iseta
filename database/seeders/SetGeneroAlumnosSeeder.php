@@ -101,7 +101,7 @@ class SetGeneroAlumnosSeeder extends Seeder
 
             foreach ($this->nombresFemeninos as $f) {
                 if (str_starts_with($nombre, $f)) {
-                    $genero = 1; // femenino
+                    $genero = 2; // femenino
                     break;
                 }
             }
@@ -109,7 +109,7 @@ class SetGeneroAlumnosSeeder extends Seeder
             if (is_null($genero)) {
                 foreach ($this->nombresMasculinos as $m) {
                     if (str_starts_with($nombre, $m)) {
-                        $genero = 0; // masculino
+                        $genero = 1; // masculino
                         break;
                     }
                 }

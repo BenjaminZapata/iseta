@@ -30,21 +30,22 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'fecha_nacimiento',
         'ciudad',
         'calle',
-        'casa_numero' ,
-        'dpto' ,
-        'piso' ,
-        'estado_civil' ,
+        'casa_numero',
+        'dpto',
+        'piso',
+        'estado_civil',
         'email',
         'nombre_institucion_secundario',
-        'titulo_anterior' ,
+        'titulo_anterior',
         'becas',
         'observaciones',
         'telefono1',
-        'telefono2' ,
+        'telefono2',
         'telefono3',
         'codigo_postal',
         'password',
-        'titulo_secundario'
+        'titulo_secundario',
+        'genero'
     ];
 
     /**
@@ -67,79 +68,93 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'fecha_nacimiento' => 'datetime',
     ];
 
-    static function existeSinPassword($data){
+    static function existeSinPassword($data)
+    {
         return Alumno::where('email', $data['email'])
-            -> where('password','0')
-            -> where('dni',$data['dni'])
-            -> first();
+            ->where('password', '0')
+            ->where('dni', $data['dni'])
+            ->first();
     }
 
-    public function verificar(){
+    public function verificar()
+    {
         $this->verificado = 1;
         $this->save();
     }
 
-    public function estadoCivilStr(){
+    public function estadoCivilStr()
+    {
 
-        $estados_civiles = ['soltero/a','casado/a','divorciado/a','viudo/a','conyuge','otro'];
+        $estados_civiles = ['soltero/a', 'casado/a', 'divorciado/a', 'viudo/a', 'conyuge', 'otro'];
 
-        if(isset($estados_civiles[$this->estado_civil])){
+        if (isset($estados_civiles[$this->estado_civil])) {
             return $estados_civiles[$this->estado_civil];
-        }else{
+        } else {
             return 'Otro';
         }
 
     }
 
-    public function cursadas(){
-        return $this -> hasMany(Cursada::class,'id_alumno');
+    public function cursadas()
+    {
+        return $this->hasMany(Cursada::class, 'id_alumno');
     }
 
-    public function carreras(){
-        return Egresado::with('carrera')->where('id_alumno',$this->id);
+    public function carreras()
+    {
+        return Egresado::with('carrera')->where('id_alumno', $this->id);
     }
 
-    public function carrerasIncriptas(){
+    public function carrerasIncriptas()
+    {
         $alumno = $this->id;
 
-        return Carrera::select('carreras.id as carrera_id','carreras.nombre as carrera_nombre')
-            ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_carrera','carreras.id')
-            ->where('egresadoinscripto.id_alumno',$alumno)
+        return Carrera::select('carreras.id as carrera_id', 'carreras.nombre as carrera_nombre')
+            ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_carrera', 'carreras.id')
+            ->where('egresadoinscripto.id_alumno', $alumno)
             ->get();
 
     }
 
-    public function examenes(){
-        return $this -> hasMany(Examen::class, 'id_alumno');
+    public function examenes()
+    {
+        return $this->hasMany(Examen::class, 'id_alumno');
     }
 
-    function textForSelect(){
+    function textForSelect()
+    {
         return $this->apellidoNombre();
     }
 
-    function elementsForDropdown($filter){
-        if($filter=='orderByApellidoNombre'){
+    function elementsForDropdown($filter)
+    {
+        if ($filter == 'orderByApellidoNombre') {
             return Alumno::select()->orderBy('apellido')->orderBy('nombre')->get();
         }
     }
 
-    public function nombreApellido(){
-        return $this->nombre.' '.$this->apellido;
+    public function nombreApellido()
+    {
+        return $this->nombre . ' ' . $this->apellido;
     }
 
-    public function apellidoNombre(){
-        return $this->apellido.' '.$this->nombre;
+    public function apellidoNombre()
+    {
+        return $this->apellido . ' ' . $this->nombre;
     }
 
-    public function dniPuntos(){
+    public function dniPuntos()
+    {
         return number_format($this->dni, 0, ',', '.');
     }
 
-    public function primerNombre(){
-        return explode(' ',$this->nombre)[0];
+    public function primerNombre()
+    {
+        return explode(' ', $this->nombre)[0];
     }
 
-    public function iniciales(){
+    public function iniciales()
+    {
         return "{$this->nombre[0]}.{$this->apellido[0]}.";
     }
 
@@ -173,28 +188,52 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         $this->attributes['calle'] = TextFormatService::ucfirst($value);
     }
 
-    function ciudades(){
+    function ciudades()
+    {
         $result = Alumno::select('ciudad')->distinct('ciudad')->get()->pluck('ciudad');
         $ciudades = ['Cualquiera'];
-        foreach($result as $ciudad){
-            if(!in_array(trim($ciudad),$ciudades)){
+        foreach ($result as $ciudad) {
+            if (!in_array(trim($ciudad), $ciudades)) {
                 $ciudades[trim($ciudad)] = trim($ciudad);
             }
         }
         return $ciudades;
     }
 
-    public function titulo_secundario(){
+    public function titulo_secundario()
+    {
         $titulo = [
             'Fotocopia del título original secundario',
             'Certificado de constancia de título en trámite',
             'Constancia de alumno del último año del nivel secundario',
-            'No entregado'];
-        if(isset($titulo [$this->titulo])){
-            return $titulo [$this->titulo];
-        }else{
+            'No entregado'
+        ];
+        if (isset($titulo[$this->titulo])) {
+            return $titulo[$this->titulo];
+        } else {
             return 'Otro';
         }
+    }
+
+    public function genero()
+    {
+        $generos = ['Masculino', 'Femenino', 'Otro'];
+
+        if (isset($generos[$this->genero])) {
+            return $generos[$this->genero];
+        } else {
+            return 'Otro';
+        }
+    }
+
+    public function generoString(): string
+    {
+        return match ((int) $this->genero) {
+            1 => 'Masculino',
+            2 => 'Femenino',
+            3 => 'Otro',
+            default => 'Desconocido',
+        };
     }
 
 
