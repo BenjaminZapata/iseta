@@ -27,9 +27,13 @@ class CursadasCarreraExcelExport implements FromCollection, WithHeadings, WithTi
         $genero = $this->mapGenero($filtros['genero'] ?? null);
         $condicion = $this->mapCondicionToInt($filtros['condicion'] ?? null);
 
-        $asignaturas = Asignatura::whereHas('carrera', fn($q) => $q->where('id', $this->carrera->id))
-            ->with(['cursadas.alumno'])
-            ->get();
+        $query = Asignatura::whereHas('carrera', fn($q) => $q->where('id', $this->carrera->id));
+
+        if (!empty($filtros['asignatura_id'])) {
+            $query->where('id', $filtros['asignatura_id']);
+        }
+
+        $asignaturas = $query->with(['cursadas.alumno'])->get();
 
         $rows = [];
 
@@ -39,31 +43,31 @@ class CursadasCarreraExcelExport implements FromCollection, WithHeadings, WithTi
 
                 if (!$alumno)
                     continue;
-
-                // Filtros manuales
+                // 🔎 Filtros manuales (opcionales)
                 if (!empty($anio) && $cursada->anio_cursada != $anio)
                     continue;
-
                 if (!is_null($condicion) && $cursada->condicion != $condicion)
                     continue;
-
                 if (!is_null($genero) && (int) $alumno->genero !== $genero)
                     continue;
 
-
+                // 📥 Agregar fila
                 $rows[] = [
                     $asignatura->nombre,
                     $alumno->apellidoNombre(),
                     $alumno->dni,
                     $cursada->condicionString(),
                     $cursada->anio_cursada,
-                    $alumno->generoString()
+                    $alumno->generoString(),
                 ];
             }
         }
 
         return collect($rows);
     }
+
+
+
 
     public function headings(): array
     {

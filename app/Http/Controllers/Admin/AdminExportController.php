@@ -32,6 +32,7 @@ class AdminExportController extends Controller
                     'genero' => strtolower($request->input('genero', '')),
                     'anio' => $request->input('anio', ''),
                     'condicion' => strtolower($request->input('condicion', '')),
+                    'asignatura_id' => $request->input('asignatura_id')
                 ]
 
             ),

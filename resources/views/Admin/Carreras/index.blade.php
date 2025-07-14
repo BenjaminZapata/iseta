@@ -53,12 +53,6 @@
                             @endif
                         </td>
                         <td>
-                            <form method="GET" action="{{ ['carrera' => $carrera->id]) }}"
-                                style="display: flex; gap: 10px; align-items: center;">
-                                <button type="submit" class="btn_blue">
-                                    <i class="ti ti-file-download"></i> Exportar cursadas
-                                </button>
-                            </form>
                         </td>
                     </tr>
                 @endforeach
