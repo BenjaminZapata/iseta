@@ -45,7 +45,7 @@
             @foreach ($mesas as $mesa)
             <tr>
                 <td>
-                    <p>{{$mesa->asignatura->nombre}}</p>
+                    <p class="bold">{{$mesa->asignatura->nombre}}</p>
                 </td>
                 <td class="w-25p">
                     <p>
