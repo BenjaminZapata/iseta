@@ -1,8 +1,4 @@
 @extends('Admin.template')
-<pre>
-    {{ print_r($aniosPorCarrera, true) }}
-</pre>
-
 
 @section('content')
     <div class="edit-form-container">
@@ -46,9 +42,9 @@
                         <div style="display: flex; flex-direction: column; gap: 8px;">
                             <select name="genero">
                                 <option value="">-- Género --</option>
-                                <option value="f">Femenino</option>
-                                <option value="m">Masculino</option>
-                                <option value="o">Otro</option>
+                                <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>Femenino</option>
+                                <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>Masculino</option>
+                                <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>Otro</option>
                             </select>
 
                             <select name="anio">
@@ -57,19 +53,27 @@
                                     $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
                                 @endphp
                                 @foreach ($aniosCalendario as $anio)
-                                    <option value="{{ $anio }}">{{ $anio }}</option>
+                                    <option value="{{ $anio }}" {{ request('anio') == $anio ? 'selected' : '' }}>
+                                        {{ $anio }}
+                                    </option>
                                 @endforeach
                             </select>
 
                             <select name="condicion">
                                 <option value="">-- Condición --</option>
-                                <option value="regular">Regular</option>
-                                <option value="libre">Libre</option>
-                                <option value="promocion">Promoción</option>
-                                <option value="equivalencia">Equivalencia</option>
-                                <option value="desertor">Desertor</option>
-                                <option value="itinerante">Itinerante</option>
-                                <option value="oyente">Oyente</option>
+                                <option value="regular" {{ request('condicion') == 'regular' ? 'selected' : '' }}>Regular
+                                </option>
+                                <option value="libre" {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre</option>
+                                <option value="promocion" {{ request('condicion') == 'promocion' ? 'selected' : '' }}>
+                                    Promoción</option>
+                                <option value="equivalencia" {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>
+                                    Equivalencia</option>
+                                <option value="desertor" {{ request('condicion') == 'desertor' ? 'selected' : '' }}>Desertor
+                                </option>
+                                <option value="itinerante" {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>
+                                    Itinerante</option>
+                                <option value="oyente" {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
+                                </option>
                             </select>
 
                             <button type="submit" class="btn_blue">
@@ -130,9 +134,11 @@
                                         <div style="display: flex; flex-direction: column; gap: 8px;">
                                             <select name="genero">
                                                 <option value="">-- Género --</option>
-                                                <option value="f">Femenino</option>
-                                                <option value="m">Masculino</option>
-                                                <option value="o">Otro</option>
+                                                <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>Femenino
+                                                </option>
+                                                <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>Masculino
+                                                </option>
+                                                <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>Otro</option>
                                             </select>
 
                                             <select name="anio">
@@ -141,19 +147,24 @@
                                                     $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
                                                 @endphp
                                                 @foreach ($aniosCalendario as $anio)
-                                                    <option value="{{ $anio }}">{{ $anio }}</option>
+                                                    <option value="{{ $anio }}" {{ request('anio') == $anio ? 'selected' : '' }}>
+                                                        {{ $anio }}
+                                                    </option>
                                                 @endforeach
                                             </select>
 
                                             <select name="condicion">
                                                 <option value="">-- Condición --</option>
-                                                <option value="regular">Regular</option>
-                                                <option value="libre">Libre</option>
-                                                <option value="promocion">Promoción</option>
-                                                <option value="equivalencia">Equivalencia</option>
-                                                <option value="desertor">Desertor</option>
-                                                <option value="itinerante">Itinerante</option>
-                                                <option value="oyente">Oyente</option>
+                                                <option value="regular" {{ request('condicion') == 'regular' ? 'selected' : '' }}>
+                                                    Regular</option>
+                                                <option value="libre" {{ request('condicion') == 'libre' ? 'selected' : '' }}>
+                                                    Libre</option>
+                                                <option value="promocion" {{ request('condicion') == 'promocion' ? 'selected' : '' }}>Promoción</option>
+                                                <option value="equivalencia" {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>Equivalencia</option>
+                                                <option value="desertor" {{ request('condicion') == 'desertor' ? 'selected' : '' }}>Desertor</option>
+                                                <option value="itinerante" {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>Itinerante</option>
+                                                <option value="oyente" {{ request('condicion') == 'oyente' ? 'selected' : '' }}>
+                                                    Oyente</option>
                                             </select>
 
                                             <button type="submit" class="btn_blue">

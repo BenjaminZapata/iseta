@@ -10,6 +10,7 @@ use App\Models\Asignatura;
 use App\Models\Carrera;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 
 
 class AdminExportController extends Controller
@@ -25,20 +26,16 @@ class AdminExportController extends Controller
     {
         $archivo = str_replace(' ', '_', trim($carrera->nombre)) . '-cursantes-' . date('Y-m-d');
 
-        return Excel::download(
-            new CursadasCarreraWrapperExport(
-                $carrera,
-                [
-                    'genero' => strtolower($request->input('genero', '')),
-                    'anio' => $request->input('anio', ''),
-                    'condicion' => strtolower($request->input('condicion', '')),
-                    'asignatura_id' => $request->input('asignatura_id')
-                ]
+        $filtros = [
+            'genero' => strtolower($request->input('genero', '')),
+            'anio' => $request->input('anio', ''),
+            'condicion' => strtolower($request->input('condicion', '')),
+            'asignatura_id' => $request->input('asignatura_id')
+        ];
 
-            ),
-            $archivo . '.xlsx'
-        );
+        return Excel::download(new CursadasCarreraWrapperExport($carrera, $filtros), $archivo . '.xlsx');
     }
+
 
     public function mostrarFormularioExportacionCursadas(Carrera $carrera)
     {
