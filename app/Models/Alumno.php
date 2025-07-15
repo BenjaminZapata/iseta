@@ -44,7 +44,8 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'telefono3',
         'codigo_postal',
         'password',
-        'titulo_secundario'
+        'titulo_secundario',
+        'genero'
     ];
 
     /**
@@ -79,11 +80,6 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     {
         $this->verificado = 1;
         $this->save();
-    }
-
-    public function egresado()
-    {
-        return $this->hasMany(Egresado::class, 'id_alumno');
     }
 
     public function estadoCivilStr()
@@ -216,4 +212,27 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             return 'Otro';
         }
     }
+
+    public function genero()
+    {
+        $generos = ['Masculino', 'Femenino', 'Otro'];
+
+        if (isset($generos[$this->genero])) {
+            return $generos[$this->genero];
+        } else {
+            return 'Otro';
+        }
+    }
+
+    public function generoString(): string
+    {
+        return match ((int) $this->genero) {
+            1 => 'Masculino',
+            2 => 'Femenino',
+            3 => 'Otro',
+            default => 'Desconocido',
+        };
+    }
+
+
 }

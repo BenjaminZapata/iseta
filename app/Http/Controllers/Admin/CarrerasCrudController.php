@@ -32,9 +32,30 @@ class CarrerasCrudController extends BaseController
     public function index(Request $request)
     {
         $this->setFilters($request);
-        $this->data['carreras'] = $this->carreraRepo->index($request);
+
+        $carreras = $this->carreraRepo->index($request);
+
+        // Obtener años disponibles para cada carrera
+        $aniosPorCarrera = [];
+
+        foreach ($carreras as $carrera) {
+            $anios = \DB::table('cursadas')
+                ->where('id_carrera', $carrera->id)
+                ->whereNotNull('anio_cursada')
+                ->distinct()
+                ->orderByDesc('anio_cursada')
+                ->pluck('anio_cursada')
+                ->toArray();
+
+            $aniosPorCarrera[$carrera->id] = $anios;
+        }
+
+        $this->data['carreras'] = $carreras;
+        $this->data['aniosPorCarrera'] = $aniosPorCarrera;
+
         return view('Admin.Carreras.index', $this->data);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -69,15 +90,28 @@ class CarrerasCrudController extends BaseController
     public function edit(Request $request, Carrera $carrera)
     {
         $carrera->load('asignaturas');
-        return view('Admin.Carreras.edit', ['carrera' => $carrera]);
+
+        // Obtener los años disponibles de cursadas para esta carrera
+        $anios = \DB::table('cursadas')
+            ->where('id_carrera', $carrera->id)
+            ->whereNotNull('anio_cursada')
+            ->distinct()
+            ->orderByDesc('anio_cursada')
+            ->pluck('anio_cursada')
+            ->toArray();
+
+        return view('Admin.Carreras.edit', [
+            'carrera' => $carrera,
+            'aniosPorCarrera' => [$carrera->id => $anios],
+        ]);
     }
+
 
 
     /**
      * Update the specified resource in storage.
      */
     public function update(EditarCarreraRequest $request, Carrera $carrera)
-
     {
         $datos = $request->validated();
 
@@ -113,21 +147,7 @@ class CarrerasCrudController extends BaseController
     }
     public function addAsignatura(Request $request, Carrera $carrera)
     {
-        try {
-            $data = [
-                'id_carrera' => $request->carrera_id,
-                'id_asignatura' => $request->asignatura_id,
-                'anio' => $request->anio,
-                'tipo_modulo' => $request->tipo_modulo,
-                'carga_horaria' => $request->carga_horaria,
-            ];
-            log::debug($data);
-            $carrera->asignaturas()->attach(["asignatura" => $data]);
-        } catch (\Exception $e) {
-            Log::error($e);
-            return redirect()->back()->with('error', 'No se pudo agregar la asignatura');
-        }
-
+        $carrera->asignaturas()->attach($request->asignatura);
         return redirect()->back()->with('mensaje', 'Se agrego la asignatura');
     }
 

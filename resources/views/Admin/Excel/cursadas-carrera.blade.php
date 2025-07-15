@@ -1,37 +1,74 @@
-<br>
+<!DOCTYPE html>
+<html lang="es">
 
-<table>
+<head>
+    <meta charset="UTF-8">
+    <title>Cursadas - {{ $carrera->nombre }}</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 12px;
+        }
 
-    <thead>
-      
-        <tr>
-            <th></th>
-            <th colspan="3">Alumno</th>
-            <th>Dni</th>
-            <th>Condicion</th>
-            <th>Año</th>
-        </tr>
-    </thead>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
 
-    <tbody>
-      @foreach ($asignaturas as $asignatura)
-      <tr></tr>
-        <tr>
-          <td></td>
-          <td colspan="5">{{$asignatura->nombre}}</td>
-        </tr>
-        
-        @foreach ($asignatura->cursadas as $cursada)
-            
+        th,
+        td {
+            border: 1px solid #444;
+            padding: 4px 6px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #eee;
+        }
+
+        h2 {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Carrera: {{ $carrera->nombre }}</h2>
+
+    <table>
+        <thead>
             <tr>
-                <td></td>
-                <td colspan="3">{{$cursada->alumno->apellidoNombre()}}</td>
-                <td>{{$cursada->alumno->dni}}</td>
-                <td>{{$cursada->condicionString()}}</td>
-                <td>{{$cursada->anio_cursada}}</td>
+                <th>#</th>
+                <th colspan="2">Alumno</th>
+                <th>DNI</th>
+                <th>Género</th>
+                <th>Condición</th>
+                <th>Año</th>
             </tr>
-            @endforeach
-        @endforeach
-    </tbody>
+        </thead>
+        <tbody>
+            @foreach ($asignaturas as $asignatura)
+                <tr>
+                    <td colspan="7"><strong>Asignatura: {{ $asignatura->nombre }}</strong></td>
+                </tr>
 
-</table>
+                @php $i = 1; @endphp
+                @foreach ($asignatura->cursadas as $cursada)
+                    <tr>
+                        <td>{{ $i++ }}</td>
+                        <td colspan="2">{{ $cursada->alumno->apellidoNombre() }}</td>
+                        <td>{{ $cursada->alumno->dni }}</td>
+                        <td>{{ ucfirst($cursada->alumno->genero ?? 'No especificado') }}</td>
+                        <td>{{ $cursada->condicionString() }}</td>
+                        <td>{{ $cursada->anio_cursada }}</td>
+                    </tr>
+                @endforeach
+            @endforeach
+        </tbody>
+    </table>
+
+</body>
+
+</html>
