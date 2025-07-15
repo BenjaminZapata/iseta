@@ -21,9 +21,10 @@ class CursadaRegularService
 
     public function cursadasCursando()
     {
+
         $carreras = $this->alumno->carreras()
-        ->where('estado', 0)
-        ->get();
+            ->where('estado', 0)
+            ->get();
 
 
         $cursadasLista = collect();
@@ -38,26 +39,28 @@ class CursadaRegularService
 
     public function regular(Cursada $cursada)
     {
-       // $inicio = Carbon::parse($this->config['fecha_inicial_rematriculacion']);
-      //  $final = Carbon::parse($this->config['fecha_final_rematriculacion']);
-      //  $fecha_inscripto = Carbon::parse($cursada->created_at);
         $inicio = Carbon::parse($this->config['fecha_final_rematriculacion'])->format('Y');
-        $fecha_inscripto = ($cursada->anio_cursada)+1;
-       // $fecha_inscripto->addYear();
-       // error_log($fecha_inscripto);
-        //return $fecha_inscripto->between($inicio, $final);
+        $fecha_inscripto = ($cursada->anio_cursada) + 1;
         return $fecha_inscripto == $inicio;
-
     }
 
 
     public function esCursadaRegular()
     {
+        $egresados = $this->alumno->egresado->all();
+        foreach ($egresados as $egresado) {
+            $inscripto = $egresado->anio_inscripcion == $this->config['anio_ciclo_actual'];
+            Log::debug($egresado->alumno->cursadas->first());
+            if ($inscripto) {
+                return ["cursada" => $egresado->alumno->cursadas->first(), "inscripto" => true];
+            }
+        }
+
         $cursadas = $this->cursadasCursando();
 
         foreach ($cursadas as $cursada) {
-            if (($cursada->aprobada == '5' || $cursada->aprobada == '1' || $cursada->aprobada == '4') && ($this->regular($cursada)) ){
-                return $cursada->id_carrera;
+            if (($cursada->aprobada == '5' || $cursada->aprobada == '1' || $cursada->aprobada == '4') && ($this->regular($cursada))) {
+                return ["cursada" => $cursada, "inscripto" => false];
             }
         }
         return false;

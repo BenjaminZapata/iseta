@@ -2,7 +2,7 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 1,
   "[blade]": {
-    "editor.defaultFormatter": "shufo.vscode-blade-formatter"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "todo-tree.general.tags": ["FIXME", "WARN", "COMPLETE", "TODO"],
 

@@ -44,11 +44,11 @@
                 </div>
             </div>
             <div class="px-3 pt-4">
-                <h1><strong> CONSTANCIA DE ALUMNO REGULAR</strong></h1>
+                <h1><strong> CONSTANCIA DE ALUMNO @if ($inscripto) INSCRIPTO @else REGULAR @endif</strong></h1>
                 <p class="pt-3">Se deja constancia de que, a la fecha,
                     <strong> {{Str::upper($alumno->apellido)}} {{Str::upper($alumno->nombre)}} </strong>
                     DNI <strong> {{$alumno->dni}} es alumno regular </strong> del <strong> Instituto Superior Experimental de Tecnologia Alimentaria, </strong>
-                    de la Carrera <strong> nombre_carrera </strong>, curso <strong> anio_carrera. </strong>
+                    de la Carrera <strong> {{$cursada->carrera->nombre}} </strong>, curso <strong> {{$cursada->asignatura->anio}} </strong>
                 </p>
                 <p>
                     <br>
