@@ -203,7 +203,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         return $ciudades;
     }
 
-    public function titulo_secundario()
+    public function getTituloSecundarioTexto()
     {
         $titulo = [
             'Fotocopia del título original secundario',
@@ -211,12 +211,9 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             'Constancia de alumno del último año del nivel secundario',
             'No entregado'
         ];
-        if (isset($titulo[$this->titulo])) {
-            return $titulo[$this->titulo];
-        } else {
-            return 'Otro';
-        }
+        return $titulo[$this->titulo] ?? 'Otro';
     }
+
 
     public function genero()
     {
