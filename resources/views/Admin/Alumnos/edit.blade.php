@@ -44,17 +44,7 @@
         'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
     ]) ?>
     </div>
-    <div class="botones-derecha">
-        <div class="botones-derecha">
-            <button class="btn_sky">
-                <a href="{{route('admin.alumnos.regular', ['alumno' => $alumno->id], ['config' => $config])}}">
-                    <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Certificado
-            </button>
-            <a href="{{ route('admin.alumnos.analitico.pdf', ['alumno' => $alumno->id]) }}" target="_blank" class="btn_sky">
-                <i class="fa-solid fa-file-pdf" style="font-size: 1.3em; margin-right: 8px;"></i> Abrir Analítico
-            </a>
-        </div>
-    </div>
+
     </div>
 
     <div class="matricular">
