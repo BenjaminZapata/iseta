@@ -68,6 +68,11 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'fecha_nacimiento' => 'datetime',
     ];
 
+
+    public function egresado()
+    {
+        return $this->hasMany(Egresado::class, 'id_alumno');
+    }
     static function existeSinPassword($data)
     {
         return Alumno::where('email', $data['email'])
@@ -233,6 +238,4 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             default => 'Desconocido',
         };
     }
-
-
 }

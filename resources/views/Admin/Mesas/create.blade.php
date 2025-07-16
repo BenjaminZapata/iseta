@@ -11,15 +11,15 @@
             <div class="perfil__header">
                 <h2>Crear nueva mesa</h2>
             </div>
-           
+
             <div class="perfil__info">
                 <form method="post" action="{{route('admin.mesas.store')}}">
-                
+
                 <div class="perfil_dataname">
                     <label>Carrera:</label>
                     <select class="campo_info rounded" name="carrera" id="carrera_select">
                         <option value="any">Selecciona una carrera</option>
-                        
+
                         @foreach ($carreras as $carrera)
                         @php
                             $selected = $precargados['carrera'] == $carrera->id || old('carrera')==$carrera->id;
@@ -38,7 +38,7 @@
                 @csrf
 
                 <div class="perfil_dataname">
-                    
+
                     @php
                         $asig=null;
                         if($carrera_previa){
@@ -49,7 +49,7 @@
 
                     <label>Materia:</label>
                     <select class="campo_info rounded" id="asignatura_select" name="id_asignatura">
-   
+
                         @if ($precargados['asignatura'])
                             <option selected value="{{$precargados['asignatura']->id}}">{{$precargados['asignatura']->nombre}}</option>
                         @elseif($asig)
@@ -70,7 +70,7 @@
                         @endforeach
                     </select>
                 </div>
-     
+
                 <div class="perfil_dataname">
                     <label>Profesor 1:</label>
                     <select class="profesor campo_info rounded" name="prof_vocal_1">
@@ -104,12 +104,8 @@
                     <label>Fecha:</label>
                     <input class="campo_info rounded" value="{{old('fecha')?old('fecha'):''}}" type="datetime-local" name="fecha">
                 </div>
-
-                <div class="upd"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear</button></div>
                 </form>
-                <?= $form->generate(route('admin.mesas.store'),'post',[
-                    
-                ]) ?>
+                <?= $form->generate(route('admin.mesas.store'), 'post', []) ?>
             </div>
         </div>
     </div>
