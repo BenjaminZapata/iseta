@@ -34,11 +34,11 @@
             $form->text('becas', 'Becas:', 'label-input-y-75', $alumno),
             $form->text('nombre_institucion_secundario', 'Secundaria:', 'label-input-y-75', $alumno),
             $form->select('titulo_secundario', 'Titulo secundario:', 'label-input-y-75', $alumno, [
-                'vacio',
-                'Fotocopia del título original secundario',
-                'Certificado de constancia de título en trámite',
-                'Constancia de alumno del último año del nivel secundario',
-                'No entregado'
+                0 => 'Fotocopia del título original secundario',
+                1 => 'Certificado de constancia de título en trámite',
+                2 => 'Constancia de alumno del último año del nivel secundario',
+                3 => 'No entregado',
+                4 => 'Otro'
             ])
         ],
         'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)]
