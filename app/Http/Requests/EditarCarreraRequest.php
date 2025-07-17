@@ -22,10 +22,10 @@ class EditarCarreraRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "nombre" => ['required'],
+            'nombre' => ['required', 'regex:/^[^\d]*$/'],
             "resolucion" => ['required'],
-            "anio_apertura" => ['required','numeric'],
-            "anio_fin" => ['nullable','numeric'],
+            "anio_apertura" => ['required', 'numeric'],
+            "anio_fin" => ['nullable', 'numeric'],
             "observaciones" => ['nullable'],
             "vigente" => ['nullable'],
             "resolucion_archivo" => ['nullable']

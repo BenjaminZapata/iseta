@@ -14,7 +14,7 @@ class ExamenesCrudController extends Controller
 {
     public function __construct()
     {
-        $this -> middleware('auth:admin');
+        $this->middleware('auth:admin');
     }
 
 
@@ -24,27 +24,27 @@ class ExamenesCrudController extends Controller
     public function store(Request $request, AlumnoInscripcionService $inscripcionService)
     {
 
-        if(!$request->has('id_alumno'))
-            return redirect() -> back() -> with('error','No has seleccionado ningun alumno');
+        if (!$request->has('id_alumno'))
+            return redirect()->back()->with('error', 'No has seleccionado ningun alumno');
 
         $mesa = Mesa::find($request->input('id_mesa'));
         $alumno = Alumno::find($request->input('id_alumno'));
 
         $comprobacion = $inscripcionService->puedeInscribirse($mesa, $alumno);
 
-        if(!$comprobacion['success'])
-            return \redirect()->back()->with('error',$comprobacion['mensaje']);
+        if (!$comprobacion['success'])
+            return \redirect()->back()->with('error', $comprobacion['mensaje']);
 
         Examen::create([
             'id_alumno' => $alumno->id,
             'id_mesa' => $mesa->id,
             'id_asignatura' => $mesa->id_asignatura,
-            'nota'=> 0,
+            'nota' => 0,
             'aprobado' => 0,
             'fecha' => now()
         ]);
 
-        return redirect() -> back() -> with('mensaje','Se ha inscrito al alumno');
+        return redirect()->back()->with('mensaje', 'Se ha inscrito al alumno');
     }
 
 
@@ -61,24 +61,28 @@ class ExamenesCrudController extends Controller
      */
     public function update(Request $request, Examen $examen)
     {
+        $validatedData = $request->validate([
+            'nota' => 'nullable|numeric|min:0|max:10',
+            'ausente' => 'nullable'
+        ]);
 
-        $examen->update($request->all());
-
-        if($request->ausente){
+        if ($request->ausente) {
             $examen->nota = 0;
             $examen->aprobado = 3;
-        }elseif($request->nota > 4){
+        } elseif ($request->nota > 4) {
+            $examen->nota = $request->nota;
             $examen->aprobado = 1;
-        }else
+        } else {
+            $examen->nota = $request->nota;
             $examen->aprobado = 2;
-
+        }
         $examen->save();
 
 
-        if($request->has('redirect'))
-            return redirect()->to($request->input('redirect'))->with('mensaje','Se modificó el examen');
+        if ($request->has('redirect'))
+            return redirect()->to($request->input('redirect'))->with('mensaje', 'Se modificó el examen');
         else
-            return redirect()->back()->with('mensaje','Se modificó el examen');
+            return redirect()->back()->with('mensaje', 'Se modificó el examen');
 
     }
 
@@ -90,28 +94,32 @@ class ExamenesCrudController extends Controller
         $mesa = Mesa::where('id', $examen->id_mesa)->first();
         $examen->delete();
 
-        if(!$mesa)
-            return redirect() -> route('admin.mesas.edit',['mesa'=>$mesa->id]) -> with('mensaje', 'Se ha eliminado el examen');
+        if (!$mesa)
+            return redirect()->route('admin.mesas.edit', ['mesa' => $mesa->id])->with('mensaje', 'Se ha eliminado el examen');
         else
-            return redirect() -> route('admin.mesas.index') -> with('mensaje', 'Se ha eliminado el examen');
+            return redirect()->route('admin.mesas.index')->with('mensaje', 'Se ha eliminado el examen');
     }
 
-    function modificarNota(Request $request, Examen $examen){
-        if(!$request->has('nota')) {
+    function modificarNota(Request $request, Examen $examen)
+    {
+        if (!$request->has('nota')) {
             return \redirect()->back()->with('Ingresa una nota');
         }
 
-        if($request->input('nota') == 'a'){
+        if ($request->input('nota') == 'a') {
             $examen->aprobado = 3;
             $examen->save();
             return \redirect()->back()->with('Se ha actualizado la nota');
         }
 
-        if(!is_numeric($request->input('nota')) || ($request->input('nota') <0 && $request->input('nota') > 10)) {
-            return \redirect()->back()->with('error', 'La nota debe estar entre 0 y 10');
+        $nota = $request->input('nota');
+
+        if (!is_numeric($nota) || $nota < 0 || $nota > 10) {
+            return redirect()->back()->with('error', 'La nota debe estar entre 0 y 10');
         }
+
         $examen->nota = $request->input('nota');
-        $examen->aprobado = $request->input('nota')>=4? 1 : 2;
+        $examen->aprobado = $request->input('nota') >= 4 ? 1 : 2;
         $examen->save();
         return \redirect()->back()->with('mensaje', 'Se ha actualizado la nota');
     }

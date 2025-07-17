@@ -17,42 +17,50 @@ class Examen extends Model
         'acta',
         'nota',
         'fecha',
-        'aprobado'
+        'aprobado',
+        'tipo_final'
     ];
     public $timestamps = false;
     use HasFactory;
 
-    public function mesa(){
-        return $this -> belongsTo(Mesa::class,'id_mesa');
+    public function mesa()
+    {
+        return $this->belongsTo(Mesa::class, 'id_mesa');
     }
 
-    public function carrera(){
-        return $this -> belongsTo(Carrera::class,'id_carrera');
+    public function carrera()
+    {
+        return $this->belongsTo(Carrera::class, 'id_carrera');
     }
 
-    public function alumno(){
-        return $this -> belongsTo(Alumno::class,'id_alumno');
+    public function alumno()
+    {
+        return $this->belongsTo(Alumno::class, 'id_alumno');
     }
 
-    public function asignatura(){
-        return $this -> belongsTo(Asignatura::class,'id_asignatura');
+    public function asignatura()
+    {
+        return $this->belongsTo(Asignatura::class, 'id_asignatura');
     }
 
-    public function fecha(){
-        if( $this-> fecha ){
-           return $this->fecha;
+    public function fecha()
+    {
+        if ($this->fecha) {
+            return $this->fecha;
         }
 
         $mesa = Mesa::where('id', $this->id_mesa)
-           -> first();
+            ->first();
 
-        if( !$mesa ) return null;
+        if (!$mesa)
+            return null;
 
         return $mesa->fecha;
-     }
+    }
 
-    public function tipoFinal(){
-        return match($this->tipo_final){
+    public function tipoFinal()
+    {
+        return match ($this->tipo_final) {
             1 => "Escrito",
             2 => "Oral",
             3 => "Promocionado",
@@ -61,10 +69,14 @@ class Examen extends Model
         };
     }
 
-    public function nota(){
-        if($this->aprobado == 3) return 'Ausente';
-        else if($this->nota <= 0) return 'Aun no rendido';
-        else return $this->nota;
+    public function nota()
+    {
+        if ($this->aprobado == 3)
+            return 'Ausente';
+        else if ($this->nota <= 0)
+            return 'Aun no rendido';
+        else
+            return $this->nota;
     }
 
 }

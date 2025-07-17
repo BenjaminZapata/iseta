@@ -23,9 +23,9 @@ class EditarAsignaturaRequest extends FormRequest
     {
         return [
             'nombre' => ['required'],
-            'tipo_modulo' => ['nullable'],
-            'carga_horaria' => ['required'],
-            'anio' => ['required'],
+            'tipo_modulo' => ['required'],
+            'carga_horaria' => ['required', 'regex:/^\d+$/'],
+            'anio' => ['required', 'regex:/^\d+$/'],
             'observaciones' => ['nullable'],
         ];
     }

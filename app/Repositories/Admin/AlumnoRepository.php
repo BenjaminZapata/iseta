@@ -8,44 +8,47 @@ use App\Models\Configuracion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
-class AlumnoRepository{
+class AlumnoRepository
+{
 
     public $config;
-    public $availableFiels = ['alumno','dni','email','ciudad','telefono1'];
+    public $availableFiels = ['alumno', 'dni', 'email', 'ciudad', 'telefono1'];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->config = Configuracion::todas();
     }
 
-    function index($request){
+    function index($request)
+    {
         $idsQuery = Alumno::select('alumnos.id')
-        ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id')
-        ->leftJoin('carreras','carreras.id', '=', 'egresadoinscripto.id_carrera');
+            ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id')
+            ->leftJoin('carreras', 'carreras.id', '=', 'egresadoinscripto.id_carrera');
 
-        if($request->has('filter_carrera_id') && $request->input('filter_carrera_id') != 0){
+        if ($request->has('filter_carrera_id') && $request->input('filter_carrera_id') != 0) {
             $idsQuery->where('egresadoinscripto.id_carrera', $request->input('filter_carrera_id'));
         }
 
-        if($request->has('filter_ciudad') && $request->input('filter_ciudad') != 0){
+        if ($request->has('filter_ciudad') && $request->input('filter_ciudad') != 0) {
             $idsQuery->where('alumnos.ciudad', $request->input('filter_ciudad'));
         }
 
-        if($request->has('filter_estado_civil') && $request->input('filter_estado_civil') != 0){
-           $idsQuery->where('alumnos.estado_civil', $request->input('filter_estado_civil'));
+        if ($request->has('filter_estado_civil') && $request->input('filter_estado_civil') != 0) {
+            $idsQuery->where('alumnos.estado_civil', $request->input('filter_estado_civil'));
         }
 
-        if($request->has('filter_search_box') && ''!=$request->input('filter_search_box') && in_array($request->input('filter_field'),$this->availableFiels)){
-            if($request->input('filter_field') == 'alumno'){
-                $word = str_replace(' ','%',$request->input('filter_search_box'));
+        if ($request->has('filter_search_box') && '' != $request->input('filter_search_box') && in_array($request->input('filter_field'), $this->availableFiels)) {
+            if ($request->input('filter_field') == 'alumno') {
+                $word = str_replace(' ', '%', $request->input('filter_search_box'));
                 $idsQuery->whereRaw("(CONCAT(alumnos.nombre,' ',alumnos.apellido) LIKE '%$word%' OR (CONCAT(alumnos.apellido,' ',alumnos.nombre) LIKE '%$word%'))");
-            }else{
-                $idsQuery->where($request->input('filter_field'), 'LIKE', '%'.$request->input('filter_search_box').'%');
+            } else {
+                $idsQuery->where($request->input('filter_field'), 'LIKE', '%' . $request->input('filter_search_box') . '%');
             }
 
         }
 
-        if($request->has('filter_titulo') && $request->input('filter_titulo') != 0){
-           $idsQuery->where('alumnos.titulo', $request->input('filter_titulo'));
+        if ($request->has('filter_titulo') && $request->input('filter_titulo') != 0) {
+            $idsQuery->where('alumnos.titulo', $request->input('filter_titulo'));
         }
 
 
@@ -55,7 +58,13 @@ class AlumnoRepository{
             ->whereIn('alumnos.id', $ids);
 
         $query->orderBy('apellido')->orderBy('nombre');
-        return $query->paginate($this->config['filas_por_tabla']);
+
+        $filasPorTabla = $this->config['filas_por_tabla'] ?? 15;
+
+        if (!is_numeric($filasPorTabla)) {
+            $filasPorTabla = 15; // Default value if not numeric
+        }
+        return $query->paginate((int) $filasPorTabla);
     }
 
     // agregar una institucion secundaraia a un alumno
@@ -70,7 +79,7 @@ class AlumnoRepository{
     public function actualizarInstitucionSecundaria(int $id, string $nuevoNombre): ?Alumno
     {
         $alumno = Alumno::query()->find($id);
-        if (!$alumno){
+        if (!$alumno) {
             return null;
         }
 

@@ -21,31 +21,24 @@ class AdminPdfController extends Controller
 {
     function acta_volante(Request $request, Mesa $mesa)
     {
-
-        $alumnos = [];
-
-        $examenes = Examen::where('id_mesa', $mesa->id)->get();
-
-        foreach ($examenes as $examen) {
-            $cursadas = Cursada::where('id_alumno', $examen->id_alumno)
-                ->where('id_asignatura', $examen->id_asignatura)
-                ->get();
-
-            foreach ($cursadas as $cursada) {
-                if ($cursada->condicion == 1) {
-                    $alumnos[] = Alumno::find($examen->id_alumno);
-                }
-            }
-        }
-        // $alumnos = Mesa::select('examenes.id as id_examen','alumnos.nombre','alumnos.dni','alumnos.apellido','examenes.nota')
-        // -> join('examenes', 'examenes.id_mesa','mesas.id')
-        // -> join('alumnos', 'alumnos.id','examenes.id_alumno')
-        // -> where('mesas.id', $mesa->id)
-        // -> get();
-
+        // Traigo todos los exámenes de esa mesa que cumplan con condicion == 1
+        $examenes = Examen::with('alumno')
+            ->where('id_mesa', $mesa->id)
+            ->get()
+            ->filter(function ($examen) {
+                // Verifico que exista cursada con condicion == 1 para el alumno y asignatura
+                return Cursada::where('id_alumno', $examen->id_alumno)
+                    ->where('id_asignatura', $examen->id_asignatura)
+                    ->where('condicion', 1)
+                    ->exists();
+            });
 
         return pdf()
-            ->view('pdf.acta-volante', compact('alumnos') + ['mesa' => $mesa, 'condicion' => ''])
+            ->view('pdf.acta-volante', [
+                'examenes' => $examenes,
+                'mesa' => $mesa,
+                'condicion' => 'REGULAR',
+            ])
             ->name('acta-volante-regular.pdf');
     }
 
@@ -68,8 +61,9 @@ class AdminPdfController extends Controller
         }
 
         return pdf()
-            ->view('pdf.acta-volante', compact('alumnos') + ['mesa' => $mesa, 'condicion' => 'PROMOCION'])
+            ->view('pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'PROMOCION'])
             ->name('acta-volante-promocion.pdf');
+
     }
 
     public function actaVolanteLibre(Request $request, Mesa $mesa)
@@ -95,8 +89,9 @@ class AdminPdfController extends Controller
             }
         }
         return pdf()
-            ->view('Pdf.acta-volante', compact('alumnos') + ['mesa' => $mesa, 'condicion' => 'LIBRE'])
+            ->view('pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'LIBRE'])
             ->name('acta-volante-libre.pdf');
+
     }
     public function constanciaRegular(Alumno $alumno, Carrera $carrera, Configuracion $config)
     {
