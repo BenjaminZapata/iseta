@@ -23,19 +23,19 @@ class CrearAlumnoRequest extends FormRequest
     {
         return [
             'dni' => ['required', 'numeric', 'max:999999999'],
-            'nombre' => ['required', 'regex:/^[a-zA-Z]+$/'],
-            'apellido' => ['required', 'regex:/^[a-zA-Z]+$/'],
+            'nombre' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
+            'apellido' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
             'ciudad' => ['nullable', 'regex:/^[\pL\pN\s]+$/u'],
-            'calle' => ['nullable', 'regex:/^[\pL\pN\s]+$/u'],
-            'casa_numero' => ['nullable', 'numeric'],
+            'calle' => ['nullable', 'regex:/^[\pL]+$/u'],
+            'casa_numero' => ['nullable', 'numeric', 'max:100000'],
             'dpto' => ['nullable'],
             'piso' => ['nullable'],
             'estado_civil' => ['required'],
-            'email' => ['nullable', 'unique:alumnos', 'regex:/^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,6}$/'],
+            'email' => ['nullable', 'regex:/^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,6}$/'],
             'nombre_institucion_secundario' => ['required', 'string', 'max:255', 'regex:/^[A-Za-záéíóúÁÉÍÓÚÑñ\s\d]+$/'],
             'titulo_anterior' => ['nullable', 'regex:/^[\pL\s]+$/u'],
-            'becas' => ['numeric', 'nullable'],
+            'becas' => ['nullable'],
             'observaciones' => ['nullable'],
             'telefono1' => ['nullable', 'numeric'],
             'telefono2' => ['nullable', 'numeric'],
@@ -44,6 +44,7 @@ class CrearAlumnoRequest extends FormRequest
             'estado' => ['nullable'],
             'titulo_secundario' => ['required'],
             'genero' => ['required']
+
         ];
     }
     public function messages()
