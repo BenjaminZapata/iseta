@@ -8,44 +8,44 @@
             </div>
             <div class="perfil__info">
                 <?= $form->generate(
-        route('admin.carreras.update', ['carrera' => $carrera->id]),
-        'put',
-        [
-            'Información' => [
-                $form->text(
-                    'nombre',
-                    'Nombre:',
-                    'label-input-y-75',
-                    $carrera
-                ),
-                $form->text(
-                    'resolucion',
-                    'Resolucion:',
-                    'label-input-y-75',
-                    $carrera
-                ),
-                $form->text(
-                    'anio_apertura',
-                    'Año de apertura:',
-                    'label-input-y-75',
-                    $carrera
-                ),
-                $form->text(
-                    'anio_fin',
-                    'Año de cierre:',
-                    'label-input-y-75',
-                    $carrera
-                ),
-                $form->textarea(
-                    'observaciones',
-                    'Observaciones:',
-                    'label-input-y-75',
-                    $carrera
-                ),
-                $form->texthidden(url()->previous()),
-            ],
-        ]
-    ) ?>
+                  route('admin.carreras.update', ['carrera' => $carrera->id]),
+                  'put',
+                  [
+                    'Información' => [
+                      $form->text(
+                        'nombre',
+                        'Nombre:',
+                        'label-input-y-75',
+                        $carrera
+                      ),
+                      $form->text(
+                        'resolucion',
+                        'Resolucion:',
+                        'label-input-y-75',
+                        $carrera
+                      ),
+                      $form->text(
+                        'anio_apertura',
+                        'Año de apertura:',
+                        'label-input-y-75',
+                        $carrera
+                      ),
+                      $form->text(
+                        'anio_fin',
+                        'Año de cierre:',
+                        'label-input-y-75',
+                        $carrera
+                      ),
+                      $form->textarea(
+                        'observaciones',
+                        'Observaciones:',
+                        'label-input-y-75',
+                        $carrera
+                      ),
+                      $form->texthidden(url()->previous()),
+                    ],
+                  ]
+                ) ?>
             </div>
         </div>
 
@@ -54,7 +54,7 @@
                 <a href="{{ route('admin.carreras.add', ['carrera' => $carrera->id]) }}">
                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar asignatura</button>
                 </a>
-                <a href="{{ route('admin.asignaturas.create') }}">
+                <a href="{{ route('admin.asignaturas.create', ['carrera' => $carrera->id]) }}">
                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear asignatura</button>
                 </a>
 

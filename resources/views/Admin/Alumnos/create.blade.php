@@ -1,5 +1,4 @@
-@extends('Admin.tem
-plate')
+@extends('Admin.template')
 
 @section('content')
     <div>

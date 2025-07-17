@@ -85,10 +85,16 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::get('carreras/add', [CarrerasCrudController::class, 'addAsignaturaView'])
         ->name('admin.carreras.add');
 
+    Route::get('carreras/create_asignatura/{carrera}', [AsignaturasCrudController::class, 'createAsignatura'])->name('admin.asignaturas.createAsignatura');
+    Route::post('carreras/create_asignatura/{carrera}', [AsignaturasCrudController::class, 'store'])->name('admin.asignaturas.storeAsignatura');
+
+
 
     Route::resource('asignaturas', AsignaturasCrudController::class, ['as' => 'admin'])->missing(function () {
         return redirect()->route('admin.asignaturas.index')->with('aviso', 'La asignatura no existe o ha sido eliminada');
     })->except('show');
+
+    Route::get('asignaturas/create/{carrera}', [AsignaturasCrudController::class, 'createAsignatura'])->name('admin.asignaturas.createAsignatura');
 
     Route::get('cursadas', [CursadasAdminController::class, 'index'])
         ->name('admin.cursadas.index');
