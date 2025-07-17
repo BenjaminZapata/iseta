@@ -10,16 +10,19 @@ use App\Models\Configuracion;
 use PhpParser\Node\Expr\FuncCall;
 
 
-class CarreraRepository{
+class CarreraRepository
+{
 
     public $config;
-    public $availableFiels = ['nombre','asignatura'];
+    public $availableFiels = ['nombre', 'asignatura'];
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->config = Configuracion::todas();
     }
 
-    public function index($request){
+    public function index($request)
+    {
         return Carrera::query()
             ->with('asignaturas') // eager loading
             ->when(
@@ -42,12 +45,15 @@ class CarreraRepository{
                     }
                 }
             )
+            ->orderByDesc('vigente')
+            ->orderByDesc('anio_apertura')
             ->orderBy('nombre')
-            ->paginate($this->config['filas_por_tabla']);
 
+            ->paginate($this->config['filas_por_tabla']);
     }
 
-    public function setAsignatura($asignatura, $carrera){
+    public function setAsignatura($asignatura, $carrera)
+    {
         // Implement logic to associate asignatura with carrera if needed
         // Example: return $carrera->asignaturas()->attach($asignatura->id);
     }
@@ -55,7 +61,7 @@ class CarreraRepository{
     public function GETresolucion($carrera)
     {
         return Carrera::where('id', $carrera->id)
-            ->select('nombre','resolucion', 'vigente', 'resolucion_archivo')
+            ->select('nombre', 'resolucion', 'vigente', 'resolucion_archivo')
             ->first();
     }
 
