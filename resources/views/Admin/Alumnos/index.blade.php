@@ -12,6 +12,7 @@
             <button class="btn_blue">
                 <i class="ti ti-circle-plus"></i>Agregar alumno</button>
         </a>
+        {{-- FILTROS --}}
         <?= $filtergen->generate('admin.alumnos.index', $filters, [
             'dropdowns' => [
                 $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
