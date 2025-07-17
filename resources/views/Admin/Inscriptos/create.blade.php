@@ -1,77 +1,88 @@
 @extends('Admin.template')
 
 @section('content')
-@php
-    $alumno_id = request()->get('alumno_id');
-    $alumno_preseleccionado = $alumnos->firstWhere('id', $alumno_id);
-@endphp
 
-<div>
-    <div class="perfil_one br">
-        <div class="perfil__header">
-            <h2>Crear nuevo inscripto</h2>
-        </div>
-        <div class="perfil__info">
-            <form method="post" action="{{ route('admin.inscriptos.store') }}">
-                @csrf
+    @php
+        $alumno_id = request()->get('alumno_id');
+        $alumno_preseleccionado = null;
 
-                <div class="perfil_dataname">
-                    <label>Alumno:</label>
-                    @if($alumno_preseleccionado)
-                        <div class="campo_info rounded" style="background-color: #f0f0f0; padding: 8px;">
-                            {{ $alumno_preseleccionado->apellidoNombre() }}
-                        </div>
-                        <input type="hidden" name="id_alumno" value="{{ $alumno_preseleccionado->id }}">
-                    @else
-                        <select class="campo_info rounded" name="id_alumno">
-                            <option value="">Selecciona un alumno</option>
-                            @foreach ($alumnos as $alumno)
-                                <option value="{{ $alumno->id }}">{{ $alumno->apellidoNombre() }}</option>
+        if ($alumno_id) {
+            $alumno_preseleccionado = $alumnos->firstWhere('id', $alumno_id);
+        }
+    @endphp
+
+    <div>
+        <div class="perfil_one br">
+            <div class="perfil__header">
+                <h2>Crear nuevo inscripto</h2>
+            </div>
+
+            <div class="perfil__info">
+                <form method="post" action="{{ route('admin.inscriptos.store') }}">
+                    @csrf
+
+                    {{-- Alumno --}}
+                    <div class="perfil_dataname">
+                        <label>Alumno:</label>
+
+                        @if ($alumno_preseleccionado)
+                            <div class="campo_info2">{{ $alumno_preseleccionado->apellidoNombre() }}</div>
+                            <input type="hidden" name="id_alumno" value="{{ $alumno_preseleccionado->id }}">
+                        @else
+                            <select class="campo_info rounded" name="id_alumno" required>
+                                <option value="">Selecciona un alumno</option>
+                                @foreach ($alumnos as $alumno)
+                                    <option value="{{ $alumno->id }}">{{ $alumno->apellidoNombre() }}</option>
+                                @endforeach
+                            </select>
+                        @endif
+                    </div>
+
+                    {{-- Carrera --}}
+                    <div class="perfil_dataname">
+                        <label>Carrera:</label>
+                        <select class="campo_info rounded" name="id_carrera" required>
+                            @foreach ($carreras as $carrera)
+                                <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
                             @endforeach
                         </select>
-                    @endif
-                </div>
+                    </div>
 
-                <div class="perfil_dataname">
-                    <label>Carrera:</label>
-                    <select class="campo_info rounded" name="id_carrera">
-                        @foreach ($carreras as $carrera)
-                            <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                    {{-- Año inscripción --}}
+                    <div class="perfil_dataname">
+                        <label>Año inscripción:</label>
+                        <input class="campo_info rounded" name="anio_inscripcion"
+                            value="{{ old('anio_inscripcion', date('Y')) }}">
+                    </div>
 
-                <div class="perfil_dataname">
-                    <label>Año inscripción:</label>
-                    <input class="campo_info rounded" name="anio_inscripcion" value="{{ date('Y') }}">
-                </div>
+                    {{-- Índice libro matriz --}}
+                    <div class="perfil_dataname">
+                        <label>Índice libro matriz:</label>
+                        <input class="campo_info rounded" name="indice_libro_matriz"
+                            value="{{ old('indice_libro_matriz') }}">
+                    </div>
 
-                <div class="perfil_dataname">
-                    <label>Índice libro matriz:</label>
-                    <input class="campo_info rounded" name="indice_libro_matriz">
-                </div>
+                    {{-- Año finalización --}}
+                    <div class="perfil_dataname">
+                        <label>Año finalización:</label>
+                        <input class="campo_info rounded" name="anio_finalizacion" value="{{ old('anio_finalizacion') }}">
+                    </div>
 
-                <div class="perfil_dataname">
-                    <label>Año finalización:</label>
-                    <input class="campo_info rounded" name="anio_finalizacion">
-                </div>
+                    {{-- Estado --}}
+                    <div class="perfil_dataname">
+                        <label>Estado:</label>
+                        <input class="campo_info rounded" type="text" name="estado_texto" value="Cursando" readonly>
+                        <input type="hidden" name="estado" value="0">
+                    </div>
 
-                <div class="perfil_dataname">
-                    <label>Estado:</label>
-                    <input class="campo_info rounded" type="text" name="estado_texto" value="Cursando" readonly>
-                    <input type="hidden" name="estado" value="0">
-                </div>
+                    {{-- Redirección --}}
+                    <input type="hidden" name="redirect" value="{{ url()->previous() }}">
 
-                <input name="redirect" type="hidden" value="{{ url()->previous() }}">
-
-                <div class="upd">
-                    <button class="btn_blue">
-                        <i class="ti ti-circle-plus"></i>Crear
-                    </button>
-                </div>
-            </form>
+                    <div class="upd">
+                        <button class="btn_blue"><i class="ti ti-circle-plus"></i> Crear</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 @endsection
-

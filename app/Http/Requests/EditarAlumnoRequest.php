@@ -32,7 +32,7 @@ class EditarAlumnoRequest extends FormRequest
             'dpto' => ['nullable'],
             'piso' => ['nullable'],
             'estado_civil' => ['required'],
-            'email' => ['nullable'],
+            'email' => ['nullable', 'regex:/^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,6}$/'],
             'nombre_institucion_secundario' => ['required', 'string', 'max:255', 'regex:/^[A-Za-záéíóúÁÉÍÓÚÑñ\s\d]+$/'],
             'titulo_anterior' => ['nullable', 'regex:/^[\pL\s]+$/u'],
             'becas' => ['nullable'],
