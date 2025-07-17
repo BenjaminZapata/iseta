@@ -8,44 +8,44 @@
             </div>
             <div class="perfil__info">
                 <?= $form->generate(
-                  route('admin.carreras.update', ['carrera' => $carrera->id]),
-                  'put',
-                  [
-                    'Información' => [
-                      $form->text(
-                        'nombre',
-                        'Nombre:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->text(
-                        'resolucion',
-                        'Resolucion:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->text(
-                        'anio_apertura',
-                        'Año de apertura:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->text(
-                        'anio_fin',
-                        'Año de cierre:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->textarea(
-                        'observaciones',
-                        'Observaciones:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->texthidden(url()->previous()),
-                    ],
-                  ]
-                ) ?>
+        route('admin.carreras.update', ['carrera' => $carrera->id]),
+        'put',
+        [
+            'Información' => [
+                $form->text(
+                    'nombre',
+                    'Nombre:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->text(
+                    'resolucion',
+                    'Resolucion:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->text(
+                    'anio_apertura',
+                    'Año de apertura:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->text(
+                    'anio_fin',
+                    'Año de cierre:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->textarea(
+                    'observaciones',
+                    'Observaciones:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->texthidden(url()->previous()),
+            ],
+        ]
+    ) ?>
             </div>
         </div>
 
@@ -143,14 +143,15 @@
                                 </form>
                             </td>
                             <td>
-                                <a href="{{ route('admin.mesas.dual', ['carrera'=>$carrera->id, 'asignatura' => $asignatura->id]) }}">
+                                <a
+                                    href="{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
                                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Mesas</button>
                                 </a>
                             </td>
                             <td>
                                 <div style="position: relative;">
                                     <button type="button" class="btn_blue" onclick="toggleFiltroExportar(this)">
-                                        <i class="ti ti-file-download"></i> Exportar cursadas
+                                        <i class="ti ti-file-download"></i> Exportar materia
                                     </button>
 
                                     <form method="GET"

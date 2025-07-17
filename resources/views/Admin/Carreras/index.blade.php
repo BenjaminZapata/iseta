@@ -29,8 +29,6 @@
                     <th class="center">Apertura</th>
                     <th class="center">Estado</th>
                     <th class="center">Acción</th>
-                    <th class="center">Cargar</th>
-                    <th class="center">Exportar</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,23 +40,6 @@
                         <td class="center">{{$carrera->vigente == 1 ? "Vigente" : $carrera->anio_fin}}</td>
                         <td><a href="{{route('admin.carreras.edit', ['carrera' => $carrera])}}"><button class="btn_blue"><i
                                         class="ti ti-file-info"></i>Detalles</button></a></td>
-                        <td class="flex-col items-center just-center spe">
-                            @if ($carrera->primeraAsignatura())
-                                <a class="flex just-center"
-                                    href="{{route('admin.cursadas.masivo', ['asignatura' => $carrera->primeraAsignatura()->id])}}">
-                                    <button class="spe-b1"><i class="ti ti-file-plus"></i>Cursadas</button>
-                                </a>
-                                <a class="flex just-center"
-                                    href="{{route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $carrera->primeraAsignatura()->id])}}">
-                                    <button class="spe-b2"><i class="ti ti-file-plus"></i>Mesas</button>
-                                </a>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="/admin/cursantes/carrera/{{$carrera->id}}">
-                                <button class="btn_blue">
-                                    <i class="ti ti-file-download"></i>Cursadas</button></a>
-                        </td>
                     </tr>
                 @endforeach
             </tbody>
