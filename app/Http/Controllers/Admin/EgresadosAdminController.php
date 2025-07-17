@@ -83,7 +83,8 @@ class EgresadosAdminController extends BaseController
     public function edit(Request $request, $registro)
     {
         $registro = Egresado::find($registro);
-        if (!$registro) return \redirect()->route('admin.Inscriptos.index')->with('aviso', 'La inscripcion no existe');
+        if (!$registro)
+            return \redirect()->route('admin.Inscriptos.index')->with('aviso', 'La inscripcion no existe');
 
 
         return view('Admin.Inscriptos.edit', [
@@ -96,10 +97,26 @@ class EgresadosAdminController extends BaseController
      */
     public function update(Request $request, $registro)
     {
+        $validated = $request->validate([
+            'anio_inscripcion' => 'required|integer',
+            'indice_libro_matriz' => 'nullable|string',
+            'anio_finalizacion' => 'nullable|integer|gte:anio_inscripcion',
+            'estado' => 'nullable|in:0,1',
+        ], [
+            'anio_finalizacion.gte' => 'El año de finalización no puede ser menor que el año de inscripción.',
+        ]);
+
         $registro = Egresado::find($registro);
-        $registro->update($request->all());
-        return redirect()->back()->with('mensaje', 'Se actualizo correctamente');
+
+        if (!$registro) {
+            return redirect()->route('admin.Inscriptos.index')->with('aviso', 'La inscripción no existe');
+        }
+
+        $registro->update($validated);
+
+        return redirect()->back()->with('mensaje', 'Se actualizó correctamente');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -107,9 +124,11 @@ class EgresadosAdminController extends BaseController
     public function destroy($alumno)
     {
         Egresado::find($alumno)->delete();
-        return redirect()->route('admin.inscriptos.index')->with(['mensaje' => [
-            'Se ha eliminado la inscripcion',
-            'Recuerda que puedes volver a crearla en el apartado "crear inscripcion"'
-        ]]);
+        return redirect()->route('admin.inscriptos.index')->with([
+            'mensaje' => [
+                'Se ha eliminado la inscripcion',
+                'Recuerda que puedes volver a crearla en el apartado "crear inscripcion"'
+            ]
+        ]);
     }
 }

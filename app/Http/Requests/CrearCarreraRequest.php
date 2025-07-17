@@ -25,7 +25,7 @@ class CrearCarreraRequest extends FormRequest
             'nombre' => ['required', 'regex:/^[^\d]*$/'],
             "resolucion" => ['required'],
             "anio_apertura" => ['required', 'numeric'],
-            "anio_fin" => ['nullable', 'numeric'],
+            "anio_fin" => ['nullable', 'numeric', 'gte:anio_apertura'],
             "observaciones" => ['nullable']
         ];
     }
