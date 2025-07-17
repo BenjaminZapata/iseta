@@ -6,16 +6,16 @@
         <a href="/admin/alumnos">Alumnos</a>/
         <a href="/admin/alumnos/{{$alumno->id}}/edit">{{$alumno->id}}</a>/ Rematricular/
         <a href="/admin/matricular/{{$alumno->id}}?carrera={{$carrera->id}}">{{$carrera->nombre}}</a>
-    </p> 
+    </p>
     <p>Si solo desea registrar que un alumno esta inscripto en una carrera sin anotarlo en ninguna cursada, deje todos los campos con el valor "No matricular" y haga click en enviar!</p>
     <p>Al hacer esto el alumno podra visualizar esta carrera en el seleccionador de carreras y podra inscribirse a las cursadas manualmente.</p>
-    
+
     <div class="perfil_one br">
         <div class="perfil__header">
             <h2>Matricular</h2>
         </div>
         <div class="perfil__info">
-           
+
             <form  method="POST" action="{{route('admin.alumno.matricular.post', ['alumno'=>$alumno->id, 'carrera'=>$carrera->id])}}">
             @csrf
 
@@ -24,7 +24,7 @@
                     <span>No tienes asignaturas para rendir de esta carrera.</span>
                     <span>Si crees que se trata de un error, comunicate con la institucion para solucionarlo.</span>
                 </div>
-        
+
             @else
             @foreach ($asignaturas as $asignatura)
                 <div class="w-100p flex just-between perfil_dataname-rem">
@@ -33,7 +33,7 @@
                     'gray-600' => $asignatura->equivalencias_previas
                     ])>
                         <div class="flex">
-                            <label>Año:</label> 
+                            <label>Año:</label>
                             <span class="font-400">{{$asignatura->anio}}</span>
                         </div>
                         <div class="flex">
@@ -43,9 +43,9 @@
                     </div>
                     <div class="flex-col">
                         @if ($asignatura->equivalencias_previas)
-                        <div class="flex just-end gap-3">    
+                        <div class="flex just-end gap-3">
                             <p class="font-600">Debes correlativas</p>
-                            <label class="blue-600 px-1 rounded pointer ver-equiv" data-element="{{$asignatura->id}}">Detalles...</label> 
+                            <label class="blue-600 px-1 rounded pointer ver-equiv" data-element="{{$asignatura->id}}">Detalles...</label>
                         </div>
                             <ul class="none id-{{$asignatura->id}}">
                                 @foreach ($asignatura->equivalencias_previas as $asignatura)
@@ -57,7 +57,7 @@
                                 <option value="">No matricular</option>
                                 <option @selected(old($asignatura->id) == 2) value="2">Regular</option>
                                 <option @selected(old($asignatura->id) == 1) value="1">Libre</option>
-                                <option @selected(old($asignatura->id) == 3) value="3">Promocion</option>    
+                                <option @selected(old($asignatura->id) == 3) value="3">Promocion</option>
                                 <option @selected(old($asignatura->id) == 4) value="4">Equivalencia</option>
                             </select>
                         @endif

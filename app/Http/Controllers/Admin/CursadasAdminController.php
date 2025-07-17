@@ -117,9 +117,14 @@ class CursadasAdminController extends BaseController
 
     function store(Request $request)
     {
+        $request->validate([
+            'carrera' => ['required'],
+            'asignatura' => ['required'],
+            'alumno' => ['required'],
+        ]);
 
-        $asignatura = Asignatura::where('id', $request->id_asignatura)->with('correlativas.asignatura')->first();
-        $alumno = Alumno::find($request->id_alumno);
+        $asignatura = Asignatura::where('id', $request->asignatura)->with('correlativas.asignatura')->first();
+        $alumno = Alumno::find($request->alumno);
 
 
         // Ver que no este ya anotado o que ya la haya aprobado
@@ -147,8 +152,8 @@ class CursadasAdminController extends BaseController
         if ($request->aprobada == 5) {
             Examen::create([
                 'id_carrera' => $request->carrera,
-                'id_asignatura' => $request->id_asignatura,
-                'id_alumno' => $request->id_alumno,
+                'id_asignatura' => $request->asignatura,
+                'id_alumno' => $request->alumno,
                 'tipo_final' => 4, // Equivalencia
                 // 'libro' => $request->libro,
                 // 'acta' => $request->acta,
@@ -161,8 +166,8 @@ class CursadasAdminController extends BaseController
 
         Cursada::create([
             'id_carrera' => $request->carrera,
-            'id_asignatura' => $request->id_asignatura,
-            'id_alumno' => $request->id_alumno,
+            'id_asignatura' => $request->asignatura,
+            'id_alumno' => $request->alumno,
             'anio_cursada' => $request->anio_cursada,
             'condicion' => $request->condicion,
             'aprobada' => $request->aprobada

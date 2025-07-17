@@ -22,7 +22,7 @@
             <div class="perfil_dataname">
                 <label>Carrera:</label>
                 <select class="campo_info rounded" name="carrera" id="carrera_select">
-                    <option selected >Selecciona una carrera</option>
+                    <option disabled selected >Selecciona una carrera</option>
                     @foreach ($carreras as $carrera)
                         @php
                             if(old('carrera')==$carrera->id){
@@ -35,20 +35,17 @@
             </div>
                 <div class="perfil_dataname">
                     <label>Materia:</label>
-                    <select id="asignatura_select" class="asignatura campo_info rounded" name="id_asignatura">
+                    <select id="asignatura_select" class="asignatura campo_info rounded" name="asignatura">
+                        <option disabled selected>Selecciona una materia</option>
                         @if ($ultimaCarreraSeleccionada)
-                            <option value="{{old('id_asignatura')}}">{{$ultimaCarreraSeleccionada->asignaturas->where('id',old('id_asignatura'))->first()->nombre}}</option>
+                            <option value="{{old('asignatura')}}">{{$ultimaCarreraSeleccionada->asignaturas->first()->nombre}}</option>
                         @endif
-                        @if (old('carrera') && old('id_asignatura'))
-                            <option value="{{old('id_asignatura')}}">Selecciona una carrera</option>
-                        @endif
-
                     </select>
                 </div>
                 <div class="perfil_dataname">
                     <label>Alumno:</label>
-                    <select class="alumno campo_info rounded" name="id_alumno">
-                        <option selected>Selecciona un alumno</option>
+                    <select class="alumno campo_info rounded" name="alumno">
+                        <option disabled selected>Selecciona un alumno</option>
                         @foreach($alumnos as $alumno)
                             <option @selected(old('id_alumno') == $alumno->id) value="{{$alumno->id}}">{{$alumno->apellidoNombre()}}</option>
                         @endforeach
@@ -83,7 +80,16 @@
                         <input class="campo_info rounded" name="nota" type="number"/>
                     </div>
                 </div>
-                <div class="upd"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear</button></div>
+                <div class="botones-derecha">
+                    <div class="botones-derecha" style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                        <x-botones-alumno />
+                        <x-btn-cancelar />
+                        <button type="submit" class="btn_blue">
+                            <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
+                            Crear
+                        </button>
+                    </div>
+                </div>
             </form>
             </div>
         </div>
