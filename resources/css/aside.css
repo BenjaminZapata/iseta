@@ -1,0 +1,99 @@
+/* resources/css/sidebar.css */
+
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 4rem;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    z-index: 50;
+    transition: width 0.5s ease;
+}
+
+/* Expansión con JS inline ya está manejada, solo CSS visual */
+#sidebar .sidebar-header {
+    height: 5rem;
+    background-color: #140b5c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Logos */
+#sidebar .logo-mini {
+    width: 2.5rem;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.3s ease;
+}
+
+#sidebar:hover .logo-mini {
+    opacity: 0;
+}
+
+#sidebar .logo-full {
+    width: 12rem;
+    max-width: 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#sidebar:hover .logo-full {
+    opacity: 1;
+}
+
+/* Lista del menú */
+#sidebar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#sidebar ul li {
+    margin: 0;
+}
+
+/* Links del menú */
+#sidebar ul li a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: #2563eb;
+    /* similar a Tailwind blue-600 */
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+#sidebar ul li a:hover {
+    background-color: #f3f4f6;
+    /* similar a Tailwind gray-100 */
+}
+
+/* Íconos */
+#sidebar ul li a i {
+    font-size: 1.25rem;
+}
+
+/* Texto del link */
+#sidebar ul li a span {
+    opacity: 0;
+    white-space: nowrap;
+    transition: opacity 0.3s ease;
+}
+
+#sidebar:hover ul li a span {
+    opacity: 1;
+}
+
+/* Separador <hr> */
+#sidebar hr {
+    margin: 0.5rem 1rem;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+}

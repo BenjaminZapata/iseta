@@ -1,36 +1,87 @@
-<aside class="none lg-block admin-aside">
-    <h1>
-        <a href="{{route('admin.alumnos.index')}}" class="text-blue-600">
-            <img src="{{ asset('img/logo.png') }}" alt="" style="max-width: 100%; height: auto; display: block; margin: 0 auto;">
-        </a>
-    </h1>
+<aside id="sidebar" onmouseover="this.style.width='16rem'" onmouseout="this.style.width='4rem'">
+    <div class="sidebar-header">
+        {{-- Logo colapsado (chico) --}}
+        <img src="{{ asset('img/logo-mini.png') }}" alt="Logo Mini" class="logo-mini">
+
+        {{-- Logo expandido (grande) --}}
+        <img src="{{ asset('img/logo.png') }}" alt="Logo Completo" class="logo-full">
+    </div>
+
     <ul>
-        <li><a class="text-blue-600" href="{{route('admin.alumnos.index')}} " style="display: block;"><i class="ti ti-user"></i>Alumnos</a></li>
-        <li><a class="text-blue-600" href="{{route('admin.profesores.index')}}" style="display: block;"><i class="ti ti-users"></i> Profesores </a></li>
-        <li><a class="text-blue-600" href="{{route('admin.carreras.index')}}" style="display: block;"><i class="ti ti-address-book"></i> Carreras </a></li>
-        {{-- <li><a class="text-blue-600" href="{{route('admin.asignaturas.index')}}" style="display: block;"> Asignaturas </a></li> --}}
-        <li><a class="text-blue-600" href="{{route('admin.mesas.index')}}" style="display: block;"><i class="ti ti-clipboard-text"></i> Mesas </a></li>
-        {{-- <li><a class="text-blue-600" href="{{route('admin.examenes.index')}}" style="display: block;"><i class="ti ti-address-book"></i> Examenes </a></li> --}}
-        <li><a class="text-blue-600" href="{{route('admin.cursadas.index')}}" style="display: block;"><i class="ti ti-books"></i></i> Cursadas </a></li>
-        <li><a class="text-blue-600" href="{{route('admin.inscriptos.index')}}" style="display: block;"><i class="ti ti-file-invoice"></i> Inscriptos </a></li>
+        <li>
+            <a href="{{ route('admin.alumnos.index') }}">
+                <i class="ti ti-user"></i>
+                <span>Alumnos</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.profesores.index') }}">
+                <i class="ti ti-users"></i>
+                <span>Profesores</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.carreras.index') }}">
+                <i class="ti ti-folders"></i>
+                <span>Carreras</span>
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="ti ti-notes"></i>
+                <span>Asignaturas</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.mesas.index') }}">
+                <i class="ti ti-address-book"></i>
+                <span>Mesas</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.cursadas.index') }}">
+                <i class="ti ti-books"></i>
+                <span>Cursadas</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.inscriptos.index') }}">
+                <i class="ti ti-file-invoice"></i>
+                <span>Inscriptos</span>
+            </a>
+        </li>
+
         <hr>
-        <li><a class="text-blue-600" href="{{route('admin.admins.index')}}  " style="display: block;"><i class="ti ti-user-cog"></i> Admins </a></li>
-        <li><a class="text-blue-600" href="{{route('admin.config.index')}}  " style="display: block;"><i class="ti ti-settings"></i> Configuracion </a></li>
-        <li><a class="text-blue-600" href="{{route('admin.habiles.index')}}  " style="display: block;"><i class="ti ti-calendar-time"></i> Dias no habiles </a></li>
 
-        <div class="aside-end">
-            <li>
-                <a class="text-blue-600" href="{{route('admin.config.modoseguro')}}" style="display: block;"><i class="ti ti-shield-lock"></i>
-                    @if ($config['modo_seguro'])
-                    Desactivar modo seguro
-                    @else
-                    Activar modo seguro
-                    @endif
-                </a>
-            </li>
-            <li><a href="/admin/logout" style="display: block;"><i class="ti ti-logout"></i> Cerrar sesion</a></li>
-        </div>
+        <li>
+            <a href="{{ route('admin.admins.index') }}">
+                <i class="ti ti-user-cog"></i>
+                <span>Admins</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.config.index') }}">
+                <i class="ti ti-settings"></i>
+                <span>Configuración</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.habiles.index') }}">
+                <i class="ti ti-calendar-time"></i>
+                <span>Días no hábiles</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.config.modoseguro') }}">
+                <i class="ti ti-shield-lock"></i>
+                <span>{{ $config['modo_seguro'] ? 'Desactivar modo seguro' : 'Activar modo seguro' }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="/admin/logout">
+                <i class="ti ti-logout"></i>
+                <span>Cerrar sesión</span>
+            </a>
+        </li>
     </ul>
-
-
 </aside>
