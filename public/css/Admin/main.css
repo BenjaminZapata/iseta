@@ -136,6 +136,10 @@ body {
   border-radius: 0.8rem;
   overflow: hidden;
   width: 100%;
+  min-height: 50vh;
+  /* o 600px si preferís fijo */
+  position: relative;
+  /* necesario para dropdowns con position: absolute */
 }
 
 .tit-year {
