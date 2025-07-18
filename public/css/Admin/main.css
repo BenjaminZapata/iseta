@@ -49,6 +49,10 @@ body {
   text-transform: uppercase;
 }
 
+.excluir-mayusculas {
+  text-transform: none;
+}
+
 /*--- FILTROS, ORDENAR, BUSCAR  ---- */
 
 .contenedor-tabla_botonera {

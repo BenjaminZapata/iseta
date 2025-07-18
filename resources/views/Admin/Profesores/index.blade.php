@@ -41,7 +41,7 @@
                     <p>dni: {{$profesor->dniPuntos()}}</p>
                 </td>
                 <td>
-                    <p>
+                    <p class="excluir-mayusculas">
                         {{$profesor->email?$profesor->email:'Sin mail registrado'}}
                     </p>
                     <p>

@@ -53,7 +53,7 @@
                 </td>
 
                 <td>
-                    <p>{{$alumno->email?$alumno->email:'Sin mail registrado'}}</p>
+                    <p class="excluir-mayusculas">{{$alumno->email?$alumno->email:'Sin mail registrado'}}</p>
                     @if ($alumno->telefono1)
                     <p>tel: {{$alumno->telefono1}}</p>
                     @elseif ($alumno->telefono2)
