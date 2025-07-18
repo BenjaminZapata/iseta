@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="{{asset('css/Admin/Edit/edit-page.css')}}">
     <link rel="stylesheet" href="{{asset('css/Admin/main.css')}}">
     <link rel="stylesheet" href="{{asset('css/Admin/aside.css')}}">
-    <link rel="stylesheet" href="{{asset('css/Admin/aside.css')}}">
     <link rel="stylesheet" href="{{asset('css/global.css')}}">
     <link rel="stylesheet" href="{{asset('css/form.css')}}">
 

@@ -1,0 +1,69 @@
+/* Botón icono sin fondo ni borde */
+.btn-icon {
+ background: none;
+ border: none;
+ padding: 4px;
+ cursor: pointer;
+ color: #333;
+ transition: opacity 0.2s;
+ display: flex;
+ align-items: center;
+}
+
+.btn-icon:hover {
+ opacity: 0.6;
+}
+
+/* El formulario dropdown */
+#filters {
+ position: absolute !important;
+ top: 110% !important;
+ right: 0 !important;
+ z-index: 10 !important;
+ min-width: 750px !important;
+}
+
+
+/* Ajusta gap si querés más espacio entre botones */
+.flex-row.items-center.gap-2 {
+ gap: 8px;
+}
+
+/* Formulario de filtros */
+.filters-dropdown-form {
+ position: absolute;
+ top: 110%;
+ right: 0;
+ z-index: 10;
+ width: 1300px;
+ /* ancho real */
+ background: #fff;
+ border-radius: 10px;
+ box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+ padding: 16px;
+ display: flex;
+ flex-direction: column;
+ gap: 16px;
+}
+
+/* Dropdowns de filtros adicionales */
+.filters-dropdowns {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: 16px;
+}
+
+/* Fila con el select, campo y botón */
+.filters-actions {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: flex-end;
+ gap: 16px;
+}
+
+/* Botón Aplicar (usando clases existentes para mantener consistencia visual) */
+.filters-apply-button button {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+}
