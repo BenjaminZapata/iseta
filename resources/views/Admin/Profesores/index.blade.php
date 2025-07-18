@@ -37,7 +37,7 @@
             @foreach ($profesores as $profesor)
             <tr>
                 <td>
-                    <p class="bold">{{$profesor->apellidoNombre()}}</p>
+                    <p class="bold" style="text-transform: uppercase;">{{$profesor->apellidoNombre()}}</p>
                     <p>dni: {{$profesor->dniPuntos()}}</p>
                 </td>
                 <td>

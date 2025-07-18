@@ -48,12 +48,12 @@
             @foreach ($alumnos as $alumno)
             <tr>
                 <td class="capitalize">
-                    <p class="bold">{{$alumno->apellidoNombre()}}</p>
+                    <p class="bold" style="text-transform: uppercase;">{{$alumno->apellidoNombre()}}</p>
                     <p>dni: {{$alumno->dniPuntos()}}</p>
                 </td>
 
                 <td>
-                    <p class="excluir-mayusculas">{{$alumno->email?$alumno->email:'Sin mail registrado'}}</p>
+                    <p style="text-transform: none;">{{$alumno->email?$alumno->email:'Sin mail registrado'}}</p>
                     @if ($alumno->telefono1)
                     <p>tel: {{$alumno->telefono1}}</p>
                     @elseif ($alumno->telefono2)
