@@ -13,20 +13,24 @@
                 <i class="ti ti-circle-plus"></i>Agregar alumno</button>
         </a>
         {{-- FILTROS --}}
-        <?= $filtergen->generate('admin.alumnos.index', $filters, [
-            'dropdowns' => [
-                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
-                $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
-                $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])
-            ],
-            'fields' => [
-                'alumno' => 'Alumno',
-                'dni' => 'Dni',
-                'email' => 'Email',
-                'ciudad' => 'Ciudad',
-                'telefono1' => 'Telefono'
-            ]
-        ]) ?>
+        <div>
+            <?= $filtergen->generate('admin.alumnos.index', $filters, [
+                'dropdowns' => [
+                    $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
+                    $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
+                    $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])
+                ],
+                'fields' => [
+                    'alumno' => 'Alumno',
+                    'dni' => 'Dni',
+                    'email' => 'Email',
+                    'ciudad' => 'Ciudad',
+                    'telefono1' => 'Telefono'
+                ]
+            ]) ?>
+        </div>
+
+
     </div>
 
     {{-- TABLA --}}
