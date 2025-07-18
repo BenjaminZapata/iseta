@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CrearCarreraRequest;
 use App\Http\Requests\EditarCarreraRequest;
+use App\Http\Requests\CrearAsignaturaRequest;
 use App\Models\Carrera;
 use App\Models\Asignatura;
 use App\Repositories\Admin\CarreraRepository;
@@ -133,13 +134,49 @@ class CarrerasCrudController extends BaseController
             return redirect()->back()->with('mensaje', 'Se edito la carrera');
     }
 
+    public function createAsignaturaView(Carrera $carrera)
+    {
+        return view('Admin.Carreras.create_asignatura', [
+            'carrera' => $carrera,
+        ]);
+    }
+
+    public function createAsignatura(CrearAsignaturaRequest $request, Carrera $carrera)
+    {
+        $asignatura = $request->validated();
+        $asignatura = Asignatura::create([
+            'nombre' => $asignatura['nombre'],
+            'tipo_modulo' => $asignatura['tipo_modulo'],
+            'carga_horaria' => $asignatura['carga_horaria'],
+            'anio' => $asignatura['anio'],
+            'observaciones' => $asignatura['observaciones'],
+        ]);
+        log::debug($asignatura);
+        try {
+            $data = [
+                'id_carrera' => $carrera->id,
+                'id_asignatura' => $asignatura['id'],
+                'tipo_modulo' => $asignatura['tipo_modulo'],
+                'carga_horaria' => $asignatura['carga_horaria'],
+                'anio' => $asignatura['anio'],
+            ];
+            log::debug($data);
+            $carrera->asignaturas()->attach(["asignatura" => $data]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return redirect()->back()->with('error', 'No se pudo agregar la asignatura');
+        }
+
+        return redirect()->back()->with('mensaje', 'Se creo y agrego la asignatura a la carrera');
+    }
+
     public function addAsignaturaView(Request $request)
     {
         log::debug($request->all());
         $carrera = Carrera::find($request->carrera);
         $asignaturas = Asignatura::orderBy('nombre')->get();
         $id_asignatura = $request->id_asignatura ?? null;
-        return view('Admin.Carreras.add', [
+        return view('Admin.Carreras.add_asignatura', [
             'carrera' => $carrera,
             'asignaturas' => $asignaturas,
             'id_asignatura' => $id_asignatura,
@@ -147,8 +184,22 @@ class CarrerasCrudController extends BaseController
     }
     public function addAsignatura(Request $request, Carrera $carrera)
     {
-        $carrera->asignaturas()->attach($request->asignatura);
-        return redirect()->back()->with('mensaje', 'Se agrego la asignatura');
+        try {
+            $data = [
+                'id_carrera' => $request->carrera_id,
+                'id_asignatura' => $request->asignatura_id,
+                'anio' => $request->anio,
+                'tipo_modulo' => $request->tipo_modulo,
+                'carga_horaria' => $request->carga_horaria,
+            ];
+            log::debug($data);
+            $carrera->asignaturas()->attach(["asignatura" => $data]);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return redirect()->back()->with('error', 'No se pudo agregar la asignatura');
+        }
+
+        return redirect()->back()->with('mensaje', 'Se agrego la asignatura a la carrera');
     }
 
     //FIXME: Falta desarrollar la funcionalidad de eliminar una carrera

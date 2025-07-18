@@ -51,10 +51,10 @@
 
         <div class="table">
             <div class="perfil__header-alt">
-                <a href="{{ route('admin.carreras.add', ['carrera' => $carrera->id]) }}">
+                <a href="{{ route('admin.carreras.addAsignaturaView', ['carrera' => $carrera->id]) }}">
                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar asignatura</button>
                 </a>
-                <a href="{{ route('admin.asignaturas.create', ['carrera' => $carrera->id]) }}">
+                <a href="{{ route('admin.carreras.createAsignaturaView', ['carrera' => $carrera->id]) }}">
                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear asignatura</button>
                 </a>
 

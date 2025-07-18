@@ -1,4 +1,4 @@
-<form method="post" action="{{route('admin.carreras.add.post')}}" id="add_asignatura">
+<form method="post" action="{{route('admin.carreras.addAsignatura')}}" id="add_asignatura">
 @csrf
     <div class="perfil__info">
         <div class="perfil_dataname">
