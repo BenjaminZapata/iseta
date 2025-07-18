@@ -23,6 +23,7 @@
 * {
   list-style: none;
   text-decoration: none;
+  text-transform: uppercase;
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
   margin: 0;
