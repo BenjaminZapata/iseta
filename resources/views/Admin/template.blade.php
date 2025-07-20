@@ -30,7 +30,7 @@
     @include('Componentes.aside')
     @include('Componentes.confirmacion')
 
-    <div class="admin-main w-80p p-0 pr-6 just-end">
+    <div class="admin-main">
         @yield('content')
     </div>
 

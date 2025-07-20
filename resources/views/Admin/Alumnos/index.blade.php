@@ -2,6 +2,15 @@
 
 @section('content')
 
+<style>
+    #filters .label-input-y-100 label {
+    text-align: left !important;
+    display: block !important;
+    width: 100%;
+    padding-top: 15px;
+}
+</style>
+
 
 {{-- CONTENT --}}
 <div class="table" data-name="tablaAlumnos">
@@ -13,8 +22,7 @@
                 <i class="ti ti-circle-plus"></i>Agregar alumno</button>
         </a>
         {{-- FILTROS --}}
-        <div>
-            <?= $filtergen->generate('admin.alumnos.index', $filters, [
+                    <?= $filtergen->generate('admin.alumnos.index', $filters, [
                 'dropdowns' => [
                     $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
                     $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
@@ -28,7 +36,7 @@
                     'telefono1' => 'Telefono'
                 ]
             ]) ?>
-        </div>
+       
 
 
     </div>

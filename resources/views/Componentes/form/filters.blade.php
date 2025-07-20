@@ -24,10 +24,10 @@ $hasActiveFilters = !empty(array_filter($filtersArray));
         </button>
 
         <form action="{{ route($url) }}" id="filters" class="none w-100p rounded bg-white"
-            style="position: absolute; top: 110%; right: 0; z-index: 10; width: 1000px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); border: 2px solid #e0e0e0;">
+            style="position: absolute; top: 110%; right: 0; align-items:left; z-index: 10; width: 750px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); border: 2px solid #e0e0e0;">
 
             @if ($dropdowns)
-            <div class="grid-4 gap-3 w-100p p-2">
+            <div class="dropdown-filtros">
                 @foreach ($dropdowns as $dropdown)
                 {!! $dropdown !!}
                 @endforeach
