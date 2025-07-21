@@ -1,3 +1,7 @@
+#filters {
+ padding: 10px !important;
+}
+
 /* Botón icono sin fondo ni borde */
 .btn-icon {
  background: none;
@@ -66,4 +70,72 @@
  display: flex;
  align-items: center;
  gap: 8px;
+}
+
+.dropdown-filtros {
+ text-align: left;
+ align-content: left;
+ align-items: left;
+}
+
+#filters .label-input-y-100 label {
+ font-weight: bold !important;
+ text-align: left !important;
+ display: block !important;
+ width: 100%;
+}
+
+/* ESTILOS DEL DROPDOWN DE FILTROS */
+
+.dropdown-filtros select,
+.dropdown-filtros input {
+ background-color: #eceffa;
+ border: 2px solid #b3bee5;
+ border-radius: 6px;
+ padding: 8px 12px;
+ font-size: 14px;
+ color: #150a5c;
+ transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+ outline: none;
+ cursor: pointer;
+}
+
+/* Hover */
+.dropdown-filtros select:hover,
+.dropdown-filtros input:hover {
+ border-color: #150a5c;
+ background-color: #fefeff;
+}
+
+/* Focus */
+.dropdown-filtros select:focus,
+.dropdown-filtros input:focus {
+ border-color: #150a5c;
+ box-shadow: 0 0 10px rgba(21, 10, 92, 0.7);
+ background-color: #fefeff;
+ color: #150a5c;
+}
+
+/* Placeholder */
+.dropdown-filtros input::placeholder {
+ color: #b3bee5;
+ font-style: italic;
+}
+
+/* Animación glow suave */
+@keyframes glow {
+
+ 0%,
+ 100% {
+  box-shadow: 0 0 0 rgba(21, 10, 92, 0);
+ }
+
+ 50% {
+  box-shadow: 0 0 8px rgba(21, 10, 92, 0.5);
+ }
+}
+
+.dropdown-filtros select:focus,
+.dropdown-filtros input:focus {
+ animation: glow 1.5s ease-in-out infinite;
 }

@@ -23,6 +23,7 @@
 * {
   list-style: none;
   text-decoration: none;
+
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
   margin: 0;
@@ -42,9 +43,15 @@ body {
 }
 
 .admin-main {
+  min-height: 100%;
   width: 95%;
   margin-left: 80px;
   margin-right: 15px;
+  text-transform: uppercase;
+}
+
+.excluir-mayusculas {
+  text-transform: none;
 }
 
 /*--- FILTROS, ORDENAR, BUSCAR  ---- */
@@ -136,7 +143,7 @@ body {
   border-radius: 0.8rem;
   overflow: hidden;
   width: 100%;
-  min-height: 50vh;
+  min-height: 100vh;
   /* o 600px si preferís fijo */
   position: relative;
   /* necesario para dropdowns con position: absolute */

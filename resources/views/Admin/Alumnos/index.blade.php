@@ -2,6 +2,15 @@
 
 @section('content')
 
+<style>
+    #filters .label-input-y-100 label {
+    text-align: left !important;
+    display: block !important;
+    width: 100%;
+    padding-top: 15px;
+}
+</style>
+
 
 {{-- CONTENT --}}
 <div class="table" data-name="tablaAlumnos">
@@ -13,20 +22,23 @@
                 <i class="ti ti-circle-plus"></i>Agregar alumno</button>
         </a>
         {{-- FILTROS --}}
-        <?= $filtergen->generate('admin.alumnos.index', $filters, [
-            'dropdowns' => [
-                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
-                $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
-                $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])
-            ],
-            'fields' => [
-                'alumno' => 'Alumno',
-                'dni' => 'Dni',
-                'email' => 'Email',
-                'ciudad' => 'Ciudad',
-                'telefono1' => 'Telefono'
-            ]
-        ]) ?>
+                    <?= $filtergen->generate('admin.alumnos.index', $filters, [
+                'dropdowns' => [
+                    $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
+                    $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
+                    $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])
+                ],
+                'fields' => [
+                    'alumno' => 'Alumno',
+                    'dni' => 'Dni',
+                    'email' => 'Email',
+                    'ciudad' => 'Ciudad',
+                    'telefono1' => 'Telefono'
+                ]
+            ]) ?>
+       
+
+
     </div>
 
     {{-- TABLA --}}
@@ -48,12 +60,12 @@
             @foreach ($alumnos as $alumno)
             <tr>
                 <td class="capitalize">
-                    <p class="bold">{{$alumno->apellidoNombre()}}</p>
+                    <p class="bold" style="text-transform: uppercase;">{{$alumno->apellidoNombre()}}</p>
                     <p>dni: {{$alumno->dniPuntos()}}</p>
                 </td>
 
                 <td>
-                    <p>{{$alumno->email?$alumno->email:'Sin mail registrado'}}</p>
+                    <p style="text-transform: none;">{{$alumno->email?$alumno->email:'Sin mail registrado'}}</p>
                     @if ($alumno->telefono1)
                     <p>tel: {{$alumno->telefono1}}</p>
                     @elseif ($alumno->telefono2)

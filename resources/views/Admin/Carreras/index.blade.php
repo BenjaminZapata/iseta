@@ -2,7 +2,14 @@
 
 @section('content')
 
-
+<style>
+    #filters .label-input-y-100 label {
+    text-align: left !important;
+    display: block !important;
+    width: 100%;
+    padding-top: 15px;
+}
+</style>
 
 {{-- TABLA --}}
 <div class="table">
@@ -15,7 +22,7 @@
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.carreras.index', $filters, [
             'dropdowns' => [
-                $form->select('filter_vigente', 'Condición: ', 'label-input-y', $filters, ['Todas', 'No Vigentes', 'Vigentes'])
+                $form->select('filter_vigente', 'Condición: ', 'label-input-y-100', $filters, ['Todas', 'No Vigentes', 'Vigentes'])
             ],
             'fields' => ['nombre' => 'Nombre', 'asignatura' => 'Asignatura']
         ]) ?>
