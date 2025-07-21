@@ -235,4 +235,10 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             default => 'Desconocido',
         };
     }
+
+    public function inscripciones()
+    {
+        return $this->hasMany(EgresadoInscripto::class, 'id_alumno');
+    }
+
 }

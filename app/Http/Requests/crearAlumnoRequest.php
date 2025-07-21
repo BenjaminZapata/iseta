@@ -44,7 +44,6 @@ class CrearAlumnoRequest extends FormRequest
             'estado' => ['nullable'],
             'titulo_secundario' => ['required'],
             'genero' => ['required']
-
         ];
     }
     public function messages()
