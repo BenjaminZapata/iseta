@@ -238,7 +238,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
 
     public function inscripciones()
     {
-        return $this->hasMany(EgresadoInscripto::class, 'id_alumno');
+        return $this->hasMany(Egresado::class, 'id_alumno');
     }
 
 }
