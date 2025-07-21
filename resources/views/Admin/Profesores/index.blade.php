@@ -3,7 +3,10 @@
 @section('content')
 
 
-<div class="table">
+<div class="table" data-name="tablaProfesores">
+
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE PROFESORES']) 
+    
     <div class="perfil__header-alt">
         <a href="{{route('admin.profesores.create')}}">
             <button class="btn_blue">
@@ -52,7 +55,7 @@
                     <p>{{$profesor->ciudad}}</p>
                     <p>{{$profesor->calle}} {{$profesor->casa_numero?$profesor->casa_numero:''}}</p>
                 </td>
-                <td class="flex just-center"><a href="{{route('admin.profesores.edit', ['profesor' => $profesor->id])}}"><button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
+                <td class="flex just-center"><a href="{{route('admin.profesores.edit', ['profesor' => $profesor->id])}}"><button class="btn_blue"><i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button></a></td>
 
 
             </tr>

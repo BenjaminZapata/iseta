@@ -3,9 +3,7 @@
 @section('content')
     <div>
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Crear mesas de primer y segundo llamado</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'CREAR MESA']) 
             <div class="perfil__info">
 
                 <form method="post" action="{{route('admin.mesas.dualpost', ['carrera'=>$carrera->id, 'asignatura'=>$asignatura->id])}}">

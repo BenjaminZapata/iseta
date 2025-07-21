@@ -11,7 +11,12 @@
 }
 </style>
 
-<div class="table">
+<div class="table" data-name="tablaCursadas">
+
+    {{-- HEADER AVATAR --}}
+
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CURSADAS'])  
+
     <div class="perfil__header-alt">
         <a href="{{route('admin.cursadas.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar cursada</button></a>
         {{-- FILTROS --}}
@@ -49,7 +54,7 @@
                 <td>
                     {{$cursada->aprobado()}}
                 </td>
-                <td class="flex just-center"><a href="{{route('admin.cursadas.edit', ['cursada' => $cursada->id])}}"><button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
+                <td class="flex just-center"><a href="{{route('admin.cursadas.edit', ['cursada' => $cursada->id])}}"><button class="btn_blue"><i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button></a></td>
 
 
             </tr>

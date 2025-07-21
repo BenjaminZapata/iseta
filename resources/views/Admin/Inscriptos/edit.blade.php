@@ -3,9 +3,7 @@
 @section('content')
     <div>
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Ficha inscripto</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR INSCRIPTO']) 
             <div class="perfil__info">
                 <form method="post" action="{{route('admin.inscriptos.update', ['inscripto' => $registro->id])}}">
                 @csrf

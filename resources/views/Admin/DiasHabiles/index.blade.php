@@ -2,9 +2,7 @@
 
 @section('content')
     <div class="perfil_one br">
-        <div class="perfil__header">
-            <h2>Días no hábiles</h2>
-        </div>
+        @include('components.header-avatar', ['tituloSeccion' => 'DIAS NO HÁBILES']) 
 
         @php
             $meses = [31,29,31,30,31,30,31,31,30,31,30,31];

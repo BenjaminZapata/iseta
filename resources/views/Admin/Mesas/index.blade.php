@@ -11,7 +11,12 @@
 }
 </style>
 
-<div class="table">
+<div class="table" data-name="tablaMesas">
+
+    {{-- HEADER AVATAR --}}
+
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE MESAS']) 
+
     <div class="perfil__header-alt">
         <a href="{{route('admin.mesas.create')}}">
             <button class="btn_blue">
@@ -73,8 +78,8 @@
                     <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <a href="{{route('admin.mesas.edit', ['mesa' => $mesa->id])}}">
                             <button class="btn_blue">
-                                <i class="ti ti-file-info"></i>
-                                Detalles
+                                <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                Modificar
                             </button>
                         </a>
                     </div>

@@ -3,9 +3,7 @@
 @section('content')
     <div>
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Crear asignatura</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA ASIGNATURA']) 
             <div class="perfil__info">
                 <form method="post" action="{{route('admin.carreras.createAsignatura', ['carrera' => $carrera->id])}}" id="create_asignatura">
                 @csrf
