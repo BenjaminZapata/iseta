@@ -66,6 +66,8 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
         Route::get('notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones.index');
     });
+    Route::get('/notificaciones/{id}/leer', [NotificacionesController::class, 'leer'])->name('admin.notificaciones.leer');
+    Route::post('/notificaciones/marcar-todas', [NotificacionesController::class, 'marcarTodas'])->name('admin.notificaciones.marcarTodas');
 
 
     Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
