@@ -1,0 +1,27 @@
+FROM php:8.2-cli
+
+# Instalar dependencias necesarias
+RUN apt-get update && apt-get install -y \
+ git unzip curl libzip-dev zip libpng-dev libonig-dev libxml2-dev \
+ && docker-php-ext-install pdo pdo_mysql
+
+# Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+WORKDIR /var/www/html
+
+# Copiar el proyecto
+COPY . .
+
+# Instalar dependencias de Laravel
+RUN composer install --no-interaction --prefer-dist --optimize-autoloader
+
+# Copiar tu .env
+COPY .env .env
+
+# Generar cache de config (opcional)
+RUN php artisan config:cache
+
+# Establece DB_HOST como host.docker.internal para el cron container
+ENV DB_HOST=host.docker.internal
+

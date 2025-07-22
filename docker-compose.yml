@@ -1,4 +1,16 @@
 services:
+  cron:
+    build:
+      context: .
+      dockerfile: Dockerfile-cron
+    volumes:
+      - .:/var/www/html
+    entrypoint: [ "/bin/sh", "-c", "while :; do php artisan schedule:run >> /dev/null 2>&1; sleep 60; done" ]
+    networks:
+      - app-network
+    depends_on:
+      - db-iseta
+
   db-iseta:
     image: mysql:8.0
     environment:
