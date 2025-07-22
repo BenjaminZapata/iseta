@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\CursadasAdminController;
 use App\Http\Controllers\Admin\EgresadosAdminController;
 use App\Http\Controllers\PdfsController;
 use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\Admin\NotificacionesController;
 use App\Models\Alumno;
 use App\Models\Asignatura;
 use App\Models\Carrera;
@@ -60,6 +61,11 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::resource('alumnos', AlumnoCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->missing(function () {
         return redirect()->route('admin.alumnos.index')->with('aviso', 'El alumno no existe o ha sido eliminado');
     })->except('show');
+
+    // NOTIFICACIONES
+    Route::prefix('admin')->name('admin.')->middleware('auth:admin')->group(function () {
+        Route::get('notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones.index');
+    });
 
 
     Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])

@@ -8,6 +8,14 @@
     </div>
 
     <ul>
+
+        <li>
+            <a href="{{ route('admin.notificaciones.index') }}">
+                <i class="ti ti-bell"></i>
+                <span>Notificaciones</span>
+            </a>
+        </li>
+
         <li>
             <a href="{{ route('admin.alumnos.index') }}">
                 <i class="ti ti-user"></i>
