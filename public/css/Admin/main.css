@@ -162,7 +162,7 @@ body {
 thead th {
   top: 0;
   left: 0;
-  background: var(--disney-plus);
+  background: #150a5c;
   color: white;
   text-align: left;
 }

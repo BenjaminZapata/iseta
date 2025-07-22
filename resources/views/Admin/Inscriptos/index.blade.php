@@ -11,7 +11,12 @@
 }
 </style>
 
-<div class="table">
+<div class="table" data-name="tablaInscriptos">
+
+    {{-- HEADER AVATAR --}}
+
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE INSCRIPTOS']) 
+
     <div class="perfil__header-alt">
         <a href="{{route('admin.inscriptos.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar inscripcion</button></a>
         {{-- FILTROS --}}
@@ -62,7 +67,7 @@
                     {{$inscripcion->anio_finalizacion? $inscripcion->anio_finalizacion:'Presente'}}
                 </td>
 
-                <td class="flex just-center"><a href="{{route('admin.inscriptos.edit', ['inscripto' => $inscripcion->id])}}"><button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
+                <td class="flex just-center"><a href="{{route('admin.inscriptos.edit', ['inscripto' => $inscripcion->id])}}"><button class="btn_blue"><i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button></a></td>
 
             </tr>
             @endforeach

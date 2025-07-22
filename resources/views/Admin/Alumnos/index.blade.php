@@ -2,6 +2,7 @@
 
 @section('content')
 
+
 <style>
     #filters .label-input-y-100 label {
     text-align: left !important;
@@ -13,7 +14,11 @@
 
 
 {{-- CONTENT --}}
+
 <div class="table" data-name="tablaAlumnos">
+
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])   
+
     {{-- BOTON CREAR --}}
 
     <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
@@ -35,10 +40,7 @@
                     'ciudad' => 'Ciudad',
                     'telefono1' => 'Telefono'
                 ]
-            ]) ?>
-       
-
-
+            ]) ?>   
     </div>
 
     {{-- TABLA --}}
@@ -82,7 +84,7 @@
                 </td>
                 <td class="flex just-center">
                     <a href="{{route('admin.alumnos.edit', ['alumno' => $alumno->id])}}">
-                        <button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button>
+                        <button class="btn_blue"><i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                     </a>
                 </td>
             </tr>
@@ -97,7 +99,5 @@
 <div class="w-1/2 mx-auto p-5 pagination">
     {{ $alumnos->appends(request()->query())->links('Componentes.pagination') }}
 </div>
-
-
 
 @endsection

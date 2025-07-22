@@ -12,7 +12,10 @@
 </style>
 
 {{-- TABLA --}}
-<div class="table">
+<div class="table" data-name="tablaCarreras">
+
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CARRERAS']) 
+
     <div class="perfil__header-alt">
         <a href="{{route('admin.carreras.create')}}">
             <button class="btn_blue">
@@ -45,8 +48,15 @@
                 {{--<td class="center">{{$carrera->resolucion}}</td>--}}
                 <td class="center">{{$carrera->anio_apertura}}</td>
                 <td class="center">{{$carrera->vigente == 1 ? "Vigente" : $carrera->anio_fin}}</td>
-                <td><a href="{{route('admin.carreras.edit', ['carrera' => $carrera])}}"><button class="btn_blue"><i
-                                class="ti ti-file-info"></i>Detalles</button></a></td>
+                <td class="center">
+                    <div style="display: flex; justify-content: center;">
+                        <a href="{{ route('admin.carreras.edit', ['carrera' => $carrera]) }}">
+                            <button class="btn_blue">
+                                <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>Modificar
+                            </button>
+                        </a>
+                    </div>
+                </td>
             </tr>
             @endforeach
         </tbody>

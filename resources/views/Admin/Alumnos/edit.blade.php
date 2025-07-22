@@ -1,10 +1,9 @@
 @extends('Admin.template')
 
 @section(section: 'content')
+    
     <div class="perfil_one br">
-        <div class="perfil__header">
-            <h2>Modificar Alumno</h2>
-        </div>
+        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUUMNO/A']) 
         <?= $form->generate(
         route('admin.alumnos.update', ['alumno' => $alumno->id]),
         'put',

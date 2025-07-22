@@ -3,9 +3,7 @@
 @section('content')
     <div>
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Crear nueva carrera</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA CARRERA']) 
             <div class="perfil__info">
 
                 <?= $form->generate(route('admin.carreras.store'),'post',[

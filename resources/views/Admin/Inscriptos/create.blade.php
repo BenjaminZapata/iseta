@@ -13,9 +13,7 @@
 
     <div>
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Crear nuevo inscripto</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'INSCRIBIR ALUMNO']) 
 
             <div class="perfil__info">
                 <form method="post" action="{{ route('admin.inscriptos.store') }}">

@@ -8,9 +8,7 @@
 
     <div>
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Crear nueva mesa</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'CREAR MESA']) 
 
             <div class="perfil__info">
                 <form method="post" action="{{route('admin.mesas.store')}}">

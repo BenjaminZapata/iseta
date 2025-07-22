@@ -3,9 +3,7 @@
 @section('content')
     <div class="edit-form-container">
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Carrera</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA']) 
             <div class="perfil__info">
                 <?= $form->generate(
                   route('admin.carreras.update', ['carrera' => $carrera->id]),

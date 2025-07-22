@@ -58,38 +58,5 @@
                 <span>Inscriptos</span>
             </a>
         </li>
-
-        <hr>
-
-        <li>
-            <a href="{{ route('admin.admins.index') }}">
-                <i class="ti ti-user-cog"></i>
-                <span>Admins</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('admin.config.index') }}">
-                <i class="ti ti-settings"></i>
-                <span>Configuración</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('admin.habiles.index') }}">
-                <i class="ti ti-calendar-time"></i>
-                <span>Días no hábiles</span>
-            </a>
-        </li>
-        <li>
-            <a href="{{ route('admin.config.modoseguro') }}">
-                <i class="ti ti-shield-lock"></i>
-                <span>{{ $config['modo_seguro'] ? 'Desactivar modo seguro' : 'Activar modo seguro' }}</span>
-            </a>
-        </li>
-        <li>
-            <a href="/admin/logout">
-                <i class="ti ti-logout"></i>
-                <span>Cerrar sesión</span>
-            </a>
-        </li>
     </ul>
 </aside>
