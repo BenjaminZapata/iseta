@@ -22,8 +22,9 @@ class AdminLoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "username"=>['required'],
-            "password"=>['required']
+            "username" => ['required'],
+            "password" => ['required'],
+            //'rol' => ['required', 'in:regente, preceptor, secretario']
         ];
     }
 }

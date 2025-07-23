@@ -1,11 +1,13 @@
-<?php 
+<?php
 
 namespace App\Services;
 
-class Form{
+class Form
+{
 
-    function select($name,$label,$class,$item,$optionsE,$options=[]){
-        if(!isset($options['inputclass'])){
+    function select($name, $label, $class, $optionsE, $item = null, $options = [])
+    {
+        if (!isset($options['inputclass'])) {
             $options['inputclass'] = 'p-1';
         }
 
@@ -20,9 +22,10 @@ class Form{
         ])->render();
     }
 
-    function text($name, $label, $class, $item=null, $options=[]){
+    function text($name, $label, $class, $item = null, $options = [])
+    {
 
-        if(!isset($options['inputclass'])){
+        if (!isset($options['inputclass'])) {
             $options['inputclass'] = 'p-1';
         }
 
@@ -34,10 +37,11 @@ class Form{
             'label' => $label,
             'options' => $options
         ])->render();
-    }    
-    function textarea($name, $label, $class, $item=null, $options=[]){
+    }
+    function textarea($name, $label, $class, $item = null, $options = [])
+    {
 
-        if(!isset($options['inputclass'])){
+        if (!isset($options['inputclass'])) {
             $options['inputclass'] = 'p-1';
         }
 
@@ -48,12 +52,13 @@ class Form{
             'label' => $label,
             'options' => $options
         ])->render();
-    }    
+    }
 
 
-    function date($name, $label, $class, $item=null, $options=[]){
+    function date($name, $label, $class, $item = null, $options = [])
+    {
 
-        if(!isset($options['inputclass'])){
+        if (!isset($options['inputclass'])) {
             $options['inputclass'] = 'p-1';
         }
 
@@ -65,11 +70,12 @@ class Form{
             'label' => $label,
             'options' => $options
         ])->render();
-    }  
-    
-    function password($name, $label, $class, $item=null, $options=[]){
+    }
 
-        if(!isset($options['inputclass'])){
+    function password($name, $label, $class, $item = null, $options = [])
+    {
+
+        if (!isset($options['inputclass'])) {
             $options['inputclass'] = 'p-1';
         }
 
@@ -81,12 +87,13 @@ class Form{
             'label' => $label,
             'options' => $options
         ])->render();
-    }    
+    }
 
 
-    function checkbox($name, $label, $class, $item=null, $options=[]){
+    function checkbox($name, $label, $class, $item = null, $options = [])
+    {
 
-        if(!isset($options['inputclass'])){
+        if (!isset($options['inputclass'])) {
             $options['inputclass'] = 'p-1';
         }
         return view('Componentes.form.checkbox-input', [
@@ -98,12 +105,13 @@ class Form{
             'options' => $options
         ])->render();
     }
-    
-    function generate($url, $method, $fieldsets){
+
+    function generate($url, $method, $fieldsets)
+    {
 
         $fieldsets = (object) $fieldsets;
 
-        if(!isset($options['inputclass'])){
+        if (!isset($options['inputclass'])) {
             $options['inputclass'] = 'p-1';
         }
         return view('Componentes.form.edit-form', [
@@ -113,7 +121,8 @@ class Form{
         ])->render();
     }
 
-    function texthidden($value){
+    function texthidden($value)
+    {
         return view('Componentes.form.text-hidden', [
             'value' => $value,
         ])->render();
