@@ -61,6 +61,21 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         return redirect()->route('admin.alumnos.index')->with('aviso', 'El alumno no existe o ha sido eliminado');
     })->except('show');
 
+    //usuarios
+    Route::prefix('admin')->middleware(['auth:admin'])->group(function () {
+        Route::get('/preceptor/dashboard', function () {
+            return view('Admin.Preceptor.dashboard');
+        })->name('admin.preceptor.dashboard');
+
+        Route::get('/regente/dashboard', function () {
+            return view('Admin.Regente.dashboard');
+        })->name('admin.regente.dashboard');
+
+        Route::get('/secretario/dashboard', function () {
+            return view('Admin.Secretario.dashboard');
+        })->name('admin.secretario.dashboard');
+    });
+
 
     Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
         ->name('admin.alumnos.analitico.pdf');

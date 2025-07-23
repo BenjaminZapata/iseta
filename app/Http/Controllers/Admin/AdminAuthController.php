@@ -75,7 +75,12 @@ class AdminAuthController extends Controller
         // Iniciar sesión con el guard 'admin'
         Auth::guard('admin')->login($admin);
 
-        return redirect()->route('admin.alumnos.index'); // Ajustá la ruta si es distinta
+        return match ($request->rol) {
+            'preceptor' => redirect()->route('admin.preceptor.dashboard'),
+            'regente' => redirect()->route('admin.regente.dashboard'),
+            'secretario' => redirect()->route('admin.secretario.dashboard'),
+            default => redirect()->route('admin.alumnos.index'), // por si hay algún fallback
+        }; // Ajustá la ruta si es distinta
     }
 
 
