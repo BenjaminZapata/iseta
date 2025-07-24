@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminCopiaDB;
-use App\Http\Controllers\Admin\PreceptorController;
+use App\Http\Controllers\PreceptorController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminCorrelativasController;
 use App\Http\Controllers\Admin\AdminCursadasLotes;
@@ -63,8 +63,8 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     })->except('show');
 
     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/preceptor/dashboard', [PreceptorController::class, 'dashboard'])
-            ->name('admin.preceptor.dashboard');
+        Route::get('/preceptor/alumnos/index', [PreceptorController::class, 'index'])
+            ->name('preceptor.alumnos.index');
     });
 
 

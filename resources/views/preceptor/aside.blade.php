@@ -9,19 +9,19 @@
 
     <ul>
         <li>
-            <a href="{{ route('admin.preceptor.alumnos') }}">
+            <a href="{{ route('preceptor.alumnos') }}">
                 <i class="ti ti-user"></i>
                 <span>Alumnos</span>
             </a>
         </li>
         <li>
-            <a href="{{ route('admin.preceptor.cursadas') }}">
+            <a href="{{ route('preceptor.cursadas') }}">
                 <i class="ti ti-books"></i>
                 <span>Cursadas</span>
             </a>
         </li>
         <li>
-            <a href="{{ route('admin.preceptor.mesas') }}">
+            <a href="{{ route('preceptor.mesas') }}">
                 <i class="ti ti-address-book"></i>
                 <span>Mesas</span>
             </a>

@@ -76,11 +76,11 @@ class AdminAuthController extends Controller
         Auth::guard('admin')->login($admin);
 
         return match ($request->rol) {
-            'preceptor' => redirect()->route('preceptor.dashboard'),
+            'preceptor' => redirect()->route('preceptor.alumnos.index'),
             'regente' => redirect()->route('admin.regente.dashboard'),
             'secretario' => redirect()->route('admin.secretario.dashboard'),
-            default => redirect()->route('admin.alumnos.index'), // por si hay algún fallback
-        }; // Ajustá la ruta si es distinta
+            default => redirect()->route('admin.alumnos.index'),
+        };
     }
 
 
