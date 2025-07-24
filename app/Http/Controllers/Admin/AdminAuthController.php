@@ -76,7 +76,7 @@ class AdminAuthController extends Controller
         Auth::guard('admin')->login($admin);
 
         return match ($request->rol) {
-            'preceptor' => redirect()->route('admin.preceptor.dashboard'),
+            'preceptor' => redirect()->route('preceptor.dashboard'),
             'regente' => redirect()->route('admin.regente.dashboard'),
             'secretario' => redirect()->route('admin.secretario.dashboard'),
             default => redirect()->route('admin.alumnos.index'), // por si hay algún fallback

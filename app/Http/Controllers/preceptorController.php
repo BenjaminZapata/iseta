@@ -24,4 +24,10 @@ class PreceptorController extends Controller
   // Mostrar notificaciones específicas del preceptor
   return view('Admin.Preceptor.mesas');
  }
+
+ public function dashboard()
+ {
+  return view('Admin.Preceptor.dashboard');
+ }
+
 }
