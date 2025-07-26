@@ -26,7 +26,10 @@
             </a>
             {{-- FILTROS --}}
             <?= $filtergen->generate('admin.alumnos.index', $filters, [
-                    'dropdowns' => [$carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]), $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()), $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])],
+                    'dropdowns' => [$carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
+                    $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
+                    $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
+                    $form->select('filter_titulo', 'Titulo Secundario:', 'label-input-y-100', $filters, ['Todos', 'No Entregado', 'Constancia de título en trámite', 'Constancia ultimo año del nivel secundario', 'Titulo Secundario'])],
                     'fields' => [
                         'alumno' => 'Alumno',
                         'dni' => 'Dni',
