@@ -19,8 +19,9 @@ class AlumnoRepository
         $this->config = Configuracion::todas();
     }
 
-    function index($request)
+    public function index($request)
     {
+
         $idsQuery = Alumno::select('alumnos.id')
             ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id')
             ->leftJoin('carreras', 'carreras.id', '=', 'egresadoinscripto.id_carrera');
@@ -48,7 +49,7 @@ class AlumnoRepository
         }
 
         if ($request->has('filter_titulo') && $request->input('filter_titulo') != 0) {
-            $idsQuery->where('alumnos.titulo', $request->input('filter_titulo'));
+            $idsQuery->where('alumnos.titulo_secundario', $request->input('filter_titulo'));
         }
 
 
@@ -65,6 +66,7 @@ class AlumnoRepository
             $filasPorTabla = 15; // Default value if not numeric
         }
         return $query->paginate((int) $filasPorTabla);
+
     }
 
     // agregar una institucion secundaraia a un alumno

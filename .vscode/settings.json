@@ -2,10 +2,14 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 1,
   "[blade]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "shufo.vscode-blade-formatter"
   },
-  "todo-tree.general.tags": ["FIXME", "WARN", "COMPLETE", "TODO"],
-
+  "todo-tree.general.tags": [
+    "FIXME",
+    "WARN",
+    "COMPLETE",
+    "TODO"
+  ],
   "todo-tree.highlights.defaultHighlight": {
     "icon": "alert",
     "type": "text",
@@ -13,7 +17,6 @@
     "opacity": 50,
     "iconColour": "yellow"
   },
-
   "todo-tree.highlights.customHighlight": {
     "TODO": {
       "icon": "check",
