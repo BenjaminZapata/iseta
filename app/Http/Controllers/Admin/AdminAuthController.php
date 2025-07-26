@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use App\Http\Requests\AdminLoginRequest;
 use Illuminate\Support\Facades\Log;
 
 class AdminAuthController extends Controller

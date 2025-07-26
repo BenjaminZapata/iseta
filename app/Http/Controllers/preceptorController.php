@@ -53,7 +53,8 @@ class PreceptorController extends Controller
    'form',
    'alumnoM',
    'carreraM',
-   'alumnos'
+   'alumnos',
+   'ciudades'
   ));
  }
 

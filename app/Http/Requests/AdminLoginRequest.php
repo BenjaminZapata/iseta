@@ -24,7 +24,7 @@ class AdminLoginRequest extends FormRequest
         return [
             "username" => ['required'],
             "password" => ['required'],
-            //'rol' => ['required', 'in:regente, preceptor, secretario']
+            'rol' => ['required', 'in:regente, preceptor, secretario']
         ];
     }
 }

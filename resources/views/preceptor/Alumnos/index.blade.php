@@ -10,9 +10,11 @@
         }
     </style>
 
+    {{-- CONTENIDO --}}
     <div class="table" data-name="tablaAlumnos">
         @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
 
+        {{-- BOTÓN AGREGAR ALUMNO Y FILTROS --}}
         <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
             <a href="{{ route('preceptor.alumnos.create') }}">
                 <button class="btn_blue">
@@ -20,7 +22,8 @@
                 </button>
             </a>
 
-            <?= $filter->generate('preceptor.alumnos.index', $filters, [
+            {{-- FILTROS --}}
+            <?= $filtergen->generate('preceptor.alumnos.index', $filters, [
         'dropdowns' => [
             $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
             $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
@@ -36,6 +39,7 @@
     ]) ?>
         </div>
 
+        {{-- TABLA DE ALUMNOS --}}
         <table class="table__body">
             <thead>
                 <tr>
@@ -81,6 +85,7 @@
         </table>
     </div>
 
+    {{-- PAGINACIÓN --}}
     <div class="w-1/2 mx-auto p-5 pagination">
         {{ $alumnos->appends(request()->query())->links('Componentes.pagination') }}
     </div>
