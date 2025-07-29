@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Preceptor;
+
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Alumno;
 use App\Models\Carrera;
 use App\Services\Filter;
 use App\Services\Form;
 
-class PreceptorController extends Controller
+class AlumnoPreceptorController extends Controller
 {
  // preceptor/alumnos
  public function alumnos(Request $request)
  {
-  // Recibir filtros con nombres coherentes
   $filters = [
    'filter_carrera_id' => $request->input('filter_carrera_id', 0),
    'filter_ciudad' => $request->input('filter_ciudad', ''),
@@ -36,27 +37,15 @@ class PreceptorController extends Controller
   }
 
   if (!empty($filters['campo']) && !empty($filters['filtro'])) {
-   $query->where($filters['campo'], 'like', '%' . $filters['filtro'] . '%');
+   $query->where($filters['campo'], 'like', "%{$filters['filtro']}%");
   }
 
-  $alumnos = $query->paginate(25)->withQueryString();
+  $alumnos = $query->paginate(20);
 
-  // Servicios y modelos para filtros
-  $filter = new Filter;
-  $form = new Form;
-  $alumnoM = new Alumno();
-  $carreraM = new Carrera();
+  $carreras = Carrera::pluck('nombre', 'id');
 
-  return view('Preceptor.alumnos.index', compact(
-   'filters',
-   'filter',
-   'form',
-   'alumnoM',
-   'carreraM',
-   'alumnos'
-  ));
+  return view('Preceptor.alumnos.index', compact('alumnos', 'filters', 'carreras'));
  }
-
 
  public function crearAlumno()
  {
@@ -78,19 +67,23 @@ class PreceptorController extends Controller
   ]);
  }
 
-
- public function cursadas()
+ // Actualizar datos del alumno
+ public function update(Request $request, $id)
  {
-  return view('Preceptor.cursadas.index');
- }
+  $alumno = Alumno::findOrFail($id);
 
- public function mesas()
- {
-  return view('Preceptor.mesas.index');
- }
+  $validated = $request->validate([
+   'nombre' => 'required|string|max:255',
+   'apellido' => 'required|string|max:255',
+   'dni' => 'required|string|max:20',
+   'fecha_nacimiento' => 'required|date',
+   'estado_civil' => 'nullable|string|max:100',
+   // Agregá más validaciones si hace falta
+  ]);
 
- public function dashboard()
- {
-  return view('Preceptor.dashboard');
+  $alumno->update($validated);
+
+  return Redirect::route('preceptor.alumnos.edit', ['alumno' => $alumno->id])
+   ->with('success', 'Datos actualizados correctamente.');
  }
 }
