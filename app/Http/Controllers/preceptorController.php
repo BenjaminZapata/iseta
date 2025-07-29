@@ -53,8 +53,7 @@ class PreceptorController extends Controller
    'form',
    'alumnoM',
    'carreraM',
-   'alumnos',
-   'ciudades'
+   'alumnos'
   ));
  }
 
@@ -64,11 +63,21 @@ class PreceptorController extends Controller
   return view('Preceptor.alumnos.create');
  }
 
- public function editAlumno($alumno)
+ public function editAlumno($id)
  {
-  $alumno = Alumno::findOrFail($alumno);
-  return view('Preceptor.alumnos.edit', compact('alumno'));
+  $alumno = Alumno::findOrFail($id);
+  $carreras = Carrera::select('id as carrera_id', 'nombre as carrera_nombre')->get();
+  $cursadas = $alumno->cursadas()->with('asignatura')->get();
+  $examenes = $alumno->examenes()->with('asignatura', 'mesa')->get(); // con relaciones si las tenés
+
+  return view('preceptor.Alumnos.edit', [
+   'alumno' => $alumno,
+   'carreras' => $carreras,
+   'cursadas' => $cursadas,
+   'examenes' => $examenes
+  ]);
  }
+
 
  public function cursadas()
  {

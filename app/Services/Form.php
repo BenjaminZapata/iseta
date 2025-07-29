@@ -5,7 +5,7 @@ namespace App\Services;
 class Form
 {
 
-    function select($name, $label, $class, $optionsE, $item = null, $options = [])
+    function select($name, $label, $class, $item = null, $optionsE = [], $options = [])
     {
         if (!isset($options['inputclass'])) {
             $options['inputclass'] = 'p-1';

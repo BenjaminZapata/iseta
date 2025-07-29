@@ -1,11 +1,11 @@
 @extends('Admin.template')
 
 @section(section: 'content')
-    
+
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUUMNO/A']) 
+        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUUMNO/A'])
         <?= $form->generate(
-        route('admin.alumnos.update', ['alumno' => $alumno->id]),
+        route('preceptor.alumnos.update', ['alumno' => $alumno->id]),
         'put',
         [
             'Alumno' => [
@@ -108,7 +108,7 @@
             </div>
 
             <div class="matricular">
-                <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}">
+                <form action="{{ route('preceptor.alumno.rematricular', ['alumno' => $alumno->id]) }}">
                     <select name="carrera">
                         @foreach ($carreras as $carrera)
                             <option value="{{$carrera->carrera_id}}">{{$carrera->carrera_nombre}}</option>
@@ -116,7 +116,7 @@
                     </select>
                     <div class="upd"><button class="btn_blue"><i class="ti ti-paperclip"></i>Matricular</button></div>
                 </form>
-                <a href="{{ route('admin.inscriptos.create', ['alumno_id' => $alumno->id]) }}"
+                <a href="{{ route('preceptor.inscriptos.create', ['alumno_id' => $alumno->id]) }}"
                     style="display:block;width:190px">
                     <button class="btn_blue" style="margin-top:-40px">Inscribir a otra carrera</button>
                 </a>
@@ -212,7 +212,7 @@
                                     <td>{{ $cursada->condicionString() }}</td>
                                     <td class="center">{{ $cursada->aprobado() }}</td>
                                     <td class="flex just-center">
-                                        <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}">
+                                        <a href="{{ route('preceptor.cursadas.edit', ['cursada' => $cursada->id]) }}">
                                             <button class="btn_blue"><i class="ti ti-edit"></i>Editar</button>
                                         </a>
                                     </td>
@@ -326,7 +326,7 @@
                                         @endif
                                     </td>
                                     <td class="flex just-center">
-                                        <a href="{{ route('admin.examenes.edit', ['examen' => $examen->id]) }}">
+                                        <a href="{{ route('preceptor.examenes.edit', ['examen' => $examen->id]) }}">
                                             <button class="btn_blue"><i class="ti ti-edit"></i>Editar</button>
                                         </a>
                                     </td>
@@ -336,7 +336,7 @@
                 </table>
                 @if ($alumno->verificado == 0)
                                 <div class='my-4'>
-                                    <a href="{{route('admin.alumnos.verificar', ['alumno' => $alumno->id])}}"><button
+                                    <a href="{{route('preceptor.alumnos.verificar', ['alumno' => $alumno->id])}}"><button
                                             class="btn_blue">Verificar alumno</button></a>
                                 </div>
                             </div>
@@ -349,7 +349,7 @@
 
     @if ($alumno->verificado == 0)
         <div class='my-4 mx-2'>
-            <a href="{{ route('admin.alumnos.verificar', ['alumno' => $alumno->id]) }}">
+            <a href="{{ route('preceptor.alumnos.verificar', ['alumno' => $alumno->id]) }}">
                 <button class="btn_blue">Verificar alumno</button>
             </a>
         </div>
