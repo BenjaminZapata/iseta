@@ -81,10 +81,14 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         return redirect()->route('admin.carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
     })->except('show');
 
-    Route::post('carreras/add', [CarrerasCrudController::class, 'addAsignatura'])
-        ->name('admin.carreras.add.post');
-    Route::get('carreras/add', [CarrerasCrudController::class, 'addAsignaturaView'])
-        ->name('admin.carreras.add');
+    Route::post('carreras/add_asignatura', [CarrerasCrudController::class, 'addAsignatura'])
+        ->name('admin.carreras.addAsignatura');
+    Route::get('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
+        ->name('admin.carreras.addAsignaturaView');
+
+    Route::get('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignaturaView'])->name('admin.carreras.createAsignaturaView');
+    Route::post('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignatura'])->name('admin.carreras.createAsignatura');
+
 
 
     Route::resource('asignaturas', AsignaturasCrudController::class, ['as' => 'admin'])->missing(function () {

@@ -1,34 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="{{asset('css/Admin/login.css')}}">
-    <link rel="stylesheet" href="{{asset('css/Reset/reset.css')}}">
-    <link rel="stylesheet" href="{{asset('css/Admin/main.css')}}">
-    <link rel="stylesheet" href="{{asset('css/global.css')}}">
-    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<html lang="es">
+<link rel="stylesheet" href="{{ asset('css/Admin/auth.css') }}">
 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login Administradores</title>
 </head>
+
 <body>
     <div class="login-box">
+        <h2>Ingreso Administradores</h2>
 
-        <form method="POST" action="{{route('admin.login.post')}}">
+        <!-- Mensaje de error desde backend -->
+        {{-- @include('Componentes.mensaje') --}}
+
+        <form method="POST" action="{{ route('admin.login.post') }}" novalidate>
             @csrf
-          <div class="user-box">
-            <input value="" type="text" name="username" required="">
-            <label>Username</label>
-          </div>
-          <div class="user-box">
-            <input value="" type="password" name="password" name="" required="">
-            <label>Password</label>
-          </div>
-          <input type="submit" value="Login">
+
+            <label for="role">Rol</label>
+            <select name="role" id="role" required aria-required="true" aria-label="Seleccione su rol">
+                <option value="" disabled selected>Seleccione rol</option>
+                <option value="regente">Regente</option>
+                <option value="preceptor">Preceptor</option>
+                <option value="secretario">Secretario</option>
+            </select>
+
+            <label for="username">Usuario</label>
+            <input id="username" name="username" type="text" required autocomplete="username" aria-required="true"
+                aria-label="Nombre de usuario" placeholder="Ingrese su usuario" />
+
+            <label for="password">Contraseña</label>
+            <input id="password" name="password" type="password" required autocomplete="current-password"
+                aria-required="true" aria-label="Contraseña" placeholder="Ingrese su contraseña" />
+
+            <button type="submit" class="btn-login">Ingresar</button>
         </form>
-      </div>
-      @include('Componentes.mensaje')
+
+        <p class="forgot-password">
+            <a href="">¿Olvidaste tu contraseña?</a>
+        </p>
+    </div>
 </body>
+
 </html>

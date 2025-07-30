@@ -23,8 +23,8 @@ class EditarAlumnoRequest extends FormRequest
     {
         return [
             'dni' => ['required', 'numeric', 'max:999999999'],
-            'nombre' => ['required', 'regex:/^[a-zA-Z]+$/'],
-            'apellido' => ['required',],
+            'nombre' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
+            'apellido' => ['required', 'regex:/^[a-zA-Z\s]+$/'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
             'ciudad' => ['nullable', 'regex:/^[\pL\pN\s]+$/u'],
             'calle' => ['nullable', 'regex:/^[\pL]+$/u'],
@@ -33,7 +33,7 @@ class EditarAlumnoRequest extends FormRequest
             'piso' => ['nullable'],
             'estado_civil' => ['required'],
             'email' => ['nullable', 'regex:/^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,6}$/'],
-            'nombre_institucion_secundario' => ['required', 'string', 'max:255', 'regex:/^[A-Za-záéíóúÁÉÍÓÚÑñ\s\d]+$/'],
+            'nombre_institucion_secundario' => ['required', 'string', 'max:255'],
             'titulo_anterior' => ['nullable', 'regex:/^[\pL\s]+$/u'],
             'becas' => ['nullable'],
             'observaciones' => ['nullable'],

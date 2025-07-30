@@ -1,16 +1,14 @@
 @extends('Admin.template')
 
 @section('content')
-<p class="w-100p">
+{{-- <p class="w-100p">
     <a href="/admin/alumnos">Alumnos</a>/
     <a href="/admin/alumnos/{{$cursada->alumno->id}}/edit">{{$cursada->alumno->id}}</a>/ Cursada/
     <a>{{$cursada->asignatura->nombre}}</a>
-</p>
+</p> --}}
 <div class="edit-form-container">
     <div class="perfil_one br">
-        <div class="perfil__header">
-            <h2>Cursada</h2>
-        </div>
+        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CURSADA']) 
         <div class="perfil__info">
 
             <form method="POST" action="{{route('admin.cursadas.update', ['cursada'=>$cursada->id])}}">

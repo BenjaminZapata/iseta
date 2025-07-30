@@ -2,17 +2,31 @@
 
 @section('content')
 
-<div class="table">
+<style>
+    #filters .label-input-y-100 label {
+    text-align: left !important;
+    display: block !important;
+    width: 100%;
+    padding-top: 15px;
+}
+</style>
+
+<div class="table" data-name="tablaCursadas">
+
+    {{-- HEADER AVATAR --}}
+
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CURSADAS'])  
+
     <div class="perfil__header-alt">
         <a href="{{route('admin.cursadas.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar cursada</button></a>
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.cursadas.index', $filters, [
             'dropdowns' => [
-                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-75', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
-                $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-75', $filters, ['Seleccione una carrera'], ['id' => 'asignatura_select']),
-                $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-75', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']),
-                $form->select('filter_condicion', 'Condición: ', 'label-input-y-75', $filters, ['Cualquiera', 'Libre', 'Regular', 'Promoción', 'Equivalencia', 'Desertor']),
-                $form->select('filter_aprobada', 'Estado: ', 'label-input-y-75', $filters, ['Cualquiera', 'Aprobada', 'Desaprobada', 'Cursando']),
+                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
+                $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', $filters, ['Seleccione una carrera'], ['id' => 'asignatura_select']),
+                $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-100', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']),
+                $form->select('filter_condicion', 'Condición: ', 'label-input-y-100', $filters, ['Cualquiera', 'Libre', 'Regular', 'Promoción', 'Equivalencia', 'Desertor']),
+                $form->select('filter_aprobada', 'Estado: ', 'label-input-y-100', $filters, ['Cualquiera', 'Aprobada', 'Desaprobada', 'Cursando']),
             ],
 
             'fields' => [
@@ -40,7 +54,7 @@
                 <td>
                     {{$cursada->aprobado()}}
                 </td>
-                <td class="flex just-center"><a href="{{route('admin.cursadas.edit', ['cursada' => $cursada->id])}}"><button class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
+                <td class="flex just-center"><a href="{{route('admin.cursadas.edit', ['cursada' => $cursada->id])}}"><button class="btn_blue"><i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button></a></td>
 
 
             </tr>

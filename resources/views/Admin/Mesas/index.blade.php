@@ -2,8 +2,21 @@
 
 @section('content')
 
+<style>
+    #filters .label-input-y-100 label {
+    text-align: left !important;
+    display: block !important;
+    width: 100%;
+    padding-top: 15px;
+}
+</style>
 
-<div class="table">
+<div class="table" data-name="tablaMesas">
+
+    {{-- HEADER AVATAR --}}
+
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE MESAS']) 
+
     <div class="perfil__header-alt">
         <a href="{{route('admin.mesas.create')}}">
             <button class="btn_blue">
@@ -13,15 +26,15 @@
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.mesas.index', $filters, [
             'dropdowns' => [
-                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-75', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
-                $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-75', $filters, ['Seleccione una carrera'], ['id' => 'asignatura_select']),
-                $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-75', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']),
-                $form->select('filter_llamado', 'Llamado: ', 'label-input-y-75', $filters, ['Cualquiera', 'Primer llamado', 'Segundo llamado']),
-                $form->date('filter_from', 'Desde:', 'label-input-y-75', $filters),
-                $form->date('filter_to', 'Hasta:', 'label-input-y-75', $filters),
-                $profesorM->dropdown('filter_presidente', 'Presidente:', 'label-input-y-75 text-right', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
-                $profesorM->dropdown('filter_vocal1', 'Vocal 1:', 'label-input-y-75', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
-                $profesorM->dropdown('filter_vocal2', 'Vocal 2:', 'label-input-y-75', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']])
+                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
+                $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', $filters, ['Seleccione una carrera'], ['id' => 'asignatura_select']),
+                $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-100', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']),
+                $form->select('filter_llamado', 'Llamado: ', 'label-input-y-100', $filters, ['Cualquiera', 'Primer llamado', 'Segundo llamado']),
+                $form->date('filter_from', 'Desde:', 'label-input-y-100', $filters),
+                $form->date('filter_to', 'Hasta:', 'label-input-y-100', $filters),
+                $profesorM->dropdown('filter_presidente', 'Presidente:', 'label-input-y-100', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
+                $profesorM->dropdown('filter_vocal1', 'Vocal 1:', 'label-input-y-100', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
+                $profesorM->dropdown('filter_vocal2', 'Vocal 2:', 'label-input-y-100', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']])
             ],
             'fields' => [
                 'alumno' => 'Alumno',
@@ -65,8 +78,8 @@
                     <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
                         <a href="{{route('admin.mesas.edit', ['mesa' => $mesa->id])}}">
                             <button class="btn_blue">
-                                <i class="ti ti-file-info"></i>
-                                Detalles
+                                <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                Modificar
                             </button>
                         </a>
                     </div>

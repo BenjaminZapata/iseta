@@ -3,9 +3,7 @@
 @section('content')
     <div>
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Crear nuevo profesor/a</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVO PROFESOR/A']) 
             <div class="perfil__info">
                 <?= $form->generate(route('admin.profesores.store'),'post',[
                     'Profesor' => [

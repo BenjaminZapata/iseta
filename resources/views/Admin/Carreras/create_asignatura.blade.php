@@ -3,12 +3,15 @@
 @section('content')
     <div>
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Crear asignatura</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA ASIGNATURA']) 
             <div class="perfil__info">
-                <form method="post" action="{{route('admin.asignaturas.store')}}">
+                <form method="post" action="{{route('admin.carreras.createAsignatura', ['carrera' => $carrera->id])}}" id="create_asignatura">
                 @csrf
+                    <div class="perfil_dataname">
+                        <label>Carrera:</label>
+                        <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
+                        <input type="hidden" name="carrera_id" value="{{ $carrera->id }}">
+                    </div>
                     <div class="perfil_dataname">
                         <label>Asignatura:</label>
                         <input class="campo_info rounded" name="nombre">

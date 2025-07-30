@@ -23,6 +23,7 @@
 * {
   list-style: none;
   text-decoration: none;
+
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
   margin: 0;
@@ -42,8 +43,15 @@ body {
 }
 
 .admin-main {
-  width: 80%;
-  margin-left: 20%;
+  min-height: 100%;
+  width: 95%;
+  margin-left: 80px;
+  margin-right: 15px;
+  text-transform: uppercase;
+}
+
+.excluir-mayusculas {
+  text-transform: none;
 }
 
 /*--- FILTROS, ORDENAR, BUSCAR  ---- */
@@ -135,6 +143,23 @@ body {
   border-radius: 0.8rem;
   overflow: hidden;
   width: 100%;
+  /* o 600px si preferís fijo */
+  position: relative;
+  /* necesario para dropdowns con position: absolute */
+}
+
+.table2 {
+  margin: 20px 0;
+  background: var(--gris-fondo-tabla);
+  backdrop-filter: blur(7px);
+  box-shadow: 0 0.4rem 0.8rem #0005;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+  /* o 600px si preferís fijo */
+  position: relative;
+  /* necesario para dropdowns con position: absolute */
 }
 
 .tit-year {
@@ -150,7 +175,7 @@ body {
 thead th {
   top: 0;
   left: 0;
-  background: var(--disney-plus);
+  background: #150a5c;
   color: white;
   text-align: left;
 }
@@ -202,7 +227,11 @@ table td {
 .btn_blue,
 .btn_red,
 .btn_grey,
-.btn_sky {
+.btn_sky,
+.btn_green,
+.btn_cancelar,
+.btn_borrar,
+.btn_borrar-alt {
   position: relative;
   z-index: 1;
   display: flex;
@@ -217,12 +246,18 @@ table td {
   border: none;
   border-radius: 5px;
   overflow: hidden;
+  transition: background 0.35s;
 }
 
+/* ::after base para efecto de hover */
 .btn_blue::after,
 .btn_red::after,
 .btn_grey::after,
-.btn_sky::after {
+.btn_sky::after,
+.btn_green::after,
+.btn_cancelar::after,
+.btn_borrar::after,
+.btn_borrar-alt::after {
   content: "";
   position: absolute;
   z-index: -1;
@@ -230,13 +265,17 @@ table td {
   bottom: 0;
   left: -100%;
   right: 100%;
-  -webkit-transition: all 0.35s;
   transition: all 0.35s;
 }
 
+/* Estilos por botón */
 .btn_blue {
   background-color: var(--azul-iseta);
   color: white;
+}
+
+.btn_blue::after {
+  background-color: var(--facebook);
 }
 
 .btn_red {
@@ -244,14 +283,17 @@ table td {
   color: white;
 }
 
+.btn_red::after {
+  background-color: var(--netflix);
+}
+
 .btn_grey {
   background: var(--gris-titulo);
   color: black;
 }
 
-.btn_green {
-  background: var(--green-iseta);
-  color: black;
+.btn_grey::after {
+  background-color: var(--facebook);
 }
 
 .btn_sky {
@@ -259,57 +301,13 @@ table td {
   color: black;
 }
 
-/* ...existing code... */
-.btn_cancelar {
-  background-color: #b71f14;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-weight: bold;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.4s;
-}
-
-.btn_cancelar::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  background: linear-gradient(90deg, transparent 100%);
-  width: 0;
-  transition: width 0.4s;
-  z-index: 0;
-}
-
-.btn_cancelar:hover::before {
-  width: 100%;
-}
-
-.btn_cancelar span {
-  position: relative;
-  z-index: 1;
-}
-/* ...existing code... */
-
-.btn_blue::after {
-  background-color: var(--facebook);
-}
-
-.btn_red::after {
-  background-color: var(--netflix);
-}
-
-.btn_grey::after {
-  background-color: var(--facebook);
-  color: white;
-}
-
 .btn_sky::after {
   background-color: var(--gris-titulo);
+}
+
+.btn_green {
+  background: var(--green-iseta);
+  color: black;
 }
 
 .btn_green::after {
@@ -317,60 +315,117 @@ table td {
   color: white;
 }
 
-.btn_blue:hover::after,
-.btn_red:hover::after,
-.btn_grey:hover::after,
-.btn_sky:hover::after,
-.btn_green:hover::after {
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  -webkit-transition: all 0.35s;
-  transition: all 0.35s;
+/* Botón Cancelar */
+.btn_cancelar {
+  background-color: #b71f14;
+  color: #fff;
+  border-radius: 5px;
 }
 
+.btn_cancelar::after {
+  background-color: #a11b10;
+}
+
+/* Botón Borrar */
 .btn_borrar {
   background: var(--azul-iseta);
   color: white;
   padding: 0 15px;
   min-width: 80px;
-  height: 40px;
   border-radius: 7px;
-  cursor: pointer;
-  border: none;
 }
 
-.btn_borrar:hover {
+.btn_borrar::after {
   background-color: var(--facebook);
 }
 
+/* Botón Borrar Alternativo */
 .btn_borrar-alt {
   background: var(--rojo-sl);
   color: white;
   padding: 0 15px;
   min-width: 80px;
-  height: 40px;
   border-radius: 25px;
-  cursor: pointer;
-  border: none;
 }
 
-.btn_borrar-alt:hover {
+.btn_borrar-alt::after {
   background-color: var(--netflix);
 }
 
-.ti-info-circle {
-  font-size: 20px;
-  margin-left: 5px;
-  color: var(--dark3);
+/* Hover animations */
+.btn_blue:hover::after,
+.btn_red:hover::after,
+.btn_grey:hover::after,
+.btn_sky:hover::after,
+.btn_green:hover::after,
+.btn_cancelar:hover::after,
+.btn_borrar:hover::after,
+.btn_borrar-alt:hover::after {
+  left: 0;
+  right: 0;
 }
 
-.botones-derecha {
-  justify-content: flex-end;
-  display: flex;
-  gap: 0.5rem;
+/* Para asegurar visibilidad del texto */
+.btn_blue span,
+.btn_red span,
+.btn_grey span,
+.btn_sky span,
+.btn_green span,
+.btn_cancelar span,
+.btn_borrar span,
+.btn_borrar-alt span {
+  position: relative;
+  z-index: 1;
 }
+
+.btn_icon-danger {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--rojo-sl);
+  /* Fondo rojo predeterminado */
+  color: white;
+  transition: background 0.35s;
+}
+
+/* Efecto hover con overlay más oscuro */
+.btn_icon-danger::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  right: 100%;
+  transition: all 0.35s;
+  background-color: black;
+  /* Un rojo más oscuro para el hover */
+}
+
+.btn_icon-danger:hover::after {
+  left: 0;
+  right: 0;
+}
+
+/* Íconos centrados y visibles */
+.btn_icon-danger i,
+.btn_icon-danger svg {
+  font-size: 18px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+
+
 /*---------------------------------------------- E  D  I  T  ,   C  R  E  A  T  E    y    R  E  M  A  T  ---------------------------------------------------------------*/
 
 .nwt {
@@ -505,6 +560,7 @@ table {
   background-color: white;
   cursor: pointer;
 }
+
 .campo_info-noinput {
   border: none;
   outline: none;

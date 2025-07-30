@@ -2,11 +2,8 @@
 
 @section('content')
 
-
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Crear nuevo administrador</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE USUARIOS ADMINISTRATIVOS']) 
             <div class="perfil__info">
             <form class="flex-col gap-3" method="POST" action="{{route('admin.admins.store')}}">
                 @csrf

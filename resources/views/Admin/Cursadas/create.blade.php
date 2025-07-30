@@ -11,9 +11,7 @@
 
     <div>
         <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Crear nueva cursada</h2>
-            </div>
+            @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA CURSADA']) 
             <div class="perfil__info">
 
 

@@ -9,6 +9,7 @@ use App\Models\Asignatura;
 use App\Models\Carrera;
 use App\Models\Configuracion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AsignaturasCrudController extends Controller
 {
@@ -54,10 +55,10 @@ class AsignaturasCrudController extends Controller
      */
     public function create(Request $request)
     {
-        $carreras = Carrera::orderBy('nombre')->get();
+        Log::debug($request->all());
+        $carreras = $request->carrera;
         return view('Admin.Asignaturas.create', [
-            'carreras' => $carreras,
-            'id_carrera' => $request->id_carrera ? $request->id_carrera : null
+            'carrera' => $carreras->id,
         ]);
     }
 
