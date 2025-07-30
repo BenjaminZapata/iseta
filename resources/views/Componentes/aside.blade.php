@@ -10,6 +10,7 @@
         <li><a class="text-blue-600" href="{{route('admin.carreras.index')}}" style="display: block;"><i class="ti ti-address-book"></i> Carreras </a></li>
         {{-- <li><a class="text-blue-600" href="{{route('admin.asignaturas.index')}}" style="display: block;"> Asignaturas </a></li> --}}
         <li><a class="text-blue-600" href="{{route('admin.mesas.index')}}" style="display: block;"><i class="ti ti-clipboard-text"></i> Mesas </a></li>
+        <li><a class="text-blue-600" href="{{route('admin.asignaturas.index')}} " style="display: block;"><i class="ti ti-notes"></i>Asignaturas</a></li>
         {{-- <li><a class="text-blue-600" href="{{route('admin.examenes.index')}}" style="display: block;"><i class="ti ti-address-book"></i> Examenes </a></li> --}}
         <li><a class="text-blue-600" href="{{route('admin.cursadas.index')}}" style="display: block;"><i class="ti ti-books"></i></i> Cursadas </a></li>
         <li><a class="text-blue-600" href="{{route('admin.inscriptos.index')}}" style="display: block;"><i class="ti ti-file-invoice"></i> Inscriptos </a></li>

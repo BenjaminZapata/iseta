@@ -25,3 +25,6 @@ include("test.php");
 Route::fallback(function(){
     return response()->view('Error.404',[],404);
 });
+
+
+Route::resource('/asignaturas-gestion', AsignaturaGestionController::class);
