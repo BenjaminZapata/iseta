@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('alumnos', function (Blueprint $table) {
             $table->tinyInteger('titulo_secundario')->default(0);
+            $table->date_created('fecha_titulo_secundario')->nullable();
         });
     }
 

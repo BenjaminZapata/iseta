@@ -211,7 +211,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             'Constancia de alumno del último año del nivel secundario',
             'No entregado'
         ];
-        return $titulo[$this->titulo] ?? 'Otro';
+        return $titulo[$this->titulo];
     }
 
 
