@@ -34,6 +34,7 @@ use App\Services\TextFormatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Admin\AsignaturaController;
 
 Route::redirect('/admin', '/admin/login');
 
@@ -207,4 +208,11 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
     Route::get('copia', [AdminCopiaDB::class, 'crearCopia']);
     Route::get('restaurar', [AdminCopiaDB::class, 'restaurarCopia']);
+
+    
+    Route::get('/admin/asignaturas', [AsignaturaController::class, 'index'])->name('admin.asignaturas.index');
+    Route::get('/admin/asignaturas/create', [AsignaturaController::class, 'create'])->name('admin.asignaturas.create');
+    Route::get('/admin/asignaturas/{asignatura}/edit', [AsignaturaController::class, 'edit'])->name('admin.asignaturas.edit');
+
+    
 });
