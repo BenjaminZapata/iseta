@@ -1,11 +1,11 @@
-@extends('Admin.template')
+@extends('preceptor.template')
 
 @section('content')
     <div>
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR INSCRIPTO'])
             <div class="perfil__info">
-                <form method="post" action="{{ route('admin.inscriptos.update', ['inscripto' => $registro->id]) }}">
+                <form method="post" action="{{ route('preceotor.inscriptos.update', ['inscripto' => $registro->id]) }}">
                     @csrf
                     @method('put')
 
@@ -54,7 +54,7 @@
         @if (!$config['modo_seguro'])
             <div class="upd">
                 <form class="form-eliminar" method="POST"
-                    action="{{ route('admin.inscriptos.destroy', ['inscripto' => $registro->id]) }}">
+                    action="{{ route('preceptor.inscriptos.destroy', ['inscripto' => $registro->id]) }}">
                     @csrf
                     @method('delete')
                     <button class="btn_red"><i class="ti ti-trash"></i>Eliminar inscripción</button>

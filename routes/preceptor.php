@@ -27,9 +27,10 @@ Route::prefix('preceptor')
 
 
   // Rutas cursadas
-  Route::get('/cursadas', [CursadasPreceptorController::class, 'cursadas'])->name('cursadas.index');
+  Route::get('/cursadas', [CursadasPreceptorController::class, 'index'])->name('cursadas.index');
   Route::get('/cursadas/{cursada}/edit', [CursadasPreceptorController::class, 'edit'])->name('cursadas.edit');
-
+  Route::get('/cursadas/create', [CursadasPreceptorController::class, 'create'])->name('cursadas.create');
+  Route::post('/cursadas', [CursadasPreceptorController::class, 'store'])->name('cursadas.store');
   // Rutas mesas
   Route::get('/mesas', [PreceptorController::class, 'mesas'])->name('mesas.index');
 

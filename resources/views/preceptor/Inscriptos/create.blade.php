@@ -1,4 +1,4 @@
-@extends('Admin.template')
+@extends('preceptor.template')
 
 @section('content')
 
@@ -16,7 +16,7 @@
             @include('components.header-avatar', ['tituloSeccion' => 'INSCRIBIR ALUMNO'])
 
             <div class="perfil__info">
-                <form method="post" action="{{ route('admin.inscriptos.store') }}">
+                <form method="post" action="{{ route('preceptor.inscriptos.store') }}">
                     @csrf
 
                     {{-- Alumno --}}

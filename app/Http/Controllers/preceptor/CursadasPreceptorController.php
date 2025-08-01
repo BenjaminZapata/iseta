@@ -60,4 +60,15 @@ class CursadasPreceptorController extends BaseController
   $data = $request->except('_token', '_method');
   // Update logic here...
  }
+
+ function create()
+ {
+  $alumnos = Alumno::orderBy('nombre', 'asc')->orderBy('apellido', 'asc')->get();
+  $carreras = Carrera::vigentes();
+
+  return view('preceptor/Cursadas/create', [
+   'alumnos' => $alumnos,
+   'carreras' => $carreras
+  ]);
+ }
 }

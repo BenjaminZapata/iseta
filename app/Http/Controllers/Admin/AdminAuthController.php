@@ -45,7 +45,7 @@ class AdminAuthController extends Controller
         $request->validate([
             'username' => 'required',
             'password' => 'required',
-            'rol' => 'required',
+            //'rol' => 'required',
         ]);
 
         $admin = Admin::where('username', $request->username)->first();
@@ -55,17 +55,17 @@ class AdminAuthController extends Controller
         }
 
         // Validar rol seleccionado
-        $roles = [
-            'regente' => 0,
-            'preceptor' => 1,
-            'secretario' => 2,
-        ];
+        // $roles = [
+        // 'regente' => 0,
+        // 'preceptor' => 1,
+        // 'secretario' => 2,
+        //  ];
 
-        $rolSeleccionado = $roles[$request->rol] ?? null;
+        //$rolSeleccionado = $roles[$request->rol] ?? null;
 
-        if ($admin->rol !== $rolSeleccionado) {
-            return back()->withErrors(['rol' => 'Rol incorrecto para este usuario.']);
-        }
+        //  if ($admin->rol !== $rolSeleccionado) {
+        //  return back()->withErrors(['rol' => 'Rol incorrecto para este usuario.']);
+        // }
 
         // Validar contraseña
         if (!\Hash::check($request->password, $admin->password)) {

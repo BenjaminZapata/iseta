@@ -15,7 +15,7 @@
             <div class="perfil__info">
 
 
-                <form method="post" action="{{route('admin.cursadas.store')}}">
+                <form method="post" action="{{route('preceptor.cursadas.store')}}">
                     @csrf
                     <div class="perfil_dataname">
                         <label>Carrera:</label>
@@ -38,7 +38,8 @@
                             <option disabled selected>Selecciona una materia</option>
                             @if ($ultimaCarreraSeleccionada)
                                 <option value="{{old('asignatura')}}">
-                                    {{$ultimaCarreraSeleccionada->asignaturas->first()->nombre}}</option>
+                                    {{$ultimaCarreraSeleccionada->asignaturas->first()->nombre}}
+                                </option>
                             @endif
                         </select>
                     </div>
@@ -48,7 +49,8 @@
                             <option disabled selected>Selecciona un alumno</option>
                             @foreach($alumnos as $alumno)
                                 <option @selected(old('id_alumno') == $alumno->id) value="{{$alumno->id}}">
-                                    {{$alumno->apellidoNombre()}}</option>
+                                    {{$alumno->apellidoNombre()}}
+                                </option>
                             @endforeach
                         </select>
                     </div>
