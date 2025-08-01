@@ -101,27 +101,7 @@
             ],
         ]
     ) ?>
-        <div class="perfil_one br">
 
-            <div class="perfil__header">
-                <h2>Rematriculación manual</h2>
-            </div>
-
-            <div class="matricular">
-                <form action="{{ route('preceptor.alumno.rematricular', ['alumno' => $alumno->id]) }}">
-                    <select name="carrera">
-                        @foreach ($carreras as $carrera)
-                            <option value="{{$carrera->carrera_id}}">{{$carrera->carrera_nombre}}</option>
-                        @endforeach
-                    </select>
-                    <div class="upd"><button class="btn_blue"><i class="ti ti-paperclip"></i>Matricular</button></div>
-                </form>
-                <a href="{{ route('preceptor.inscriptos.create', ['alumno_id' => $alumno->id]) }}"
-                    style="display:block;width:190px">
-                    <button class="btn_blue" style="margin-top:-40px">Inscribir a otra carrera</button>
-                </a>
-            </div>
-        </div>
 
         <!--//? CURSADAS -->
         <div class="edit-form-container">
