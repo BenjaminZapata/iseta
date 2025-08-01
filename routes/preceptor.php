@@ -4,6 +4,9 @@ use App\Http\Controllers\Preceptor\CursadasPreceptorController;
 use App\Http\Controllers\preceptor\AlumnoPreceptorController;
 use App\Http\Controllers\Admin\AlumnoCrudController;
 use App\htpp\Controllers\RematriculacionController;
+use App\Http\Controllers\Preceptor\ExamenPreceptorController;
+use App\Http\Controllers\Preceptor\mesaPreceptorController;
+use App\Http\Controllers\Admin\AdminPdfController;
 
 Route::prefix('preceptor')
  ->middleware(['auth:admin'])
@@ -31,9 +34,19 @@ Route::prefix('preceptor')
   Route::get('/cursadas/{cursada}/edit', [CursadasPreceptorController::class, 'edit'])->name('cursadas.edit');
   Route::get('/cursadas/create', [CursadasPreceptorController::class, 'create'])->name('cursadas.create');
   Route::post('/cursadas', [CursadasPreceptorController::class, 'store'])->name('cursadas.store');
+
   // Rutas mesas
-  Route::get('/mesas', [PreceptorController::class, 'mesas'])->name('mesas.index');
+  Route::get('/mesas', [mesaPreceptorController::class, 'index'])->name('mesas.index');
+  Route::get('/mesas/create', [mesaPreceptorController::class, 'create'])->name('mesas.create');
+  Route::post('/mesas', [mesaPreceptorController::class, 'store'])->name('mesas.store');
+  Route::get('/mesas/{mesa}/edit', [mesaPreceptorController::class, 'edit'])->name('mesas.edit');
+  Route::put('/mesas/{mesa}', [mesaPreceptorController::class, 'update'])->name('mesas.update');
+  Route::delete('/mesas/{mesa}', [mesaPreceptorController::class, 'destroy'])->name('mesas.destroy');
+  Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('mesas.acta');
+  Route::get('/mesas/acta-volante-prom/{mesa}', [AdminPdfController::class, 'actaVolantePromocion'])->name('mesas.actaprom');
+  Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('mesas.actalibre');
 
   //rutas Examenes
   Route::get('preceptor/examenes/{examen}/edit', [ExamenPreceptorController::class, 'edit'])->name('examenes.edit');
+  Route::post('preceptor/examenes', [ExamenPreceptorController::class, 'store'])->name('examenes.store');
  });
