@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 return new class extends Migration
 {
@@ -13,7 +14,7 @@ return new class extends Migration
     {
         Schema::table('alumnos', function (Blueprint $table) {
             $table->tinyInteger('titulo_secundario')->default(0);
-            $table->date_created('fecha_titulo_secundario')->nullable();
+            $table->date('fecha_titulo_secundario')->nullable()->after('titulo_secundario')->default(Carbon::now());
         });
     }
 
