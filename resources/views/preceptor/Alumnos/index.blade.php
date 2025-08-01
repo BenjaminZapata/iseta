@@ -1,5 +1,4 @@
-@extends('Admin.template')
-
+@extends('preceptor.template')
 @section('content')
     <style>
         #filters .label-input-y-100 label {

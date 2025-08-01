@@ -1,4 +1,4 @@
-@extends('Admin.template')
+@extends('preceptor.template')
 @section('content')
 
     <main id="fondo-estudiantes" class="black flex-col justify-center items-center gap-3 p-3 w-100">
