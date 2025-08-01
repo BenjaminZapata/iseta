@@ -15,9 +15,9 @@ Route::prefix('preceptor')
   Route::get('/dashboard', [AlumnoPreceptorController::class, 'dashboard'])->name('dashboard');
 
   // Rutas alumnos
-  Route::get('/alumnos', [AlumnoPreceptorController::class, 'alumnos'])->name('alumnos.index');
-  Route::get('/alumnos/create', [AlumnoPreceptorController::class, 'crearAlumno'])->name('alumnos.create');
-  Route::get('/alumnos/{alumno}/edit', [AlumnoPreceptorController::class, 'editAlumno'])->name('alumnos.edit');
+  Route::get('/alumnos', [AlumnoPreceptorController::class, 'index'])->name('alumnos.index');
+  Route::get('/alumnos/create', [AlumnoPreceptorController::class, 'create'])->name('alumnos.create');
+  Route::get('/alumnos/{alumno}/edit', [AlumnoPreceptorController::class, 'ediit'])->name('alumnos.edit');
   Route::put('alumnos/{alumno}', [AlumnoPreceptorController::class, 'update'])->name('alumnos.update');
   Route::post('/preceptor/alumno/{alumno}/rematricular', [RematriculacionController::class, 'rematricular'])
    ->name('alumno.rematricular');

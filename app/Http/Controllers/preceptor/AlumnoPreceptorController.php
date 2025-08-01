@@ -2,93 +2,59 @@
 
 namespace App\Http\Controllers\Preceptor;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\CrearAlumnoRequest;
-use Illuminate\Http\Request;
+use Validator;
+use App\Http\Controllers\BaseController;
+use App\Http\Requests\crearAlumnoRequest;
+use App\Http\Requests\EditarAlumnoRequest;
 use App\Models\Alumno;
-use App\Models\Carrera;
-use App\Services\Filter;
-use App\Services\Form;
+use App\Models\Cursada;
+use App\Models\Examen;
+use App\Repositories\Admin\AlumnoRepository;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use stdClass;
+use App\Http\Controllers\Controller;
 
-class AlumnoPreceptorController extends Controller
+class AlumnoPreceptorController extends BaseController
 {
-  // preceptor/alumnos
-  public function alumnos(Request $request)
+  public $alumnosRepo;
+  public $defaultFilters = [
+    'filter_carrera_id' => 0,
+    'filter_ciudad' => 0,
+    'filter_estado_civil' => 0
+  ];
+
+  public $mensajes = ['mensaje' => [], 'error' => [], 'aviso' => []];
+
+  public function __construct(AlumnoRepository $alumnosRepo)
   {
-    $filters = [
-      'filter_carrera_id' => $request->input('filter_carrera_id', 0),
-      'filter_ciudad' => $request->input('filter_ciudad', ''),
-      'filter_estado_civil' => $request->input('filter_estado_civil', ''),
-      'campo' => $request->input('campo', ''),
-      'filtro' => $request->input('filtro', ''),
-    ];
-
-    $query = Alumno::query();
-
-    if (!empty($filters['filter_carrera_id']) && $filters['filter_carrera_id'] != 0) {
-      $query->where('id_carrera', $filters['filter_carrera_id']);
-    }
-
-    if (!empty($filters['filter_ciudad'])) {
-      $query->where('ciudad', $filters['filter_ciudad']);
-    }
-
-    if (!empty($filters['filter_estado_civil'])) {
-      $query->where('estado_civil', $filters['filter_estado_civil']);
-    }
-
-    if (!empty($filters['campo']) && !empty($filters['filtro'])) {
-      $query->where($filters['campo'], 'like', "%{$filters['filtro']}%");
-    }
-
-    $alumnos = $query->paginate(20);
-
-    $carreras = Carrera::pluck('nombre', 'id');
-
-    return view('Preceptor.alumnos.index', compact('alumnos', 'filters', 'carreras'));
+    $this->alumnosRepo = $alumnosRepo;
   }
 
-  public function crearAlumno()
+  /**
+   * Display a listing of the resource.
+   */
+
+  public function index(Request $request)
   {
-    return view('Preceptor.alumnos.create');
+    $this->setFilters($request);
+    $this->data['alumnos'] = $this->alumnosRepo->index($request);
+
+    return view('preceptor.Alumnos.index', $this->data);
   }
 
-  public function editAlumno($id)
+  /**
+   * Show the form for creating a new resource.
+   */
+  public function create(): View
   {
-    $alumno = Alumno::findOrFail($id);
-    $carreras = Carrera::select('id as carrera_id', 'nombre as carrera_nombre')->get();
-    $cursadas = $alumno->cursadas()->with('asignatura')->get();
-    $examenes = $alumno->examenes()->with('asignatura', 'mesa')->get(); // con relaciones si las tenés
-
-    return view('preceptor.Alumnos.edit', [
-      'alumno' => $alumno,
-      'carreras' => $carreras,
-      'cursadas' => $cursadas,
-      'examenes' => $examenes
-    ]);
+    return view('preceptor.Alumnos.create');
   }
 
-  // Actualizar datos del alumno
-  public function update(Request $request, $id)
-  {
-    $alumno = Alumno::findOrFail($id);
-
-    $validated = $request->validate([
-      'nombre' => 'required|string|max:255',
-      'apellido' => 'required|string|max:255',
-      'dni' => 'required|string|max:20',
-      'fecha_nacimiento' => 'required|date',
-      'estado_civil' => 'nullable|string|max:100',
-      // Agregá más validaciones si hace falta
-    ]);
-
-    $alumno->update($validated);
-
-    return Redirect::route('preceptor.alumnos.edit', ['alumno' => $alumno->id])
-      ->with('success', 'Datos actualizados correctamente.');
-  }
-
-  public function store(CrearAlumnoRequest $request)
+  /**
+   * Guarda un nuevo alumno creado
+   */
+  public function store(crearAlumnoRequest $request)
   {
     $data = $request->validated();
     $response = redirect()->back();
@@ -100,6 +66,80 @@ class AlumnoPreceptorController extends Controller
       return $response->with('mensaje', 'Se creo el alumno');
     }
   }
+
+  /**
+   * Show the form for editing the specified resource.
+   */
+  public function edit(Request $request, Alumno $alumno)
+  {
+    $cursadas = Cursada::select(
+      'asignaturas.nombre as asignatura',
+      'cursadas.aprobada',
+      'cursadas.condicion',
+      'cursadas.anio_cursada',
+      'cursadas.id',
+      'carreras.nombre as carrera',
+      'asignaturas.anio as anio_asig'
+    )
+      ->join('asignaturas', 'cursadas.id_asignatura', 'asignaturas.id')
+      ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', 'cap.id_asignatura')
+      ->join('carreras', 'cap.id_carrera', 'carreras.id')
+      ->where('cursadas.id_alumno', $alumno->id)
+      ->orderBy('carreras.id')
+      ->orderBy('asignaturas.anio')
+      ->orderBy('asignaturas.id')
+      ->orderBy('cursadas.anio_cursada')
+      ->get();
+
+    $examenes = Examen::select('examenes.fecha', 'asignaturas.nombre as asignatura', 'examenes.nota', 'examenes.id', 'carreras.nombre as carrera', 'asignaturas.anio as anio_asig')
+      ->join('asignaturas', 'examenes.id_asignatura', 'asignaturas.id')
+      ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', 'cap.id_asignatura')
+      ->join('carreras', 'cap.id_carrera', 'carreras.id')
+      ->where('examenes.id_alumno', $alumno->id)
+      ->orderBy('carreras.id')
+      ->orderBy('asignaturas.anio')
+      ->orderBy('examenes.fecha', 'desc')
+      ->get();
+
+    return view('preceptor.Alumnos.edit', [
+      'alumno' => $alumno,
+      'cursadas' => $cursadas,
+      'examenes' => $examenes,
+      'carreras' => $alumno->carrerasIncriptas(),
+      'esAlumno' => true,
+      'method' => 'put',
+
+    ]);
+  }
+
+  /**
+   * Update the specified resource in storage.
+   */
+  public function update(EditarAlumnoRequest $request, Alumno $alumno)
+  {
+    $data = $request->validated();
+
+    $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
+
+    if ($data['dni'] && Alumno::where('id', '!=', $alumno->id)->where('dni', $data['dni'])->exists()) {
+      $mensajes['aviso'][] = 'Ya hay un usuario con ese numero de dni';
+    }
+
+    $alumno->update($data);
+    $mensajes['mensaje'][] = 'Se actualizo el alumno';
+    return redirect()->back()->with('mensajes', $mensajes);
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   */
+  public function destroy(Alumno $alumno)
+  {
+
+    $alumno->delete();
+    return redirect()->route('preceptor.alumnos.index')->with('mensaje', 'Se ha eliminado el alumno');
+  }
+
 
   public function verificar(Request $request, Alumno $alumno)
   {
@@ -115,7 +155,7 @@ class AlumnoPreceptorController extends Controller
       $this->mensajes['mensaje'][] = 'Se utilizará su dni como clave de acceso';
     }
     // dd($this->mensajes,['mensaje'=>['Se ha verificado al alumno','Se utilizará su dni como clave de acceso']]);
-    return redirect()->route('Preceptor.alumnos.index')->with('mensajes', $this->mensajes);
+    return redirect()->route('preceptor.alumnos.index')->with('mensajes', $this->mensajes);
   }
 }
 
