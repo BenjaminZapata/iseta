@@ -11,15 +11,15 @@ class FaltaTituloSecundario extends Notification
 {
     use Queueable;
 
-    public $alumnos;
+    public $cuantos;
 
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($alumnos)
+    public function __construct($cuantos)
     {
-        $this->alumnos = $alumnos;
+        $this->cuantos = $cuantos;
     }
 
     /**
@@ -36,11 +36,8 @@ class FaltaTituloSecundario extends Notification
     public function toDatabase(object $notifiable): array
     {
         return [
-            'titulo' => 'Alumnos sin título secundario',
-            'mensaje' => 'Hay ' . $this->alumnos->count() . ' alumnos sin entregar su título secundario.',
-            'url' => '/admin/alumnos?filtro=titulo_no_entregado', // o la ruta que quieras
-            'entity_id' => $this->alumnos->pluck('id')->toArray(),
-            'tipo' => 'warning'
+            'title' => 'Alumnos sin titulo secundario',
+            'message' => "Hay {$this->cuantos} alumnos sin entregar su titulo secundario.",
         ];
     }
     /**

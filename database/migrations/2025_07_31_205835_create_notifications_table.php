@@ -14,14 +14,10 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('type');
-            $table->integer('entity_id');
-            $table->string('title');
             $table->morphs('notifiable');
             $table->text('data');
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
-
-            $table->unique(['type', 'entity_id']);
         });
     }
 
