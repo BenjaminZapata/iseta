@@ -18,13 +18,13 @@
         @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE MESAS'])
 
         <div class="perfil__header-alt">
-            <a href="{{route('Regente.mesas.create')}}">
+            <a href="{{route('admin.mesas.create')}}">
                 <button class="btn_blue">
                     <i class="ti ti-circle-plus"></i>Agregar mesa
                 </button>
             </a>
             {{-- FILTROS --}}
-            <?= $filtergen->generate('Regente.mesas.index', $filters, [
+            <?= $filtergen->generate('admin.mesas.index', $filters, [
         'dropdowns' => [
             $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
             $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', $filters, ['Seleccione una carrera'], ['id' => 'asignatura_select']),
@@ -76,7 +76,7 @@
                         </td>
                         <td class="center">
                             <div style="display: flex; justify-content: center; align-items: center; height: 100%;">
-                                <a href="{{route('Regente.mesas.edit', ['mesa' => $mesa->id])}}">
+                                <a href="{{route('admin.mesas.edit', ['mesa' => $mesa->id])}}">
                                     <button class="btn_blue">
                                         <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>
                                         Modificar

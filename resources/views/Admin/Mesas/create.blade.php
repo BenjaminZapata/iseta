@@ -11,7 +11,7 @@
             @include('components.header-avatar', ['tituloSeccion' => 'CREAR MESA'])
 
             <div class="perfil__info">
-                <form method="post" action="{{route('Regente.mesas.store')}}">
+                <form method="post" action="{{route('admin.mesas.store')}}">
 
                     <div class="perfil_dataname">
                         <label>Carrera:</label>
@@ -50,8 +50,7 @@
 
                             @if ($precargados['asignatura'])
                                 <option selected value="{{$precargados['asignatura']->id}}">
-                                    {{$precargados['asignatura']->nombre}}
-                                </option>
+                                    {{$precargados['asignatura']->nombre}}</option>
                             @elseif($asig)
                                 <option selected value="{{$asig->id}}">{{$asig->nombre}}</option>
                             @endif
@@ -106,7 +105,7 @@
                             name="fecha">
                     </div>
                 </form>
-                <?= $form->generate(route('Regente.mesas.store'), 'post', []) ?>
+                <?= $form->generate(route('admin.mesas.store'), 'post', []) ?>
             </div>
         </div>
     </div>

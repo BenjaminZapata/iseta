@@ -5,10 +5,10 @@
     <div>
 
 
-        <a href="{{route('Regente.examenes.create')}}"><button>Inscribir alumno</button></a>
+        <a href="{{route('admin.examenes.create')}}"><button>Inscribir alumno</button></a>
 
         <div>
-            <form action="{{route('Regente.examenes.index')}}">
+            <form action="{{route('admin.examenes.index')}}">
                 <p>filtrar</p>
                 <select name="campo">
                     <option @selected($filtros['campo'] == 'principales') value="principales">Principales</option>
@@ -24,7 +24,7 @@
                 <input type="submit" value="Buscar">
             </form>
 
-            <a href="{{route('Regente.examenes.index')}}"><button>Quitar filtro</button></a>
+            <a href="{{route('admin.examenes.index')}}"><button>Quitar filtro</button></a>
 
         </div>
     </div>
@@ -54,7 +54,7 @@
                         <td>{{$examen->apellido}}</td>
                         <td>{{$examen->materia}}</td>
                         <td>{{$examen->nota}}</td>
-                        <td><a href="{{route('Regente.examenes.edit', ['examen' => $examen->id])}}"><button
+                        <td><a href="{{route('admin.examenes.edit', ['examen' => $examen->id])}}"><button
                                     class="btn_edit">Editar</button></a></td>
                         <td>
 

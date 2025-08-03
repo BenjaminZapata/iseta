@@ -23,15 +23,15 @@
                             <td>{{$mesa->asignatura->nombre}}</td>
                             <td>{{$mesa->asignatura->carrera->nombre}}</td>
                             <td>{{$mesa->fecha}}</td>
-                            <td><a href="{{route('Regente.mesas.edit', ['mesa' => $mesa->id])}}">revisar</a></td>
-                        </tr>
+                            <td><a href="{{route('admin.mesas.edit', ['mesa' => $mesa->id])}}">revisar</a></td>
+                                </tr>
                     @endforeach
-                    <tr></tr>
-                </tbody>
-            </table>
+                        <tr></tr>
+                    </tbody>
+                </table>
 
 
+            </div>
         </div>
-    </div>
 
 @endsection

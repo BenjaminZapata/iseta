@@ -6,7 +6,7 @@
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR PROFESOR/A'])
             <div class="perfil__info">
 
-                <?= $form->generate(route('Regente.profesores.update', ['profesor' => $profesor->id]), 'put', [
+                <?= $form->generate(route('admin.profesores.update', ['profesor' => $profesor->id]), 'put', [
         'Profesor' => [
             $form->text('dni', 'DNI:', 'label-input-y-75', $profesor),
             $form->text('nombre', 'Nombre:', 'label-input-y-75', $profesor),
@@ -67,9 +67,8 @@
                                     Vocal 2
                                 @endif
                             </td>
-                            <td class="flex just-center"><a
-                                    href="{{route('Regente.mesas.edit', ['mesa' => $mesa->id])}}"><button class="btn_blue"><i
-                                            class="ti ti-file-info"></i>Detalles</button></a></td>
+                            <td class="flex just-center"><a href="{{route('admin.mesas.edit', ['mesa' => $mesa->id])}}"><button
+                                        class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a></td>
                         </tr>
                     @endforeach
                 </tbody>

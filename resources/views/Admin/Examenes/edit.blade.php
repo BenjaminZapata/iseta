@@ -13,7 +13,7 @@
                 <h2>Ficha examen</h2>
             </div>
             <div class="perfil__info">
-                <form method="post" action="{{route('Regente.examenes.update', ['examen' => $examen->id])}}">
+                <form method="post" action="{{route('admin.examenes.update', ['examen' => $examen->id])}}">
                     @csrf
                     @method('put')
                     <div class="perfil_tit_dataname rounded">
@@ -23,7 +23,7 @@
                         <label>Nombre:</label>
                         <span class="campo_info2">
                             <a class="capitalize flex items-center"
-                                href="{{route('Regente.alumnos.edit', ['alumno' => $examen->alumno->id])}}">
+                                href="{{route('admin.alumnos.edit', ['alumno' => $examen->alumno->id])}}">
                                 {{$examen->alumno->apellidoNombre()}} <i class="ti ti-info-circle"></i>
                             </a>
                         </span>
@@ -40,7 +40,7 @@
                             <label>Materia:</label>
                             <span class="campo_info2">
                                 <a class="capitalize flex items-center"
-                                    href="{{route('Regente.asignaturas.edit', ['asignatura' => $examen->asignatura->id])}}">
+                                    href="{{route('admin.asignaturas.edit', ['asignatura' => $examen->asignatura->id])}}">
                                     {{$examen->asignatura->nombre}} <i class="ti ti-info-circle"></i>
                                 </a>
                             </span>
@@ -49,7 +49,7 @@
                             <label>Carrera:</label>
                             <span class="campo_info2">
                                 <a class="flex items-center"
-                                    href="{{route('Regente.carreras.edit', ['carrera' => $examen->asignatura->carrera->first()->id])}}">
+                                    href="{{route('admin.carreras.edit', ['carrera' => $examen->asignatura->carrera->first()->id])}}">
                                     {{$examen->asignatura->carrera->first()->nombre}} <i class="ti ti-info-circle"></i>
                                 </a>
                             </span>
@@ -153,8 +153,7 @@
     @if (!$config['modo_seguro'])
         <div class="upd">
 
-            <form class="form-eliminar" c method="post"
-                action="{{route('Regente.examenes.destroy', ['examen' => $examen->id])}}">
+            <form class="form-eliminar" c method="post" action="{{route('admin.examenes.destroy', ['examen' => $examen->id])}}">
                 @csrf
                 @method('delete')
                 <button class="btn_red"><i class="ti ti-trash"></i>Eliminar examen</button>

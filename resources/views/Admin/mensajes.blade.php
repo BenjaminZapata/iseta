@@ -12,15 +12,14 @@
                     <p class="font-6">Mensaje: <span class="font-600">{{$mensaje->mensaje}}</span></p>
 
                     <p>Escribe una respuesta</p>
-                    <form method="POST" action="{{route('Regente.mensajes.update', ['mensaje' => $mensaje->id])}}"
+                    <form method="POST" action="{{route('admin.mensajes.update', ['mensaje' => $mensaje->id])}}"
                         class="flex-col items-start gap-2">
                         @csrf
                         @method('put')
-                        <textarea name="respuesta" cols="30"
-                            rows="2">{{$mensaje->respuesta ? $mensaje->respuesta : ''}}</textarea>
+                        <textarea name="respuesta" cols="30" rows="2">{{$mensaje->respuesta ? $mensaje->respuesta : ''}}</textarea>
                         <button class="bg-white p-2 rounded shadow">Responder</button>
                     </form>
-                    <form method="POST" action="{{route('Regente.mensajes.update', ['mensaje' => $mensaje->id])}}"
+                    <form method="POST" action="{{route('admin.mensajes.update', ['mensaje' => $mensaje->id])}}"
                         class="flex-col items-start gap-2">
                         @csrf
                         @method('delete')

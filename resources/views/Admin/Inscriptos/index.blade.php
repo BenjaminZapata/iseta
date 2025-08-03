@@ -18,10 +18,10 @@
         @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE INSCRIPTOS'])
 
         <div class="perfil__header-alt">
-            <a href="{{route('Regente.inscriptos.create')}}"><button class="btn_blue"><i
-                        class="ti ti-circle-plus"></i>Agregar inscripcion</button></a>
+            <a href="{{route('admin.inscriptos.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar
+                    inscripcion</button></a>
             {{-- FILTROS --}}
-            <?= $filtergen->generate('Regente.inscriptos.index', $filters, [
+            <?= $filtergen->generate('admin.inscriptos.index', $filters, [
         'dropdowns' => [
             $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
             $form->select('filter_vigente', 'Estado Carreras: ', 'label-input-y-100', $filters, ['Todas', 'No Vigentes', 'Vigentes']),
@@ -69,7 +69,7 @@
                         </td>
 
                         <td class="flex just-center"><a
-                                href="{{route('Regente.inscriptos.edit', ['inscripto' => $inscripcion->id])}}"><button
+                                href="{{route('admin.inscriptos.edit', ['inscripto' => $inscripcion->id])}}"><button
                                     class="btn_blue"><i class="ti ti-file-info"
                                         style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button></a></td>
 

@@ -16,7 +16,7 @@
             @include('components.header-avatar', ['tituloSeccion' => 'INSCRIBIR ALUMNO'])
 
             <div class="perfil__info">
-                <form method="post" action="{{ route('Regente.inscriptos.store') }}">
+                <form method="post" action="{{ route('admin.inscriptos.store') }}">
                     @csrf
 
                     {{-- Alumno --}}
