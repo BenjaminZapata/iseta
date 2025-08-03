@@ -41,8 +41,7 @@
             </div>
 
             <div class="usuario input-box">
-                <input value="{{ old('email') }}" type="email" name="email" required
-                    placeholder="Nombre de usuario">
+                <input value="{{ old('email') }}" type="email" name="email" required placeholder="Nombre de usuario">
                 <div class="underline"></div>
             </div>
 
@@ -65,7 +64,7 @@
             </div>
 
             <div class="admin-btn-container">
-                <a href="{{ route('admin.login') }}" class="admin-btn" title="Solo para administradores">
+                <a href="{{ route('Regente.login') }}" class="admin-btn" title="Solo para administradores">
                     <i class="ti ti-lock"></i> Soy Admin
                 </a>
             </div>
