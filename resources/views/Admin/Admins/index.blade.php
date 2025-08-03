@@ -5,7 +5,7 @@
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE USUARIOS ADMINISTRATIVOS'])
         <div class="perfil__info">
-            <form class="flex-col gap-3" method="POST" action="{{route('Regente.admins.store')}}">
+            <form class="flex-col gap-3" method="POST" action="{{route('admin.admins.store')}}">
                 @csrf
                 <div class="grid-2 gap-1">
 
@@ -52,7 +52,7 @@
                         @if (!$config['modo_seguro'])
                             <td class="center">
                                 <form method="POST" class="form-eliminar"
-                                    action="{{route('Regente.admins.destroy', ['admin' => $admin->id])}}">
+                                    action="{{route('admin.admins.destroy', ['admin' => $admin->id])}}">
                                     @csrf
                                     @method('delete')
                                     <input type="submit" value="Eliminar" class="btn_borrar-alt">

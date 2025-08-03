@@ -21,7 +21,7 @@ class AdminDiasHabilesController extends Controller
     {
         $noHabiles = Habiles::all()->pluck('fecha')->toArray();
 
-        return view('Regente.DiasHabiles.index', compact('noHabiles'));
+        return view('Admin.DiasHabiles.index', compact('noHabiles'));
     }
 
     function store(Request $request)

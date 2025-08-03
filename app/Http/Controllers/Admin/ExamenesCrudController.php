@@ -53,7 +53,7 @@ class ExamenesCrudController extends Controller
      */
     public function edit(Request $request, Examen $examen)
     {
-        return view('Regente.Examenes.edit', compact('examen'));
+        return view('Admin.Examenes.edit', compact('examen'));
     }
 
     /**
@@ -95,9 +95,9 @@ class ExamenesCrudController extends Controller
         $examen->delete();
 
         if (!$mesa)
-            return redirect()->route('Regente.mesas.edit', ['mesa' => $mesa->id])->with('mensaje', 'Se ha eliminado el examen');
+            return redirect()->route('admin.mesas.edit', ['mesa' => $mesa->id])->with('mensaje', 'Se ha eliminado el examen');
         else
-            return redirect()->route('Regente.mesas.index')->with('mensaje', 'Se ha eliminado el examen');
+            return redirect()->route('admin.mesas.index')->with('mensaje', 'Se ha eliminado el examen');
     }
 
     function modificarNota(Request $request, Examen $examen)

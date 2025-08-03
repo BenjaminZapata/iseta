@@ -19,7 +19,7 @@
             <div class="perfil__info">
 
                 <form method="POST"
-                    action="{{route('Regente.alumno.matricular.post', ['alumno' => $alumno->id, 'carrera' => $carrera->id])}}">
+                    action="{{route('adminz.alumno.matricular.post', ['alumno' => $alumno->id, 'carrera' => $carrera->id])}}">
                     @csrf
 
                     @if (count($asignaturas) <= 0)
@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="flex">
                                         <label>Asignatura:</label>
-                                        <a href="{{route('Regente.asignaturas.edit', ['asignatura' => $asignatura->id])}}"><span
+                                        <a href="{{route('admin.asignaturas.edit', ['asignatura' => $asignatura->id])}}"><span
                                                 class="font-400">{{$asignatura->nombre}}</span></a>
                                     </div>
                                 </div>

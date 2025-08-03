@@ -36,13 +36,13 @@ class CursadasAdminController extends BaseController
         $this->setFilters($request);
         $this->data['cursadas'] = $cursadaRepo->index($request);
         session(['return_to' => url()->previous()]);
-        return view('Regente.Cursadas.index', $this->data);
+        return view('Admin.Cursadas.index', $this->data);
     }
 
     function delete(Cursada $cursada)
     {
         $cursada->delete();
-        return redirect()->route('Regente.cursadas.index');
+        return redirect()->route('admin.cursadas.index');
     }
 
     function edit(Request $request, Cursada $cursada)
@@ -52,7 +52,7 @@ class CursadasAdminController extends BaseController
             ->where('id_alumno', $cursada->id_alumno)
             ->value('nota'); // Equivalencia
         Log::debug("message", ['cursada' => $cursada]);
-        return view('Regente.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
+        return view('Admin.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
     }
 
     function update(Request $request, Cursada $cursada)
@@ -109,7 +109,7 @@ class CursadasAdminController extends BaseController
         $alumnos = Alumno::orderBy('nombre', 'asc')->orderBy('apellido', 'asc')->get();
         $carreras = Carrera::vigentes();
 
-        return view('Regente/Cursadas/create', [
+        return view('Admin/Cursadas/create', [
             'alumnos' => $alumnos,
             'carreras' => $carreras
         ]);

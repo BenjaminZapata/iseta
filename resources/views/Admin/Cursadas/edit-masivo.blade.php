@@ -5,7 +5,7 @@
         <div class="perfil_one br">
             <div class="perfil__header">
                 <h2>Cargar resultados de cursadas</h2>
-                <form method="POST" action="{{route('Regente.config.setone')}}">
+                <form method="POST" action="{{route('admin.config.setone')}}">
                     <div class="flex items-center bot-masivo">
                         @csrf
                         Año
@@ -28,7 +28,7 @@
                         <p>Anterior</p>
                         @if ($anterior)
                             <a class="blue-600"
-                                href="{{route('Regente.cursadas.masivo', ['asignatura' => $anterior->id])}}">{{$anterior->nombre}}</a>
+                                href="{{route('admin.cursadas.masivo', ['asignatura' => $anterior->id])}}">{{$anterior->nombre}}</a>
                         @endif
                     </div>
                     <div>
@@ -39,12 +39,12 @@
                         <p>Siguiente</p>
                         @if ($siguiente)
                             <a class="blue-600"
-                                href="{{route('Regente.cursadas.masivo', ['asignatura' => $siguiente->id])}}">{{$siguiente->nombre}}</a>
+                                href="{{route('admin.cursadas.masivo', ['asignatura' => $siguiente->id])}}">{{$siguiente->nombre}}</a>
                         @endif
                     </div>
                 </div>
 
-                <form method="POST" action="{{route('Regente.cursadas.masivo.post')}}">
+                <form method="POST" action="{{route('admin.cursadas.masivo.post')}}">
                     @csrf
                     @foreach($asignatura->cursadas as $cursada)
                         <div class="w-100p grid-3 perfil_dataname-rem">
@@ -76,12 +76,12 @@
                         @if ($carrera->primeraAsignatura())
                             @if ($carrera->id == $asignatura->carrera->id)
                                 <p class="text-left gray-700 perfil_dataname-rem"
-                                    href="{{route('Regente.cursadas.masivo', ['asignatura' => $carrera->primeraAsignatura()->id])}}">
+                                    href="{{route('admin.cursadas.masivo', ['asignatura' => $carrera->primeraAsignatura()->id])}}">
                                     {{$carrera->nombre}}
                                 </p>
                             @else
                                 <a class="text-left blue-700 perfil_dataname-rem"
-                                    href="{{route('Regente.cursadas.masivo', ['asignatura' => $carrera->primeraAsignatura()->id])}}">
+                                    href="{{route('admin.cursadas.masivo', ['asignatura' => $carrera->primeraAsignatura()->id])}}">
                                     {{$carrera->nombre}}
                                 </a>
                             @endif

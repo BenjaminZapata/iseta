@@ -6,7 +6,7 @@
             @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA CARRERA'])
             <div class="perfil__info">
 
-                <?= $form->generate(route('Regente.carreras.store'), 'post', [
+                <?= $form->generate(route('admin.carreras.store'), 'post', [
         'Información' => [
             $form->text('nombre', 'Nombre:', 'label-input-y-75'),
             $form->text('resolucion', 'Resolucion:', 'label-input-y-75'),

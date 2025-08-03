@@ -31,7 +31,7 @@ class AdminsCrudController extends Controller
         } else {
             $admins = Admin::paginate($porPagina);
         }
-        return view('Regente.Admins.index', ['admins' => $admins, 'filtro' => $filtro]);
+        return view('Admin.Admins.index', ['admins' => $admins, 'filtro' => $filtro]);
 
     }
 

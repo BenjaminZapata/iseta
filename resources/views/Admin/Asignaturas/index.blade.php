@@ -2,18 +2,18 @@
 
 @section('content')
     <div class="flex justify-between items-center mb-6">
-        <a href="{{ route('Regente.asignaturas.create') }}">
+        <a href="{{ route('admin.asignaturas.create') }}">
             <button class="btn_blue">
                 <i class="ti ti-circle-plus"></i> Agregar asignatura</button>
         </a>
 
         <div class="flex gap-4">
-            <form action="{{ route('Regente.asignaturas.index') }}" method="GET" class="flex items-center gap-2">
+            <form action="{{ route('admin.asignaturas.index') }}" method="GET" class="flex items-center gap-2">
                 <input name="filtro" type="text" placeholder="Buscar..." class="form-input">
                 <button type="submit" class="btn btn-primary"><i class="ti ti-filter"></i> Filtros</button>
             </form>
 
-            <a href="{{ route('Regente.asignaturas.index') }}">
+            <a href="{{ route('admin.asignaturas.index') }}">
                 <button class="btn btn-primary"><i class="ti ti-filter-off"></i> Eliminar filtros</button>
             </a>
         </div>
@@ -42,7 +42,7 @@
                         <td>{{ $asignatura->anioStr() }}</td>
                         <td>{{ $asignatura->carga_horaria }} hs</td>
                         <td>
-                            <a href="{{ route('Regente.asignaturas.edit', $asignatura->id) }}">
+                            <a href="{{ route('admin.asignaturas.edit', $asignatura->id) }}">
                                 <button class="btn btn-secondary"><i class="ti ti-edit"></i> Editar</button>
                             </a>
                         </td>

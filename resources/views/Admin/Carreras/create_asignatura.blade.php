@@ -5,7 +5,7 @@
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA ASIGNATURA'])
             <div class="perfil__info">
-                <form method="post" action="{{route('Regente.carreras.createAsignatura', ['carrera' => $carrera->id])}}"
+                <form method="post" action="{{route('admin.carreras.createAsignatura', ['carrera' => $carrera->id])}}"
                     id="create_asignatura">
                     @csrf
                     <div class="perfil_dataname">

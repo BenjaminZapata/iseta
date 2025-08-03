@@ -13,6 +13,6 @@ class AsignaturaController extends Controller
         // Solo asignaturas que tienen al menos una carrera
         $asignaturas = Asignatura::whereHas('carrera')->paginate(10);
 
-        return view('Regente.Asignaturas.index', compact('asignaturas'));
+        return view('Admin.Asignaturas.index', compact('asignaturas'));
     }
 }

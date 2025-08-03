@@ -17,13 +17,13 @@
         @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CARRERAS'])
 
         <div class="perfil__header-alt">
-            <a href="{{route('Regente.carreras.create')}}">
+            <a href="{{route('admin.carreras.create')}}">
                 <button class="btn_blue">
                     <i class="ti ti-circle-plus"></i>Agregar carrera
                 </button>
             </a>
             {{-- FILTROS --}}
-            <?= $filtergen->generate('Regente.carreras.index', $filters, [
+            <?= $filtergen->generate('admin.carreras.index', $filters, [
         'dropdowns' => [
             $form->select('filter_vigente', 'Condición: ', 'label-input-y-100', $filters, ['Todas', 'No Vigentes', 'Vigentes'])
         ],
@@ -50,7 +50,7 @@
                         <td class="center">{{$carrera->vigente == 1 ? "Vigente" : $carrera->anio_fin}}</td>
                         <td class="center">
                             <div style="display: flex; justify-content: center;">
-                                <a href="{{ route('Regente.carreras.edit', ['carrera' => $carrera]) }}">
+                                <a href="{{ route('admin.carreras.edit', ['carrera' => $carrera]) }}">
                                     <button class="btn_blue">
                                         <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>Modificar
                                     </button>

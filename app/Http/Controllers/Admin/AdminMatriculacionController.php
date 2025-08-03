@@ -33,7 +33,7 @@ class AdminMatriculacionController extends Controller
 
         $anotables = $matriculacionService->matriculables($alumno, $carrera);
 
-        return view('Regente.Alumnos.rematriculacion', [
+        return view('Admin.Alumnos.rematriculacion', [
             'asignaturas' => $anotables,
             'carrera' => $carrera,
             'alumno' => $alumno

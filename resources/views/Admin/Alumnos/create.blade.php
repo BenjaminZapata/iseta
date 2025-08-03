@@ -6,7 +6,7 @@
     @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVO ALUMNO/A'])
     <div class="perfil__info">
 
-      <?= $form->generate(route('Regente.alumnos.store'), 'post', [
+      <?= $form->generate(route('admin.alumnos.store'), 'post', [
     'Alumno' => [
     $form->text('nombre', 'Nombre:', 'label-input-y-75', null),
     $form->text('apellido', 'Apellido:', 'label-input-y-75', null),

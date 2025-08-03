@@ -36,7 +36,7 @@ class AdminMesasLotes extends Controller
             }
         }
 
-        return view('Regente.Mesas.create-dual', [
+        return view('Admin.Mesas.create-dual', [
             'carrera' => $carrera,
             'asignatura' => $asignatura,
             'siguiente' => $siguiente < count($asignaturas) ? $asignaturas[$siguiente] : null,

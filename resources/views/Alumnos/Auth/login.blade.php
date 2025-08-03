@@ -64,7 +64,7 @@
             </div>
 
             <div class="admin-btn-container">
-                <a href="{{ route('Regente.login') }}" class="admin-btn" title="Solo para administradores">
+                <a href="{{ route('admin.login') }}" class="admin-btn" title="Solo para administradores">
                     <i class="ti ti-lock"></i> Soy Admin
                 </a>
             </div>

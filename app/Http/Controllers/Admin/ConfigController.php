@@ -17,7 +17,7 @@ class ConfigController extends Controller
     public function index()
     {
         $configuracion = Configuracion::all()->pluck('value', 'key')->toArray();
-        return view('Regente/config', compact('configuracion'));
+        return view('Admin/config', compact('configuracion'));
     }
 
     public function setear(EditarConfigRequest $request)

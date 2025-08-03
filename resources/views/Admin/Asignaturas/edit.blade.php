@@ -7,7 +7,7 @@
                 <h2>Asignatura</h2>
             </div>
             <div class="perfil__info">
-                <form method="post" action="{{route('Regente.asignaturas.update', ['asignatura' => $asignatura->id])}}">
+                <form method="post" action="{{route('admin.asignaturas.update', ['asignatura' => $asignatura->id])}}">
                     @csrf
                     @method('put')
 
@@ -100,8 +100,7 @@
         <div class="table">
             <div class="perfil__header-alt just-between">
                 <p>Alumnos que cursan esta materia que aun no tienen un estado final (aprobado o desaprobado)</p>
-                <a class="btn_blue" href="/Regente/cursantes/{{$asignatura->id}}"><i
-                        class="ti ti-file-download"></i>Exportar
+                <a class="btn_blue" href="/admin/cursantes/{{$asignatura->id}}"><i class="ti ti-file-download"></i>Exportar
                     cursadas</a>
             </div>
             <table class="table__body">
@@ -121,7 +120,7 @@
                             <td> {{$cursada->alumno->dni}} </td>
                             <td> {{$cursada->condicionString()}} </td>
                             <td>
-                                <a href="{{route('Regente.cursadas.edit', ['cursada' => $cursada->id])}}"><button
+                                <a href="{{route('admin.cursadas.edit', ['cursada' => $cursada->id])}}"><button
                                         class="btn_blue"><i class="ti ti-edit"></i>Editar</button></a>
                             </td>
                         </tr>
@@ -137,7 +136,7 @@
         <div class="upd">
             <div>
                 <form method="POST" class="form-eliminar"
-                    action="{{route('Regente.asignaturas.destroy', ['asignatura' => $asignatura->id])}}">
+                    action="{{route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id])}}">
                     @csrf
                     @method('delete')
                     <button class="btn_red"><i class="ti ti-trash"></i>Eliminar asignatura</button>
@@ -145,7 +144,7 @@
             </div>
             <div>
                 <form method="POST" class="form-eliminar"
-                    action="{{route('Regente.asignaturas.destroy', ['asignatura' => $asignatura->id])}}">
+                    action="{{route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id])}}">
                     @csrf
                     @method('delete')
                     <button class="btn_red"><i class="ti ti-trash"></i>Desligar asignatura</button>

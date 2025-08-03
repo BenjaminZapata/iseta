@@ -32,7 +32,7 @@ class ProfesoresCrudController extends BaseController
 
         $this->data['profesores'] = $this->profeRepo->index($request);
 
-        return view('Regente.Profesores.index', $this->data);
+        return view('Admin.Profesores.index', $this->data);
 
     }
 
@@ -41,7 +41,7 @@ class ProfesoresCrudController extends BaseController
      */
     public function create()
     {
-        return view('Regente.profesores.create');
+        return view('admin.profesores.create');
     }
 
     /**
@@ -52,7 +52,7 @@ class ProfesoresCrudController extends BaseController
         $data = $request->validated();
 
         Profesor::create($data);
-        return redirect()->route('Regente.profesores.index')->with('mensaje', 'Se creo el profesor');
+        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
     }
 
 
@@ -69,7 +69,7 @@ class ProfesoresCrudController extends BaseController
             ->whereRaw('fecha > NOW()')
             ->get();
 
-        return view('Regente.Profesores.edit', [
+        return view('Admin.Profesores.edit', [
             'profesor' => $profesor,
             'mesas' => $mesas
         ]);
@@ -81,7 +81,7 @@ class ProfesoresCrudController extends BaseController
     public function update(EditarProfesorRequest $request, Profesor $profesor)
     {
         $profesor->update($request->all());
-        return redirect()->route('Regente.profesores.index')->with('mensaje', 'Se edito el profesor');
+        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se edito el profesor');
     }
 
     /**
@@ -90,7 +90,7 @@ class ProfesoresCrudController extends BaseController
     public function destroy(Profesor $profesor)
     {
         $profesor->delete();
-        return redirect()->route('Regente.profesores.index')->with('mensaje', 'Se ha eliminado el profesor');
+        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se ha eliminado el profesor');
     }
 
 

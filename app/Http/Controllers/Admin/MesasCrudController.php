@@ -51,7 +51,7 @@ class MesasCrudController extends BaseController
         $this->setFilters($request);
         $this->data['mesas'] = $this->mesaRepo->index($request);
 
-        return view('Regente.Mesas.index', $this->data);
+        return view('Admin.Mesas.index', $this->data);
     }
 
     /**
@@ -72,7 +72,7 @@ class MesasCrudController extends BaseController
         $carreras = Carrera::where('vigente', 1)->get();
         $profesores = Profesor::orderBy('apellido', 'asc')->orderBy('apellido', 'asc')->get();
 
-        return view('Regente.Mesas.create', [
+        return view('Admin.Mesas.create', [
             'carreras' => $carreras,
             'profesores' => $profesores,
             'precargados' => $precargados,
@@ -131,7 +131,7 @@ class MesasCrudController extends BaseController
         $inscribibles = $this->mesaRepo->inscribibles($mesa);
 
 
-        return view('Regente.Mesas.edit', [
+        return view('Admin.Mesas.edit', [
             'mesa' => $mesa,
             'profesores' => Profesor::orderBy('apellido')->orderBy('nombre')->get(),
             'inscribibles' => $inscribibles
@@ -174,6 +174,6 @@ class MesasCrudController extends BaseController
     public function destroy(Mesa $mesa)
     {
         $this->mesaRepo->delete($mesa);
-        return redirect()->route('Regente.mesas.index')->with('mensaje', 'Se ha eliminado la mesa');
+        return redirect()->route('admin.mesas.index')->with('mensaje', 'Se ha eliminado la mesa');
     }
 }

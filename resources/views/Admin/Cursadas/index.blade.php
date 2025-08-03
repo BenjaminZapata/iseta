@@ -18,10 +18,10 @@
         @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CURSADAS'])
 
         <div class="perfil__header-alt">
-            <a href="{{route('Regente.cursadas.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar
+            <a href="{{route('admin.cursadas.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar
                     cursada</button></a>
             {{-- FILTROS --}}
-            <?= $filtergen->generate('Regente.cursadas.index', $filters, [
+            <?= $filtergen->generate('admin.cursadas.index', $filters, [
         'dropdowns' => [
             $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
             $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', $filters, ['Seleccione una carrera'], ['id' => 'asignatura_select']),
@@ -56,8 +56,8 @@
                             {{$cursada->aprobado()}}
                         </td>
                         <td class="flex just-center"><a
-                                href="{{route('Regente.cursadas.edit', ['cursada' => $cursada->id])}}"><button
-                                    class="btn_blue"><i class="ti ti-file-info"
+                                href="{{route('admin.cursadas.edit', ['cursada' => $cursada->id])}}"><button class="btn_blue"><i
+                                        class="ti ti-file-info"
                                         style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button></a></td>
 
 

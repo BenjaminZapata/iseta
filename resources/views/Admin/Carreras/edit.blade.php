@@ -6,7 +6,7 @@
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
             <div class="perfil__info">
                 <?= $form->generate(
-        route('Regente.carreras.update', ['carrera' => $carrera->id]),
+        route('admin.carreras.update', ['carrera' => $carrera->id]),
         'put',
         [
             'Información' => [
@@ -49,10 +49,10 @@
 
         <div class="table">
             <div class="perfil__header-alt">
-                <a href="{{ route('Regente.carreras.addAsignaturaView', ['carrera' => $carrera->id]) }}">
+                <a href="{{ route('admin.carreras.addAsignaturaView', ['carrera' => $carrera->id]) }}">
                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar asignatura</button>
                 </a>
-                <a href="{{ route('Regente.carreras.createAsignaturaView', ['carrera' => $carrera->id]) }}">
+                <a href="{{ route('admin.carreras.createAsignaturaView', ['carrera' => $carrera->id]) }}">
                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear asignatura</button>
                 </a>
 
@@ -129,12 +129,12 @@
                             <td>{{ $asignatura->nombre }}</td>
                             <td class="center">{{ $asignatura->carga_horaria }} horas</td>
                             <td style="display:flex;">
-                                <form action="{{ route('Regente.asignaturas.edit', ['asignatura' => $asignatura->id]) }}">
+                                <form action="{{ route('admin.asignaturas.edit', ['asignatura' => $asignatura->id]) }}">
                                     <button class="btn_blue"><i class="ti ti-edit"></i>Editar</button>
                                 </form>
                             </td>
                             <td>
-                                <form action="{{ route('Regente.mesas.create') }}">
+                                <form action="{{ route('admin.mesas.create') }}">
                                     <input name="carrera" type="hidden" value="{{ $carrera->id }}">
                                     <input name="asignatura" type="hidden" value="{{ $asignatura->id }}">
                                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Mesa</button>
@@ -142,7 +142,7 @@
                             </td>
                             <td>
                                 <a
-                                    href="{{ route('Regente.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
+                                    href="{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
                                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Mesas</button>
                                 </a>
                             </td>
@@ -211,7 +211,7 @@
         @if (!$config['modo_seguro'])
             <div class="upd">
                 <form method="POST" class="form-eliminar"
-                    action="{{ route('Regente.carreras.destroy', ['carrera' => $carrera->id]) }}">
+                    action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}">
                     @csrf
                     @method('delete')
                     <button class="btn_red"><i class="ti ti-trash"></i>Eliminar carrera</button>

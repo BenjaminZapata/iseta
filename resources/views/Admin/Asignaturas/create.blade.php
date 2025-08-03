@@ -7,7 +7,7 @@
                 <h2>Crear asignatura</h2>
             </div>
             <div class="perfil__info">
-                <form method="post" action="{{route('Regente.asignaturas.store')}}">
+                <form method="post" action="{{route('admin.asignaturas.store')}}">
                     @csrf
                     <div class="perfil_dataname">
                         <label>Asignatura:</label>

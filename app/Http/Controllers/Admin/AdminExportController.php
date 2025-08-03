@@ -48,7 +48,7 @@ class AdminExportController extends Controller
             ->pluck('anio_cursada')
             ->toArray();
 
-        return view('Regente.Exportar.cursadas', compact('carrera', 'aniosCalendario'));
+        return view('Admin.Exportar.cursadas', compact('carrera', 'aniosCalendario'));
     }
 
 }

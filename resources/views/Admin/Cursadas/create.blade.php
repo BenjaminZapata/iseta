@@ -15,7 +15,7 @@
             <div class="perfil__info">
 
 
-                <form method="post" action="{{route('Regente.cursadas.store')}}">
+                <form method="post" action="{{route('admin.cursadas.store')}}">
                     @csrf
                     <div class="perfil_dataname">
                         <label>Carrera:</label>
