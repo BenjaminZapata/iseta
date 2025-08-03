@@ -16,11 +16,11 @@
                         <?= $form->password('password', 'Contraseña:', 'label-input-y-75', null) ?>
                     </div>
                     <div>
-                        <?= $form->select('rol', 'Rol:', 'label-input-y-75', [
-        'regente' => 'regente',
+                        <?= $form->select('rol', 'Rol:', 'label-input-y-75', null, [
+        'regente' => 'Regente',
         'preceptor' => 'Preceptor',
         'secretario' => 'Secretario',
-    ], null) ?>
+    ]) ?>
 
 
                     </div>
