@@ -62,6 +62,7 @@
                         <i class="ti ti-file-download"></i> Exportar cursadas
                     </button>
 
+
                     <form method="GET" action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
                         class="filtro-exportar"
                         style="display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ccc; padding: 10px; z-index: 10; width: max-content; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
@@ -109,6 +110,28 @@
                         </div>
                     </form>
                 </div>
+
+                <td class="center">
+                    @if($carrera->vigente)
+                        <td class="center">
+                            @if($carrera->vigente)
+                                <form action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST"
+                                    onsubmit="return confirm('¿Estás seguro de que querés desactivar esta carrera?');">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button class="btn_red">
+                                        <i class="ti ti-ban" style="font-size: 1.2em;"></i> Desactivar
+                                    </button>
+                                </form>
+
+                            @else
+                                <span style="color: gray;">Inactiva</span>
+                            @endif
+                        </td>
+                    @else
+                    <span style="color: gray;">Inactiva</span>
+                @endif
+                </td>
             </div>
 
             <table class="table__body">

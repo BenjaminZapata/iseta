@@ -39,6 +39,7 @@
                     <th class="center">Apertura</th>
                     <th class="center">Estado</th>
                     <th class="center">Acción</th>
+                    <th class="center">Eliminar </th>
                 </tr>
             </thead>
             <tbody>
@@ -56,6 +57,17 @@
                                     </button>
                                 </a>
                             </div>
+                        </td>
+
+                        <td class="center">
+                            <form action="{{ route('admin.carreras.destroy', $carrera) }}" method="POST"
+                                onsubmit="return confirm('¿Estás seguro de que querés eliminar esta carrera?');">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn_red">
+                                    <i class="ti ti-trash" style="font-size: 1.2em;"></i> Eliminar
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

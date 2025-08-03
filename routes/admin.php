@@ -220,5 +220,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::get('/admin/asignaturas/create', [AsignaturaController::class, 'create'])->name('admin.asignaturas.create');
     Route::get('/admin/asignaturas/{asignatura}/edit', [AsignaturaController::class, 'edit'])->name('admin.asignaturas.edit');
 
+    Route::delete('/admin/carreras/{carrera}', [CarrerasCrudController::class, 'destroy'])->name('admin.carreras.destroy');
+    Route::patch('/admin/carreras/{carrera}/desactivar', [CarrerasCrudController::class, 'desactivar'])->name('admin.carreras.desactivar');
 
 });
