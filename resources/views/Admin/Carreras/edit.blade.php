@@ -3,56 +3,56 @@
 @section('content')
     <div class="edit-form-container">
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA']) 
+            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
             <div class="perfil__info">
                 <?= $form->generate(
-                  route('admin.carreras.update', ['carrera' => $carrera->id]),
-                  'put',
-                  [
-                    'Información' => [
-                      $form->text(
-                        'nombre',
-                        'Nombre:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->text(
-                        'resolucion',
-                        'Resolucion:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->text(
-                        'anio_apertura',
-                        'Año de apertura:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->text(
-                        'anio_fin',
-                        'Año de cierre:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->textarea(
-                        'observaciones',
-                        'Observaciones:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->texthidden(url()->previous()),
-                    ],
-                  ]
-                ) ?>
+        route('Regente.carreras.update', ['carrera' => $carrera->id]),
+        'put',
+        [
+            'Información' => [
+                $form->text(
+                    'nombre',
+                    'Nombre:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->text(
+                    'resolucion',
+                    'Resolucion:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->text(
+                    'anio_apertura',
+                    'Año de apertura:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->text(
+                    'anio_fin',
+                    'Año de cierre:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->textarea(
+                    'observaciones',
+                    'Observaciones:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->texthidden(url()->previous()),
+            ],
+        ]
+    ) ?>
             </div>
         </div>
 
         <div class="table">
             <div class="perfil__header-alt">
-                <a href="{{ route('admin.carreras.addAsignaturaView', ['carrera' => $carrera->id]) }}">
+                <a href="{{ route('Regente.carreras.addAsignaturaView', ['carrera' => $carrera->id]) }}">
                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar asignatura</button>
                 </a>
-                <a href="{{ route('admin.carreras.createAsignaturaView', ['carrera' => $carrera->id]) }}">
+                <a href="{{ route('Regente.carreras.createAsignaturaView', ['carrera' => $carrera->id]) }}">
                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Crear asignatura</button>
                 </a>
 
@@ -129,12 +129,12 @@
                             <td>{{ $asignatura->nombre }}</td>
                             <td class="center">{{ $asignatura->carga_horaria }} horas</td>
                             <td style="display:flex;">
-                                <form action="{{ route('admin.asignaturas.edit', ['asignatura' => $asignatura->id]) }}">
+                                <form action="{{ route('Regente.asignaturas.edit', ['asignatura' => $asignatura->id]) }}">
                                     <button class="btn_blue"><i class="ti ti-edit"></i>Editar</button>
                                 </form>
                             </td>
                             <td>
-                                <form action="{{ route('admin.mesas.create') }}">
+                                <form action="{{ route('Regente.mesas.create') }}">
                                     <input name="carrera" type="hidden" value="{{ $carrera->id }}">
                                     <input name="asignatura" type="hidden" value="{{ $asignatura->id }}">
                                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Mesa</button>
@@ -142,7 +142,7 @@
                             </td>
                             <td>
                                 <a
-                                    href="{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
+                                    href="{{ route('Regente.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
                                     <button class="btn_blue"><i class="ti ti-circle-plus"></i>Mesas</button>
                                 </a>
                             </td>
@@ -211,7 +211,7 @@
         @if (!$config['modo_seguro'])
             <div class="upd">
                 <form method="POST" class="form-eliminar"
-                    action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}">
+                    action="{{ route('Regente.carreras.destroy', ['carrera' => $carrera->id]) }}">
                     @csrf
                     @method('delete')
                     <button class="btn_red"><i class="ti ti-trash"></i>Eliminar carrera</button>

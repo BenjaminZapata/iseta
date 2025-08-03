@@ -25,19 +25,21 @@
                     <i class="ti ti-circle-plus"></i>Agregar alumno</button>
             </a>
             {{-- FILTROS --}}
-            <?= $filtergen->generate('admin.alumnos.index', $filters, [
-                    'dropdowns' => [$carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
-                    $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
-                    $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
-                    $form->select('filter_titulo', 'Titulo Secundario:', 'label-input-y-100', $filters, ['Todos', 'No Entregado', 'Constancia de título en trámite', 'Constancia ultimo año del nivel secundario', 'Titulo Secundario'])],
-                    'fields' => [
-                        'alumno' => 'Alumno',
-                        'dni' => 'Dni',
-                        'email' => 'Email',
-                        'ciudad' => 'Ciudad',
-                        'telefono1' => 'Telefono',
-                    ],
-                ]) ?>
+            <?= $filtergen->generate('Regente.alumnos.index', $filters, [
+        'dropdowns' => [
+            $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
+            $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
+            $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
+            $form->select('filter_titulo', 'Titulo Secundario:', 'label-input-y-100', $filters, ['Todos', 'No Entregado', 'Constancia de título en trámite', 'Constancia ultimo año del nivel secundario', 'Titulo Secundario'])
+        ],
+        'fields' => [
+            'alumno' => 'Alumno',
+            'dni' => 'Dni',
+            'email' => 'Email',
+            'ciudad' => 'Ciudad',
+            'telefono1' => 'Telefono',
+        ],
+    ]) ?>
         </div>
 
         {{-- TABLA --}}
@@ -81,11 +83,11 @@
                             <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                         </td>
                         <td class="flex just-center">
-                            <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }}">
+                            <a href="{{ route('Regente.alumnos.edit', ['alumno' => $alumno->id]) }}">
                                 <button class="btn_blue"><i class="ti ti-file-info"
                                         style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                             </a>
-                            <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }} "
+                            <a href="{{ route('Regente.alumnos.edit', ['alumno' => $alumno->id]) }} "
                                 style="margin-left: 10px;">
                                 <button class="btn_icon-danger" style="background-color: red"><i class="ti ti-trash"
                                         style="font-size: 1.3em;"></i></button>

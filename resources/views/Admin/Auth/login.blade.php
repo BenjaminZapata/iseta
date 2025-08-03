@@ -15,7 +15,7 @@
     <!-- Mensaje de error desde backend -->
     {{-- @include('Componentes.mensaje') --}}
 
-    <form method="POST" action="{{ route('admin.login.post') }}" novalidate>
+    <form method="POST" action="{{ route('Regente.login.post') }}" novalidate>
       @csrf
 
       {{-- Campo Rol --}}
@@ -56,8 +56,4 @@
   </div>
 </body>
 
-<<<<<<< HEAD </html>
-  =======
-
 </html>
->>>>>>> 1ac20a729408c6d99a835f2bc5bd81e4a5baea05
