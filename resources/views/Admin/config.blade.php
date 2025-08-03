@@ -8,7 +8,7 @@
         </div>
         <div class="perfil__info config">
 
-            <form class="flex-col gap-2" method="POST" class="" action="{{route('admin.config.set')}}">
+            <form class="flex-col gap-2" method="POST" class="" action="{{route('Regente.config.set')}}">
                 @csrf
 
                 <div class="flex-col items-start items-start perfil_dataname">
