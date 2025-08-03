@@ -54,7 +54,7 @@ class CarrerasCrudController extends BaseController
         $this->data['carreras'] = $carreras;
         $this->data['aniosPorCarrera'] = $aniosPorCarrera;
 
-        return view('Admin.Carreras.index', $this->data);
+        return view('Regente.Carreras.index', $this->data);
     }
 
 
@@ -63,7 +63,7 @@ class CarrerasCrudController extends BaseController
      */
     public function create()
     {
-        return view('Admin.Carreras.create');
+        return view('Regente.Carreras.create');
     }
 
     /**
@@ -76,13 +76,13 @@ class CarrerasCrudController extends BaseController
         $data['vigente'] = 1;
 
         Carrera::create($data);
-        return redirect()->route('admin.carreras.index');
+        return redirect()->route('Regente.carreras.index');
     }
 
     public function show(Carrera $carrera)
     {
         $carrera->load('asignaturas');
-        return view('Admin.Carreras.show', ['carrera' => $carrera]);
+        return view('Regente.Carreras.show', ['carrera' => $carrera]);
     }
 
     /**
@@ -101,7 +101,7 @@ class CarrerasCrudController extends BaseController
             ->pluck('anio_cursada')
             ->toArray();
 
-        return view('Admin.Carreras.edit', [
+        return view('Regente.Carreras.edit', [
             'carrera' => $carrera,
             'aniosPorCarrera' => [$carrera->id => $anios],
         ]);
@@ -136,7 +136,7 @@ class CarrerasCrudController extends BaseController
 
     public function createAsignaturaView(Carrera $carrera)
     {
-        return view('Admin.Carreras.create_asignatura', [
+        return view('Regente.Carreras.create_asignatura', [
             'carrera' => $carrera,
         ]);
     }
@@ -176,7 +176,7 @@ class CarrerasCrudController extends BaseController
         $carrera = Carrera::find($request->carrera);
         $asignaturas = Asignatura::orderBy('nombre')->get();
         $id_asignatura = $request->id_asignatura ?? null;
-        return view('Admin.Carreras.add_asignatura', [
+        return view('Regente.Carreras.add_asignatura', [
             'carrera' => $carrera,
             'asignaturas' => $asignaturas,
             'id_asignatura' => $id_asignatura,
@@ -208,7 +208,7 @@ class CarrerasCrudController extends BaseController
      */
     public function destroy(Carrera $carrera)
     {
-        return redirect()->route('admin.carreras.index')->with('error', 'Las carreras no se pueden eliminar');
+        return redirect()->route('Regente.carreras.index')->with('error', 'Las carreras no se pueden eliminar');
     }
 
     public function deleteAsignatura(Request $request, Carrera $carrera, Asignatura $asignatura)

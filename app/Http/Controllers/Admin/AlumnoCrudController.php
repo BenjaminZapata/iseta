@@ -40,7 +40,7 @@ class AlumnoCrudController extends BaseController
         $this->setFilters($request);
         $this->data['alumnos'] = $this->alumnosRepo->index($request);
 
-        return view('Admin.Alumnos.index', $this->data);
+        return view('Regente.Alumnos.index', $this->data);
     }
 
     /**
@@ -48,7 +48,7 @@ class AlumnoCrudController extends BaseController
      */
     public function create(): View
     {
-        return view('Admin.Alumnos.create');
+        return view('Regente.Alumnos.create');
     }
 
     /**
@@ -101,7 +101,7 @@ class AlumnoCrudController extends BaseController
             ->orderBy('examenes.fecha', 'desc')
             ->get();
 
-        return view('Admin.Alumnos.edit', [
+        return view('Regente.Alumnos.edit', [
             'alumno' => $alumno,
             'cursadas' => $cursadas,
             'examenes' => $examenes,
@@ -137,7 +137,7 @@ class AlumnoCrudController extends BaseController
     {
 
         $alumno->delete();
-        return redirect()->route('admin.alumnos.index')->with('mensaje', 'Se ha eliminado el alumno');
+        return redirect()->route('Regente.alumnos.index')->with('mensaje', 'Se ha eliminado el alumno');
     }
 
 
@@ -155,6 +155,6 @@ class AlumnoCrudController extends BaseController
             $this->mensajes['mensaje'][] = 'Se utilizará su dni como clave de acceso';
         }
         // dd($this->mensajes,['mensaje'=>['Se ha verificado al alumno','Se utilizará su dni como clave de acceso']]);
-        return redirect()->route('admin.alumnos.index')->with('mensajes', $this->mensajes);
+        return redirect()->route('Regente.alumnos.index')->with('mensajes', $this->mensajes);
     }
 }

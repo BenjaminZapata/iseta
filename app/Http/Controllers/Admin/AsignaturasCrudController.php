@@ -45,7 +45,7 @@ class AsignaturasCrudController extends Controller
         } else {
             $asignaturas = Asignatura::select('*')->with('carrera')->paginate($porPagina);
         }
-        return view('Admin.Asignaturas.index', ['asignaturas' => $asignaturas, 'filtro' => $filtro]);
+        return view('Regente.Asignaturas.index', ['asignaturas' => $asignaturas, 'filtro' => $filtro]);
     }
 
 
@@ -57,7 +57,7 @@ class AsignaturasCrudController extends Controller
     {
         Log::debug($request->all());
         $carreras = $request->carrera;
-        return view('Admin.Asignaturas.create', [
+        return view('Regente.Asignaturas.create', [
             'carrera' => $carreras->id,
         ]);
     }
@@ -84,7 +84,7 @@ class AsignaturasCrudController extends Controller
 
         $asignatura = Asignatura::with('cursadas.alumno')->find($asignatura);
 
-        return view('Admin.Asignaturas.edit', [
+        return view('Regente.Asignaturas.edit', [
             'asignatura' => $asignatura,
         ]);
     }
@@ -109,6 +109,6 @@ class AsignaturasCrudController extends Controller
     public function destroy(Asignatura $asignatura)
     {
         $asignatura->delete();
-        return redirect()->route('admin.carreras.edit', ['carrera' => $asignatura->id_carrera])->with('mensaje', 'Se ha eliminado la asignatura');
+        return redirect()->route('Regente.carreras.edit', ['carrera' => $asignatura->id_carrera])->with('mensaje', 'Se ha eliminado la asignatura');
     }
 }

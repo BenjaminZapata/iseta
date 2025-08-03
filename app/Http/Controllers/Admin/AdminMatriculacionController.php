@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 
 class AdminMatriculacionController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth:admin');
     }
 
@@ -22,7 +23,8 @@ class AdminMatriculacionController extends Controller
      | Vista de rematriculacion
      | ---------------------------------------------
      */
-    function rematriculacion_vista(Request $request,Alumno $alumno, AlumnoMatriculacionService $matriculacionService){
+    function rematriculacion_vista(Request $request, Alumno $alumno, AlumnoMatriculacionService $matriculacionService)
+    {
 
         $carrera = Carrera::where('id', $request->input('carrera'))->first();
 
@@ -31,9 +33,9 @@ class AdminMatriculacionController extends Controller
 
         $anotables = $matriculacionService->matriculables($alumno, $carrera);
 
-        return view('Admin.Alumnos.rematriculacion', [
+        return view('Regente.Alumnos.rematriculacion', [
             'asignaturas' => $anotables,
-            'carrera'=>$carrera,
+            'carrera' => $carrera,
             'alumno' => $alumno
         ]);
     }
@@ -46,28 +48,29 @@ class AdminMatriculacionController extends Controller
      */
 
 
-     // Falta chequear lo mismo que arriba
+    // Falta chequear lo mismo que arriba
 
-    public function rematriculacion(Request $request, Alumno $alumno,Carrera $carrera, AlumnoMatriculacionService $rematService){
+    public function rematriculacion(Request $request, Alumno $alumno, Carrera $carrera, AlumnoMatriculacionService $rematService)
+    {
 
         /// Ver que no haya seleccionado mas de 2 libres
-        $libres=0;
+        $libres = 0;
         foreach ($request->except('_token') as $value) {
-            if($value == 1){
+            if ($value == 1) {
                 $libres++;
             }
         }
         $inscripcion = Egresado::select('id')
-                            ->where('id_carrera', $carrera->id)
-                            ->where('id_alumno', $alumno->id)
-                            ->first();
+            ->where('id_carrera', $carrera->id)
+            ->where('id_alumno', $alumno->id)
+            ->first();
 
 
 
-        $asignaturas = $rematService->validasParaRegistrar($carrera,$request->except('_token'),$alumno);
+        $asignaturas = $rematService->validasParaRegistrar($carrera, $request->except('_token'), $alumno);
 
-        if(!$asignaturas['success'])
-            return redirect()->back()->with('error',$asignaturas['mensaje']);
+        if (!$asignaturas['success'])
+            return redirect()->back()->with('error', $asignaturas['mensaje']);
         else
             $asignaturas = $asignaturas['mensaje'];
 
@@ -76,11 +79,11 @@ class AdminMatriculacionController extends Controller
 
 
         // Registrar las cursadas
-        foreach($asignaturas as $asigId => $tipoCursada){
-            $aprobada=3;
-            $tipoCursada = $tipoCursada-1;
-            if($tipoCursada==0 || $tipoCursada==2 || $tipoCursada==3){
-                $aprobada=1;
+        foreach ($asignaturas as $asigId => $tipoCursada) {
+            $aprobada = 3;
+            $tipoCursada = $tipoCursada - 1;
+            if ($tipoCursada == 0 || $tipoCursada == 2 || $tipoCursada == 3) {
+                $aprobada = 1;
             }
 
             Cursada::create([
@@ -93,7 +96,7 @@ class AdminMatriculacionController extends Controller
         }
 
 
-        return redirect()->back()->with('mensaje','Se ha rematriculado correctamente');
+        return redirect()->back()->with('mensaje', 'Se ha rematriculado correctamente');
     }
 
 }

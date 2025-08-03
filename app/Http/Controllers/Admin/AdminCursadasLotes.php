@@ -26,7 +26,7 @@ class AdminCursadasLotes extends Controller
       }
     }
 
-    return view('Admin.Cursadas.edit-masivo', [
+    return view('regente.Cursadas.edit-masivo', [
       'asignatura' => $asignatura,
       'siguiente' => $siguiente < count($asignaturas) ? $asignaturas[$siguiente] : null,
       'anterior' => $anterior >= 0 ? $asignaturas[$anterior] : null,
