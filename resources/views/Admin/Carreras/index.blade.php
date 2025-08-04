@@ -60,12 +60,13 @@
                         </td>
 
                         <td class="center">
-                            <form action="{{ route('admin.carreras.destroy', $carrera) }}" method="POST"
-                                onsubmit="return confirm('¿Estás seguro de que querés eliminar esta carrera?');">
+                            <form id="form-eliminar-{{ $carrera->id }}" action="{{ route('admin.carreras.destroy', $carrera) }}"
+                                method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn_red">
-                                    <i class="ti ti-trash" style="font-size: 1.2em;"></i> Eliminar
+                                <button type="button" class="btn_red"
+                                    onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar esta carrera?')">
+                                    <i class="ti ti-trash"></i> Eliminar
                                 </button>
                             </form>
                         </td>

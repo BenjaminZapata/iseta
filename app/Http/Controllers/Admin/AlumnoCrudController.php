@@ -135,7 +135,6 @@ class AlumnoCrudController extends BaseController
      */
     public function destroy(Alumno $alumno)
     {
-
         $alumno->delete();
         return redirect()->route('admin.alumnos.index')->with('mensaje', 'Se ha eliminado el alumno');
     }

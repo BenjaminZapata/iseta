@@ -230,6 +230,17 @@ class CarrerasCrudController extends BaseController
             ->with('success', 'Carrera desactivada correctamente');
     }
 
+    public function reactivar(Carrera $carrera)
+    {
+        $carrera->vigente = true;
+        $carrera->anio_fin = null;
+        $carrera->save();
+
+        return redirect()->route('admin.carreras.index')
+            ->with('success', 'Carrera reactivada correctamente');
+    }
+
+
 
     public function deleteAsignatura(Request $request, Carrera $carrera, Asignatura $asignatura)
     {

@@ -113,25 +113,26 @@
 
                 <td class="center">
                     @if($carrera->vigente)
-                        <td class="center">
-                            @if($carrera->vigente)
-                                <form action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST"
-                                    onsubmit="return confirm('¿Estás seguro de que querés desactivar esta carrera?');">
-                                    @csrf
-                                    @method('PATCH')
-                                    <button class="btn_red">
-                                        <i class="ti ti-ban" style="font-size: 1.2em;"></i> Desactivar
-                                    </button>
-                                </form>
-
-                            @else
-                                <span style="color: gray;">Inactiva</span>
-                            @endif
-                        </td>
+                        <form id="form-desactivar-{{ $carrera->id }}"
+                            action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST">
+                            @csrf
+                            <button type="button" class="btn_red"
+                                onclick="openGeneralModal('form-desactivar-{{ $carrera->id }}', '¿Seguro que querés desactivar esta carrera?')">
+                                <i class="ti ti-ban"></i> Desactivar
+                            </button>
+                        </form>
                     @else
-                    <span style="color: gray;">Inactiva</span>
-                @endif
+                        <form id="form-reactivar-{{ $carrera->id }}" action="{{ route('admin.carreras.reactivar', $carrera) }}"
+                            method="POST">
+                            @csrf
+                            <button type="button" class="btn_green"
+                                onclick="openGeneralModal('form-reactivar-{{ $carrera->id }}', '¿Querés reactivar esta carrera?')">
+                                <i class="ti ti-check"></i> Reactivar
+                            </button>
+                        </form>
+                    @endif
                 </td>
+
             </div>
 
             <table class="table__body">
