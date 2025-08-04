@@ -7,6 +7,8 @@ use App\htpp\Controllers\RematriculacionController;
 use App\Http\Controllers\Preceptor\ExamenPreceptorController;
 use App\Http\Controllers\Preceptor\mesaPreceptorController;
 use App\Http\Controllers\Admin\AdminPdfController;
+use App\Htpp\Controllers\preceptor\AsignaturasPreceptorController;
+use App\Http\Controllers\preceptor\CarrerasPreceptorController;
 
 Route::prefix('preceptor')
  ->middleware(['auth:admin'])
@@ -47,7 +49,17 @@ Route::prefix('preceptor')
   Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('mesas.actalibre');
 
   //rutas Examenes
-  Route::get('preceptor/examenes/{examen}/edit', [ExamenPreceptorController::class, 'edit'])->name('examenes.edit');
-  Route::post('preceptor/examenes', [ExamenPreceptorController::class, 'store'])->name('examenes.store');
-  Route::post('preceptor/examenes/{examen}/nota', [ExamenPreceptorController::class, 'modificarNota'])->name('examenes.nota');
+  Route::get('/examenes/{examen}/edit', [ExamenPreceptorController::class, 'edit'])->name('examenes.edit');
+  Route::post('/examenes', [ExamenPreceptorController::class, 'store'])->name('examenes.store');
+  Route::put('/examenes/{examen}', [ExamenPreceptorController::class, 'update'])->name('examenes.update');
+  Route::post('/examenes/{examen}/nota', [ExamenPreceptorController::class, 'modificarNota'])->name('examenes.nota');
+
+  //rutas asignaturas
+  Route::get('/asignaturas/{asignatura}/edit', [AsignaturasPreceptorController::class, 'edit'])->name('Asignaturas.edit');
+
+
+  //rutas carreras
+  Route::get('preceptor/carreras', [CarrerasPreceptorController::class, 'edit'])->name('carreras.edit');
  });
+
+
