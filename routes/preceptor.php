@@ -1,11 +1,12 @@
 <?php
+
 use App\Http\Controllers\Preceptor\InscripcionPreceptorController;
 use App\Http\Controllers\Preceptor\CursadasPreceptorController;
-use App\Http\Controllers\preceptor\AlumnoPreceptorController;
+use App\Http\Controllers\Preceptor\AlumnoPreceptorController;
 use App\Http\Controllers\Admin\AlumnoCrudController;
-use App\htpp\Controllers\RematriculacionController;
+use App\Http\Controllers\RematriculacionController;
 use App\Http\Controllers\Preceptor\ExamenPreceptorController;
-use App\Http\Controllers\Preceptor\mesaPreceptorController;
+use App\Http\Controllers\Preceptor\MesaPreceptorController;
 use App\Http\Controllers\Admin\AdminPdfController;
 use App\Htpp\Controllers\preceptor\AsignaturasPreceptorController;
 use App\Http\Controllers\preceptor\CarrerasPreceptorController;
