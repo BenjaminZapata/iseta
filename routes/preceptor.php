@@ -49,4 +49,5 @@ Route::prefix('preceptor')
   //rutas Examenes
   Route::get('preceptor/examenes/{examen}/edit', [ExamenPreceptorController::class, 'edit'])->name('examenes.edit');
   Route::post('preceptor/examenes', [ExamenPreceptorController::class, 'store'])->name('examenes.store');
+  Route::post('preceptor/examenes/{examen}/nota', [ExamenPreceptorController::class, 'modificarNota'])->name('examenes.nota');
  });
