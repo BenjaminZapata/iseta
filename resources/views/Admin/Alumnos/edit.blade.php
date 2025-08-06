@@ -21,6 +21,21 @@
                 'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)],
             ]) ?>
 
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 27px 0 27px;">
+            @if (!$config['modo_seguro'])
+                <div>
+                    <form method="POST" class="form-eliminar"
+                        action="{{ route('admin.alumnos.destroy', ['alumno' => $alumno->id]) }}">
+                        @csrf
+                        @method('delete')
+                        <button class="btn_red_outline"
+                            onclick="return confirm('¿Estás seguro de que deseas eliminar esta carrera?')">
+                            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar alumno
+                        </button>
+                    </form>
+                </div>
+            @endif
+        </div>
 
         {{-- HEADER PARA VERIFICAR ALUMNO --}}
 
@@ -30,10 +45,12 @@
                     <h2>Validar alumno</h2>
                 </div>
                 <div>
-                    <p>Al hacer click en validar alumno se enviará un mail al alumno con su usuario y contraseña para
+                    <p style="padding: 16px 27px 0 27px; font-weight: bold;">Al hacer click en validar alumno se enviará un
+                        mail al alumno con
+                        su usuario y contraseña para
                         ingresar
                         al
-                        sistema. Si el alumno no está verificado, no podrá acceder al sistema. </p>
+                        sistema. Si el alumno no está verificado, no podrá acceder al mismo. </p>
 
                     <div class='botones-derecha'
                         style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">

@@ -15,11 +15,12 @@
             </div>
         </fieldset>
     @endforeach
-    <div class="botones-derecha">
 
+    <div class="botones-derecha">
         <div class="botones-derecha"
             style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
             <x-botones-alumno />
+            {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
             <x-btn-cancelar />
             <button type="submit" class="btn_blue">
                 @if ($method == 'put')
@@ -29,6 +30,7 @@
                     <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
                     Guardar
                 @endif
+                {{-- @endif --}}
             </button>
         </div>
     </div>

@@ -78,15 +78,26 @@
                             <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                         </td>
                         <td class="flex just-center">
-                            <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }}">
-                                <button class="btn_blue"><i class="ti ti-file-info"
-                                        style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
-                            </a>
-                            <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }} "
-                                style="margin-left: 10px;">
-                                <button class="btn_icon-danger" style="background-color: red"><i class="ti ti-trash"
-                                        style="font-size: 1.3em;"></i></button>
-                            </a>
+                            <div style="display: flex; justify-content: center;">
+                                <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }}">
+                                    <button class="btn_blue"><i class="ti ti-file-info"
+                                            style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
+                                </a>
+                                @if (!$config['modo_seguro'])
+                                    <div>
+                                        <form method="POST" class="form-eliminar"
+                                            action="{{ route('admin.alumnos.destroy', ['alumno' => $alumno->id]) }}"
+                                            style="margin-left: 10px;">
+                                            @csrf
+                                            @method('delete')
+                                            <button class="btn_icon-danger" style="background-color: red"
+                                                onclick="return confirm('¿Estás seguro de que deseas eliminar este alumno?')">
+                                                <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @endforeach
