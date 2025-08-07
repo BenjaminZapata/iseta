@@ -98,8 +98,6 @@
                                     <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                                 </button>
                             </form>
-
-
                         </td>
                     </tr>
                 @endforeach

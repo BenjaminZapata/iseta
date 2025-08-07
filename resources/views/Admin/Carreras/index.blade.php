@@ -25,7 +25,12 @@
             {{-- FILTROS --}}
             <?= $filtergen->generate('admin.carreras.index', $filters, [
         'dropdowns' => [
-            $form->select('filter_vigente', 'Condición: ', 'label-input-y-100', $filters, ['Todas', 'No Vigentes', 'Vigentes'])
+            $form->select('filter_vigente', 'Condición: ', 'label-input-y-100', $filters, [
+                '' => 'Todas',
+                0 => 'No Vigentes',
+                1 => 'Vigentes',
+            ])
+
         ],
         'fields' => ['nombre' => 'Nombre', 'asignatura' => 'Asignatura']
     ]) ?>
