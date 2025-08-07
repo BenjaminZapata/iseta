@@ -135,9 +135,14 @@ class AlumnoPreceptorController extends BaseController
      */
     public function destroy(Alumno $alumno)
     {
-
-        $alumno->delete();
-        return redirect()->route('preceptor.alumnos.index')->with('mensaje', 'Se ha eliminado el alumno');
+        try {
+            $alumno->delete();
+            return redirect()->route('preceptor.alumnos.index')
+                ->with('mensaje', 'Se ha eliminado el alumno');
+        } catch (\Exception $e) {
+            return redirect()->route('preceptor.alumnos.index')
+                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+        }
     }
 
 

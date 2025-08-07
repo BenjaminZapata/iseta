@@ -1,4 +1,5 @@
-@extends('Preceptor.template')
+@extends('Admin.template')
+
 @section('content')
     <style>
         #filters .label-input-y-100 label {
@@ -19,12 +20,12 @@
         {{-- BOTON CREAR --}}
 
         <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
-            <a href="{{ route('preceptor.alumnos.create') }}">
+            <a href="{{ route('admin.alumnos.create') }}">
                 <button class="btn_blue">
                     <i class="ti ti-circle-plus"></i>Agregar alumno</button>
             </a>
             {{-- FILTROS --}}
-            <?= $filtergen->generate('preceptor.alumnos.index', $filters, [
+            <?= $filtergen->generate('admin.alumnos.index', $filters, [
         'dropdowns' => [
             $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
             $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
@@ -82,15 +83,21 @@
                             <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                         </td>
                         <td class="flex just-center">
-                            <a href="{{ route('preceptor.alumnos.edit', ['alumno' => $alumno->id]) }}">
+                            <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }}">
                                 <button class="btn_blue"><i class="ti ti-file-info"
                                         style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                             </a>
-                            <a href="{{ route('preceptor.alumnos.edit', ['alumno' => $alumno->id]) }} "
-                                style="margin-left: 10px;">
-                                <button class="btn_icon-danger" style="background-color: red"><i class="ti ti-trash"
-                                        style="font-size: 1.3em;"></i></button>
-                            </a>
+                            <form id="form-eliminar-{{ $alumno->id }}"
+                                action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button"
+                                    onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}', '¿Estás seguro de que querés eliminar al alumno {{ $alumno->nombre }}? Esta acción no se puede deshacer.')"
+                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

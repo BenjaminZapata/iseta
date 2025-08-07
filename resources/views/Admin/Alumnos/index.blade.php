@@ -87,10 +87,19 @@
                                 <button class="btn_blue"><i class="ti ti-file-info"
                                         style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                             </a>
-                            <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }} " style="margin-left: 10px;">
-                                <button class="btn_icon-danger" style="background-color: red"><i class="ti ti-trash"
-                                        style="font-size: 1.3em;"></i></button>
-                            </a>
+                            <form id="form-eliminar-{{ $alumno->id }}"
+                                action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button"
+                                    onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}', '¿Estás seguro de que querés eliminar al alumno {{ $alumno->nombre }}? Esta acción no se puede deshacer.')"
+                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                </button>
+                            </form>
+
+
                         </td>
                     </tr>
                 @endforeach
