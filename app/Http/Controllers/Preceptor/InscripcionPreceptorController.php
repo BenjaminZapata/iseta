@@ -8,6 +8,7 @@ use App\Models\Mesa;
 use App\Repositories\Admin\InscripcionRepository;
 use App\Services\AlumnoInscripcionService;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class InscripcionPreceptorController extends Controller
 {

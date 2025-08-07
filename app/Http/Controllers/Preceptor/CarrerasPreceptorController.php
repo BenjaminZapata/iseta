@@ -101,7 +101,7 @@ class CarrerasPreceptorController extends BaseController
    ->pluck('anio_cursada')
    ->toArray();
 
-  return view('Admin.Carreras.edit', [
+  return view('preceptor.Carreras.edit', [
    'carrera' => $carrera,
    'aniosPorCarrera' => [$carrera->id => $anios],
   ]);

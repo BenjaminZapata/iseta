@@ -23,7 +23,7 @@
                         <label>Nombre:</label>
                         <span class="campo_info2">
                             <a class="capitalize flex items-center"
-                                href="{{route('admin.alumnos.edit', ['alumno' => $examen->alumno->id])}}">
+                                href="{{route('preceptor.alumnos.edit', ['alumno' => $examen->alumno->id])}}">
                                 {{$examen->alumno->apellidoNombre()}} <i class="ti ti-info-circle"></i>
                             </a>
                         </span>
@@ -39,21 +39,17 @@
                         <div class="perfil_dataname">
                             <label>Materia:</label>
                             <span class="campo_info2">
-                                <a class="capitalize flex items-center"
-                                    href="{{route('preceptor.asignaturas.edit', ['asignatura' => $examen->asignatura->id])}}">
-                                    {{$examen->asignatura->nombre}} <i class="ti ti-info-circle"></i>
-                                </a>
+                                {{ $examen->asignatura->nombre ?? 'Sin asignatura' }}
                             </span>
                         </div>
+
                         <div class="perfil_dataname">
                             <label>Carrera:</label>
                             <span class="campo_info2">
-                                <a class="flex items-center"
-                                    href="{{route('preceptor.carreras.edit', ['carrera' => $examen->asignatura->carrera->first()->id])}}">
-                                    {{$examen->asignatura->carrera->first()->nombre}} <i class="ti ti-info-circle"></i>
-                                </a>
+                                {{ $examen->asignatura?->carrera?->first()?->nombre ?? 'Sin carrera' }}
                             </span>
                         </div>
+
                         <div class="perfil_dataname border-none">
                             <label>Año:</label>
                             <span class="campo_info2">{{$examen->asignatura->anioStr()}}</span>
