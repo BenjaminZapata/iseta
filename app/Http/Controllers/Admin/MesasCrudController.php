@@ -61,20 +61,20 @@ class MesasCrudController extends BaseController
     {
 
         $precargados = [];
-        if($request->has('asignatura') && $request->has('carrera')){
+        if ($request->has('asignatura') && $request->has('carrera')) {
             $precargados['carrera'] = $request->input('carrera');
             $precargados['asignatura'] = Asignatura::find($request->input('asignatura'));
-        }else{
+        } else {
             $precargados['carrera'] = null;
             $precargados['asignatura'] = null;
         }
 
         $carreras = Carrera::where('vigente', 1)->get();
-        $profesores = Profesor::orderBy('apellido','asc')->orderBy('apellido','asc')->get();
+        $profesores = Profesor::orderBy('apellido', 'asc')->orderBy('apellido', 'asc')->get();
 
-        return view('Admin.Mesas.create',[
-            'carreras'=>$carreras,
-            'profesores'=>$profesores,
+        return view('Admin.Mesas.create', [
+            'carreras' => $carreras,
+            'profesores' => $profesores,
             'precargados' => $precargados,
             'ProfesoresModel' => Profesor::class
         ]);
@@ -86,14 +86,14 @@ class MesasCrudController extends BaseController
     public function store(CrearMesaRequest $request)
     {
         // configuracion
-        $config=Configuracion::todas();
+        $config = Configuracion::todas();
 
         // obtener datos validados
         $data = $request->validated();
 
         $esDiaValido = $this->mesasService->esDiaHabil($data['fecha']);
 
-        if(!$esDiaValido['success']){
+        if (!$esDiaValido['success']) {
             return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
         }
 
@@ -103,21 +103,21 @@ class MesasCrudController extends BaseController
 
         $llamadoYaExiste = $this->mesasService->llamadoYaExiste($data);
 
-        if($llamadoYaExiste['success']){
-            return redirect()->back()->with('error',$llamadoYaExiste['mensaje'])->withInput();
+        if ($llamadoYaExiste['success']) {
+            return redirect()->back()->with('error', $llamadoYaExiste['mensaje'])->withInput();
         }
 
         // Que los profes no sean los mismos
-        if(
+        if (
             $data['prof_presidente'] == $data['prof_vocal_1'] ||
             $data['prof_presidente'] == $data['prof_vocal_2'] ||
             $data['prof_vocal_1'] == $data['prof_vocal_2'] && $data['prof_vocal_1'] != '0'
-        ){
-            return redirect()->back()->with('error','Hay profesores repetidos');
+        ) {
+            return redirect()->back()->with('error', 'Hay profesores repetidos');
         }
 
         Mesa::create($data);
-        return \redirect()->back()->with('mensaje','Se creo la mesa');
+        return \redirect()->back()->with('mensaje', 'Se creo la mesa');
     }
 
 
@@ -126,14 +126,14 @@ class MesasCrudController extends BaseController
      */
     public function edit(Request $request, $mesa)
     {
-        $mesa = Mesa::where('id', $mesa)->with('asignatura.carrera','profesor','vocal1','vocal2','examenes.alumno')->first();
+        $mesa = Mesa::where('id', $mesa)->with('asignatura.carrera', 'profesor', 'vocal1', 'vocal2', 'examenes.alumno')->first();
 
         $inscribibles = $this->mesaRepo->inscribibles($mesa);
 
 
         return view('Admin.Mesas.edit', [
             'mesa' => $mesa,
-            'profesores'=> Profesor::orderBy('apellido')->orderBy('nombre')->get(),
+            'profesores' => Profesor::orderBy('apellido')->orderBy('nombre')->get(),
             'inscribibles' => $inscribibles
         ]);
     }
@@ -147,25 +147,25 @@ class MesasCrudController extends BaseController
         $data = $request->validated();
 
         // verificar que no sea sabado ni domingo
-        if(DiasHabiles::esFinDeSemana($data['fecha'])){
-            return \redirect()->back()->with('error','La fecha es fin de semana');
+        if (DiasHabiles::esFinDeSemana($data['fecha'])) {
+            return \redirect()->back()->with('error', 'La fecha es fin de semana');
         }
 
         // verificar que no sea feriado, o similar
-        if(!DiasHabiles::esDiaHabil($data['fecha'])){
-            return \redirect()->back()->with('error','La fecha es un dia no habil');
+        if (!DiasHabiles::esDiaHabil($data['fecha'])) {
+            return \redirect()->back()->with('error', 'La fecha es un dia no habil');
         }
 
-        if(
+        if (
             $data['prof_presidente'] == $data['prof_vocal_1'] ||
             $data['prof_presidente'] == $data['prof_vocal_2'] ||
             $data['prof_vocal_1'] == $data['prof_vocal_2'] && $data['prof_vocal_1'] != '0'
-        ){
-            return redirect()->back()->with('error','Hay profesores repetidos');
+        ) {
+            return redirect()->back()->with('error', 'Hay profesores repetidos');
         }
 
         $mesa->update($data);
-        return redirect()->back()->with('mensaje','Se edito la mesa');
+        return redirect()->back()->with('mensaje', 'Se edito la mesa');
     }
 
     /**
@@ -174,6 +174,6 @@ class MesasCrudController extends BaseController
     public function destroy(Mesa $mesa)
     {
         $this->mesaRepo->delete($mesa);
-        return redirect() -> route('admin.mesas.index') -> with('mensaje', 'Se ha eliminado la mesa');
+        return redirect()->route('admin.mesas.index')->with('mensaje', 'Se ha eliminado la mesa');
     }
 }

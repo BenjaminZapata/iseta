@@ -8,6 +8,7 @@
     "FIXME",
     "WARN",
     "COMPLETE",
+    "INFO",
     "TODO"
   ],
   "todo-tree.highlights.defaultHighlight": {
@@ -28,6 +29,10 @@
     },
     "COMPLETE": {
       "icon": "check",
+      "type": "line"
+    },
+    "INFO": {
+      "icon": "info",
       "type": "line"
     },
     "FIXME": {

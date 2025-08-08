@@ -23,12 +23,17 @@ class CarreraRepository
 
     public function index($request)
     {
+        // Usamos valor por defecto si el filtro no viene del usuario
+        $filterVigente = $request->filled('filter_vigente')
+            ? $request->input('filter_vigente')
+            : '1'; // mostrar solo vigentes por defecto
+
         return Carrera::query()
-            ->with('asignaturas') // eager loading
+            ->with('asignaturas')
             ->when(
-                $request->filled('filter_vigente') && $request->input('filter_vigente') != 0,
-                function ($query) use ($request) {
-                    $query->where('vigente', $request->input('filter_vigente') - 1);
+                $filterVigente !== '',
+                function ($query) use ($filterVigente) {
+                    $query->where('vigente', (int) $filterVigente);
                 }
             )
             ->when(
@@ -48,9 +53,10 @@ class CarreraRepository
             ->orderByDesc('vigente')
             ->orderByDesc('anio_apertura')
             ->orderBy('nombre')
-
             ->paginate($this->config['filas_por_tabla']);
     }
+
+
 
     public function setAsignatura($asignatura, $carrera)
     {

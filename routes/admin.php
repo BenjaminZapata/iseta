@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminCopiaDB;
+use App\Http\Controllers\preceptor\AlumnoPreceptorController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminCorrelativasController;
 use App\Http\Controllers\Admin\AdminCursadasLotes;
@@ -61,6 +62,11 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::resource('alumnos', AlumnoCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->missing(function () {
         return redirect()->route('admin.alumnos.index')->with('aviso', 'El alumno no existe o ha sido eliminado');
     })->except('show');
+
+    Route::middleware(['auth:admin'])->group(function () {
+        Route::get('/preceptor/alumnos/index', [AlumnoPreceptorController::class, 'index'])
+            ->name('preceptor.alumnos.index');
+    });
 
 
     Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
@@ -209,10 +215,13 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::get('copia', [AdminCopiaDB::class, 'crearCopia']);
     Route::get('restaurar', [AdminCopiaDB::class, 'restaurarCopia']);
 
-    
+
     Route::get('/admin/asignaturas', [AsignaturaController::class, 'index'])->name('admin.asignaturas.index');
     Route::get('/admin/asignaturas/create', [AsignaturaController::class, 'create'])->name('admin.asignaturas.create');
     Route::get('/admin/asignaturas/{asignatura}/edit', [AsignaturaController::class, 'edit'])->name('admin.asignaturas.edit');
 
-    
+    Route::delete('carreras/{carrera}', [CarrerasCrudController::class, 'destroy'])->name('admin.carreras.destroy');
+    Route::post('carreras/{carrera}/desactivar', [CarrerasCrudController::class, 'desactivar'])->name('admin.carreras.desactivar');
+    Route::post('carreras/{carrera}/reactivar', [CarrerasCrudController::class, 'reactivar'])->name('admin.carreras.reactivar');
+
 });

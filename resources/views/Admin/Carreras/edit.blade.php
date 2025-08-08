@@ -3,47 +3,47 @@
 @section('content')
     <div class="edit-form-container">
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA']) 
+            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
             <div class="perfil__info">
                 <?= $form->generate(
-                  route('admin.carreras.update', ['carrera' => $carrera->id]),
-                  'put',
-                  [
-                    'Información' => [
-                      $form->text(
-                        'nombre',
-                        'Nombre:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->text(
-                        'resolucion',
-                        'Resolucion:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->text(
-                        'anio_apertura',
-                        'Año de apertura:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->text(
-                        'anio_fin',
-                        'Año de cierre:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->textarea(
-                        'observaciones',
-                        'Observaciones:',
-                        'label-input-y-75',
-                        $carrera
-                      ),
-                      $form->texthidden(url()->previous()),
-                    ],
-                  ]
-                ) ?>
+        route('admin.carreras.update', ['carrera' => $carrera->id]),
+        'put',
+        [
+            'Información' => [
+                $form->text(
+                    'nombre',
+                    'Nombre:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->text(
+                    'resolucion',
+                    'Resolucion:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->text(
+                    'anio_apertura',
+                    'Año de apertura:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->text(
+                    'anio_fin',
+                    'Año de cierre:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->textarea(
+                    'observaciones',
+                    'Observaciones:',
+                    'label-input-y-75',
+                    $carrera
+                ),
+                $form->texthidden(url()->previous()),
+            ],
+        ]
+    ) ?>
             </div>
         </div>
 
@@ -61,6 +61,7 @@
                     <button type="button" class="btn_blue" onclick="toggleFiltroExportar(this)">
                         <i class="ti ti-file-download"></i> Exportar cursadas
                     </button>
+
 
                     <form method="GET" action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
                         class="filtro-exportar"
@@ -109,6 +110,29 @@
                         </div>
                     </form>
                 </div>
+
+                <td class="center">
+                    @if($carrera->vigente)
+                        <form id="form-desactivar-{{ $carrera->id }}"
+                            action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST">
+                            @csrf
+                            <button type="button" class="btn_red"
+                                onclick="openGeneralModal('form-desactivar-{{ $carrera->id }}', '¿Seguro que querés desactivar esta carrera?')">
+                                <i class="ti ti-ban"></i> Desactivar
+                            </button>
+                        </form>
+                    @else
+                        <form id="form-reactivar-{{ $carrera->id }}" action="{{ route('admin.carreras.reactivar', $carrera) }}"
+                            method="POST">
+                            @csrf
+                            <button type="button" class="btn_green"
+                                onclick="openGeneralModal('form-reactivar-{{ $carrera->id }}', '¿Querés reactivar esta carrera?')">
+                                <i class="ti ti-check"></i> Reactivar
+                            </button>
+                        </form>
+                    @endif
+                </td>
+
             </div>
 
             <table class="table__body">

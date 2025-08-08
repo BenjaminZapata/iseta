@@ -7,9 +7,12 @@ use Illuminate\Http\Request;
 
 class AdminSeguridadController extends Controller
 {
-    function vista(){
+    function vista()
+    {
         return \view('Admin.seguridad');
     }
 
-    function editar(){}
+    function editar()
+    {
+    }
 }

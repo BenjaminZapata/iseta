@@ -21,8 +21,8 @@ class RouteServiceProvider extends ServiceProvider
     public const HOME = '/home';
 
     /**
-    * Define your route model bindings, pattern filters, and other route configuration.
-    */
+     * Define your route model bindings, pattern filters, and other route configuration.
+     */
     public function boot(): void
     {
         RateLimiter::for('api', function (Request $request) {
@@ -30,16 +30,16 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('alumno-login', function (Request $request) {
-            
-            $key = 'login.'.$request->input('email');
+
+            $key = 'login.' . $request->input('email');
             $max = 5;   // attempts
             $decay = 60;    // seconds
-        
+
             if (RateLimiter::tooManyAttempts($key, $max)) {
                 $seconds = RateLimiter::availableIn($key);
                 return redirect()->route('alumno.login')
                     ->with('error', __('auth.throttle', ['seconds' => $seconds]));
-            }  
+            }
             RateLimiter::hit($key, $decay);
         });
 
@@ -50,6 +50,9 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            Route::middleware('web')
+                ->group(base_path('routes/preceptor.php'));
         });
     }
 }

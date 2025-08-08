@@ -41,8 +41,7 @@
             </div>
 
             <div class="usuario input-box">
-                <input value="{{ old('email') }}" type="email" name="email" required
-                    placeholder="Nombre de usuario">
+                <input value="{{ old('email') }}" type="email" name="email" required placeholder="Nombre de usuario">
                 <div class="underline"></div>
             </div>
 

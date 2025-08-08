@@ -202,14 +202,45 @@ class CarrerasCrudController extends BaseController
         return redirect()->back()->with('mensaje', 'Se agrego la asignatura a la carrera');
     }
 
-    //FIXME: Falta desarrollar la funcionalidad de eliminar una carrera
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Carrera $carrera)
     {
-        return redirect()->route('admin.carreras.index')->with('error', 'Las carreras no se pueden eliminar');
+        try {
+            // Desvincular todas las asignaturas relacionadas
+            $carrera->asignaturas()->detach();
+
+            // Ahora eliminar la carrera
+            $carrera->delete();
+
+            return redirect()->route('admin.carreras.index')
+                ->with('success', 'Carrera eliminada correctamente');
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.carreras.index')
+                ->with('error', 'No se pudo eliminar la carrera. Verifique que no tenga relaciones asociadas.');
+        }
     }
+
+
+    public function desactivar(Carrera $carrera)
+    {
+        $carrera->vigente = false;
+        $carrera->anio_fin = now()->year;
+        $carrera->save();
+
+        return redirect()->route('admin.carreras.index')
+            ->with('success', 'Carrera desactivada correctamente');
+    }
+
+    public function reactivar(Carrera $carrera)
+    {
+        $carrera->vigente = true;
+        $carrera->anio_fin = null;
+        $carrera->save();
+
+        return redirect()->route('admin.carreras.index')
+            ->with('success', 'Carrera reactivada correctamente');
+    }
+
+
 
     public function deleteAsignatura(Request $request, Carrera $carrera, Asignatura $asignatura)
     {

@@ -101,7 +101,7 @@ class EgresadosAdminController extends BaseController
             'anio_inscripcion' => 'required|integer',
             'indice_libro_matriz' => 'nullable|string',
             'anio_finalizacion' => 'nullable|integer|gte:anio_inscripcion',
-            'estado' => 'nullable|in:0,1',
+            'estado' => 'required|in:0,1,2',
         ], [
             'anio_finalizacion.gte' => 'El año de finalización no puede ser menor que el año de inscripción.',
         ]);

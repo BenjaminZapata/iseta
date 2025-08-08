@@ -21,9 +21,10 @@ include("alumnos.php");
 include("admin.php");
 include("profesores.php");
 include("test.php");
+include("preceptor.php");
 
-Route::fallback(function(){
-    return response()->view('Error.404',[],404);
+Route::fallback(function () {
+    return response()->view('Error.404', [], 404);
 });
 
 
