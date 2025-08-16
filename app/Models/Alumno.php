@@ -206,12 +206,12 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     public function getTituloSecundarioTexto()
     {
         $titulo = [
+            'No entregado',
             'Fotocopia del título original secundario',
             'Certificado de constancia de título en trámite',
-            'Constancia de alumno del último año del nivel secundario',
-            'No entregado'
+            'Constancia de alumno del último año del nivel secundario'
         ];
-        return $titulo[$this->titulo] ?? 'Otro';
+        return $titulo[$this->titulo];
     }
 
 
