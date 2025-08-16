@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminCopiaDB;
+use App\Http\Controllers\ImportsController;
 use App\Http\Controllers\preceptor\AlumnoPreceptorController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminCorrelativasController;
@@ -67,6 +68,12 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Route::get('/preceptor/alumnos/index', [AlumnoPreceptorController::class, 'index'])
             ->name('preceptor.alumnos.index');
     });
+
+    // EXCEL IMPORT
+    Route::get('/importar', [ImportsController::class, 'index'])->name('import.index');
+    Route::post('/importar', [ImportsController::class, 'importar'])->name('import.store');
+    Route::post('/admin/importar', [ImportsController::class, 'import'])->name('importar.excel');
+    Route::post('/admin/importar/preview', [ImportsController::class, 'preview'])->name('importar.preview');
 
 
     Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])

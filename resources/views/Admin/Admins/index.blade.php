@@ -21,8 +21,6 @@
         'preceptor' => 'Preceptor',
         'secretario' => 'Secretario',
     ]) ?>
-
-
                     </div>
                     <div class="flex">
                         <input type="submit" value="Crear" class="btn_borrar">

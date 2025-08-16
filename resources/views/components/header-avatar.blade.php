@@ -6,9 +6,16 @@
             {{ $tituloSeccion ?? 'GESTIÓN' }}
         </h2>
     </div>
-    <!-- DERECHA: Bienvenida + Avatar -->
+
+    <!-- DERECHA: Bienvenida + Botón Importar + Avatar -->
     <div style="display: flex; align-items: center; gap: 1rem; position: relative; padding-right: 30px;">
         <span style="font-size: 1rem; text-transform: none;">¡Bienvenido, Usuario!</span>
+
+        <!-- Botón Importar -->
+        <a href="{{ route('import.index') }}"
+            style="background-color: #4CAF50; color: white; padding: 6px 14px; border-radius: 6px; font-size: 0.9rem; text-decoration: none; transition: background-color 0.2s ease;">
+            <i class="ti ti-file-upload" style="margin-right: 5px;"></i> Importar
+        </a>
 
         <!-- Notificaciones -->
         <div>
@@ -18,10 +25,12 @@
 
         <!-- Avatar con dropdown -->
         <div style="position: relative;">
-            <div id="avatar-toggle" style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;" onclick="toggleUserMenu()">
+            <div id="avatar-toggle" style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;"
+                onclick="toggleUserMenu()">
                 <img src="{{ asset('img/user-icon.png') }}" alt="Regente" title="Usuario"
                     style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; background-color: white;" />
-                <i id="avatar-arrow" class="ti ti-chevron-down" style="color: white; font-size: 1rem; position: relative; top: -2px; transition: transform 0.2s ease;"></i>
+                <i id="avatar-arrow" class="ti ti-chevron-down"
+                    style="color: white; font-size: 1rem; position: relative; top: -2px; transition: transform 0.2s ease;"></i>
             </div>
 
             <!-- Dropdown (oculto por defecto) -->
@@ -51,17 +60,18 @@
                             Administrar usuarios
                         </a>
                     </li>
-                    <li><hr style="margin: 0;"></li>
+                    <li>
+                        <hr style="margin: 0;">
+                    </li>
                     <li>
                         <a href="/admin/logout" class="header-avatar-lista">
                             <i class="ti ti-logout" style="font-size: 1.3em; margin-right: 8px;"></i>
                             <span>Cerrar sesión</span>
                         </a>
                     </li>
+
                 </ul>
             </div>
         </div>
     </div>
-
 </div>
-
