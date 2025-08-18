@@ -14,6 +14,18 @@ class Asignatura extends Model
     protected $table = "asignaturas";
     use HasFactory;
 
+    // Con esto el modelo ya entiende que una asignatura puede tener un padre y varios hijos.
+    public function parent()
+    {
+        return $this->belongsTo(Asignatura::class, 'parent_id');
+    }
+    public function children()
+    {
+        return $this->hasMany(Asignatura::class, 'parent_id');
+    }
+    
+
+
     public $timestamps = false;
 
     protected $fillable =  [

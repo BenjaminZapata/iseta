@@ -27,7 +27,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="{{ route('admin.asignaturas.index') }}">
                 <i class="ti ti-notes"></i>
                 <span>Asignaturas</span>
             </a>

@@ -1,22 +1,34 @@
 @extends('Admin.template')
 
 @section('content')
-<div class="flex justify-between items-center mb-6">
-    <a href="{{ route('admin.asignaturas.create') }}">
+<style>
+    #filters .label-input-y-100 label {
+    text-align: left !important;
+    display: block !important;
+    width: 100%;
+    padding-top: 15px;
+}
+</style>
+
+{{-- TABLA --}}
+<div class="table" data-name="tablaCarreras">
+
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS']) 
+
+    <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
+        <a href="{{route('admin.asignaturas.create')}}">
         <button class="btn_blue">
-            <i class="ti ti-circle-plus"></i> Agregar asignatura</button>
+            <i class="ti ti-circle-plus"></i> Agregar asignatura
+        </button>
     </a>
+    {{-- FILTROS --}}
+    
+    <button class="btn_blue">
+            <i class="ti ti-search"></i> Filtrar
+        </button>
 
-    <div class="flex gap-4">
-        <form action="{{ route('admin.asignaturas.index') }}" method="GET" class="flex items-center gap-2">
-            <input name="filtro" type="text" placeholder="Buscar..." class="form-input">
-            <button type="submit" class="btn btn-primary"><i class="ti ti-filter"></i> Filtros</button>
-        </form>
-
-        <a href="{{ route('admin.asignaturas.index') }}">
-            <button class="btn btn-primary"><i class="ti ti-filter-off"></i> Eliminar filtros</button>
-        </a>
     </div>
+    
 </div>
 
 <div class="table">
