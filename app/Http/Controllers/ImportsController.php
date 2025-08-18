@@ -156,12 +156,44 @@ class ImportsController extends Controller
 
  public function processEditedImport(Request $request)
  {
-  $editedData = $request->input('data');
-  $headings = $request->input('headings');
-  $mappings = $request->input('mappings');
-  $table = $request->input('tabla');
+  $request->validate([
+   'tabla' => 'required|string',
+   'data' => 'nullable|array',
+   'mappings' => 'nullable|array',
+  ]);
 
-  // Procesar datos editados...
-  // Insertarlos en la BD según los mapeos
+  $table = $request->input('tabla');
+  $editedData = $request->input('data', []);
+  $mappings = $request->input('mappings', []);
+
+  $rowsToInsert = [];
+
+  foreach ($editedData as $rowIndex => $cols) {
+   $rowInsert = [];
+   foreach ($cols as $colIndex => $value) {
+    if (isset($mappings[$colIndex]) && !empty($mappings[$colIndex])) {
+     $rowInsert[$mappings[$colIndex]] = $value;
+    }
+   }
+   if (!empty($rowInsert))
+    $rowsToInsert[] = $rowInsert;
+  }
+
+  try {
+   if (!empty($rowsToInsert))
+    DB::table($table)->insert($rowsToInsert);
+
+   return response()->json([
+    'success' => true,
+    'inserted_rows' => count($rowsToInsert)
+   ]);
+  } catch (\Exception $e) {
+   return response()->json([
+    'success' => false,
+    'message' => 'Error al insertar: ' . $e->getMessage()
+   ], 500);
+  }
  }
+
+
 }

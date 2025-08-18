@@ -11,12 +11,6 @@
     <div style="display: flex; align-items: center; gap: 1rem; position: relative; padding-right: 30px;">
         <span style="font-size: 1rem; text-transform: none;">¡Bienvenido, Usuario!</span>
 
-        <!-- Botón Importar -->
-        <a href="{{ route('import.index') }}"
-            style="background-color: #4CAF50; color: white; padding: 6px 14px; border-radius: 6px; font-size: 0.9rem; text-decoration: none; transition: background-color 0.2s ease;">
-            <i class="ti ti-file-upload" style="margin-right: 5px;"></i> Importar
-        </a>
-
         <!-- Notificaciones -->
         <div>
             <i class="ti ti-bell" style="color: white; font-size: 1rem; transition: transform 0.2s ease;"></i>
@@ -40,6 +34,13 @@
                         <a href="{{ route('admin.config.modoseguro') }}" class="header-avatar-lista">
                             <i class="ti ti-shield-lock" style="font-size: 1.3em; margin-right: 8px;"></i>
                             <span>{{ $config['modo_seguro'] ? 'Desactivar modo seguro' : 'Activar modo seguro' }}</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{ route('import.index') }}" class="header-avatar-lista">
+                            <i class="ti ti-file-upload" style="font-size: 1.3em; margin-right: 8px;"></i>
+                            Importar
                         </a>
                     </li>
                     <li>
