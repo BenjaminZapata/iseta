@@ -74,7 +74,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::post('/importar', [ImportsController::class, 'importar'])->name('import.store');
     Route::post('/admin/importar', [ImportsController::class, 'import'])->name('importar.excel');
     Route::post('/admin/importar/preview', [ImportsController::class, 'preview'])->name('importar.preview');
-
+    Route::post('/admin/importar/process-edited', [ImportsController::class, 'processEditedImport'])->name('importar.process_edited');
 
     Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
         ->name('admin.alumnos.analitico.pdf');

@@ -19,14 +19,12 @@ class ImportsController extends Controller
   $tables = array_map(fn($table) => $table->$key, $tablesQuery);
 
   // Filtrar tablas que no se quieren importar
-  $tables = array_filter($tables, function ($table) {
-   return !in_array($table, [
-    'migrations',
-    'failed_jobs',
-    'password_resets',
-    'personal_access_tokens'
-   ]);
-  });
+  $tables = array_filter($tables, fn($table) => !in_array($table, [
+   'migrations',
+   'failed_jobs',
+   'password_resets',
+   'personal_access_tokens'
+  ]));
 
   return view('Admin.importar.index', compact('tables'));
  }
@@ -51,55 +49,119 @@ class ImportsController extends Controller
 
  public function preview(Request $request)
  {
-  $request->validate([
-   'archivo' => 'required|file|mimes:xls,xlsx|max:2048',
+  // Debug inicial
+  \Log::info('Preview method called', [
+   'tabla' => $request->input('tabla'),
+   'file_name' => $request->file('archivo') ? $request->file('archivo')->getClientOriginalName() : 'no file'
   ]);
 
-  $file = $request->file('archivo');
+  try {
+   $request->validate([
+    'tabla' => 'nullable|string',
+    'archivo' => 'required|file|mimes:xls,xlsx|max:2048',
+   ]);
 
-  // Llamás a la función que retorna los datos listos
-  [$headings, $previewRows] = $this->getPreviewData($file);
+   $file = $request->file('archivo');
+   $table = $request->input('tabla');
 
-  // Renderizar vista y devolver JSON
-  $html = view('admin.importar.preview', compact('headings', 'previewRows'))->render();
+   \Log::info('Validation passed, processing file...');
 
-  return response()->json(['html' => $html]);
- }
-
- private function getPreviewData($file): array
- {
-  // Obtener encabezados crudos
-  $headingsRaw = (new HeadingRowImport)->toArray($file);
-  $headings = $headingsRaw[0][0] ?? [];
-
-  // Filtrar encabezados vacíos, nulos o genéricos como 'Column1', 'Column2'
-  $headings = array_filter($headings, function ($value) {
-   if (empty($value)) {
-    return false; // eliminar vacíos
+   // Test simple primero
+   if (!$file) {
+    return response()->json(['error' => 'No se recibió archivo'], 400);
    }
-   if (preg_match('/^column\d+$/i', $value)) {
-    return false; // eliminar 'Column1', etc
-   }
-   return true;
-  });
 
-  // Obtener todas las filas (primera hoja)
-  $data = Excel::toArray(null, $file);
-  $previewRowsRaw = $data[0] ?? [];
-
-  // Tomar sólo las filas que correspondan al número de encabezados limpios
-  $previewRows = [];
-  foreach ($previewRowsRaw as $index => $row) {
-   if ($index === 0) {
-    continue; // saltar fila encabezado original
+   if (!$file->isValid()) {
+    return response()->json(['error' => 'Archivo inválido'], 400);
    }
-   // Ajustar cada fila para que tenga la misma cantidad de columnas que encabezados filtrados
-   $previewRows[] = array_slice($row, 0, count($headings));
+
+   // Obtener preview y columnas válidas
+   [$headings, $previewRows, $validColumns] = $this->getPreviewDataAndColumns($file, $table);
+
+   \Log::info('Data processed', [
+    'headings_count' => count($headings),
+    'rows_count' => count($previewRows),
+    'valid_columns_count' => count($validColumns)
+   ]);
+
+   // Verificar que la vista existe
+   if (!view()->exists('Admin.importar.preview')) {
+    return response()->json(['error' => 'Vista preview no encontrada'], 500);
+   }
+
+   $html = view('Admin.importar.preview', compact('headings', 'previewRows', 'validColumns'))->render();
+
+   \Log::info('HTML generated successfully', ['html_length' => strlen($html)]);
+
+   return response()->json(['html' => $html]);
+
+  } catch (\Illuminate\Validation\ValidationException $e) {
+   \Log::error('Validation error', ['errors' => $e->errors()]);
+   return response()->json(['error' => 'Error de validación: ' . implode(', ', $e->errors()['archivo'] ?? [])], 422);
+
+  } catch (\Exception $e) {
+   \Log::error('Error en preview', [
+    'message' => $e->getMessage(),
+    'trace' => $e->getTraceAsString()
+   ]);
+   return response()->json(['error' => 'Error al generar la previsualización: ' . $e->getMessage()], 500);
   }
-
-  return [$headings, $previewRows];
  }
 
+ private function getPreviewDataAndColumns($file, ?string $table = null): array
+ {
+  try {
+   // 1️⃣ Encabezados crudos
+   $headingsRaw = (new HeadingRowImport)->toArray($file);
+   $headings = $headingsRaw[0][0] ?? [];
 
+   $headings = array_values(array_filter(
+    $headings,
+    fn($value) => !empty($value) && !preg_match('/^column\d+$/i', $value)
+   ));
 
+   // 2️⃣ Todas las filas (primera hoja)
+   $data = Excel::toArray([], $file);
+   $previewRowsRaw = $data[0] ?? [];
+
+   if (empty($headings) && !empty($previewRowsRaw)) {
+    $count = count($previewRowsRaw[0] ?? []);
+    $headings = array_map(fn($i) => "Columna $i", range(1, $count));
+   }
+
+   $previewRows = [];
+   foreach ($previewRowsRaw as $index => $row) {
+    if ($index === 0 && !empty($headingsRaw[0][0]))
+     continue;
+    $previewRows[] = array_slice($row, 0, count($headings));
+   }
+
+   $previewRows = array_slice($previewRows, 0, 20);
+
+   // 3️⃣ Columnas válidas de la tabla (solo si se seleccionó)
+   $validColumns = [];
+   if (!empty($table)) {
+    $columns = DB::getSchemaBuilder()->getColumnListing($table);
+    foreach ($columns as $col) {
+     $label = ucwords(str_replace('_', ' ', $col));
+     $validColumns[$col] = $label;
+    }
+   }
+
+   return [$headings, $previewRows, $validColumns];
+  } catch (\Exception $e) {
+   throw new \Exception("Error procesando Excel: " . $e->getMessage());
+  }
+ }
+
+ public function processEditedImport(Request $request)
+ {
+  $editedData = $request->input('data');
+  $headings = $request->input('headings');
+  $mappings = $request->input('mappings');
+  $table = $request->input('tabla');
+
+  // Procesar datos editados...
+  // Insertarlos en la BD según los mapeos
+ }
 }
