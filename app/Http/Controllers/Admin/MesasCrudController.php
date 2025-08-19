@@ -173,7 +173,13 @@ class MesasCrudController extends BaseController
      */
     public function destroy(Mesa $mesa)
     {
-        $this->mesaRepo->delete($mesa);
-        return redirect()->route('admin.mesas.index')->with('mensaje', 'Se ha eliminado la mesa');
+        try {
+            $mesa->delete();
+            return redirect()->route('admin.mesa.index')
+                ->with('mensaje', 'Se ha eliminado el alumno');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.mesa.index')
+                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+        }
     }
 }

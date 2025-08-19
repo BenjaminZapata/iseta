@@ -89,8 +89,14 @@ class ProfesoresCrudController extends BaseController
      */
     public function destroy(Profesor $profesor)
     {
-        $profesor->delete();
-        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se ha eliminado el profesor');
+        try {
+            $profesor->delete();
+            return redirect()->route('admin.profesor.index')
+                ->with('mensaje', 'Se ha eliminado el Profesor');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.profesor.index')
+                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+        }
     }
 
 
