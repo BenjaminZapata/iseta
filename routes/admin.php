@@ -176,7 +176,6 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('admin.mesas.actalibre');
 
     // EXCEL IMPORTS (Outside auth middleware)
- // Rutas principales (usar estas)
 Route::get('/importar', [ImportsController::class, 'index'])->name('admin.importar.index');
 Route::post('/importar', [ImportsController::class, 'import'])->name('admin.importar.store');
 Route::post('/importar/preview', [ImportsController::class, 'preview'])->name('admin.importar.preview');

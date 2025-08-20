@@ -27,6 +27,7 @@
         <button id="add-row" class="btn btn-secondary">Agregar fila</button>
         <button id="add-column" class="btn btn-secondary">Agregar columna</button>
         <button id="save-changes" class="btn btn-success">Guardar cambios</button>
+        <button id="import-data" class="btn btn-primary">Importar datos</button>
     </div>
 </div>
 
@@ -86,6 +87,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert("Cambios guardados correctamente.");
             } else {
                 alert("Error al guardar: " + (res.message ?? ''));
+            }
+        })
+        .catch(err => alert("Error de conexión: " + err));
+    });
+
+    //importar datos
+    document.getElementById('import-data').addEventListener('click', () => {
+        const data = [];
+        const headings = Array.from(table.tHead.rows[0].cells).map(th => th.textContent);
+
+        for (let i = 0; i < table.tBodies[0].rows.length; i++) {
+            const row = {};
+            const cells = table.tBodies[0].rows[i].cells;
+            for (let j = 0; j < cells.length; j++) {
+                row[headings[j]] = cells[j].textContent;
+            }
+            data.push(row);
+        }
+
+        fetch("{{ route('admin.importar.import') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({
+                tabla: "{{ $tabla }}",
+                data: data
+            })
+        })
+        .then(res => res.json())
+        .then(res => {
+            if(res.success) {
+                alert("Datos importados correctamente.");
+                window.location.href = "{{ route('admin.importar.index') }}";
+            } else {
+                alert("Error al importar: " + (res.message ?? ''));
             }
         })
         .catch(err => alert("Error de conexión: " + err));
