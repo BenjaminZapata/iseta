@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 @source "resources/views/*.php";
+
 @plugin "daisyui" {
-  themes: false;
+ themes: false;
 }
+
 /* Re-assign Flux's gray of choice... */
