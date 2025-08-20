@@ -7,6 +7,7 @@ use App\Models\Alumno;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\Notifications\FaltaTituloSecundario;
+use Illuminate\Support\Facades\Log;
 
 class NotificarFaltanteTitulo extends Command
 {
@@ -33,11 +34,14 @@ class NotificarFaltanteTitulo extends Command
             ->where('fecha_titulo_secundario', '<=', Carbon::now())
             ->count();
 
+        log::info("Cantidad de alumnos sin título secundario: {$cuantos}");
         if ($cuantos > 0) {
             $admins = Admin::all();
 
             foreach ($admins as $admin) {
                 // Solo notificar si no existe ya una notificación con ese número hoy
+
+
                 $yaNotificado = $admin->notifications()
                     ->where('type', 'App\Notifications\FaltaTituloSecundario')
                     ->whereNull('read_at')
