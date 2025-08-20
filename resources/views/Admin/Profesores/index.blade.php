@@ -1,14 +1,12 @@
 @extends('Admin.template')
 
 @section('content')
-
-
 <div class="table" data-name="tablaProfesores">
 
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE PROFESORES'])
 
     <div class="perfil__header-alt">
-        <a href="{{route('admin.profesores.create')}}">
+        <a href="{{ route('admin.profesores.create') }}">
             <button class="btn_blue">
                 <i class="ti ti-circle-plus"></i>Agregar profesor
             </button>
@@ -23,8 +21,8 @@
                 'dni' => 'Dni',
                 'email' => 'Email',
                 'ciudad' => 'Ciudad',
-                'telefono1' => 'Telefono'
-            ]
+                'telefono1' => 'Telefono',
+            ],
         ]) ?>
     </div>
     <table class="table__body">
@@ -40,42 +38,44 @@
             @foreach ($profesores as $profesor)
             <tr>
                 <td>
-                    <p class="bold" style="text-transform: uppercase;">{{$profesor->apellidoNombre()}}</p>
-                    <p>dni: {{$profesor->dniPuntos()}}</p>
+                    <p class="bold" style="text-transform: uppercase;">{{ $profesor->apellidoNombre() }}</p>
+                    <p>dni: {{ $profesor->dniPuntos() }}</p>
                 </td>
                 <td>
                     <p class="excluir-mayusculas">
-                        {{$profesor->email?$profesor->email:'Sin mail registrado'}}
+                        {{ $profesor->email ? $profesor->email : 'Sin mail registrado' }}
                     </p>
                     <p>
-                        tel: {{$profesor->telefono1?$profesor->telefono1:'Sin teléfono'}}
+                        tel: {{ $profesor->telefono1 ? $profesor->telefono1 : 'Sin teléfono' }}
                     </p>
                 </td>
                 <td>
-                    <p>{{$profesor->ciudad}}</p>
-                    <p>{{$profesor->calle}} {{$profesor->casa_numero?$profesor->casa_numero:''}}</p>
+                    <p>{{ $profesor->ciudad }}</p>
+                    <p>{{ $profesor->calle }} {{ $profesor->casa_numero ? $profesor->casa_numero : '' }}</p>
                 </td>
                 <td class="flex just-center">
-                    <div>
-                        <a href="{{route('admin.profesores.edit', ['profesor' => $profesor->id])}}">
-                            <button class="btn_blue">
-                                <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                Modificar
-                            </button>
+                    <div style="display: flex; justify-content: center;">
+                        <a href="{{ route('admin.profesores.edit', ['profesor' => $profesor->id]) }}">
+                            <button class="btn_blue"><i class="ti ti-file-info"
+                                    style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                         </a>
+                        @if (!$config['modo_seguro'])
+                        <div>
+                            <form method="POST" class="form-eliminar"
+                                action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}"
+                                style="margin-left: 10px;">
+                                @csrf
+                                @method('delete')
+                                <button class="btn_icon-danger" style="background-color: red"
+                                    onclick="openGeneralModal('form-eliminar-{{ $profesor->id }}', '¿Estás seguro de que querés eliminar al profesor: {{ strtoupper($profesor->apellido) }} {{ strtoupper($profesor->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                </button>
+                            </form>
+                        </div>
+                        @endif
                     </div>
-                    <form id="form-eliminar-{{ $profesor->id }}" action="{{ route('admin.profesores.destroy', $profesor) }}"
-                        method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button"
-                            onclick="openGeneralModal('form-eliminar-{{ $profesor->id }}', '¿Estás seguro de que querés eliminar al profesor: {{ strtoupper($profesor->apellido) }} {{ strtoupper($profesor->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                            class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                        </button>
-                    </form>
                 </td>
-
 
             </tr>
             @endforeach
@@ -85,5 +85,4 @@
 <div class="w-1/2 mx-auto p-5 pagination">
     {{ $profesores->appends(request()->query())->links('Componentes.pagination') }}
 </div>
-
 @endsection
