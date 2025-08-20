@@ -141,10 +141,11 @@ body {
   backdrop-filter: blur(7px);
   box-shadow: 0 0.4rem 0.8rem #0005;
   border-radius: 0.8rem;
-  overflow: visible;
-  transition: height 0.3s ease;
+  overflow: hidden;
   width: 100%;
+  /* o 600px si preferís fijo */
   position: relative;
+  /* necesario para dropdowns con position: absolute */
 }
 
 .table2 {
@@ -319,13 +320,13 @@ table td {
 /* Botón Cancelar */
 .btn_cancelar {
   border: var(--azul-iseta);
-  background-color: transparent;
+  background-color: #150a5c33;
   color: var(--azul-iseta);
   border-radius: 5px;
 }
 
 .btn_cancelar::after {
-  background-color: #a11b10;
+  background-color: #150a5c2e;
 }
 
 /* Botón Exportar */
@@ -444,8 +445,7 @@ table td {
   color: var(--rojo-sl);
   padding: 8px 16px;
   border-radius: 4px;
-  font-weight: 600;
-  font-size: 0.95em;
+
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
   display: inline-flex;
@@ -829,4 +829,21 @@ ul .campo_info {
 .boton-siguiente {
   z-index: 1;
   /* Asegura que los botones se ubiquen sobre otros elementos */
+}
+
+.botones-derecha {
+  margin-right: 12px;
+  padding-top: 10px;
+  padding-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  justify-content: right;
+  align-items: right;
+}
+
+.boton-eliminar {
+  display: flex;
+  justify-content: right;
+  align-items: right;
+  padding: 0 27px 15px 1.5em;
 }

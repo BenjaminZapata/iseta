@@ -2,8 +2,4 @@
 
 @source "resources/views/*.php";
 
-@plugin "daisyui" {
- themes: false;
-}
-
 /* Re-assign Flux's gray of choice... */
