@@ -2,198 +2,148 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\Excel_Importar;
 use Maatwebsite\Excel\HeadingRowImport;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
 
 class ImportsController extends Controller
 {
- public function index()
- {
-  $dbName = env('DB_DATABASE');
-  $tablesQuery = DB::select('SHOW TABLES');
-  $key = "Tables_in_{$dbName}";
-
-  $tables = array_map(fn($table) => $table->$key, $tablesQuery);
-
-  // Filtrar tablas que no se quieren importar
-  $tables = array_filter($tables, fn($table) => !in_array($table, [
-   'migrations',
-   'failed_jobs',
-   'password_resets',
-   'personal_access_tokens'
-  ]));
-
-  return view('Admin.importar.index', compact('tables'));
- }
-
- public function import(Request $request)
- {
-  $request->validate([
-   'tabla' => 'nullable|string',
-   'archivo' => 'required|file|mimes:xls,xlsx,csv|max:2048',
-  ]);
-
-  $table = $request->input('tabla');
-  $file = $request->file('archivo');
-
-  try {
-   Excel::import(new Excel_Importar($table), $file);
-   return back()->with('success', 'Datos importados correctamente.');
-  } catch (\Exception $e) {
-   return back()->with('error', 'Error al importar: ' . $e->getMessage());
-  }
- }
-
- public function preview(Request $request)
- {
-  // Debug inicial
-  \Log::info('Preview method called', [
-   'tabla' => $request->input('tabla'),
-   'file_name' => $request->file('archivo') ? $request->file('archivo')->getClientOriginalName() : 'no file'
-  ]);
-
-  try {
-   $request->validate([
-    'tabla' => 'nullable|string',
-    'archivo' => 'required|file|mimes:xls,xlsx|max:2048',
-   ]);
-
-   $file = $request->file('archivo');
-   $table = $request->input('tabla');
-
-   \Log::info('Validation passed, processing file...');
-
-   // Test simple primero
-   if (!$file) {
-    return response()->json(['error' => 'No se recibió archivo'], 400);
-   }
-
-   if (!$file->isValid()) {
-    return response()->json(['error' => 'Archivo inválido'], 400);
-   }
-
-   // Obtener preview y columnas válidas
-   [$headings, $previewRows, $validColumns] = $this->getPreviewDataAndColumns($file, $table);
-
-   \Log::info('Data processed', [
-    'headings_count' => count($headings),
-    'rows_count' => count($previewRows),
-    'valid_columns_count' => count($validColumns)
-   ]);
-
-   // Verificar que la vista existe
-   if (!view()->exists('Admin.importar.preview')) {
-    return response()->json(['error' => 'Vista preview no encontrada'], 500);
-   }
-
-   $html = view('Admin.importar.preview', compact('headings', 'previewRows', 'validColumns'))->render();
-
-   \Log::info('HTML generated successfully', ['html_length' => strlen($html)]);
-
-   return response()->json(['html' => $html]);
-
-  } catch (\Illuminate\Validation\ValidationException $e) {
-   \Log::error('Validation error', ['errors' => $e->errors()]);
-   return response()->json(['error' => 'Error de validación: ' . implode(', ', $e->errors()['archivo'] ?? [])], 422);
-
-  } catch (\Exception $e) {
-   \Log::error('Error en preview', [
-    'message' => $e->getMessage(),
-    'trace' => $e->getTraceAsString()
-   ]);
-   return response()->json(['error' => 'Error al generar la previsualización: ' . $e->getMessage()], 500);
-  }
- }
-
- private function getPreviewDataAndColumns($file, ?string $table = null): array
- {
-  try {
-   // 1️⃣ Encabezados crudos
-   $headingsRaw = (new HeadingRowImport)->toArray($file);
-   $headings = $headingsRaw[0][0] ?? [];
-
-   $headings = array_values(array_filter(
-    $headings,
-    fn($value) => !empty($value) && !preg_match('/^column\d+$/i', $value)
-   ));
-
-   // 2️⃣ Todas las filas (primera hoja)
-   $data = Excel::toArray([], $file);
-   $previewRowsRaw = $data[0] ?? [];
-
-   if (empty($headings) && !empty($previewRowsRaw)) {
-    $count = count($previewRowsRaw[0] ?? []);
-    $headings = array_map(fn($i) => "Columna $i", range(1, $count));
-   }
-
-   $previewRows = [];
-   foreach ($previewRowsRaw as $index => $row) {
-    if ($index === 0 && !empty($headingsRaw[0][0]))
-     continue;
-    $previewRows[] = array_slice($row, 0, count($headings));
-   }
-
-   $previewRows = array_slice($previewRows, 0, 20);
-
-   // 3️⃣ Columnas válidas de la tabla (solo si se seleccionó)
-   $validColumns = [];
-   if (!empty($table)) {
-    $columns = DB::getSchemaBuilder()->getColumnListing($table);
-    foreach ($columns as $col) {
-     $label = ucwords(str_replace('_', ' ', $col));
-     $validColumns[$col] = $label;
+    public function index()
+    {
+        // Vista inicial con formulario de subir archivo y elegir tabla destino
+        $tablas = \DB::select('SHOW TABLES');
+        return view('Admin.importar.index', compact('tablas'));
     }
-   }
 
-   return [$headings, $previewRows, $validColumns];
-  } catch (\Exception $e) {
-   throw new \Exception("Error procesando Excel: " . $e->getMessage());
-  }
- }
+    public function preview(Request $request)
+    {
+        $request->validate([
+            'archivo' => 'required|file|mimes:xlsx,xls,csv',
+            'tabla'   => 'required|string'
+        ]);
 
- public function processEditedImport(Request $request)
- {
-  $request->validate([
-   'tabla' => 'required|string',
-   'data' => 'nullable|array',
-   'mappings' => 'nullable|array',
-  ]);
+        $tabla = $request->tabla;
 
-  $table = $request->input('tabla');
-  $editedData = $request->input('data', []);
-  $mappings = $request->input('mappings', []);
+        // Leer headings (encabezados de Excel)
+        $headings = (new HeadingRowImport)->toArray($request->file('archivo'))[0][0];
 
-  $rowsToInsert = [];
+        // Previsualizar primeras filas
+        $data = Excel::toArray(null, $request->file('archivo'));
+        $rows = array_slice($data[0], 1, 10); // 10 filas como preview
 
-  foreach ($editedData as $rowIndex => $cols) {
-   $rowInsert = [];
-   foreach ($cols as $colIndex => $value) {
-    if (isset($mappings[$colIndex]) && !empty($mappings[$colIndex])) {
-     $rowInsert[$mappings[$colIndex]] = $value;
+        // Columnas válidas de la tabla en DB
+        $validColumns = [];
+        $columns = Schema::getColumnListing($tabla);
+        foreach ($columns as $col) {
+            $validColumns[$col] = ucfirst(str_replace('_', ' ', $col));
+        }
+
+        // Guardamos temporalmente en sesión para usar en processEditedImport
+        Session::put('import_data', [
+            'tabla' => $tabla,
+            'rows' => $data[0],
+            'headings' => $headings
+        ]);
+
+        return view('Admin.importar.preview', [
+            'tabla'        => $tabla,
+            'headings'     => $headings,
+            'previewRows'  => $rows,
+            'validColumns' => $validColumns
+        ]);
     }
-   }
-   if (!empty($rowInsert))
-    $rowsToInsert[] = $rowInsert;
-  }
 
-  try {
-   if (!empty($rowsToInsert))
-    DB::table($table)->insert($rowsToInsert);
+    public function processEditedImport(Request $request)
+    {
+        $tabla = $request->tabla;
+        $data = $request->data;
+        $mappings = $request->mappings ?? [];
+        $newColumns = $request->new_columns ?? [];
 
-   return response()->json([
-    'success' => true,
-    'inserted_rows' => count($rowsToInsert)
-   ]);
-  } catch (\Exception $e) {
-   return response()->json([
-    'success' => false,
-    'message' => 'Error al insertar: ' . $e->getMessage()
-   ], 500);
-  }
- }
+        // 1. Crear nuevas columnas si corresponde
+        if ($request->create_columns && !empty($newColumns)) {
+            foreach ($newColumns as $colName => $def) {
+                if (!Schema::hasColumn($tabla, $colName)) {
+                    \DB::statement("ALTER TABLE $tabla ADD COLUMN $colName {$def['type']} " . ($def['nullable'] ? 'NULL' : 'NOT NULL'));
+                }
+            }
+        }
 
+        // 2. Insertar filas
+        $inserted = 0;
+        foreach ($data as $row) {
+            $insertData = [];
+
+            foreach ($mappings as $idx => $dbCol) {
+                if (isset($row[$idx])) {
+                    $insertData[$dbCol] = $row[$idx];
+                }
+            }
+
+            // también incluir columnas nuevas
+            foreach ($newColumns as $colName => $def) {
+                $insertData[$colName] = $row[count($row) - 1] ?? null;
+            }
+
+            if (!empty($insertData)) {
+                \DB::table($tabla)->insert($insertData);
+                $inserted++;
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Importación completada',
+            'inserted_rows' => $inserted
+        ]);
+    }
+
+   
+public function save(Request $request)
+{
+    Log::info('--- SAVE IMPORT ---');
+    Log::info('Request raw data: ' . $request->getContent());
+    
+    $tabla = $request->tabla;
+    $data = $request->input('data');
+
+    if (is_string($data)) {
+        $data = json_decode($data, true);
+        Log::info('Data decodificada: ', $data ?? []);
+    } else {
+        Log::info('Data recibida: ', $data ?? []);
+    }
+
+    if (!$tabla || empty($data)) {
+        Log::error('Tabla o data vacía');
+        return response()->json(['success' => false, 'message' => 'Datos incompletos'], 400);
+    }
+
+    $inserted = 0;
+    foreach ($data as $row) {
+        try {
+            DB::table($tabla)->updateOrInsert(
+                ['dni' => $row['dni'] ?? null],
+                $row
+            );
+            $inserted++;
+        } catch (\Exception $e) {
+            Log::error("Error insert/update fila: " . json_encode($row) . " | " . $e->getMessage());
+        }
+    }
+
+    Log::info("Filas insertadas: $inserted");
+
+    return response()->json([
+        'success' => true,
+        'inserted_rows' => $inserted
+    ]);
+}
 
 }

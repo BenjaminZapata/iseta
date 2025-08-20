@@ -38,7 +38,7 @@
                     </li>
 
                     <li>
-                        <a href="{{ route('import.index') }}" class="header-avatar-lista">
+                        <a href="{{ route('admin.importar.index') }}" class="header-avatar-lista">
                             <i class="ti ti-file-upload" style="font-size: 1.3em; margin-right: 8px;"></i>
                             Importar
                         </a>
