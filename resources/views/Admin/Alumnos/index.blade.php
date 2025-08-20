@@ -95,8 +95,7 @@
                                 style="margin-left: 10px;">
                                 @csrf
                                 @method('delete')
-                                <button class="btn_icon-danger" style="background-color: red"
-                                    onclick="return confirm('¿Estás seguro de que deseas eliminar este alumno?')">
+                                <button class="btn_icon-danger" style="background-color: red">
                                     <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                                 </button>
                             </form>
