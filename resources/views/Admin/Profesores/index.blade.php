@@ -64,7 +64,7 @@
                             </button>
                         </a>
                     </div>
-                    <form id="form-eliminar-{{ $profesor->id }}" action="{{ route('admin.profesores.destroy', $profesor) }}"
+                    <form id="form-eliminar-{{ $profesor->id }}" action="{{ route('admin.profesores.destroy', $profesor -> id) }}"
                         method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')
