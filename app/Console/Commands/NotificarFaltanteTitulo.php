@@ -40,7 +40,7 @@ class NotificarFaltanteTitulo extends Command
                 // Solo notificar si no existe ya una notificación con ese número hoy
                 $yaNotificado = $admin->notifications()
                     ->where('type', 'App\Notifications\FaltaTituloSecundario')
-                    ->whereNotNull('read_at')
+                    ->whereNull('read_at')
                     ->exists();
 
 

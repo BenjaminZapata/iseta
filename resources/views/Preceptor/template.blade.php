@@ -40,7 +40,6 @@
  <script src="{{ asset('js/confirmacion.js') }}"></script>
  <script src="{{ asset('js/filters.js') }}"></script>
  <script defer src="{{ asset('js/header-avatar.js') }}?v={{ time() }}"></script>
- <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.8/dist/cdn.min.js"></script>
  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
   crossorigin="anonymous"></script>
  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>

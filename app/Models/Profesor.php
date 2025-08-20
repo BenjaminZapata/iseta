@@ -23,16 +23,16 @@ class Profesor extends Authenticatable
         'ciudad',
         'calle',
         'casa_numero',
-        'dpto' ,
-        'piso' ,
-        'estado_civil' ,
+        'dpto',
+        'piso',
+        'estado_civil',
         'email',
-        'formacion_academica' ,
+        'formacion_academica',
         'titulo',
         'anio_ingreso',
         'observaciones',
         'telefono1',
-        'telefono2' ,
+        'telefono2',
         'telefono3',
         'codigo_postal',
         'password'
@@ -42,50 +42,73 @@ class Profesor extends Authenticatable
         'fecha_nacimiento' => 'datetime',
     ];
 
-    public function asignaturas(): BelongsToMany{
-        return $this->belongsToMany(Asignatura::class)-> using(CarreraAsignaturaProfesor::class)
-            -> withPivot('id_carrera')
-            -> withTimestamps();
+    public function asignaturas(): BelongsToMany
+    {
+        return $this->belongsToMany(Asignatura::class)->using(CarreraAsignaturaProfesor::class)
+            ->withPivot('id_carrera')
+            ->withTimestamps();
     }
 
-    function firstItemsForSelect(){
-        return ['0'=>'Vacio/A confirmar'];
+    public function profesor_mesa(): BelongsToMany
+    {
+        return $this->belongsToMany(Mesa::class, 'id', 'prof_presidente');
     }
 
-    function others(){
-        return Profesor::where('id',3)->get();
+    public function profesor_mesa_vocal(): BelongsToMany
+    {
+        return $this->belongsToMany(Mesa::class, 'id', 'prof_vocal_1');
+    }
+    public function profesor_mesa_vocal2(): BelongsToMany
+    {
+        return $this->belongsToMany(Mesa::class, 'id', 'prof_vocal_2');
+    }
+    function firstItemsForSelect()
+    {
+        return ['0' => 'Vacio/A confirmar'];
     }
 
-    function elementsForDropdown($filter){
-        if($filter=='order'){
+    function others()
+    {
+        return Profesor::where('id', 3)->get();
+    }
+
+    function elementsForDropdown($filter)
+    {
+        if ($filter == 'order') {
             return Profesor::select()->orderBy('apellido')->orderBy('nombre')->get();
         }
     }
 
-    function textForSelect(){
+    function textForSelect()
+    {
         return $this->apellidoNombre();
     }
 
-    static function existeSinPassword($data){
+    static function existeSinPassword($data)
+    {
         return Profesor::where('email', $data['email'])
-            -> where('password','0')
-            -> where('dni',$data['dni'])
-            -> first();
+            ->where('password', '0')
+            ->where('dni', $data['dni'])
+            ->first();
     }
-    public function verificar(){
+    public function verificar()
+    {
         $this->verificado = 1;
         $this->save();
     }
 
-    public function nombreApellido(){
-        return $this->nombre.' '.$this->apellido;
+    public function nombreApellido()
+    {
+        return $this->nombre . ' ' . $this->apellido;
     }
 
-    public function apellidoNombre(){
-        return $this->apellido.' '.$this->nombre;
+    public function apellidoNombre()
+    {
+        return $this->apellido . ' ' . $this->nombre;
     }
 
-    public function dniPuntos(){
+    public function dniPuntos()
+    {
         return number_format($this->dni, 0, ',', '.');
     }
 

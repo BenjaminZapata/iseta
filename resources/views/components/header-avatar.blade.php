@@ -1,3 +1,4 @@
+@vite('resources/css/app.css')
 <div class="header-avatar">
 
     <!-- IZQUIERDA: Título -->
@@ -13,8 +14,7 @@
 
         <!-- Notificaciones -->
         <div>
-            <i class="ti ti-bell" style="color: white; font-size: 1rem; transition: transform 0.2s ease;"></i>
-            <i class="ti ti-chevron-down" style="color: white; font-size: 1rem; transition: transform 0.2s ease;"></i>
+            <livewire:notificaciones/>
         </div>
 
         <!-- Avatar con dropdown -->
