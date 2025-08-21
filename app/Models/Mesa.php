@@ -24,20 +24,11 @@ class Mesa extends Model
         'fecha'
     ];
 
-    public function asignaturas()
-    {
-        return $this->belongsToMany(Asignatura::class, "carrera_asignatura_profesor", "id_carrera", "id_asignatura")
-            ->withPivot('id_profesor', 'anio', 'tipo_modulo', 'carga_horaria')
-            ->withTimestamps();
-    }
 
     public function asignatura()
     {
-        return $this->belongsTo(Asignatura::class, 'id_asignatura')->using(CarreraAsignaturaProfesor::class)
-            ->withPivot('id_carrera')
-            ->withTimestamps();
+        return $this->belongsTo(Asignatura::class, 'id_asignatura');
     }
-
 
     public function anotado()
     {
