@@ -15,4 +15,9 @@ class AsignaturaController extends Controller
 
         return view('Admin.Asignaturas.index', compact('asignaturas'));
     }
+
+    public function edit(Asignatura $asignatura)
+    {
+        return view('Admin.Asignaturas.edit', compact('asignatura'));
+    }
 }
