@@ -1,4 +1,3 @@
-@vite('resources/css/app.css')
 <div class="header-avatar">
 
     <!-- IZQUIERDA: Título -->
@@ -13,7 +12,7 @@
 
         <!-- Notificaciones -->
         <div>
-            <livewire:notificaciones/>
+            <livewire:notificaciones />
         </div>
 
         <!-- Avatar con dropdown -->
@@ -51,7 +50,9 @@
                             Administrar usuarios
                         </a>
                     </li>
-                    <li><hr style="margin: 0;"></li>
+                    <li>
+                        <hr style="margin: 0;">
+                    </li>
                     <li>
                         <a href="/admin/logout" class="header-avatar-lista">
                             <i class="ti ti-logout" style="font-size: 1.3em; margin-right: 8px;"></i>
@@ -64,4 +65,3 @@
     </div>
 
 </div>
-
