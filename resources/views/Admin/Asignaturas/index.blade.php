@@ -1,7 +1,22 @@
 @extends('Admin.template')
 
 @section('content')
-    <div class="flex justify-between items-center mb-6">
+<style>
+    #filters .label-input-y-100 label {
+        text-align: left !important;
+        display: block !important;
+        width: 100%;
+        padding-top: 15px;
+    }
+</style>
+     {{-- CONTENT --}}
+
+     <div class="table" data-name="tablaAsignatura">
+        @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
+
+        {{-- BOTON CREAR --}}
+
+        <div class="flex justify-between items-center mb-6">
         <a href="{{ route('admin.asignaturas.create') }}">
             <button class="btn_blue">
                 <i class="ti ti-circle-plus"></i> Agregar asignatura</button>
@@ -63,6 +78,12 @@
             </tbody>
         </table>
     </div>
+
+
+     </div>
+
+
+    
 
     <div class="w-1/2 mx-auto p-5 pagination">
         {{ $asignaturas->appends(request()->query())->links('Componentes.pagination') }}
