@@ -77,8 +77,9 @@
         </table>
     </div>
 
-    <div class="w-1/2 mx-auto p-5 pagination">
-        {{ $cursadas->appends(request()->query())->links('Componentes.pagination') }}
-    </div>
+  {{-- PAGINACIÓN --}}
+<div class="w-full flex justify-center p-5 pagination">
+    {{ $cursadas->appends(request()->query())->links('Componentes.pagination') }}
+</div>
     <script src="{{ asset('js/obtener-materias.js') }}"></script>
 @endsection

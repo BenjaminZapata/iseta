@@ -108,7 +108,9 @@
 
 
 
-<div class="w-1/2 mx-auto p-5 pagination">
+{{-- PAGINACIÓN --}}
+<div class="w-full flex justify-center p-5 pagination">
     {{ $alumnos->appends(request()->query())->links('Componentes.pagination') }}
 </div>
+
 @endsection
