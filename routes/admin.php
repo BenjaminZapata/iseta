@@ -216,9 +216,12 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::get('restaurar', [AdminCopiaDB::class, 'restaurarCopia']);
 
 
-    Route::get('/admin/asignaturas', [AsignaturaController::class, 'index'])->name('admin.asignaturas.index');
-    Route::get('/admin/asignaturas/create', [AsignaturaController::class, 'create'])->name('admin.asignaturas.create');
-    Route::get('/admin/asignaturas/{asignatura}/edit', [AsignaturaController::class, 'edit'])->name('admin.asignaturas.edit');
+    Route::get('/admin/asignaturas', [AsignaturasCrudController::class, 'index'])->name('admin.asignaturas.index');
+    Route::get('/admin/asignaturas/create', [AsignaturasCrudController::class, 'create'])->name('admin.asignaturas.create');
+    Route::get('/admin/asignaturas/{asignatura}/edit', [AsignaturasCrudController::class, 'edit'])->name('admin.asignaturas.edit');
+    Route::post('/admin/asignaturas', [AsignaturasCrudController::class, 'store'])->name('admin.asignaturas.store');
+    Route::put('/admin/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'update'])->name('admin.asignaturas.update');
+    Route::delete('/admin/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'destroy'])->name('admin.asignaturas.destroy');
 
     Route::delete('carreras/{carrera}', [CarrerasCrudController::class, 'destroy'])->name('admin.carreras.destroy');
     Route::post('carreras/{carrera}/desactivar', [CarrerasCrudController::class, 'desactivar'])->name('admin.carreras.desactivar');

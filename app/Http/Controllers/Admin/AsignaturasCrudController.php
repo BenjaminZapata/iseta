@@ -108,7 +108,13 @@ class AsignaturasCrudController extends Controller
      */
     public function destroy(Asignatura $asignatura)
     {
-        $asignatura->delete();
-        return redirect()->route('admin.carreras.edit', ['carrera' => $asignatura->id_carrera])->with('mensaje', 'Se ha eliminado la asignatura');
+        try {
+            $asignatura->delete();
+            return redirect()->route('admin.alumnos.index')
+                ->with('mensaje', 'Se ha eliminado el alumno');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.alumnos.index')
+                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+        }
     }
 }

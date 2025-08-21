@@ -45,6 +45,18 @@
                             <a href="{{ route('admin.asignaturas.edit', $asignatura->id) }}">
                                 <button class="btn btn-secondary"><i class="ti ti-edit"></i> Editar</button>
                             </a>
+                
+                         <form id="form-eliminar-{{ $asignatura->id }}"
+                        action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}" method="POST"
+                        style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button"
+                            onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', '¿Estás seguro de que querés eliminar a la asignatura: {{ strtoupper($asignatura-> nombre)}}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                            class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                        </button>
+                    </form>
                         </td>
                     </tr>
                 @endforeach
