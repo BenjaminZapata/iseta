@@ -1,0 +1,849 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+:root {
+  --rojo-sl: #ec212d;
+  --whatsapp: #25d366;
+  --phone: #3276c9;
+  --netflix: #d81f26;
+  --disney-plus: #0d2e6f;
+  --azul-iseta: #140b5c;
+  --azul-osc-iseta: #0f0844;
+  --facebook: #4267b2;
+  --gris-fondo-tabla: #fff5;
+  --gris-header-tabla: #fff9;
+  --gris-body-tabla: #fffb;
+  --gris-titulo: #d5d1defe;
+  --gris-hover: #fff6;
+  --green-iseta: #25d366;
+  --dark: #181818;
+  --dark2: #212121;
+  --dark3: #323232;
+}
+
+* {
+  list-style: none;
+  text-decoration: none;
+
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  color: black;
+  background: #5872d16d;
+  /*--background: linear-gradient(150deg, #5872d16d, white);
+    background-size: cover;--*/
+  min-height: 100vh;
+  width: 100%;
+}
+
+.admin-main {
+  min-height: 100%;
+  width: 95%;
+  margin-left: 80px;
+  margin-right: 15px;
+  text-transform: uppercase;
+}
+
+.excluir-mayusculas {
+  text-transform: none;
+}
+
+/*--- FILTROS, ORDENAR, BUSCAR  ---- */
+
+.contenedor-tabla_botonera {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  padding-left: 20px;
+  flex-wrap: wrap;
+}
+
+.contenedor-tabla_botonera a {
+  padding-bottom: 20px;
+}
+
+.tabla_botonera {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px 20px 0;
+}
+
+.contenedor_ordenar,
+.contenedor_filtrar,
+.contenedor_filtrado {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+}
+
+.contenedor_btn-busqueda {
+  margin-left: 15px;
+}
+
+.btn-buscador1 {
+  border: none;
+  cursor: pointer;
+  background-color: var(--gris-header-tabla);
+  height: 40px;
+  width: 75px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 25px;
+  font-weight: 600;
+}
+
+.btn-buscador1:hover {
+  background: var(--azul-iseta);
+  color: white;
+}
+
+.filtrar,
+.ordenar {
+  border: none;
+  outline: none;
+  width: auto;
+  height: 40px;
+  margin: 0 10px;
+  font-size: 13px;
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  padding-left: 30px;
+  border-radius: 5px;
+}
+
+.filtrado-busqueda {
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  background: white;
+  color: #191919;
+  padding: 15px;
+  width: 200px;
+  height: 40px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+}
+
+/*------------------ TABLA ------------------------*/
+
+.table {
+  margin: 20px 0;
+  background: var(--gris-fondo-tabla);
+  backdrop-filter: blur(7px);
+  box-shadow: 0 0.4rem 0.8rem #0005;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  width: 100%;
+  /* o 600px si preferís fijo */
+  position: relative;
+  /* necesario para dropdowns con position: absolute */
+}
+
+.table2 {
+  margin: 20px 0;
+  background: var(--gris-fondo-tabla);
+  backdrop-filter: blur(7px);
+  box-shadow: 0 0.4rem 0.8rem #0005;
+  border-radius: 0.8rem;
+  overflow: hidden;
+  width: 100%;
+  min-height: 100vh;
+  /* o 600px si preferís fijo */
+  position: relative;
+  /* necesario para dropdowns con position: absolute */
+}
+
+.tit-year {
+  background: var(--facebook);
+  color: white;
+}
+
+.tit-year2 {
+  background: var(--gris-titulo);
+  color: black;
+}
+
+thead th {
+  top: 0;
+  left: 0;
+  background: #150a5c;
+  color: white;
+  text-align: left;
+}
+
+.table__body {
+  width: 100%;
+  background: var(--gris-body-tabla);
+  border-radius: 0.6rem;
+  overflow: auto;
+}
+
+.table__body::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+.table__body::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background: #0004;
+  visibility: hidden;
+}
+
+.table__body:hover::-webkit-scrollbar-thumb {
+  visibility: visible;
+}
+
+tbody tr:nth-child(even) {
+  background: #0000000b;
+}
+
+tbody tr:hover {
+  background: var(--gris-hover);
+}
+
+table,
+th,
+td {
+  border-collapse: collapse;
+  padding: 13px;
+  text-align: left;
+}
+
+table td {
+  font-size: 15px;
+}
+
+/*-------------------------------------------------------     B  0  T  0  N  E  S   ------------------------------------------*/
+
+.btn_blue,
+.btn_red,
+.btn_grey,
+.btn_sky,
+.btn_green,
+.btn_cancelar,
+.btn_exportar,
+.btn_borrar,
+.btn_borrar-alt {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 13px;
+  height: 40px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 5px;
+  overflow: hidden;
+  transition: background 0.35s;
+}
+
+/* ::after base para efecto de hover */
+.btn_blue::after,
+.btn_red::after,
+.btn_grey::after,
+.btn_sky::after,
+.btn_green::after,
+.btn_cancelar::after,
+.btn_borrar::after,
+.btn_borrar-alt::after,
+.btn_exportar::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  right: 100%;
+  transition: all 0.35s;
+}
+
+/* Estilos por botón */
+.btn_blue {
+  background-color: var(--azul-iseta);
+  color: white;
+}
+
+.btn_blue::after {
+  background-color: var(--facebook);
+}
+
+.btn_red {
+  background-color: var(--rojo-sl);
+  color: white;
+}
+
+.btn_red::after {
+  background-color: var(--netflix);
+}
+
+.btn_grey {
+  background: var(--gris-titulo);
+  color: black;
+}
+
+.btn_grey::after {
+  background-color: var(--facebook);
+}
+
+.btn_sky {
+  background-color: var(--gris-header-tabla);
+  color: black;
+}
+
+.btn_sky::after {
+  background-color: var(--gris-titulo);
+}
+
+.btn_green {
+  background: var(--green-iseta);
+  color: black;
+}
+
+.btn_green::after {
+  background-color: var(--facebook);
+  color: white;
+}
+
+/* Botón Cancelar */
+.btn_cancelar {
+  border: var(--azul-iseta);
+  background-color: #150a5c33;
+  color: var(--azul-iseta);
+  border-radius: 5px;
+}
+
+.btn_cancelar::after {
+  background-color: #150a5c2e;
+}
+
+/* Botón Exportar */
+.btn_exportar {
+  background-color: #137400;
+  border-radius: 5px;
+}
+
+.btn_exportar::after {
+  background-color: #005c00;
+}
+
+/* Botón Borrar */
+.btn_borrar {
+  background: var(--azul-iseta);
+  color: white;
+  padding: 0 15px;
+  min-width: 80px;
+  border-radius: 7px;
+}
+
+.btn_borrar::after {
+  background-color: var(--facebook);
+}
+
+/* Botón Borrar Alternativo */
+.btn_borrar-alt {
+  background: var(--rojo-sl);
+  color: white;
+  padding: 0 15px;
+  min-width: 80px;
+  border-radius: 25px;
+}
+
+.btn_borrar-alt::after {
+  background-color: var(--netflix);
+}
+
+/* Hover animations */
+.btn_blue:hover::after,
+.btn_red:hover::after,
+.btn_grey:hover::after,
+.btn_sky:hover::after,
+.btn_green:hover::after,
+.btn_cancelar:hover::after,
+.btn_exportar:hover::after,
+.btn_borrar:hover::after,
+.btn_borrar-alt:hover::after {
+  left: 0;
+  right: 0;
+}
+
+/* Para asegurar visibilidad del texto */
+.btn_blue span,
+.btn_red span,
+.btn_grey span,
+.btn_sky span,
+.btn_green span,
+.btn_cancelar span,
+.btn_exportar span,
+.btn_borrar span,
+.btn_borrar-alt span {
+  position: relative;
+  z-index: 1;
+}
+
+.btn_icon-danger {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  background-color: var(--rojo-sl);
+  /* Fondo rojo predeterminado */
+  color: white;
+  transition: background 0.35s;
+}
+
+/* Efecto hover con overlay más oscuro */
+.btn_icon-danger::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  right: 100%;
+  transition: all 0.35s;
+  background-color: black;
+  /* Un rojo más oscuro para el hover */
+}
+
+.btn_icon-danger:hover::after {
+  left: 0;
+  right: 0;
+}
+
+/* Íconos centrados y visibles */
+.btn_icon-danger i,
+.btn_icon-danger svg {
+  font-size: 18px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.btn_red_outline {
+  border: 1px solid var(--rojo-sl);
+  background-color: transparent;
+  color: var(--rojo-sl);
+  padding: 8px 16px;
+  border-radius: 4px;
+
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.btn_red_outline:hover {
+  background-color: var(--rojo-sl);
+  color: white;
+}
+
+
+/*---------------------------------------------- E  D  I  T  ,   C  R  E  A  T  E    y    R  E  M  A  T  ---------------------------------------------------------------*/
+
+.nwt {
+  display: flex;
+}
+
+.perfil_one {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  color: #000;
+  border-radius: 0.8rem;
+  background: var(--gris-body-tabla);
+  box-shadow: 0 0.4rem 0.8rem #0005;
+  overflow: hidden;
+}
+
+.perfil__info {
+  width: 100%;
+  padding: 15px;
+}
+
+.perfil_dataname {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.perfil_dataname1 {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.perfil_tit_dataname {
+  width: 100%;
+  color: white;
+  font-size: 16px;
+  background-color: var(--facebook);
+  padding: 10px 0 10px 5px;
+  text-transform: uppercase;
+}
+
+table {
+  width: 100%;
+}
+
+.spe-b1,
+.spe-b2 {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--azul-iseta);
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  min-width: 90px;
+  overflow: hidden;
+}
+
+.spe-b1::after,
+.spe-b2::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background-color: var(--facebook);
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  right: 100%;
+  -webkit-transition: all 0.35s;
+  transition: all 0.35s;
+}
+
+.spe-b1:hover::after,
+.spe-b2:hover::after {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  -webkit-transition: all 0.35s;
+  transition: all 0.35s;
+}
+
+.spe-b1 {
+  margin-bottom: 5px;
+}
+
+.spe-b2 {
+  margin-top: 5px;
+}
+
+.perfil_dataname label,
+.perfil_dataname-rem label {
+  width: auto;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.perfil_dataname-rem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid black;
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  min-height: 50px;
+}
+
+.h-sub {
+  font-size: 24px;
+}
+
+.campo_info {
+  border: none;
+  outline: none;
+  width: 100%;
+  margin: 5px 0 5px 10px;
+  padding: 10px 0 10px 5px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.campo_info-noinput {
+  border: none;
+  outline: none;
+  width: 100%;
+  margin: 5px 0 5px 10px;
+  padding: 10px 0 10px 5px;
+  cursor: default;
+}
+
+.campo_info-rem {
+  border: none;
+  outline: none;
+  width: 100%;
+  margin: 5px 0;
+  padding: 10px;
+  background-color: white;
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+.campo_info2 {
+  border: none;
+  outline: none;
+  width: 100%;
+  margin: 5px 0 5px 10px;
+  padding: 10px 0;
+  background-color: transparent;
+}
+
+.campo_info3 {
+  padding: 10px 0;
+  margin: 5px 0 5px 10px;
+  height: 40px;
+}
+
+.campo_info4 {
+  padding: 10px 0;
+  margin: 5px 0;
+  height: 40px;
+}
+
+#border-none {
+  border: none;
+}
+
+.upd {
+  display: flex;
+  justify-content: end;
+  margin: 10px;
+}
+
+.upd input {
+  justify-content: center;
+  margin: 0 10px;
+}
+
+.perfil_subtop {
+  padding-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.table__header {
+  width: 100%;
+  height: 10%;
+  background: var(--azul-iseta);
+  color: white;
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table__header div a {
+  margin: 0 10px;
+}
+
+.table__header p {
+  text-align: center;
+  font-size: 14px;
+}
+
+ul .campo_info {
+  display: flex;
+}
+
+.br {
+  margin: 20px 0;
+}
+
+.perfil__header {
+  width: 100%;
+  height: 10%;
+  background: var(--azul-iseta);
+  color: white;
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.perfil__header-alt {
+  width: 100%;
+  height: 10%;
+  background: var(--gris-header-tabla);
+  padding: 0.8rem 1rem;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.config p {
+  font-size: 13px;
+}
+
+.perfil__header-alt p {
+  font-size: 13px;
+}
+
+.perfil__header-alt a,
+.perfil__header-alt div {
+  margin: 0 10px;
+}
+
+.dias-hab {
+  width: 100%;
+  padding: 15px;
+}
+
+.dias-hab.btn_day:hover {
+  background-color: red;
+}
+
+.matricular {
+  width: 100%;
+  padding: 15px;
+}
+
+.matricular select,
+.matricular input {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 10px 0 10px 5px;
+  margin-bottom: 10px;
+  background-color: white;
+}
+
+.remat div {
+  margin: 0 10px 0 0;
+}
+
+.remat div label {
+  margin: 0 10px 0 0;
+}
+
+.remat div span {
+  margin: 0 10px 0 0;
+}
+
+.bot-masivo input {
+  width: 80px;
+  margin: 0 8px;
+}
+
+.selec-masivo {
+  margin: 20px 0;
+}
+
+@media screen and (max-width: 1024px) {
+  .admin-main {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+/*------------------  M E S A S ------------------------*/
+
+/* Contenedor que mantiene los botones en las esquinas */
+/* Posicionamos el contenedor de los botones en la parte inferior */
+.contenedor_mesa {
+  width: 100%;
+  padding: 15px;
+  position: relative;
+  padding-bottom: 60px;
+  /* Espacio extra para los botones */
+}
+
+/* Estilos para los botones */
+.boton-anterior,
+.boton-siguiente {
+  position: absolute;
+  bottom: 10px;
+  /* Mantiene los botones en la parte inferior */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Espacio entre el icono y el texto */
+}
+
+.boton-anterior {
+  left: 0;
+}
+
+.boton-siguiente {
+  right: 0;
+}
+
+/* Estilo adicional para los botones */
+.boton-anterior button,
+.boton-siguiente button {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #150a5c;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.boton-anterior span,
+.boton-siguiente span {
+  font-size: 1.1em;
+  color: #333;
+  padding-left: 5px;
+  padding-right: 15px;
+  font-weight: bold;
+  color: black;
+}
+
+/* Evitar que los botones se superpongan con el contenido */
+.boton-anterior,
+.boton-siguiente {
+  z-index: 1;
+  /* Asegura que los botones se ubiquen sobre otros elementos */
+}
+
+.botones-derecha {
+  margin-right: 12px;
+  padding-top: 10px;
+  padding-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  justify-content: right;
+  align-items: right;
+}
+
+.boton-eliminar {
+  display: flex;
+  justify-content: right;
+  align-items: right;
+  padding: 0 27px 15px 1.5em;
+}
