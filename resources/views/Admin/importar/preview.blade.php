@@ -35,6 +35,23 @@
 document.addEventListener('DOMContentLoaded', function() {
     const table = document.getElementById('editable-table');
 
+    // --------- FUNCIONES AUX ----------
+    function getTableData() {
+        const data = [];
+        const headings = Array.from(table.tHead.rows[0].cells).map(th => th.textContent.trim());
+
+        for (let i = 0; i < table.tBodies[0].rows.length; i++) {
+            const row = {};
+            const cells = table.tBodies[0].rows[i].cells;
+            for (let j = 0; j < cells.length; j++) {
+                row[headings[j]] = cells[j].textContent.trim();
+            }
+            data.push(row);
+        }
+        return {headings, data};
+    }
+
+    // --------- BOTONES ----------
     // Agregar fila
     document.getElementById('add-row').addEventListener('click', () => {
         const row = table.insertRow(-1);
@@ -58,17 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Guardar cambios
     document.getElementById('save-changes').addEventListener('click', () => {
-        const data = [];
-        const headings = Array.from(table.tHead.rows[0].cells).map(th => th.textContent);
-
-        for (let i = 0; i < table.tBodies[0].rows.length; i++) {
-            const row = {};
-            const cells = table.tBodies[0].rows[i].cells;
-            for (let j = 0; j < cells.length; j++) {
-                row[headings[j]] = cells[j].textContent;
-            }
-            data.push(row);
-        }
+        const {data} = getTableData();
 
         fetch("{{ route('admin.importar.save') }}", {
             method: "POST",
@@ -92,21 +99,11 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(err => alert("Error de conexión: " + err));
     });
 
-    //importar datos
+    // Importar datos
     document.getElementById('import-data').addEventListener('click', () => {
-        const data = [];
-        const headings = Array.from(table.tHead.rows[0].cells).map(th => th.textContent);
+        const {headings, data} = getTableData();
 
-        for (let i = 0; i < table.tBodies[0].rows.length; i++) {
-            const row = {};
-            const cells = table.tBodies[0].rows[i].cells;
-            for (let j = 0; j < cells.length; j++) {
-                row[headings[j]] = cells[j].textContent;
-            }
-            data.push(row);
-        }
-
-        fetch("{{ route('admin.importar.import') }}", {
+        fetch("{{ route('admin.importar.processEditedImport') }}", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -114,16 +111,16 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify({
                 tabla: "{{ $tabla }}",
+                headings: headings,
                 data: data
             })
         })
         .then(res => res.json())
         .then(res => {
             if(res.success) {
-                alert("Datos importados correctamente.");
-                window.location.href = "{{ route('admin.importar.index') }}";
+                alert("Importación completada. Filas insertadas: " + res.inserted_rows);
             } else {
-                alert("Error al importar: " + (res.message ?? ''));
+                alert("Error en la importación: " + (res.message ?? ''));
             }
         })
         .catch(err => alert("Error de conexión: " + err));
