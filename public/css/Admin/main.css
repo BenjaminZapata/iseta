@@ -231,6 +231,7 @@ table td {
 .btn_sky,
 .btn_green,
 .btn_cancelar,
+.btn_exportar,
 .btn_borrar,
 .btn_borrar-alt {
   position: relative;
@@ -258,7 +259,8 @@ table td {
 .btn_green::after,
 .btn_cancelar::after,
 .btn_borrar::after,
-.btn_borrar-alt::after {
+.btn_borrar-alt::after,
+.btn_exportar::after {
   content: "";
   position: absolute;
   z-index: -1;
@@ -318,13 +320,24 @@ table td {
 
 /* Botón Cancelar */
 .btn_cancelar {
-  background-color: #b71f14;
-  color: #fff;
+  border: var(--azul-iseta);
+  background-color: #150a5c33;
+  color: var(--azul-iseta);
   border-radius: 5px;
 }
 
 .btn_cancelar::after {
-  background-color: #a11b10;
+  background-color: #150a5c2e;
+}
+
+/* Botón Exportar */
+.btn_exportar {
+  background-color: #137400;
+  border-radius: 5px;
+}
+
+.btn_exportar::after {
+  background-color: #005c00;
 }
 
 /* Botón Borrar */
@@ -360,6 +373,7 @@ table td {
 .btn_sky:hover::after,
 .btn_green:hover::after,
 .btn_cancelar:hover::after,
+.btn_exportar:hover::after,
 .btn_borrar:hover::after,
 .btn_borrar-alt:hover::after {
   left: 0;
@@ -373,6 +387,7 @@ table td {
 .btn_sky span,
 .btn_green span,
 .btn_cancelar span,
+.btn_exportar span,
 .btn_borrar span,
 .btn_borrar-alt span {
   position: relative;
@@ -425,6 +440,24 @@ table td {
   pointer-events: none;
 }
 
+.btn_red_outline {
+  border: 1px solid var(--rojo-sl);
+  background-color: transparent;
+  color: var(--rojo-sl);
+  padding: 8px 16px;
+  border-radius: 4px;
+
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.btn_red_outline:hover {
+  background-color: var(--rojo-sl);
+  color: white;
+}
 
 
 /*---------------------------------------------- E  D  I  T  ,   C  R  E  A  T  E    y    R  E  M  A  T  ---------------------------------------------------------------*/
@@ -736,4 +769,82 @@ ul .campo_info {
     width: 100%;
     margin-left: 0;
   }
+}
+
+/*------------------  M E S A S ------------------------*/
+
+/* Contenedor que mantiene los botones en las esquinas */
+/* Posicionamos el contenedor de los botones en la parte inferior */
+.contenedor_mesa {
+  width: 100%;
+  padding: 15px;
+  position: relative;
+  padding-bottom: 60px;
+  /* Espacio extra para los botones */
+}
+
+/* Estilos para los botones */
+.boton-anterior,
+.boton-siguiente {
+  position: absolute;
+  bottom: 10px;
+  /* Mantiene los botones en la parte inferior */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Espacio entre el icono y el texto */
+}
+
+.boton-anterior {
+  left: 0;
+}
+
+.boton-siguiente {
+  right: 0;
+}
+
+/* Estilo adicional para los botones */
+.boton-anterior button,
+.boton-siguiente button {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #150a5c;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.boton-anterior span,
+.boton-siguiente span {
+  font-size: 1.1em;
+  color: #333;
+  padding-left: 5px;
+  padding-right: 15px;
+  font-weight: bold;
+  color: black;
+}
+
+/* Evitar que los botones se superpongan con el contenido */
+.boton-anterior,
+.boton-siguiente {
+  z-index: 1;
+  /* Asegura que los botones se ubiquen sobre otros elementos */
+}
+
+.botones-derecha {
+  margin-right: 12px;
+  padding-top: 10px;
+  padding-bottom: 16px;
+  display: flex;
+  gap: 12px;
+  justify-content: right;
+  align-items: right;
+}
+
+.boton-eliminar {
+  display: flex;
+  justify-content: right;
+  align-items: right;
+  padding: 0 27px 15px 1.5em;
 }
