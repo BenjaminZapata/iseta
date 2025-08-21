@@ -52,7 +52,8 @@
                         @csrf
                         @method('DELETE')
                         <button type="button"
-                            onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', '¿Estás seguro de que querés eliminar a la asignatura: {{ strtoupper($asignatura-> nombre)}}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                            onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', 
+                            '¿Estás seguro de que querés eliminar a la asignatura: {{ strtoupper($asignatura-> nombre)}}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                             class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
                             <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                         </button>

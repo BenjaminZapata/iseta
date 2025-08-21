@@ -54,13 +54,12 @@ class AsignaturasCrudController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
-    {
-        Log::debug($request->all());
-        $carreras = $request->carrera;
-        return view('Admin.Asignaturas.create', [
-            'carrera' => $carreras->id,
-        ]);
-    }
+{
+    return view('Admin.Asignaturas.create', [
+        'asignatura' => null,
+    ]);
+}
+
 
     /**
      * Store a newly created resource in storage.
