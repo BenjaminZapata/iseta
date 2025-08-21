@@ -21,8 +21,9 @@
                         @csrf
                         @method('delete')
                         <button class="btn_red_outline"
-                            onclick="return confirm('¿Estás seguro de que deseas eliminar este profesor?')">
-                            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
+                            onclick="openGeneralModal('form-eliminar-{{ $profesor->id }}', '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($profesor->apellido)}} {{ strtoupper($profesor->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                            class="btn_icon-danger" style="margin-left: 10px;">
+                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar
                             profesor/a
                         </button>
                     </form>

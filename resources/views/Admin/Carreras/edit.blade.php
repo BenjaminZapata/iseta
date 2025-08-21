@@ -16,8 +16,9 @@
                         @csrf
                         @method('delete')
                         <button class="btn_red_outline"
-                            onclick="return confirm('¿Estás seguro de que deseas eliminar esta carrera?')">
-                            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar carrera
+                            onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                            class="btn_icon-danger" style=" margin-left: 10px;">
+                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar carrera
                         </button>
                     </form>
                 </div>

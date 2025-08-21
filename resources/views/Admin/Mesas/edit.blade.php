@@ -86,8 +86,9 @@
                         @csrf
                         @method('delete')
                         <button class="btn_red_outline"
-                            onclick="return confirm('¿Estás seguro de que deseas eliminar esta mesa?')">
-                            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
+                            onclick="openGeneralModal('form-eliminar-{{ $mesa->id }}', '¿Estás seguro de que querés eliminar la mesa: {{ strtoupper($mesa->asignatura->nombre)  }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                            class="btn_icon-danger" style=" margin-left: 10px;">
+                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar
                             mesa
                         </button>
                     </form>
