@@ -8,8 +8,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\HeadingRowImport;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 
 
 class ImportsController extends Controller
@@ -60,23 +61,24 @@ class ImportsController extends Controller
     }
 
     public function processEditedImport(Request $request)
-    {
-        $tabla = $request->tabla;
-        $data = $request->data;
-        $mappings = $request->mappings ?? [];
-        $newColumns = $request->new_columns ?? [];
+{
+    $tabla = $request->tabla;
+    $data = $request->input('data');
+    $mappings = $request->mappings ?? [];
+    $newColumns = $request->new_columns ?? [];
 
-        // 1. Crear nuevas columnas si corresponde
-        if ($request->create_columns && !empty($newColumns)) {
-            foreach ($newColumns as $colName => $def) {
-                if (!Schema::hasColumn($tabla, $colName)) {
-                    \DB::statement("ALTER TABLE $tabla ADD COLUMN $colName {$def['type']} " . ($def['nullable'] ? 'NULL' : 'NOT NULL'));
-                }
-            }
-        }
+    Log::info("PROCESS - Tabla destino: {$tabla}");
+    Log::info("PROCESS - Data recibida:", [$data]);
 
-        // 2. Insertar filas
-        $inserted = 0;
+    // 🔧 FIX: aplanar doble array
+    if (isset($data[0]) && is_array($data[0]) && count($data) === 1) {
+        $data = $data[0];
+        Log::info("PROCESS - Data aplanada:", [$data]);
+    }
+
+    $inserted = 0;
+
+    try {
         foreach ($data as $row) {
             $insertData = [];
 
@@ -86,63 +88,75 @@ class ImportsController extends Controller
                 }
             }
 
-            // también incluir columnas nuevas
             foreach ($newColumns as $colName => $def) {
                 $insertData[$colName] = $row[count($row) - 1] ?? null;
             }
 
+            Log::info("PROCESS - Insertando fila:", $insertData);
+
             if (!empty($insertData)) {
-                \DB::table($tabla)->insert($insertData);
+                DB::table($tabla)->insert($insertData);
                 $inserted++;
             }
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Importación completada',
-            'inserted_rows' => $inserted
+    } catch (\Exception $e) {
+        Log::error("PROCESS - Error general:", [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
         ]);
+        return response()->json(['success' => false, 'message' => $e->getMessage()]);
     }
+
+    Log::info("PROCESS - Total insertadas: {$inserted}");
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Importación completada',
+        'inserted_rows' => $inserted
+    ]);
+}
+
 
    
 public function save(Request $request)
 {
-    Log::info('--- SAVE IMPORT ---');
-    Log::info('Request raw data: ' . $request->getContent());
-    
     $tabla = $request->tabla;
     $data = $request->input('data');
 
+    // Si es JSON string, decodificamos
     if (is_string($data)) {
         $data = json_decode($data, true);
-        Log::info('Data decodificada: ', $data ?? []);
-    } else {
-        Log::info('Data recibida: ', $data ?? []);
     }
 
-    if (!$tabla || empty($data)) {
-        Log::error('Tabla o data vacía');
-        return response()->json(['success' => false, 'message' => 'Datos incompletos'], 400);
+    // Si viene doblemente anidado [[...]], lo aplanamos
+    if (is_array($data) && isset($data[0]) && is_array($data[0]) && array_keys($data[0]) !== range(0, count($data[0]) - 1)) {
+        // caso normal: [{...}, {...}]
+    } elseif (is_array($data) && isset($data[0]) && is_array($data[0])) {
+        $data = $data[0]; // aplanar un nivel
     }
+
+    \Log::info("PROCESS - Data final lista para insertar:", $data);
 
     $inserted = 0;
     foreach ($data as $row) {
-        try {
-            DB::table($tabla)->updateOrInsert(
-                ['dni' => $row['dni'] ?? null],
-                $row
-            );
-            $inserted++;
-        } catch (\Exception $e) {
-            Log::error("Error insert/update fila: " . json_encode($row) . " | " . $e->getMessage());
-        }
+        \Log::info("PROCESS - Insertando fila:", $row);
+
+        DB::table($tabla)->updateOrInsert(
+            ['dni' => $row['dni'] ?? null],
+            $row
+        );
+
+        $inserted++;
     }
 
-    Log::info("Filas insertadas: $inserted");
+    \Log::info("PROCESS - Total insertadas: " . $inserted);
 
     return response()->json([
         'success' => true,
         'inserted_rows' => $inserted
     ]);
 }
+
+
 }
