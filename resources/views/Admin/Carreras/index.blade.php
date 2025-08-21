@@ -14,7 +14,6 @@
 <div class="table" data-name="tablaCarreras">
 
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CARRERAS'])
-    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CARRERAS'])
 
     <div class="perfil__header-alt">
         <a href="{{ route('admin.carreras.create') }}">
@@ -61,33 +60,24 @@
                                     style="font-size: 1.3em; margin-right: 8px;"></i>Modificar
                             </button>
                         </a>
-                        @if (!$config['modo_seguro'])
-                        <div>
-                            <form method="POST" class="form-eliminar"
-                                action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}"
-                                style="margin-left: 10px;">
-                                @csrf
-                                @method('delete')
-                                <button class="btn_icon-danger" style="background-color: red"
-                                    onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                </button>
-                            </form>
-                        </div>
-                        @endif
                     </div>
-                    <form id="form-eliminar-{{ $carrera->id }}" action="{{ route('admin.carreras.destroy', $carrera) }}"
-                        method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button"
-                            onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                            class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                        </button>
-                    </form>
+                    @if (!$config['modo_seguro'])
+                    <div>
+                        <form method="POST" class="form-eliminar"
+                            action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}"
+                            style="margin-left: 10px;">
+                            @csrf
+                            @method('delete')
+                            <button class="btn_icon-danger" style="background-color: red"
+                                onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                                <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                            </button>
+                        </form>
+                    </div>
+                    @endif
                 </td>
+
             </tr>
             @endforeach
         </tbody>

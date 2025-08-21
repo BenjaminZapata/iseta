@@ -226,7 +226,7 @@ class CarrerasCrudController extends BaseController
         $carrera->anio_fin = now()->year;
         $carrera->save();
 
-        return redirect()->route('admin.carreras.index')
+        return redirect()->back()
             ->with('success', 'Carrera desactivada correctamente');
     }
 
@@ -236,7 +236,7 @@ class CarrerasCrudController extends BaseController
         $carrera->anio_fin = null;
         $carrera->save();
 
-        return redirect()->route('admin.carreras.index')
+        return redirect()->back()
             ->with('success', 'Carrera reactivada correctamente');
     }
 

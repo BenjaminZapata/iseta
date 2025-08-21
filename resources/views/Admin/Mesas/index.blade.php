@@ -15,7 +15,6 @@
     {{-- HEADER AVATAR --}}
 
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE MESAS'])
-    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE MESAS'])
 
     <div class="perfil__header-alt">
         <a href="{{ route('admin.mesas.create') }}">
@@ -96,16 +95,6 @@
                         </div>
                         @endif
                     </div>
-                    <form id="form-eliminar-{{ $mesa->id }}" action="{{ route('admin.mesas.destroy', $mesa) }}"
-                        method="POST" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button"
-                            onclick="openGeneralModal('form-eliminar-{{ $mesa->id }}', '¿Estás seguro de que querés eliminar la mesa: {{ strtoupper($mesa->asignatura->nombre)  }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                            class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                        </button>
-                    </form>
                 </td>
 
             </tr>

@@ -15,7 +15,6 @@
     {{-- HEADER AVATAR --}}
 
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE INSCRIPTOS'])
-    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE INSCRIPTOS'])
 
     <div class="perfil__header-alt">
         <a href="{{ route('admin.inscriptos.create') }}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar

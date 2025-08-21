@@ -5,8 +5,6 @@
 
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE PROFESORES'])
 
-    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE PROFESORES'])
-
     <div class="perfil__header-alt">
         <a href="{{ route('admin.profesores.create') }}">
             <button class="btn_blue">

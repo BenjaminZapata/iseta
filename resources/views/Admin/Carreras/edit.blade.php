@@ -5,9 +5,45 @@
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
         <div class="perfil__info">
-            <?= $form->generate(route('admin.carreras.update', ['carrera' => $carrera->id]), 'put', [
-                'Información' => [$form->text('nombre', 'Nombre:', 'label-input-y-75', $carrera), $form->text('resolucion', 'Resolucion:', 'label-input-y-75', $carrera), $form->text('anio_apertura', 'Año de apertura:', 'label-input-y-75', $carrera), $form->text('anio_fin', 'Año de cierre:', 'label-input-y-75', $carrera), $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $carrera), $form->texthidden(url()->previous())],
-            ]) ?>
+            <?= $form->generate(
+                route('admin.carreras.update', ['carrera' => $carrera->id]),
+                'put',
+                [
+                    'Información' => [
+                        $form->text(
+                            'nombre',
+                            'Nombre:',
+                            'label-input-y-75',
+                            $carrera
+                        ),
+                        $form->text(
+                            'resolucion',
+                            'Resolucion:',
+                            'label-input-y-75',
+                            $carrera
+                        ),
+                        $form->text(
+                            'anio_apertura',
+                            'Año de apertura:',
+                            'label-input-y-75',
+                            $carrera
+                        ),
+                        $form->text(
+                            'anio_fin',
+                            'Año de cierre:',
+                            'label-input-y-75',
+                            $carrera
+                        ),
+                        $form->textarea(
+                            'observaciones',
+                            'Observaciones:',
+                            'label-input-y-75',
+                            $carrera
+                        ),
+                        $form->texthidden(url()->previous()),
+                    ],
+                ]
+            ) ?>
             <div class="boton-eliminar">
                 @if (!$config['modo_seguro'])
                 <div>
@@ -16,8 +52,8 @@
                         @csrf
                         @method('delete')
                         <button class="btn_red_outline"
-                            onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                            class="btn_icon-danger" style=" margin-left: 10px;">
+                            onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->apellido)}} {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                            class="btn_icon-danger" style="margin-left: 10px;">
                             <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar carrera
                         </button>
                     </form>
