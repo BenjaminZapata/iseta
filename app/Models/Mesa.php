@@ -24,56 +24,60 @@ class Mesa extends Model
         'fecha'
     ];
 
-    // protected $casts = [
-    //     'fecha' => 'datetime',
-    // ];
 
-    public function asignatura() {
-    return $this->belongsTo(Asignatura::class, 'id_asignatura');
-}
-
-
-    public function anotado(){
-        return $this -> hasOne(Examen::class,'id_mesa')
-            ->where('id_alumno',Auth::id());
+    public function asignatura()
+    {
+        return $this->belongsTo(Asignatura::class, 'id_asignatura');
     }
 
-    public function examenes(){
-        return $this->hasMany(Examen::class,'id_mesa','id');
+    public function anotado()
+    {
+        return $this->hasOne(Examen::class, 'id_mesa')
+            ->where('id_alumno', Auth::id());
     }
 
-    public function profesor(){
-        return $this -> hasOne(Profesor::class,'id','prof_presidente');
+    public function examenes()
+    {
+        return $this->hasMany(Examen::class, 'id_mesa', 'id');
     }
 
-    function habilitada(){
+    public function profesor()
+    {
+        return $this->hasOne(Profesor::class, 'id', 'prof_presidente');
+    }
+
+
+    function habilitada()
+    {
         $horasHabiles = Configuracion::get('horas_habiles_inscripcion');
 
         $horasMesa = DiasHabiles::desdeHoyHasta($this->fecha);
 
         return $horasMesa >= $horasHabiles;
-     }
+    }
 
-    function profesorNombre($tipo, $mensaje="A confirmar"){
+    function profesorNombre($tipo, $mensaje = "A confirmar")
+    {
         $profesor = null;
 
-        if($tipo == 'vocal1') $profesor = $this->vocal1;
-        else if($tipo == 'vocal2') $profesor = $this->vocal2;
+        if ($tipo == 'vocal1') $profesor = $this->vocal1;
+        else if ($tipo == 'vocal2') $profesor = $this->vocal2;
         else $profesor = $this->profesor;
 
-        if($profesor){
+        if ($profesor) {
             return $profesor->apellidoNombre();
-        }else{
+        } else {
             return $mensaje;
         }
     }
 
-    public function vocal1(){
-        return $this -> hasOne(Profesor::class,'id','prof_vocal_1');
+    public function vocal1()
+    {
+        return $this->hasOne(Profesor::class, 'id', 'prof_vocal_1');
     }
 
-    public function vocal2(){
-        return $this -> hasOne(Profesor::class,'id','prof_vocal_2');
+    public function vocal2()
+    {
+        return $this->hasOne(Profesor::class, 'id', 'prof_vocal_2');
     }
-
 }

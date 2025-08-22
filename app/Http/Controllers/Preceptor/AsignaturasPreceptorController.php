@@ -1,0 +1,114 @@
+<?php
+
+namespace App\Http\Controllers\preceptor;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\CrearAsignaturaRequest;
+use App\Http\Requests\EditarAsignaturaRequest;
+use App\Models\Asignatura;
+use App\Models\Carrera;
+use App\Models\Configuracion;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
+class AsignaturasPreceptorController extends Controller
+{
+
+ function __construct()
+ {
+  $this->middleware('auth:admin');
+ }
+
+ /**
+  * Display a listing of the resource.
+  */
+ public function index(Request $request)
+ {
+  $asignaturas = [];
+  $filtro = "";
+  $porPagina = Configuracion::get('filas_por_tabla', true);
+
+
+  if ($request->has('filtro')) {
+   $filtro = $request->filtro;
+
+   if (strpos($filtro, ':')) {
+    $arr = explode(':', $filtro);
+    $campo = $arr[0];
+    $keyword = $arr[1];
+    $asignaturas = Asignatura::where($campo, 'LIKE', '%' . $keyword . '%')->paginate($porPagina);
+   } else {
+
+    $asignaturas = Asignatura::where('nombre', 'LIKE', '%' . $filtro . '%')
+     ->paginate($porPagina);
+   }
+  } else {
+   $asignaturas = Asignatura::select('*')->with('carrera')->paginate($porPagina);
+  }
+  return view('preceptor.Asignaturas.index', ['asignaturas' => $asignaturas, 'filtro' => $filtro]);
+ }
+
+
+
+ /**
+  * Show the form for creating a new resource.
+  */
+ public function create(Request $request)
+ {
+  Log::debug($request->all());
+  $carreras = $request->carrera;
+  return view('preceptor.Asignaturas.create', [
+   'carrera' => $carreras->id,
+  ]);
+ }
+
+ /**
+  * Store a newly created resource in storage.
+  */
+ public function store(CrearAsignaturaRequest $request)
+ {
+  $data = $request->validated();
+
+  Asignatura::create($data);
+
+  return redirect()->back()->with('mensaje', 'Se creo la asignatura');
+ }
+
+
+ /**
+  * Show the form for editing the specified resource.
+  */
+ public function edit(Request $request, $asignatura)
+ {
+  Configuracion::todas();
+
+  $asignatura = Asignatura::with('cursadas.alumno')->find($asignatura);
+
+  return view('preceptor.Asignaturas.edit', [
+   'asignatura' => $asignatura,
+  ]);
+ }
+
+ /**
+  * Update the specified resource in storage.
+  */
+ public function update(EditarAsignaturaRequest $request, Asignatura $asignatura)
+ {
+  $data = $request->validated();
+  $asignatura->update($data);
+
+  if ($request->has('redirect'))
+   return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la asignatura');
+  else
+   return redirect()->back()->with('mensaje', 'Se edito la asignatura');
+ }
+
+ /**
+  * Remove the specified resource from storage.
+  */
+ public function destroy(Asignatura $asignatura)
+ {
+  $asignatura->delete();
+  return redirect()->route('preceptor.carreras.edit', ['carrera' => $asignatura->id_carrera])->with('mensaje', 'Se ha eliminado la asignatura');
+ }
+}

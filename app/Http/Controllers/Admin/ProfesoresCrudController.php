@@ -22,7 +22,7 @@ class ProfesoresCrudController extends BaseController
         $this->middleware('auth:admin');
         $this->profeRepo = $profeRepo;
     }
-       /**
+    /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
@@ -32,7 +32,7 @@ class ProfesoresCrudController extends BaseController
 
         $this->data['profesores'] = $this->profeRepo->index($request);
 
-        return view('Admin.Profesores.index',$this->data);
+        return view('Admin.Profesores.index', $this->data);
 
     }
 
@@ -52,7 +52,7 @@ class ProfesoresCrudController extends BaseController
         $data = $request->validated();
 
         Profesor::create($data);
-        return redirect()->route('admin.profesores.index')->with('mensaje','Se creo el profesor');
+        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
     }
 
 
@@ -66,8 +66,8 @@ class ProfesoresCrudController extends BaseController
                 ->orWhere('prof_vocal_1', $profesor->id)
                 ->orWhere('prof_vocal_2', $profesor->id);
         })
-        ->whereRaw('fecha > NOW()')
-        ->get();
+            ->whereRaw('fecha > NOW()')
+            ->get();
 
         return view('Admin.Profesores.edit', [
             'profesor' => $profesor,
@@ -81,7 +81,7 @@ class ProfesoresCrudController extends BaseController
     public function update(EditarProfesorRequest $request, Profesor $profesor)
     {
         $profesor->update($request->all());
-        return redirect()->route('admin.profesores.index')->with('mensaje','Se edito el profesor');
+        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se edito el profesor');
     }
 
     /**
@@ -89,8 +89,14 @@ class ProfesoresCrudController extends BaseController
      */
     public function destroy(Profesor $profesor)
     {
-        $profesor->delete();
-        return redirect() -> route('admin.profesores.index') -> with('mensaje', 'Se ha eliminado el profesor');
+        try {
+            $profesor->delete();
+            return redirect()->route('admin.profesor.index')
+                ->with('mensaje', 'Se ha eliminado el Profesor');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.profesor.index')
+                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+        }
     }
 
 

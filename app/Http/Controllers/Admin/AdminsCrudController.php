@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 
 class AdminsCrudController extends Controller
 {
-        function __construct()
+    function __construct()
     {
-        $this -> middleware('auth:admin');
+        $this->middleware('auth:admin');
     }
     /**
      * Display a listing of the resource.
@@ -19,19 +19,19 @@ class AdminsCrudController extends Controller
     public function index(Request $request)
     {
         $admins = [];
-         $filtro = "";
-         $porPagina = Configuracion::get('filas_por_tabla',true);
+        $filtro = "";
+        $porPagina = Configuracion::get('filas_por_tabla', true);
 
 
-        if($request->has('filtro')){
+        if ($request->has('filtro')) {
             $filtro = $request->filtro;
 
-            $admins = Admin::where('username','LIKE','%'.$filtro.'%') -> paginate($porPagina);
+            $admins = Admin::where('username', 'LIKE', '%' . $filtro . '%')->paginate($porPagina);
 
-        }else{
+        } else {
             $admins = Admin::paginate($porPagina);
         }
-        return view('Admin.Admins.index',['admins'=>$admins, 'filtro'=>$filtro]);
+        return view('Admin.Admins.index', ['admins' => $admins, 'filtro' => $filtro]);
 
     }
 
@@ -48,10 +48,20 @@ class AdminsCrudController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only('username','password');
+        $roles = [
+            'regente' => 0,
+            'preceptor' => 1,
+            'secretario' => 2
+        ];
+
+        $data = $request->only('username', 'password', 'rol');
+
         $data['password'] = bcrypt($data['password']);
+        $data['rol'] = $roles[$data['rol']] ?? 0; // Default a regente si no viene bien
+
         Admin::create($data);
-        return redirect()->back();
+
+        return redirect()->back()->with('mensaje', 'Administrador creado correctamente');
     }
 
     /**
@@ -83,10 +93,10 @@ class AdminsCrudController extends Controller
      */
     public function destroy(Admin $admin)
     {
-        if(Admin::count()<=1){
-            return \redirect()->back()->with('error','Debe haber como minimo una cuenta de administrador');
+        if (Admin::count() <= 1) {
+            return \redirect()->back()->with('error', 'Debe haber como minimo una cuenta de administrador');
         }
         $admin->delete();
-        return redirect()->back()->with('mensaje','Se ha eliminado el administrador');
+        return redirect()->back()->with('mensaje', 'Se ha eliminado el administrador');
     }
 }

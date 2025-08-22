@@ -20,21 +20,25 @@ class Cursada extends Model
         'condicion'
     ];
 
-    public function alumno(){
-        return $this -> hasOne(Alumno::class,'id','id_alumno');
+    public function alumno()
+    {
+        return $this->hasOne(Alumno::class, 'id', 'id_alumno');
     }
 
-    public function carrera(): BelongsTo{
-        return $this -> belongsTo(Carrera::class,'id_carrera','id');
+    public function carrera(): BelongsTo
+    {
+        return $this->belongsTo(Carrera::class, 'id_carrera', 'id');
     }
 
-    public function asignatura(){
-        return $this -> belongsTo(Asignatura::class,'id_asignatura','id');
+    public function asignatura()
+    {
+        return $this->belongsTo(Asignatura::class, 'id_asignatura', 'id');
     }
 
     /** INFO: no eliminar campos "Promocion", "Desertor" y "Equivalencia"
      * son utilizados para mantener funcionalidades antiguas */
-    public function condicionString(): string{
+    public function condicionString(): string
+    {
         return match ($this->condicion) {
             0 => 'Libre',
             1 => 'Regular',
@@ -47,8 +51,9 @@ class Cursada extends Model
         };
     }
 
-    public function aprobado(): string{
-        return match($this->aprobada) {
+    public function aprobado(): string
+    {
+        return match ($this->aprobada) {
             1 => 'Aprobada',
             2 => 'Reprobada',
             3 => 'Cursando',

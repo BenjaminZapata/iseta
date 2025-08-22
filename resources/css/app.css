@@ -1,2 +1,5 @@
 @import "tailwindcss";
-@source "../views"
+
+@source "resources/views/*.php";
+
+/* Re-assign Flux's gray of choice... */

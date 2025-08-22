@@ -8,6 +8,7 @@
     "FIXME",
     "WARN",
     "COMPLETE",
+    "INFO",
     "TODO"
   ],
   "todo-tree.highlights.defaultHighlight": {
@@ -30,9 +31,21 @@
       "icon": "check",
       "type": "line"
     },
+    "INFO": {
+      "icon": "info",
+      "type": "line"
+    },
     "FIXME": {
       "iconColour": "yellow",
       "gutterIcon": true
     }
-  }
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": false
+  },
+  "explorerExclude.backup": {}
 }
