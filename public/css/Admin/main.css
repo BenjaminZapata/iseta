@@ -848,3 +848,63 @@ ul .campo_info {
   align-items: right;
   padding: 0 27px 15px 1.5em;
 }
+
+/*------------------  boton exportar ------------------------*/
+
+/* Estilo general para el botón de exportación */
+.btn_exportar {
+  background-color: rgb(11, 122, 11);
+  color: white;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+
+/* Estilo de hover */
+.btn_exportar:hover {
+  background-color: rgb(35, 173, 35);
+}
+
+/* Estilo para el ícono dentro del botón */
+.btn_exportar i {
+  font-size: 1.3em;
+}
+
+/* Estilo para el formulario de filtro de exportación */
+.filtro-exportar {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #eeeeee;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 10;
+  width: max-content;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+
+.filtro-exportar select,
+.filtro-exportar button {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.filtro-exportar select {
+  background-color: #f9f9f9;
+}
+
+.filtro-exportar button:hover {
+  background-color: var(--blue-hover);
+}
