@@ -17,14 +17,16 @@
 
         <!-- Avatar con dropdown -->
         <div style="position: relative;">
-            <div id="avatar-toggle" style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;" onclick="toggleUserMenu()">
+            <div id="avatar-toggle" style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;"
+                onclick="toggleUserMenu()">
                 <img src="{{ asset('img/user-icon.png') }}" alt="Regente" title="Usuario"
                     style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; background-color: white;" />
-                <i id="avatar-arrow" class="ti ti-chevron-down" style="color: white; font-size: 1rem; position: relative; top: -2px; transition: transform 0.2s ease;"></i>
+                <i id="avatar-arrow" class="ti ti-chevron-down"
+                    style="color: white; font-size: 1rem; position: relative; top: -2px; transition: transform 0.2s ease;"></i>
             </div>
 
             <!-- Dropdown (oculto por defecto) -->
-            <div id="user-menu" class="header-dropdown">
+            <div id="user-menu" class="header-dropdown-avatar">
                 <ul style="list-style: none; margin: 0; padding: 0;">
                     <li>
                         <a href="{{ route('admin.config.modoseguro') }}" class="header-avatar-lista">
