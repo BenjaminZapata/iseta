@@ -91,7 +91,7 @@
                             </select>
 
                             <button class="btn_blue">
-                                <i class="ti ti-file-export"></i> Descargar
+                                <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i> Descargar
                             </button>
                         </div>
                     </form>
