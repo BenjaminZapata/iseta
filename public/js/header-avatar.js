@@ -58,6 +58,27 @@ function alinearDropdowns() {
  });
 }
 
+function toggleNotificacionesMenu() {
+ const menu = document.getElementById('notificaciones-menu');
+ const arrow = document.getElementById('notificaciones-arrow');
+
+ const isVisible = menu.style.display === 'block';
+
+ menu.style.display = isVisible ? 'none' : 'block';
+ arrow.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+
+document.addEventListener('click', function (event) {
+ const menu = document.getElementById('notificaciones-menu');
+ const toggle = document.getElementById('notificaciones-toggle');
+ const arrow = document.getElementById('notificaciones-arrow');
+
+ if (menu && toggle && !menu.contains(event.target) && !toggle.contains(event.target)) {
+  menu.style.display = 'none';
+  arrow.style.transform = 'rotate(0deg)';
+ }
+});
+
 window.addEventListener('resize', alinearDropdowns);
 window.addEventListener('load', alinearDropdowns);
 
