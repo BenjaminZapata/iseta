@@ -16,20 +16,15 @@ class Notificaciones extends Component
     }
 
     public function fetchNotificaciones()
-    {
-        $this->notificaciones = Auth::user()->notifications()->latest()->take(20)->get();
+{
+    $user = Auth::user();
+
+    if ($user) {
+        $this->notificaciones = $user->notifications()->latest()->take(20)->get();
+    } else {
+        $this->notificaciones = collect(); // Lista vacía si no hay usuario
     }
-
-    public function marcarComoLeida($id)
-    {
-        $notificacion = Auth::user()->notifications()->find($id);
-
-        if ($notificacion && !$notificacion->read_at) {
-            $notificacion->markAsRead();
-        }
-
-        $this->fetchNotificaciones();
-    }
+}
 
     public function borrarNotificacion($id)
     {
