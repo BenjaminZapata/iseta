@@ -12,26 +12,40 @@ class Notificaciones extends Component
 
     public function mount()
     {
-        $this->notificaciones = Auth::user()->notifications->all();
+        $this->fetchNotificaciones();
     }
 
-    public function marcarComoLeida($id)
+    public function fetchNotificaciones()
+{
+    $user = Auth::user();
+
+    if ($user) {
+        $this->notificaciones = $user->notifications()->latest()->take(20)->get();
+    } else {
+        $this->notificaciones = collect(); // Lista vacía si no hay usuario
+    }
+}
+
+    public function borrarNotificacion($id)
     {
         $notificacion = Auth::user()->notifications()->find($id);
 
         if ($notificacion) {
-            $notificacion->markAsRead();
-            // Recargamos solo la lista
-            $this->notificaciones = Auth::user()->notifications;
+            $notificacion->delete();
         }
+
+        $this->fetchNotificaciones();
+    }
+
+    public function borrarTodas()
+    {
+        Auth::user()->notifications()->delete();
+
+        $this->fetchNotificaciones();
     }
 
     public function render()
     {
-        foreach ($this->notificaciones as $notificacion) {
-            Log::info($notificacion);
-        }
-
         return view('livewire.notificaciones');
     }
 }
