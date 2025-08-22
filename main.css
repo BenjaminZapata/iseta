@@ -135,18 +135,17 @@ body {
 
 /*------------------ TABLA ------------------------*/
 
-
-
 .table {
   margin: 20px 0;
   background: var(--gris-fondo-tabla);
   backdrop-filter: blur(7px);
   box-shadow: 0 0.4rem 0.8rem #0005;
   border-radius: 0.8rem;
-  overflow: visible;
-  transition: height 0.3s ease;
+  overflow: hidden;
   width: 100%;
+  /* o 600px si preferís fijo */
   position: relative;
+  /* necesario para dropdowns con position: absolute */
 }
 
 .table2 {

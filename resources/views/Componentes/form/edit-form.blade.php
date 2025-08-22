@@ -1,36 +1,37 @@
-<form class="flex-col gap-2" method="post" action="{{ $url }}">
+<form class="perfil__info" method="post" action="{{ $url }}">
     @csrf
 
     @if ($method == 'put')
-        @method('put')
+    @method('put')
     @endif
 
     @foreach ($fieldsets as $legend => $inputs)
-        <fieldset class="p-2" style="margin: 10px;">
-            <legend class="font-600 font-7">{{ $legend }}</legend>
-            <div class="grid-2 gap-2 p-0">
-                @foreach ($inputs as $input)
-                    <?= $input ?>
-                @endforeach
-            </div>
-        </fieldset>
+    <fieldset class="p-2" style="margin: 10px;">
+        <legend class="font-600 font-7">{{ $legend }}</legend>
+        <div class="grid-2 gap-2 p-0">
+            @foreach ($inputs as $input)
+            <?= $input ?>
+            @endforeach
+        </div>
+    </fieldset>
     @endforeach
+
     <div class="botones-derecha">
 
-        <div class="botones-derecha"
-            style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
-            <x-botones-alumno />
-            <x-btn-cancelar />
-            <button type="submit" class="btn_blue">
-                @if ($method == 'put')
-                    <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                    Actualizar
-                @else
-                    <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                    Guardar
-                @endif
-            </button>
-        </div>
+        <x-botones-alumno />
+        {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
+        <x-btn-cancelar />
+        <button type="submit" class="btn_blue">
+            @if ($method == 'put')
+            <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
+            Actualizar
+            @else
+            <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+            Guardar
+            @endif
+            {{-- @endif --}}
+        </button>
+
     </div>
 </form>
 

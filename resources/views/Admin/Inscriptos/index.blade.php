@@ -1,7 +1,6 @@
 @extends('Admin.template')
 
 @section('content')
-
 <style>
     #filters .label-input-y-100 label {
         text-align: left !important;
@@ -18,25 +17,17 @@
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE INSCRIPTOS'])
 
     <div class="perfil__header-alt">
-        <a href="{{route('admin.inscriptos.create')}}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar
+        <a href="{{ route('admin.inscriptos.create') }}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar
+
                 inscripcion</button></a>
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.inscriptos.index', $filters, [
-            'dropdowns' => [
-                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
-                $form->select('filter_vigente', 'Estado Carreras: ', 'label-input-y-100', $filters, ['Todas', 'No Vigentes', 'Vigentes']),
-                $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-100', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']),
-                $form->select('filter_estado', 'Estado: ', 'label-input-y-100', $filters, ['Cursando', 'Egresado', 'Desertor']),
-                $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
-
-
-
-            ],
+            'dropdowns' => [$carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']), $form->select('filter_vigente', 'Estado Carreras: ', 'label-input-y-100', $filters, ['Todas', 'No Vigentes', 'Vigentes']), $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-100', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']), $form->select('filter_estado', 'Estado: ', 'label-input-y-100', $filters, ['Cursando', 'Egresado', 'Desertor']), $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades())],
 
             'fields' => [
                 'anio_inscripcion' => 'Año de inscripción',
                 'anio_finalizacion' => 'Año de finalización',
-            ]
+            ],
         ]) ?>
     </div>
     <table class="table__body">
@@ -54,47 +45,52 @@
             @foreach ($inscripciones as $inscripcion)
             <tr>
                 <td class="bold">
-                    {{$inscripcion->alumno->apellidoNombre()}}
+                    {{ $inscripcion->alumno->apellidoNombre() }}
                 </td>
 
                 {{-- <td>{{$alumno->dni}}</td> --}}
-                <td>{{$inscripcion->carrera->nombre}}</td>
+                <td>{{ $inscripcion->carrera->nombre }}</td>
                 <td>
                     {{ $inscripcion->estado() }}
                 </td>
                 <td>
-                    {{$inscripcion->anio_inscripcion ? $inscripcion->anio_inscripcion : 'Sin datos'}}
+                    {{ $inscripcion->anio_inscripcion ? $inscripcion->anio_inscripcion : 'Sin datos' }}
                     -
-                    {{$inscripcion->anio_finalizacion ? $inscripcion->anio_finalizacion : 'Presente'}}
+                    {{ $inscripcion->anio_finalizacion ? $inscripcion->anio_finalizacion : 'Presente' }}
                 </td>
-
                 <td class="flex just-center">
-                    <div>
-                        <a href="{{route('admin.inscriptos.edit', ['inscripto' => $inscripcion->id])}}">
-                            <button class="btn_blue">
-                                <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                Modificar
-                            </button>
+                    <div style="display: flex; justify-content: center;">
+                        <a href="{{ route('admin.inscriptos.edit', ['inscripto' => $inscripcion->id]) }}">
+                            <button class="btn_blue"><i class="ti ti-file-info"
+                                    style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                         </a>
-                    </div>
-                    <form id="form-eliminar-{{ $inscripcion->id }}" action="{{ route('admin.inscriptos.destroy', $inscripcion) }}"
-                        method="POST" style="display: inline;">
+                        {{-- Boton eliminar 
+                        @if (!$config['modo_seguro'])
+                        <div>
+                            <form method="POST" class="form-eliminar"
+                                action="{{ route('admin.inscriptos.destroy', ['inscripto' => $inscripcion->id]) }}"
+                        style="margin-left: 10px;">
                         @csrf
-                        @method('DELETE')
-                        <button type="button"
-                            onclick="openGeneralModal('form-eliminar-{{ $inscripcion->id }}', '¿Estás seguro de que querés eliminar al inscripto: {{ strtoupper($inscripcion->apellido) }} {{ strtoupper($inscripcion->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                        @method('delete')
+                        <button class="btn_icon-danger" style="background-color: red"
+                            onclick="openGeneralModal('form-eliminar-{{ $inscripcion->id }}', '¿Estás seguro de que querés eliminar al inscripto: {{ strtoupper($inscripcion->alumno->apellido) }} {{ strtoupper($inscripcion->alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                             class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
                             <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                         </button>
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
+                        </form>
+                    </div>
+                    @endif
+                    --}}
+</div>
+</td>
+
+</tr>
+@endforeach
+</tbody>
 
 
 
-    </table>
+</table>
 </div>
 
 

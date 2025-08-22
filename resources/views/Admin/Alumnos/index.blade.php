@@ -26,12 +26,7 @@
         </a>
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.alumnos.index', $filters, [
-            'dropdowns' => [
-                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
-                $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
-                $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
-                $form->select('filter_titulo', 'Titulo Secundario:', 'label-input-y-100', $filters, ['Todos', 'No Entregado', 'Constancia de título en trámite', 'Constancia ultimo año del nivel secundario', 'Titulo Secundario'])
-            ],
+            'dropdowns' => [$carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]), $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()), $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])],
             'fields' => [
                 'alumno' => 'Alumno',
                 'dni' => 'Dni',
@@ -83,21 +78,26 @@
                     <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                 </td>
                 <td class="flex just-center">
-                    <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }}">
-                        <button class="btn_blue"><i class="ti ti-file-info"
-                                style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
-                    </a>
-                    <form id="form-eliminar-{{ $alumno->id }}"
-                        action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST"
-                        style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="button"
-                            onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}', '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido)}} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                            class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                        </button>
-                    </form>
+                    <div style="display: flex; justify-content: center;">
+                        <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }}">
+                            <button class="btn_blue"><i class="ti ti-file-info"
+                                    style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
+                        </a>
+                        @if (!$config['modo_seguro'])
+                        <div>
+                            <form method="POST" class="form-eliminar"
+                                action="{{ route('admin.alumnos.destroy', ['alumno' => $alumno->id]) }}"
+                                style="margin-left: 10px;">
+                                @csrf
+                                @method('delete')
+                                <button class="btn_icon-danger" style="background-color: red"
+                                    onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}', '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido)}} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                            </form>
+                        </div>
+                        @endif
+                    </div>
                 </td>
             </tr>
             @endforeach

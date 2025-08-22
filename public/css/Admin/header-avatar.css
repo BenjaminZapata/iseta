@@ -23,8 +23,7 @@
  background-color: #f1f1f1;
 }
 
-#user-menu {
- display: none;
+.header-dropdown-avatar {
  position: absolute;
  right: 0;
  top: 50px;
@@ -33,6 +32,29 @@
  border-radius: 5px;
  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
  z-index: 100;
- text-transform: none;
  width: 290px;
+ text-transform: none;
+ display: none;
+}
+
+.header-dropdown-bell {
+ position: absolute;
+ right: 0;
+ top: 40px;
+ background-color: white;
+ border: 1px solid #ccc;
+ border-radius: 5px;
+ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+ z-index: 100;
+ width: 290px;
+ text-transform: none;
+ display: none;
+}
+
+
+.campana {
+ font-size: 1.4rem;
+ color: #fff;
+ cursor: pointer;
+ transition: color 0.3s ease;
 }
