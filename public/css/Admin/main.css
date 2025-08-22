@@ -838,8 +838,8 @@ ul .campo_info {
   padding-bottom: 16px;
   display: flex;
   gap: 12px;
-  justify-content: right;
-  align-items: right;
+  justify-content: end;
+  align-items: end;
 }
 
 .boton-eliminar {
