@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class Notificaciones extends Component
@@ -16,15 +15,30 @@ class Notificaciones extends Component
     }
 
     public function fetchNotificaciones()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if ($user) {
-        $this->notificaciones = $user->notifications()->latest()->take(20)->get();
-    } else {
-        $this->notificaciones = collect(); // Lista vacía si no hay usuario
+        if ($user) {
+            $this->notificaciones = $user->notifications()->latest()->take(20)->get();
+        } else {
+            $this->notificaciones = collect(); // Lista vacía si no hay usuario
+        }
     }
-}
+
+    public function marcarComoLeida($id)
+    {
+        $user = Auth::user();
+
+        if ($user) {
+            $notificacion = $user->notifications()->find($id);
+
+            if ($notificacion && !$notificacion->read_at) {
+                $notificacion->markAsRead();
+            }
+
+            $this->fetchNotificaciones();
+        }
+    }
 
     public function borrarNotificacion($id)
     {
