@@ -2,51 +2,52 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\BaseController;
 use App\Http\Requests\CrearAsignaturaRequest;
 use App\Http\Requests\EditarAsignaturaRequest;
 use App\Models\Asignatura;
 use App\Models\Carrera;
+use App\Repositories\Admin\AsignaturaRepository;
+use App\Repositories\Admin\CarreraRepository;
 use App\Models\Configuracion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class AsignaturasCrudController extends Controller
+class AsignaturasCrudController extends BaseController
 {
+   public $asignaturasRepo;
 
-    function __construct()
+   public $mensajes = ['mensaje' => [], 'error' => [], 'aviso' => []];
+
+    function __construct(AsignaturaRepository $asignaturasRepo)
     {
         $this->middleware('auth:admin');
+        $this->asignaturasRepo = $asignaturasRepo;
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $asignaturas = [];
-        $filtro = "";
-        $porPagina = Configuracion::get('filas_por_tabla', true);
+      public function index(Request $request)
+{
+    // Definimos los filtros que vienen del request
+    $filters = [
+        'nombre' => $request->input('nombre', null),
+        'filter_anio' => $request->input('filter_anio', null),
+        'tipo_modulo' => $request->input('tipo_modulo', null),
+        'filter_carga_horaria' => $request->input('filter_carga_horaria', null),
+        'filter_carrera_id' => $request->input('filter_carrera_id', 0),
+        'filter_asignatura_id' => $request->input('filter_asignatura_id', 0),
+    ];
 
+    // Pasamos los filtros al repositorio
+    $this->data['asignaturas'] = $this->asignaturasRepo->filter($filters,15);
 
-        if ($request->has('filtro')) {
-            $filtro = $request->filtro;
+    // Pasamos los filtros actuales a la vista para mantener la selección
+    $this->data['filters'] = $filters;
 
-            if (strpos($filtro, ':')) {
-                $arr = explode(':', $filtro);
-                $campo = $arr[0];
-                $keyword = $arr[1];
-                $asignaturas = Asignatura::where($campo, 'LIKE', '%' . $keyword . '%')->paginate($porPagina);
-            } else {
-
-                $asignaturas = Asignatura::where('nombre', 'LIKE', '%' . $filtro . '%')
-                    ->paginate($porPagina);
-            }
-        } else {
-            $asignaturas = Asignatura::select('*')->with('carrera')->paginate($porPagina);
-        }
-        return view('Admin.Asignaturas.index', ['asignaturas' => $asignaturas, 'filtro' => $filtro]);
-    }
+    return view('Admin.Asignaturas.index', $this->data);
+}
 
 
 
@@ -109,11 +110,13 @@ class AsignaturasCrudController extends Controller
     {
         try {
             $asignatura->delete();
-            return redirect()->route('admin.alumnos.index')
-                ->with('mensaje', 'Se ha eliminado el alumno');
+            return redirect()->route('admin.asignaturas.index')
+                ->with('mensaje', 'Se ha eliminado la asignatura');
         } catch (\Exception $e) {
-            return redirect()->route('admin.alumnos.index')
-                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+            return redirect()->route('admin.asignaturas.index')
+                ->with('error', 'No se pudo eliminar la asignatura. Error: ' . $e->getMessage());
         }
     }
+
+    
 }

@@ -40,42 +40,56 @@ use App\Http\Controllers\Admin\AsignaturaController;
 Route::redirect('/admin', '/admin/login');
 
 Route::middleware(['web'])->prefix('admin')->group(function () {
-    Route::get('alumnos/verificar/{alumno}', [AlumnoCrudController::class, 'verificar'])->name('admin.alumnos.verificar')->middleware('auth:admin');
 
-    // LOGIN
+    // -----------------------------
+    // LOGIN / LOGOUT
+    // -----------------------------
     Route::get('login', [AdminAuthController::class, 'loginView'])->name('admin.login');
     Route::post('login', [AdminAuthController::class, 'login'])->name('admin.login.post');
-
     Route::get('logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
 
+    // -----------------------------
+    // ALUMNOS
+    // -----------------------------
+    Route::get('alumnos/verificar/{alumno}', [AlumnoCrudController::class, 'verificar'])
+        ->name('admin.alumnos.verificar')->middleware('auth:admin');
 
-    // ACTAS VOLANTES
-    Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('admin.mesas.acta');
-    Route::get('/mesas/acta-volante-prom/{mesa}', [AdminPdfController::class, 'actaVolantePromocion'])->name('admin.mesas.actaprom');
-    Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('admin.mesas.actalibre');
+    Route::resource('alumnos', AlumnoCrudController::class, ['as' => 'admin'])
+        ->middleware('auth:admin')
+        ->missing(function () {
+            return redirect()->route('admin.alumnos.index')->with('aviso', 'El alumno no existe o ha sido eliminado');
+        })->except('show');
 
-    // CERTIFICADOS
+    Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
+        ->name('admin.alumnos.analitico.pdf');
+
     Route::get('/alumnos/regular/{alumno}', [AdminPdfController::class, 'constanciaRegular'])
         ->name('admin.alumnos.regular');
 
-    // RESOURCES
-    Route::resource('alumnos', AlumnoCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->missing(function () {
-        return redirect()->route('admin.alumnos.index')->with('aviso', 'El alumno no existe o ha sido eliminado');
-    })->except('show');
+    Route::get('matricular/{alumno}', [AdminMatriculacionController::class, 'rematriculacion_vista'])
+        ->name('admin.alumno.rematricular');
+    Route::post('matricular/{alumno}/{carrera}', [AdminMatriculacionController::class, 'rematriculacion'])
+        ->name('admin.alumno.matricular.post');
 
+    // -----------------------------
+    // PRECEPTOR
+    // -----------------------------
     Route::middleware(['auth:admin'])->group(function () {
         Route::get('/preceptor/alumnos/index', [AlumnoPreceptorController::class, 'index'])
             ->name('preceptor.alumnos.index');
     });
 
+    // -----------------------------
+    // EGRESADOS
+    // -----------------------------
+    Route::resource('inscriptos', EgresadosAdminController::class, ['as' => 'admin'])
+        ->missing(function () {
+            return redirect()->route('admin.inscriptos.index')->with('aviso', 'La inscripcion no existe o ha sido eliminada');
+        })->except('show');
 
-    Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
-        ->name('admin.alumnos.analitico.pdf');
-
-    Route::resource('inscriptos', EgresadosAdminController::class, ['as' => 'admin'])->missing(function () {
-        return redirect()->route('admin.inscriptos.index')->with('aviso', 'La inscripcion no existe o ha sido eliminada');
-    })->except('show');
-
+    // -----------------------------
+    // PROFESORES
+    // -----------------------------
     Route::resource('profesores', ProfesoresCrudController::class, [
         'as' => 'admin',
         'parameters' => ['profesores' => 'profesor']
@@ -83,72 +97,127 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         return redirect()->route('admin.profesores.index')->with('aviso', 'El profesor no existe o ha sido eliminado');
     });
 
-    Route::resource('carreras', CarrerasCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->missing(function () {
-        return redirect()->route('admin.carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
-    })->except('show');
+    // -----------------------------
+    // CARRERAS
+    // -----------------------------
+    Route::resource('carreras', CarrerasCrudController::class, ['as' => 'admin'])
+        ->middleware('auth:admin')
+        ->missing(function () {
+            return redirect()->route('admin.carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
+        })->except('show');
 
     Route::post('carreras/add_asignatura', [CarrerasCrudController::class, 'addAsignatura'])
         ->name('admin.carreras.addAsignatura');
     Route::get('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
         ->name('admin.carreras.addAsignaturaView');
 
-    Route::get('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignaturaView'])->name('admin.carreras.createAsignaturaView');
-    Route::post('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignatura'])->name('admin.carreras.createAsignatura');
+    Route::get('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignaturaView'])
+        ->name('admin.carreras.createAsignaturaView');
+    Route::post('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignatura'])
+        ->name('admin.carreras.createAsignatura');
 
+    Route::delete('carreras/{carrera}', [CarrerasCrudController::class, 'destroy'])->name('admin.carreras.destroy');
+    Route::post('carreras/{carrera}/desactivar', [CarrerasCrudController::class, 'desactivar'])->name('admin.carreras.desactivar');
+    Route::post('carreras/{carrera}/reactivar', [CarrerasCrudController::class, 'reactivar'])->name('admin.carreras.reactivar');
 
+    Route::get('carreras/resolucion/{carrera}', function (Request $request, Carrera $carrera) {
+        return Storage::download($carrera->resolucion_archivo);
+    })->name('admin.carreras.resolucion');
 
-    Route::resource('asignaturas', AsignaturasCrudController::class, ['as' => 'admin'])->missing(function () {
-        return redirect()->route('admin.asignaturas.index')->with('aviso', 'La asignatura no existe o ha sido eliminada');
-    })->except('show');
+    Route::get('carreras/resolucion-delete/{carrera}', function (Request $request, Carrera $carrera) {
+        Storage::delete($carrera->resolucion_archivo);
+        $carrera->resolucion_archivo = '';
+        $carrera->save();
+        return redirect()->back();
+    })->name('admin.carreras.resolucion.borrar');
 
-    Route::get('cursadas', [CursadasAdminController::class, 'index'])
-        ->name('admin.cursadas.index');
-    Route::get('cursadas/{cursada}/edit', [CursadasAdminController::class, 'edit'])
-        ->name('admin.cursadas.edit');
-    Route::put('cursadas/{cursada}/edit', [CursadasAdminController::class, 'update'])
-        ->name('admin.cursadas.update');
-    Route::delete('cursadas/{cursada}', [CursadasAdminController::class, 'delete'])->name('admin.cursadas.destroy');
+    // -----------------------------
+    // ASIGNATURAS
+    // -----------------------------
+    Route::resource('asignaturas', AsignaturasCrudController::class, ['as' => 'admin'])
+        ->missing(function () {
+            return redirect()->route('admin.asignaturas.index')->with('aviso', 'La asignatura no existe o ha sido eliminada');
+        })->except('show');
+
+    Route::get('/asignaturas', [AsignaturasCrudController::class, 'index'])->name('admin.asignaturas.index');
+    Route::get('/asignaturas/create', [AsignaturasCrudController::class, 'create'])->name('admin.asignaturas.create');
+    Route::get('/asignaturas/{asignatura}/edit', [AsignaturasCrudController::class, 'edit'])->name('admin.asignaturas.edit');
+    Route::post('/asignaturas', [AsignaturasCrudController::class, 'store'])->name('admin.asignaturas.store');
+    Route::put('/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'update'])->name('admin.asignaturas.update');
+    Route::delete('/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'destroy'])->name('admin.asignaturas.destroy');
+
+    // -----------------------------
+    // CURSADAS
+    // -----------------------------
+    Route::get('cursadas', [CursadasAdminController::class, 'index'])->name('admin.cursadas.index');
     Route::get('cursadas/create', [CursadasAdminController::class, 'create'])->name('admin.cursadas.create');
     Route::post('cursadas/create', [CursadasAdminController::class, 'store'])->name('admin.cursadas.store');
+    Route::get('cursadas/{cursada}/edit', [CursadasAdminController::class, 'edit'])->name('admin.cursadas.edit');
+    Route::put('cursadas/{cursada}/edit', [CursadasAdminController::class, 'update'])->name('admin.cursadas.update');
+    Route::delete('cursadas/{cursada}', [CursadasAdminController::class, 'delete'])->name('admin.cursadas.destroy');
 
+    Route::get('cursadas/{asignatura}', [AdminCursadasLotes::class, 'vista'])->name('admin.cursadas.masivo');
+    Route::post('masivo/cursadas', [AdminCursadasLotes::class, 'cargar'])->name('admin.cursadas.masivo.post');
 
+    // -----------------------------
+    // MESAS / EXAMENES
+    // -----------------------------
     Route::resource('mesas', MesasCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->except('show');
-    Route::resource('admins', AdminsCrudController::class, ['as' => 'admin'])->except('show');
+
+    Route::get('mesas-dual/{carrera}/{asignatura}', [AdminMesasLotes::class, 'vista'])->name('admin.mesas.dual');
+    Route::post('mesas-dual/{carrera}/{asignatura}', [AdminMesasLotes::class, 'store'])->name('admin.mesas.dualpost');
+
+    Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('admin.mesas.acta');
+    Route::get('/mesas/acta-volante-prom/{mesa}', [AdminPdfController::class, 'actaVolantePromocion'])->name('admin.mesas.actaprom');
+    Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('admin.mesas.actalibre');
 
     Route::resource('examenes', ExamenesCrudController::class, [
         'as' => 'admin',
         'parameters' => ['examenes' => 'examen']
     ])->only('store', 'edit', 'update', 'destroy');
-
     Route::post('examenes/{examen}/nota', [ExamenesCrudController::class, 'modificarNota'])->name('admin.examenes.nota');
 
+    // -----------------------------
+    // ADMINS
+    // -----------------------------
+    Route::resource('admins', AdminsCrudController::class, ['as' => 'admin'])->except('show');
 
+    // -----------------------------
+    // CONFIGURACION
+    // -----------------------------
     Route::get('config', [ConfigController::class, 'index'])->name('admin.config.index');
     Route::post('config', [ConfigController::class, 'setear'])->name('admin.config.set');
     Route::post('config/one', [ConfigController::class, 'setOnly'])->name('admin.config.setone');
     Route::get('config/modoseguro', [ConfigController::class, 'modoSeguro'])->name('admin.config.modoseguro');
 
+    // -----------------------------
+    // CORRELATIVAS
+    // -----------------------------
     Route::post('correlativa/{asignatura}', [AdminCorrelativasController::class, 'agregar'])->name('correlativa.agregar');
-
     Route::delete('correlativa/{asignatura}', [AdminCorrelativasController::class, 'eliminar'])->name('correlativa.eliminar');
 
-
+    // -----------------------------
+    // DIAS HABILES
+    // -----------------------------
     Route::get('dias-habiles', [AdminDiasHabilesController::class, 'index'])->name('admin.habiles.index');
     Route::post('dias-habiles', [AdminDiasHabilesController::class, 'store'])->name('admin.habiles.store');
     Route::delete('dias-habiles/{habil}', [AdminDiasHabilesController::class, 'destroy'])->name('admin.habiles.destroy');
 
-    Route::get('matricular/{alumno}', [AdminMatriculacionController::class, 'rematriculacion_vista'])->name('admin.alumno.rematricular');
-    Route::post('matricular/{alumno}/{carrera}', [AdminMatriculacionController::class, 'rematriculacion'])->name('admin.alumno.matricular.post');
-
+    // -----------------------------
+    // EXPORTS
+    // -----------------------------
     Route::get('cursantes/carrera/{carrera}', [AdminExportController::class, 'cursadasCarrera'])->name('excel.cursadas.carrera');
-
     Route::get('cursantes/{asignatura}', [AdminExportController::class, 'cursadasAsignatura'])->name('excel.cursadas.asig');
 
+    // -----------------------------
+    // SEGURIDAD
+    // -----------------------------
     Route::get('seguridad', [AdminSeguridadController::class, 'vista'])->name('admin.seguridad.index');
-
     Route::post('seguridad', [AdminSeguridadController::class, 'editar'])->name('admin.seguridad.update');
 
-
+    // -----------------------------
+    // NORMALIZACION DE DATOS
+    // -----------------------------
     Route::get('normalizar', function () {
         foreach (Alumno::all() as $alumno) {
             $alumno->nombre = TextFormatService::ucwords($alumno->nombre);
@@ -185,46 +254,9 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         return redirect()->back()->with('mensaje', 'Se han normalizado los datos');
     });
 
-
-
-    Route::get('mesas-dual/{carrera}/{asignatura}', [AdminMesasLotes::class, 'vista'])->name('admin.mesas.dual');
-
-    Route::post('mesas-dual/{carrera}/{asignatura}', [AdminMesasLotes::class, 'store'])->name('admin.mesas.dualpost');
-
-
-
-    Route::get('carreras/resolucion/{carrera}', function (Request $request, Carrera $carrera) {
-        return Storage::download($carrera->resolucion_archivo);
-    })->name('admin.carreras.resolucion');
-
-    Route::get('carreras/resolucion-delete/{carrera}', function (Request $request, Carrera $carrera) {
-        Storage::delete($carrera->resolucion_archivo);
-        $carrera->resolucion_archivo = '';
-        $carrera->save();
-        return redirect()->back();
-    })->name('admin.carreras.resolucion.borrar');
-
-
-
-    // /////////////////////////////////////////////
-    Route::get('cursadas/{asignatura}', [AdminCursadasLotes::class, 'vista'])->name('admin.cursadas.masivo');
-
-    Route::post('masivo/cursadas', [AdminCursadasLotes::class, 'cargar'])->name('admin.cursadas.masivo.post');
-
-
+    // -----------------------------
+    // COPIA DE SEGURIDAD / RESTAURACION
+    // -----------------------------
     Route::get('copia', [AdminCopiaDB::class, 'crearCopia']);
     Route::get('restaurar', [AdminCopiaDB::class, 'restaurarCopia']);
-
-
-    Route::get('/admin/asignaturas', [AsignaturasCrudController::class, 'index'])->name('admin.asignaturas.index');
-    Route::get('/admin/asignaturas/create', [AsignaturasCrudController::class, 'create'])->name('admin.asignaturas.create');
-    Route::get('/admin/asignaturas/{asignatura}/edit', [AsignaturasCrudController::class, 'edit'])->name('admin.asignaturas.edit');
-    Route::post('/admin/asignaturas', [AsignaturasCrudController::class, 'store'])->name('admin.asignaturas.store');
-    Route::put('/admin/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'update'])->name('admin.asignaturas.update');
-    Route::delete('/admin/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'destroy'])->name('admin.asignaturas.destroy');
-
-    Route::delete('carreras/{carrera}', [CarrerasCrudController::class, 'destroy'])->name('admin.carreras.destroy');
-    Route::post('carreras/{carrera}/desactivar', [CarrerasCrudController::class, 'desactivar'])->name('admin.carreras.desactivar');
-    Route::post('carreras/{carrera}/reactivar', [CarrerasCrudController::class, 'reactivar'])->name('admin.carreras.reactivar');
-
 });

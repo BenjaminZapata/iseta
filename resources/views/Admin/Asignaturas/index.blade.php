@@ -14,28 +14,29 @@
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
 
     {{-- BOTÓN CREAR Y FILTROS --}}
-    <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
+    <div class="perfil__header-alt">
         <a href="{{ route('admin.asignaturas.create') }}">
             <button class="btn_blue">
-                <i class="ti ti-circle-plus"></i> Agregar asignatura
+                <i class="ti ti-circle-plus"></i>Agregar asignatura
             </button>
         </a>
-
-        <div class="flex gap-4">
-            <form action="{{ route('admin.asignaturas.index') }}" method="GET" class="flex items-center gap-2">
-                <input name="filtro" type="text" placeholder="Buscar..." class="form-input">
-                <button type="submit" class="btn btn-primary">
-                    <i class="ti ti-filter"></i> Filtros
-                </button>
-            </form>
-
-            <a href="{{ route('admin.asignaturas.index') }}">
-                <button class="btn btn-primary">
-                    <i class="ti ti-filter-off"></i> Eliminar filtros
-                </button>
-            </a>
-        </div>
+        {{-- FILTROS --}}
+        <?= $filtergen->generate('admin.asignaturas.index', $filters, [
+            'dropdowns' => [
+                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
+                $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', $filters, ['Seleccione una asignatura'], ['id' => 'asignatura_select']),
+                $form->select('filter_anio', 'Año:', 'label-input-y-100', $filters, ['Todos', '1er Año', '2do Año', '3er Año', '4to Año', '5to Año']),
+                $form->select('filter_carga_horaria', 'Carga Horaria:', 'label-input-y-100', $filters, ['Cualquiera', 'Menos de 10 hs', '10 a 20 hs', 'Más de 20 hs']),
+            ],
+            'fields' => [
+                'nombre' => 'Nombre',
+                'carrera' => 'Carrera',
+                'anio' => 'Año',
+                'carga_horaria' => 'Carga Horaria',
+            ],
+        ]) ?>
     </div>
+        
 
     {{-- TABLA DE ASIGNATURAS --}}
     <table class="table__body">
