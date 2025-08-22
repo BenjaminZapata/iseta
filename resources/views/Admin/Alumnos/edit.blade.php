@@ -17,10 +17,26 @@
         ],
         'Dirección' => [$form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno), $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', $alumno), $form->text('calle', 'Calle:', 'label-input-y-75', $alumno), $form->text('casa_numero', 'Altura:', 'label-input-y-75', $alumno), $form->text('dpto', 'Departamento:', 'label-input-y-75', $alumno), $form->text('piso', 'Piso:', 'label-input-y-75', $alumno)],
         'Contacto' => [$form->text('email', 'Email:', 'label-input-y-75', $alumno), $form->text('telefono1', 'Telefono 1:', 'label-input-y-75', $alumno), $form->text('telefono2', 'Telefono 2:', 'label-input-y-75', $alumno), $form->text('telefono3', 'Telefono 3:', 'label-input-y-75', $alumno)],
-        'Academico' => [$form->text('titulo_anterior', 'Titulo anterior:', 'label-input-y-75', $alumno), $form->text('becas', 'Becas:', 'label-input-y-75', $alumno), $form->text('nombre_institucion_secundario', 'Secundaria:', 'label-input-y-75', $alumno), $form->select('titulo_secundario', 'Titulo secundario:', 'label-input-y-75', $alumno, ['No entregado', 'Fotocopia del título original secundario', 'Certificado de constancia de título en trámite', 'Constancia de alumno del último año del nivel secundario'])],
+        'Academico' => [$form->text('titulo_anterior', 'Titulo anterior:', 'label-input-y-75', $alumno), $form->text('becas', 'Becas:', 'label-input-y-75', $alumno), $form->text('nombre_institucion_secundario', 'Secundaria:', 'label-input-y-75', $alumno), $form->select('titulo_secundario', 'Titulo secundario:', 'label-input-y-75', $alumno, ['vacio', 'Fotocopia del título original secundario', 'Certificado de constancia de título en trámite', 'Constancia de alumno del último año del nivel secundario', 'No entregado'])],
         'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)],
     ]) ?>
 
+    <div class="boton-eliminar">
+        @if (!$config['modo_seguro'])
+        <div>
+            <form method="POST" class="form-eliminar"
+                action="{{ route('admin.alumnos.destroy', ['alumno' => $alumno->id]) }}">
+                @csrf
+                @method('delete')
+                <button class="btn_red_outline"
+                    onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}', '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido)}} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                    class="btn_icon-danger" style="margin-left: 10px;">
+                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar alumno
+                </button>
+            </form>
+        </div>
+        @endif
+    </div>
 
     {{-- HEADER PARA VERIFICAR ALUMNO --}}
 
@@ -30,10 +46,12 @@
             <h2>Validar alumno</h2>
         </div>
         <div>
-            <p>Al hacer click en validar alumno se enviará un mail al alumno con su usuario y contraseña para
+            <p style="padding: 16px 27px 0 27px; font-weight: bold;">Al hacer click en validar alumno se enviará un
+                mail al alumno con
+                su usuario y contraseña para
                 ingresar
                 al
-                sistema. Si el alumno no está verificado, no podrá acceder al sistema. </p>
+                sistema. Si el alumno no está verificado, no podrá acceder al mismo. </p>
 
             <div class='botones-derecha'
                 style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
@@ -92,7 +110,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 </div>
 @php $carrera_index++; @endphp
@@ -193,6 +210,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 </div>
 </div>
