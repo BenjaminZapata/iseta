@@ -115,14 +115,7 @@
                             type="datetime-local" name="fecha2">
                     </div>
 
-                    <div class="botones-derecha"
-                        style="margin-right: 27px; padding-top: 20px; display: flex; gap: 12px; justify-content: flex-end;">
-                        <x-btn-cancelar />
-                        <button type="submit" class="btn_blue">
-                            <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            Crear
-                        </button>
-                    </div>
+
                 </form>
                 <?= $form->generate(route('admin.mesas.store'), 'post', []) ?>
             </div>
