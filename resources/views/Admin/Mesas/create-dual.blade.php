@@ -1,7 +1,7 @@
 @extends('Admin.template')
 
 @section('content')
-    <div>
+
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'CREAR MESA'])
             <div class="contenedor_mesa">
@@ -121,7 +121,6 @@
 
             </div>
         </div>
-    </div>
 
     <script src="{{ asset('js/obtener-materias.js') }}"></script>
     <script src="{{ asset('js/llamados.js') }}"></script>

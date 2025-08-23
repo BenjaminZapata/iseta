@@ -30,24 +30,33 @@ class AsignaturasCrudController extends BaseController
      */
       public function index(Request $request)
 {
-    // Definimos los filtros que vienen del request
-    $filters = [
-        'nombre' => $request->input('nombre', null),
-        'filter_anio' => $request->input('filter_anio', null),
-        'tipo_modulo' => $request->input('tipo_modulo', null),
-        'filter_carga_horaria' => $request->input('filter_carga_horaria', null),
-        'filter_carrera_id' => $request->input('filter_carrera_id', 0),
-        'filter_asignatura_id' => $request->input('filter_asignatura_id', 0),
-    ];
+    $filters = $request->all();
 
-    // Pasamos los filtros al repositorio
-    $this->data['asignaturas'] = $this->asignaturasRepo->filter($filters,15);
+    // Si hay carrera seleccionada, muestro solo sus asignaturas
+    $carreraId = $filters['filter_carrera_id'] ?? null;
 
-    // Pasamos los filtros actuales a la vista para mantener la selección
-    $this->data['filters'] = $filters;
+    if ($carreraId) {
+        $asignaturasList = App\Models\Asignatura::where('id_carrera', $carreraId)
+            ->orderBy('nombre')
+            ->get();
+    } else {
+        $asignaturasList = Asignatura::where('id_carrera', $carreraId)
+    ->orderBy('nombre')
+    ->get();
 
-    return view('Admin.Asignaturas.index', $this->data);
+    }
+
+    // Aplico filtros al repositorio
+$asignaturas = $this->asignaturasRepo->filter($filters);
+
+
+    return view('Admin.Asignaturas.index', [
+        'filters'         => $filters,
+        'asignaturas'     => $asignaturas,
+        'asignaturasList' => $asignaturasList,
+    ]);
 }
+
 
 
 

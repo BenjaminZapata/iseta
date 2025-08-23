@@ -80,12 +80,6 @@
     </table>
 </div>
 
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
   {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
     {{ $cursadas->appends(request()->query())->links('Componentes.pagination') }}

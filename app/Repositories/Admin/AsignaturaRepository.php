@@ -95,6 +95,12 @@ class AsignaturaRepository
 {
     $query = $this->model->query();
 
+    // 🔹 Si viene un ID de asignatura, devolver solo esa
+    if (!empty($filters['filter_asignatura_id']) && $filters['filter_asignatura_id'] != 0) {
+        return $query->where('id', $filters['filter_asignatura_id'])
+                     ->paginate($perPage);
+    }
+
     // Filtrar por nombre
     if (!empty($filters['nombre'])) {
         $query->where('nombre', 'like', '%' . $filters['nombre'] . '%');
@@ -115,13 +121,16 @@ class AsignaturaRepository
     if (!empty($filters['filter_carga_horaria']) && $filters['filter_carga_horaria'] !== 'Cualquiera') {
         switch ($filters['filter_carga_horaria']) {
             case 'Menos de 10 hs':
-                $query->where('carga_horaria', '<', 10);
+                $query->where('carga_horaria', '<', 10)
+                      ->orderBy('carga_horaria', 'desc');
                 break;
             case '10 a 20 hs':
-                $query->whereBetween('carga_horaria', [10, 20]);
+                $query->whereBetween('carga_horaria', [10, 20])
+                      ->orderBy('carga_horaria', 'desc');
                 break;
             case 'Más de 20 hs':
-                $query->where('carga_horaria', '>', 20);
+                $query->where('carga_horaria', '>', 20)
+                      ->orderBy('carga_horaria', 'desc');
                 break;
         }
     }
@@ -133,12 +142,8 @@ class AsignaturaRepository
         });
     }
 
-    // Filtrar por asignatura específica
-    if (!empty($filters['filter_asignatura_id']) && $filters['filter_asignatura_id'] != 0) {
-        $query->where('id', $filters['filter_asignatura_id']);
-    }
-
     return $query->orderBy('nombre')->paginate($perPage);
 }
+
 
 }

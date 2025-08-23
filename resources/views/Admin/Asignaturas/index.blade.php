@@ -24,9 +24,15 @@
         <?= $filtergen->generate('admin.asignaturas.index', $filters, [
             'dropdowns' => [
                 $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
-                $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', $filters, ['Seleccione una asignatura'], ['id' => 'asignatura_select']),
+                $form->select('filter_asignatura_id','Asignatura:', 'label-input-y-100',$filters,$asignaturasList->pluck('nombre', 'id')->prepend('Todas', '')),
                 $form->select('filter_anio', 'Año:', 'label-input-y-100', $filters, ['Todos', '1er Año', '2do Año', '3er Año', '4to Año', '5to Año']),
-                $form->select('filter_carga_horaria', 'Carga Horaria:', 'label-input-y-100', $filters, ['Cualquiera', 'Menos de 10 hs', '10 a 20 hs', 'Más de 20 hs']),
+               $form->select('filter_carga_horaria', 'Carga Horaria:', 'label-input-y-100', $filters, [
+    'Cualquiera' => 'Cualquiera',
+    'Menos de 10 hs' => 'Menos de 10 hs',
+    '10 a 20 hs' => '10 a 20 hs',
+    'Más de 20 hs' => 'Más de 20 hs',
+])
+
             ],
             'fields' => [
                 'nombre' => 'Nombre',
