@@ -31,34 +31,28 @@ class AsignaturasCrudController extends BaseController
       public function index(Request $request)
 {
     $filters = $request->all();
-
-    // Si hay carrera seleccionada, muestro solo sus asignaturas
     $carreraId = $filters['filter_carrera_id'] ?? null;
 
-    if ($carreraId) {
-        $asignaturasList = App\Models\Asignatura::where('id_carrera', $carreraId)
-            ->orderBy('nombre')
-            ->get();
+    // Asignaturas para el dropdown del select
+    if ($carreraId && $carreraId != 0) {
+        // Solo las asignaturas de esa carrera
+        $asignaturasList = Asignatura::whereHas('carrera', function($q) use ($carreraId) {
+            $q->where('id', $carreraId);
+        })->orderBy('nombre')->get();
     } else {
-        $asignaturasList = Asignatura::where('id_carrera', $carreraId)
-    ->orderBy('nombre')
-    ->get();
-
+        // Todas las asignaturas
+        $asignaturasList = Asignatura::orderBy('nombre')->get();
     }
 
-    // Aplico filtros al repositorio
-$asignaturas = $this->asignaturasRepo->filter($filters);
-
+    // Aplicar filtros al repositorio
+    $asignaturas = $this->asignaturasRepo->filter($filters);
 
     return view('Admin.Asignaturas.index', [
-        'filters'         => $filters,
-        'asignaturas'     => $asignaturas,
+        'filters' => $filters,
+        'asignaturas' => $asignaturas,
         'asignaturasList' => $asignaturasList,
     ]);
 }
-
-
-
 
     /**
      * Show the form for creating a new resource.
