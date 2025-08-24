@@ -1,4 +1,3 @@
-@vite('resources/css/app.css')
 <div class="header-avatar">
 
     <!-- IZQUIERDA: Título -->
@@ -14,7 +13,7 @@
 
         <!-- Notificaciones -->
         <div>
-            <livewire:notificaciones/>
+            <livewire:notificaciones />
         </div>
 
         <!-- Avatar con dropdown -->
@@ -28,7 +27,7 @@
             </div>
 
             <!-- Dropdown (oculto por defecto) -->
-            <div id="user-menu">
+            <div id="user-menu" class="header-dropdown-avatar">
                 <ul style="list-style: none; margin: 0; padding: 0;">
                     <li>
                         <a href="{{ route('admin.config.modoseguro') }}" class="header-avatar-lista">

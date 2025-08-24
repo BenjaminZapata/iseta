@@ -23,8 +23,7 @@
  background-color: #f1f1f1;
 }
 
-#user-menu {
- display: none;
+.header-dropdown-avatar {
  position: absolute;
  right: 0;
  top: 50px;
@@ -33,6 +32,142 @@
  border-radius: 5px;
  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
  z-index: 100;
- text-transform: none;
  width: 290px;
+ text-transform: none;
+ display: none;
+}
+
+.header-dropdown-bell {
+ position: absolute;
+ right: 0;
+ top: 40px;
+ background-color: white;
+ border: 1px solid #ccc;
+ border-radius: 5px;
+ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+ z-index: 100;
+ width: 290px;
+ text-transform: none;
+ display: none;
+ font-family: sans-serif;
+}
+
+
+/* Botón borrar todas */
+.notificaciones-header {
+ padding: 8px 12px;
+ border-bottom: 1px solid #ddd;
+ text-align: right;
+}
+
+.borrar-todas-btn {
+ background: none;
+ border: none;
+ color: #c0392b;
+ font-size: 0.85rem;
+ font-weight: bold;
+ cursor: pointer;
+}
+
+.borrar-todas-btn:hover {
+ text-decoration: underline;
+}
+
+/* Cada item de notificación */
+.notificacion-item {
+ padding: 10px 15px;
+ border-bottom: 1px solid #eee;
+ font-size: 0.85rem;
+ color: #333;
+ background-color: white;
+}
+
+.notificacion-item.unread {
+ font-weight: bold;
+ background-color: #f9f9f9;
+}
+
+/* Contenido y botón de cada notificación */
+.notificacion-contenido {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+}
+
+.notificacion-contenido a {
+ text-decoration: none;
+ color: inherit;
+ flex: 1;
+}
+
+.notificacion-contenido h3 {
+ font-size: 0.85rem;
+ margin: 0 0 4px 0;
+}
+
+.notificacion-contenido p {
+ font-size: 0.8rem;
+ color: #555;
+ margin: 0;
+}
+
+/* Botón borrar individual */
+.borrar-btn {
+ background: none;
+ border: none;
+ color: #c0392b;
+ font-size: 1rem;
+ margin-left: 10px;
+ cursor: pointer;
+}
+
+.borrar-btn:hover {
+ color: #e74c3c;
+}
+
+/* Texto cuando no hay notificaciones */
+.notificacion-vacia {
+ padding: 12px 15px;
+ text-align: center;
+ font-size: 0.9rem;
+ color: #666;
+ font-weight: bold;
+}
+
+/* Estilos del ícono de la campana */
+.campana {
+ font-size: 1.4rem;
+ color: #fff;
+ cursor: pointer;
+ transition: color 0.3s ease;
+}
+
+/* Posición del contador */
+.bell {
+ position: relative;
+ display: flex;
+ align-items: center;
+ gap: 0.4rem;
+ cursor: pointer;
+}
+
+.counter {
+ position: absolute;
+ top: -6px;
+ right: 16px;
+ background-color: red;
+ color: white;
+ border-radius: 50%;
+ width: 18px;
+ height: 18px;
+ font-size: 11px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-weight: bold;
+ z-index: 10;
+}
+
+.header-dropdown-bell .text-gray-800 {
+ color: #333 !important;
 }

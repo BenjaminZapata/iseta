@@ -6,7 +6,7 @@
 
 @if (Route::currentRouteName() === 'admin.alumnos.edit')
     <div class="dropdown" style="position: relative;">
-        <button class="btn_sky" onclick="toggleExportar()" type="button" style="color: black;">
+        <button class="btn_exportar" onclick="toggleExportar()" type="button">
             <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px;"></i>Exportar...
         </button>
         <div id="exportar-opciones"
