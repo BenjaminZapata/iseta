@@ -965,3 +965,58 @@ ul .campo_info {
   left: 0;
   right: 0;
 }
+
+/* BOTONES SIGUIENTE Y ANTERIOR */
+
+.boton-anterior,
+.boton-siguiente {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px;
+  /* Espaciado horizontal */
+  padding: 10px 20px;
+  /* Aumenta el espacio alrededor */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  background-color: #150a5c;
+  /* Color de fondo */
+  color: white;
+  cursor: pointer;
+}
+
+.boton-anterior button,
+.boton-siguiente button {
+  padding: 8px 12px;
+  background-color: #150a5c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  /* Bordes redondeados */
+  font-size: 1.1em;
+  /* Tamaño de texto más grande */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Espacio entre el icono y el texto */
+  cursor: pointer;
+}
+
+.boton-anterior span,
+.boton-siguiente span {
+  margin-left: 12px;
+  font-weight: bold;
+  color: white;
+}
+
+.boton-anterior:hover,
+.boton-siguiente:hover {
+  background-color: #0c0844;
+  /* Cambio de color al pasar el mouse */
+}
+
+.boton-anterior button i,
+.boton-siguiente button i {
+  font-size: 1.4em;
+  /* Tamaño de los iconos ajustado */
+}
