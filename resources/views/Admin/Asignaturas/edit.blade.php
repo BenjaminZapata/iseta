@@ -1,130 +1,131 @@
 @extends('Admin.template')
 
 @section('content')
-    <div class="edit-form-container">
-        <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Asignatura</h2>
-            </div>
-            <div class="perfil__info">
-                <form method="post" action="{{ route('admin.asignaturas.update', ['asignatura' => $asignatura->id]) }}">
-                    @csrf
-                    @method('put')
+<div class="edit-form-container">
+    <div class="perfil_one br">
+        @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
+        <div class="perfil__header">
+            <h2>Asignatura</h2>
+        </div>
+        <div class="perfil__info">
+            <form method="post" action="{{ route('admin.asignaturas.update', ['asignatura' => $asignatura->id]) }}">
+                @csrf
+                @method('put')
 
-                    <div class="perfil_dataname">
-                        <label>Asignatura:</label>
-                        <input class="campo_info rounded" value="{{ $asignatura->nombre }}" name="nombre">
-                    </div>
-                    <div class="perfil_dataname">
-                        <label>Carrera:</label>
-                        <span class="campo_info2">{{ $asignatura->carrera->first()?->nombre }}</span>
-                    </div>
-                    <div class="perfil_dataname">
-                        <label>Tipo modulo:</label>
-                        <select class="campo_info rounded" name="tipo_modulo">
-                            <option @selected($asignatura->tipo_modulo == 1) value="1">Modulos</option>
-                            <option @selected($asignatura->tipo_modulo == 2) value="2">Horas</option>
-                        </select>
-                    </div>
-                    <div class="perfil_dataname">
-                        <label>Carga horaria:</label>
-                        <input class="campo_info rounded" value="{{ $asignatura->carga_horaria }}" name="carga_horaria">
-                    </div>
-                    <div class="perfil_dataname">
-                        <label>Año:</label>
-                        <input class="campo_info rounded" value="{{ $asignatura->anio }}" name="anio">
-                    </div>
-                    <div class="perfil_dataname">
-                        <label>Observaciones:</label>
-                        <input class="campo_info rounded" value="{{ $asignatura->observaciones }}" name="observaciones">
-                    </div>
-                    <input type="hidden" value="{{ url()->previous() }}" name="redirect">
+                <div class="perfil_dataname">
+                    <label>Asignatura:</label>
+                    <input class="campo_info rounded" value="{{ $asignatura->nombre }}" name="nombre">
+                </div>
+                <div class="perfil_dataname">
+                    <label>Carrera:</label>
+                    <span class="campo_info2">{{ $asignatura->carrera->first()?->nombre }}</span>
+                </div>
+                <div class="perfil_dataname">
+                    <label>Tipo modulo:</label>
+                    <select class="campo_info rounded" name="tipo_modulo">
+                        <option @selected($asignatura->tipo_modulo == 1) value="1">Modulos</option>
+                        <option @selected($asignatura->tipo_modulo == 2) value="2">Horas</option>
+                    </select>
+                </div>
+                <div class="perfil_dataname">
+                    <label>Carga horaria:</label>
+                    <input class="campo_info rounded" value="{{ $asignatura->carga_horaria }}" name="carga_horaria">
+                </div>
+                <div class="perfil_dataname">
+                    <label>Año:</label>
+                    <input class="campo_info rounded" value="{{ $asignatura->anio }}" name="anio">
+                </div>
+                <div class="perfil_dataname">
+                    <label>Observaciones:</label>
+                    <input class="campo_info rounded" value="{{ $asignatura->observaciones }}" name="observaciones">
+                </div>
+                <input type="hidden" value="{{ url()->previous() }}" name="redirect">
 
-                    <div class="botones-derecha">
-                        <x-btn-cancelar />
-                        <button type="submit" class="btn_blue">
-                            <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            Actualizar
-                        </button>
+                <div class="botones-derecha">
+                    <x-btn-cancelar />
+                    <button type="submit" class="btn_blue">
+                        <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
+                        Actualizar
+                    </button>
+                </div>
+                @if (!$config['modo_seguro'])
+                <div class="botones-derecha">
+                    <div>
+                        <form method="POST" class="form-eliminar"
+                            action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
+                            @csrf
+                            @method('delete')
+                            <button class="btn-desligar"><i class="ti ti-unlink"
+                                    style="font-size: 1.3em; margin-right: 8px;"></i>Desligar
+                                asignatura</button>
+                        </form>
                     </div>
-                    @if (!$config['modo_seguro'])
-                        <div class="botones-derecha">
-                            <div>
-                                <form method="POST" class="form-eliminar"
-                                    action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn-desligar"><i class="ti ti-unlink"
-                                            style="font-size: 1.3em; margin-right: 8px;"></i>Desligar
-                                        asignatura</button>
-                                </form>
-                            </div>
-                            <div>
-                                <form method="POST" class="form-eliminar"
-                                    action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
-                                    @csrf
-                                    @method('delete')
-                                    <button class="btn_red_outline"><i class="ti ti-trash"
-                                            style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
-                                        asignatura</button>
-                                </form>
-                            </div>
+                    <div>
+                        <form method="POST" class="form-eliminar"
+                            action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
+                            @csrf
+                            @method('delete')
+                            <button class="btn_red_outline"><i class="ti ti-trash"
+                                    style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
+                                asignatura</button>
+                        </form>
+                    </div>
 
-                        </div>
-                    @endif
-                </form>
-            </div>
+                </div>
+                @endif
+            </form>
+        </div>
+    </div>
+
+
+    {{-- -------------------------- --}}
+
+    @if ($asignatura->anio > 0)
+    <div class="perfil_one br">
+
+        <div class="perfil__header">
+            <h2>Correlativas</h2>
         </div>
 
+        <div class="matricular">
 
-        {{-- -------------------------- --}}
+            @foreach ($asignatura->correlativas as $correlativa)
+            <div class="flex items-center">
+                <li>{{ $correlativa->asignatura->nombre }}</li>
+            </div>
+            @if (!$config['modo_seguro'])
+            <form method="post" class="form-eliminar"
+                action="{{ route('correlativa.eliminar', ['asignatura' => $asignatura->id, 'asignatura_correlativa' => $correlativa->asignatura->id]) }}">
+                <div class="flex">
+                    @csrf
+                    @method('delete')
 
-        @if ($asignatura->anio > 0)
-            <div class="perfil_one br">
-
-                <div class="perfil__header">
-                    <h2>Correlativas</h2>
+                    <div class="flex items-center m-1 mx-4"><button class="btn_red"><i
+                                class="ti ti-backspace"></i>Quitar</button></div>
                 </div>
+            </form>
+            @endif
+            @endforeach
+            <br><br>
+            <form method="post" action="{{ route('correlativa.agregar', ['asignatura' => $asignatura->id]) }}">
+                @csrf
 
-                <div class="matricular">
-
-                    @foreach ($asignatura->correlativas as $correlativa)
-                        <div class="flex items-center">
-                            <li>{{ $correlativa->asignatura->nombre }}</li>
-                        </div>
-                        @if (!$config['modo_seguro'])
-                            <form method="post" class="form-eliminar"
-                                action="{{ route('correlativa.eliminar', ['asignatura' => $asignatura->id, 'asignatura_correlativa' => $correlativa->asignatura->id]) }}">
-                                <div class="flex">
-                                    @csrf
-                                    @method('delete')
-
-                                    <div class="flex items-center m-1 mx-4"><button class="btn_red"><i
-                                                class="ti ti-backspace"></i>Quitar</button></div>
-                                </div>
-                            </form>
-                        @endif
-                    @endforeach
-                    <br><br>
-                    <form method="post" action="{{ route('correlativa.agregar', ['asignatura' => $asignatura->id]) }}">
-                        @csrf
-
-                        <div class="perfil_dataname1">
-                            <label>Materia:</label>
-                            <select class="campo_info rounded" id="asignatura_select" name="id_asignatura"
-                                style="text-transform: uppercase;>
-                                @foreach ($asignatura->carrera->first()->asignaturas->where('anio', '<=', $asignatura->anio) as $asignatura_carrera)
-@if ($asignatura_carrera->id != $asignatura->id)
-<option value="{{ $asignatura_carrera->id }}">{{ $asignatura_carrera->nombre }}
-                                </option>
-        @endif
-        @endforeach
-        </select>
-    </div>
-    <div class="upd"><a href=""><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar</button></a>
-    </div>
-    </form>
-    </div>
+                <div class="perfil_dataname1">
+                    <label>Materia:</label>
+                    <select class="campo_info rounded" id="asignatura_select" name="id_asignatura"
+                        style="text-transform: uppercase;">
+                        @foreach ($asignatura->carrera->first()->asignaturas->where('anio', '<=', $asignatura->anio) as $asignatura_carrera)
+                            @if ($asignatura_carrera->id != $asignatura->id)
+                            <option value="{{ $asignatura_carrera->id }}">{{ $asignatura_carrera->nombre }}
+                            </option>
+                            @endif
+                            @endforeach
+                    </select>
+                </div>
+                <div class="upd"><a href=""><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar</button></a>
+                </div>
+            </form>
+        </div>
     </div>
     @endif
 
@@ -147,31 +148,31 @@
             <tbody>
 
                 @foreach ($asignatura->cursadas as $cursada)
-                    <tr>
-                        <td> {{ $cursada->alumno->apellidoNombre() }}</td>
-                        <td> {{ $cursada->alumno->dni }} </td>
-                        <td> {{ $cursada->condicionString() }} </td>
-                        <td>
-                            <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}"><button
-                                    class="btn_blue"><i class="ti ti-edit"></i>Editar</button></a>
-                        </td>
-                    </tr>
+                <tr>
+                    <td> {{ $cursada->alumno->apellidoNombre() }}</td>
+                    <td> {{ $cursada->alumno->dni }} </td>
+                    <td> {{ $cursada->condicionString() }} </td>
+                    <td>
+                        <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}"><button
+                                class="btn_blue"><i class="ti ti-edit"></i>Editar</button></a>
+                    </td>
+                </tr>
                 @endforeach
 
 
             </tbody>
         </table>
     </div>
-    </div>
+</div>
 
 
 
 
-    </div>
+</div>
 
 
 
-    {{--
+{{--
     <script src="{{asset('js/obtener-materias.js')}}"></script> --}}
 
 @endsection
