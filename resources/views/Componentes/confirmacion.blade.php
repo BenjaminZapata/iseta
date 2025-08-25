@@ -57,21 +57,56 @@
 
 <script>
     let generalForm = null;
+    let toggleCheckbox = null;
+    let estadoTexto = null;
 
+    // 🔹 Abrir modal con mensaje
     function openGeneralModal(formId, message = '¿Estás seguro de que querés realizar esta acción?') {
         generalForm = document.getElementById(formId);
         document.getElementById('modal-message').innerText = message;
         document.getElementById('general-confirm-modal').style.display = 'flex';
     }
 
-    function closeGeneralModal() {
-        document.getElementById('general-confirm-modal').style.display = 'none';
-        generalForm = null;
+    // 🔹 Acción al usar el switch de carrera
+    function onToggleCarrera(checkbox, carreraId) {
+        toggleCheckbox = checkbox;
+        estadoTexto = document.getElementById("estado-texto");
+
+        if (checkbox.checked) {
+            openGeneralModal(`form-reactivar-${carreraId}`, "¿Querés reactivar esta carrera?");
+        } else {
+            openGeneralModal(`form-desactivar-${carreraId}`, "¿Seguro que querés desactivar esta carrera?");
+        }
     }
 
+    // 🔹 Cancelar → volver al estado original
+    function closeGeneralModal() {
+        document.getElementById('general-confirm-modal').style.display = 'none';
+
+        // Si era un toggle, lo revierte
+        if (toggleCheckbox) {
+            toggleCheckbox.checked = !toggleCheckbox.checked;
+        }
+
+        generalForm = null;
+        toggleCheckbox = null;
+        estadoTexto = null;
+    }
+
+    // 🔹 Confirmar → enviar form y actualizar texto de estado si aplica
     function submitGeneralForm() {
         if (generalForm) {
             generalForm.submit();
+
+            if (toggleCheckbox && estadoTexto) {
+                if (toggleCheckbox.checked) {
+                    estadoTexto.textContent = "Activa";
+                    estadoTexto.style.color = "#4cd964";
+                } else {
+                    estadoTexto.textContent = "Inactiva";
+                    estadoTexto.style.color = "#dc2626";
+                }
+            }
         }
     }
 </script>
