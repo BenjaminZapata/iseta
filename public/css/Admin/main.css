@@ -1019,4 +1019,72 @@ ul .campo_info {
 .boton-siguiente button i {
   font-size: 1.4em;
   /* Tamaño de los iconos ajustado */
-}
+  /* Activar o desactivar carrera al hacer clic en el botón */
+
+  /* Toggle estilo iOS */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #dc2626;
+    /* rojo por defecto */
+    transition: .4s;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 10px;
+    font-size: 18px;
+    color: white;
+    font-weight: bold;
+  }
+
+  .slider:before {
+    content: "✖";
+    /* cruz por defecto */
+    position: relative;
+    z-index: 2;
+  }
+
+  input:checked+.slider {
+    background-color: #16a34a;
+    /* verde cuando activo */
+    justify-content: flex-start;
+    padding: 0 10px;
+  }
+
+  input:checked+.slider:before {
+    content: "✔";
+  }
+
+  .slider::after {
+    content: "";
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    top: 3px;
+    left: 3px;
+    border-radius: 50%;
+    background-color: white;
+    transition: .4s;
+  }
+
+  input:checked+.slider::after {
+    transform: translateX(24px);
+  }

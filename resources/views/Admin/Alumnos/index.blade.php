@@ -11,31 +11,55 @@
 </style>
 
 
+
 {{-- CONTENT --}}
 
 <div class="table" data-name="tablaAlumnos">
+
 
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
 
     {{-- BOTON CREAR --}}
 
     <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
-        <a href="{{ route('admin.alumnos.create') }}">
-            <button class="btn_blue">
-                <i class="ti ti-circle-plus"></i>Agregar alumno</button>
-        </a>
-        {{-- FILTROS --}}
-        <?= $filtergen->generate('admin.alumnos.index', $filters, [
-            'dropdowns' => [$carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]), $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()), $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])],
-            'fields' => [
-                'alumno' => 'Alumno',
-                'dni' => 'Dni',
-                'email' => 'Email',
-                'ciudad' => 'Ciudad',
-                'telefono1' => 'Telefono',
-            ],
-        ]) ?>
+    <a href="{{ route('admin.alumnos.create') }}">
+        <button class="btn_blue">
+            <i class="ti ti-circle-plus"></i>Agregar alumno
+        </button>
+    </a>
+
+    {{-- FILTROS --}}
+    <?= $filtergen->generate('admin.alumnos.index', $filters, [
+        'dropdowns' => [
+            $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
+            $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters->filter_ciudad ?? null, $alumnoM->ciudades()),
+            $form->select(
+    'filter_titulo',
+    'Titulo:',
+    'label-input-y-100',
+    $filters->filter_titulo ?? null,
+    [
+        'Todos',
+        'No entregado',
+        'Fotocopia del título original secundario',
+        'Certificado de constancia de título en trámite',
+        'Constancia de alumno del último año del nivel secundario'
+    ]
+)
+
+        ],
+       'fields' => [
+    'alumno' => 'Alumno',
+    'dni' => 'Dni',
+    'telefono1' => 'Telefono',
+    'titulo_secundario' => 'Titulo'
+],
+
+    ]) ?>
+
+    
     </div>
+
 
     {{-- TABLA --}}
     <table class="table__body">
