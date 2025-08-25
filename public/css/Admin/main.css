@@ -908,3 +908,60 @@ ul .campo_info {
 .filtro-exportar button:hover {
   background-color: var(--blue-hover);
 }
+
+/* BOTON DESLIGAR */
+
+/* Estilo para el botón "Desligar asignatura" */
+/* BOTÓN DESLIGAR */
+.btn-desligar {
+  background-color: #FF7043;
+  /* Naranja suave (más distinto que el rojo) */
+  color: white;
+  font-size: 13px;
+  /* Tamaño consistente con los demás botones */
+  padding: 10px 20px;
+  /* Tamaño consistente con los otros botones */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Sombra suave para diferenciarlo */
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover (cuando el usuario pasa el mouse sobre el botón) */
+.btn-desligar:hover {
+  background-color: #686868;
+  /* Naranja más intenso para el hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+  /* Sombra más intensa en hover */
+}
+
+/* Efecto cuando el botón está deshabilitado */
+.btn-desligar:disabled {
+  background-color: var(--gris-fondo-tabla);
+  /* Gris claro para deshabilitado */
+  color: var(--gris-titulo);
+  /* Gris más claro para el texto */
+  cursor: not-allowed;
+}
+
+/* Efecto de "deslizar" en el hover, similar a los otros botones */
+.btn-desligar::after {
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  right: 100%;
+  transition: all 0.35s ease;
+  background-color: var(--azul-iseta);
+  /* Fondo azul más suave para el hover */
+}
+
+.btn-desligar:hover::after {
+  left: 0;
+  right: 0;
+}

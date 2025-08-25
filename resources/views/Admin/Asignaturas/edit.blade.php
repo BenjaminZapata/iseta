@@ -47,6 +47,31 @@
                             Actualizar
                         </button>
                     </div>
+                    @if (!$config['modo_seguro'])
+                        <div class="botones-derecha">
+                            <div>
+                                <form method="POST" class="form-eliminar"
+                                    action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn-desligar"><i class="ti ti-unlink"
+                                            style="font-size: 1.3em; margin-right: 8px;"></i>Desligar
+                                        asignatura</button>
+                                </form>
+                            </div>
+                            <div>
+                                <form method="POST" class="form-eliminar"
+                                    action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn_red_outline"><i class="ti ti-trash"
+                                            style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
+                                        asignatura</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    @endif
                 </form>
             </div>
         </div>
@@ -139,26 +164,6 @@
     </div>
     </div>
 
-    @if (!$config['modo_seguro'])
-        <div class="upd">
-            <div>
-                <form method="POST" class="form-eliminar"
-                    action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
-                    @csrf
-                    @method('delete')
-                    <button class="btn_red"><i class="ti ti-trash"></i>Eliminar asignatura</button>
-                </form>
-            </div>
-            <div>
-                <form method="POST" class="form-eliminar"
-                    action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
-                    @csrf
-                    @method('delete')
-                    <button class="btn_red"><i class="ti ti-trash"></i>Desligar asignatura</button>
-                </form>
-            </div>
-        </div>
-    @endif
 
 
 
