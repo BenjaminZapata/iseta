@@ -5,6 +5,23 @@
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
         <div class="perfil__info">
+            {{-- BOTÓN SWITCH DE ESTADO --}}
+            <div style="margin: 10px 5px; display: flex; align-items: center; gap: 12px; justify-content: flex-end; padding-right: 25px;">
+                <span style="font-weight: 600;">
+                    Estado de la carrera:
+                    <span id="estado-texto" style="color: {{ $carrera->vigente ? '#16a34a' : '#dc2626' }};">
+                        {{ $carrera->vigente ? 'Activa' : 'Inactiva' }}
+                    </span>
+                </span>
+
+                <label class="switch" title="{{ $carrera->vigente ? 'Desactivar carrera' : 'Activar carrera' }}">
+                    <input type="checkbox"
+                        id="toggle-carrera-{{ $carrera->id }}"
+                        @if ($carrera->vigente) checked @endif
+                    onchange="onToggleCarrera(this, {{ $carrera->id }})">
+                    <span class="slider"></span>
+                </label>
+            </div>
             <?= $form->generate(route('admin.carreras.update', ['carrera' => $carrera->id]), 'put', [
                 'Información' => [
                     $form->text('nombre', 'Nombre:', 'label-input-y-75', $carrera),
@@ -33,6 +50,7 @@
             </div>
         </div>
     </div>
+
 
     {{-- BOTONES SUPERIORES --}}
     <div class="table">
@@ -91,27 +109,15 @@
                 </form>
             </div>
 
-            {{-- ACTIVAR / DESACTIVAR --}}
-            <td class="center">
-                @if ($carrera->vigente)
-                <form id="form-desactivar-{{ $carrera->id }}"
-                    action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST">
-                    @csrf
-                    <button type="button" class="btn_red"
-                        onclick="openGeneralModal('form-desactivar-{{ $carrera->id }}', '¿Seguro que querés desactivar esta carrera?')">
-                        <i class="ti ti-ban"></i> Desactivar
-                    </button>
-                </form>
-                @else
-                <form id="form-reactivar-{{ $carrera->id }}"
-                    action="{{ route('admin.carreras.reactivar', $carrera) }}" method="POST">
-                    @csrf
-                    <button type="button" class="btn_green"
-                        onclick="openGeneralModal('form-reactivar-{{ $carrera->id }}', '¿Querés reactivar esta carrera?')">
-                        <i class="ti ti-check"></i> Reactivar
-                    </button>
-                </form>
-                @endif
+            {{-- Formularios ocultos --}}
+            <form id="form-desactivar-{{ $carrera->id }}"
+                action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST" style="display:none;">
+                @csrf
+            </form>
+            <form id="form-reactivar-{{ $carrera->id }}"
+                action="{{ route('admin.carreras.reactivar', $carrera) }}" method="POST" style="display:none;">
+                @csrf
+            </form>
             </td>
         </div>
 
