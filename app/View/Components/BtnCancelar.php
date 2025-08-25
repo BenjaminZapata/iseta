@@ -56,6 +56,33 @@ class BtnCancelar extends Component
             }
 
             // Si no encuentra origen claro → seguir con lógica existente
+            $this->url = route('admin.alumnos.index');
+            return;
+        }
+
+        if ($name === 'admin.asignaturas.edit') {
+            $prev = url()->previous();
+
+            // Si venís del index de asignaturas
+            if (preg_match('#/admin/asignaturas$#', $prev)) {
+                $this->url = route('admin.asignaturas.index');
+                return;
+            }
+
+            // Si venís del edit de carreras
+            if (preg_match('#/admin/carreras/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.carreras.edit', ['carrera' => $m[1]]);
+                return;
+            }
+
+            // Si no reconoce el origen, usar index de asignaturas por defecto
+            $this->url = route('admin.asignaturas.index');
+            return;
+
+
+
+
+            // Si no encuentra origen claro → seguir con lógica existente
         }
 
 
