@@ -35,7 +35,7 @@
             $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters->filter_ciudad ?? null, $alumnoM->ciudades()),
             $form->select(
     'filter_titulo',
-    'Titulo:',
+    'Estado del título:',
     'label-input-y-100',
     $filters->filter_titulo ?? null,
     [
@@ -45,15 +45,14 @@
         'Certificado de constancia de título en trámite',
         'Constancia de alumno del último año del nivel secundario'
     ]
-)
-
-        ],
+)],
        'fields' => [
     'alumno' => 'Alumno',
     'dni' => 'Dni',
     'telefono1' => 'Telefono',
-    'titulo_secundario' => 'Titulo'
+    'titulo_secundario' => 'Titulo' // coincide con el nombre real de la columna
 ],
+
 
     ]) ?>
 

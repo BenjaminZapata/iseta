@@ -10,9 +10,9 @@ use Illuminate\Http\Request;
 
 class AlumnoRepository
 {
-
     public $config;
-    public $availableFiels = ['alumno', 'dni', 'email', 'ciudad', 'telefono1'];
+    // Agregamos titulo_secundario a los campos disponibles para búsqueda
+    public $availableFiels = ['alumno', 'dni', 'email', 'ciudad', 'telefono1', 'titulo_secundario'];
 
     public function __construct()
     {
@@ -21,23 +21,26 @@ class AlumnoRepository
 
     public function index($request)
     {
-
         $idsQuery = Alumno::select('alumnos.id')
             ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id')
             ->leftJoin('carreras', 'carreras.id', '=', 'egresadoinscripto.id_carrera');
 
+        // Filtro por carrera
         if ($request->has('filter_carrera_id') && $request->input('filter_carrera_id') != 0) {
             $idsQuery->where('egresadoinscripto.id_carrera', $request->input('filter_carrera_id'));
         }
 
+        // Filtro por ciudad
         if ($request->has('filter_ciudad') && $request->input('filter_ciudad') != 0) {
             $idsQuery->where('alumnos.ciudad', $request->input('filter_ciudad'));
         }
 
+        // Filtro por estado civil
         if ($request->has('filter_estado_civil') && $request->input('filter_estado_civil') != 0) {
             $idsQuery->where('alumnos.estado_civil', $request->input('filter_estado_civil'));
         }
 
+        // Búsqueda por campo y texto
         if ($request->has('filter_search_box') && '' != $request->input('filter_search_box') && in_array($request->input('filter_field'), $this->availableFiels)) {
             if ($request->input('filter_field') == 'alumno') {
                 $word = str_replace(' ', '%', $request->input('filter_search_box'));
@@ -45,13 +48,12 @@ class AlumnoRepository
             } else {
                 $idsQuery->where($request->input('filter_field'), 'LIKE', '%' . $request->input('filter_search_box') . '%');
             }
-
         }
 
+        // Filtro por título secundario
         if ($request->has('filter_titulo') && $request->input('filter_titulo') != 0) {
             $idsQuery->where('alumnos.titulo_secundario', $request->input('filter_titulo'));
         }
-
 
         $ids = $idsQuery->distinct()->get()->pluck('id');
 
@@ -65,11 +67,11 @@ class AlumnoRepository
         if (!is_numeric($filasPorTabla)) {
             $filasPorTabla = 15; // Default value if not numeric
         }
-        return $query->paginate((int) $filasPorTabla);
 
+        return $query->paginate((int) $filasPorTabla);
     }
 
-    // agregar una institucion secundaraia a un alumno
+    // Agregar una institución secundaria a un alumno
     public function agregarInstitucionSecundaria(string $nombre): Alumno
     {
         return Alumno::create([
@@ -77,7 +79,7 @@ class AlumnoRepository
         ]);
     }
 
-    //actualizr una institucion secundaria de un alumno
+    // Actualizar una institución secundaria de un alumno
     public function actualizarInstitucionSecundaria(int $id, string $nuevoNombre): ?Alumno
     {
         $alumno = Alumno::query()->find($id);
