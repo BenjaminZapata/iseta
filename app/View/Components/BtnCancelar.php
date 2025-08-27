@@ -85,6 +85,12 @@ class BtnCancelar extends Component
             // Si no encuentra origen claro → seguir con lógica existente
         }
 
+        if ($name === 'admin.carreras.edit') {
+            $this->url = route('admin.carreras.index');
+            return;
+        }
+
+
 
         /**
          * 2) Mapa hijo → padre

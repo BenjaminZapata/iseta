@@ -1,10 +1,10 @@
-.pager{
+.pager {
     list-style: none;
     display: flex;
     gap: 0.5em;
 }
 
-.disabled{
+.disabled {
     color: gray;
 }
 
@@ -28,7 +28,8 @@
     cursor: pointer;
 }
 
-.pagination .btn1, .pagination .btn2 {
+.pagination .btn1,
+.pagination .btn2 {
     display: inline-flex;
     align-items: center;
     font-weight: 500;
@@ -53,13 +54,13 @@
 .no-active:hover {
     color: white;
     font-weight: 600;
-    background: rgba(255, 0, 0, 0.775);
+    background: #261598;
 }
 
 .active {
     color: white;
     font-weight: 600;
-    background: red;
+    background: #150a5c;
     width: 35px;
     height: 35px;
     border-radius: 50%;

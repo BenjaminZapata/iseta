@@ -1,0 +1,1 @@
+<x-breadcrumb :breadcrumbs="$breadcrumbs" />
