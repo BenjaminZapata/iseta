@@ -145,6 +145,12 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::post('/asignaturas', [AsignaturasCrudController::class, 'store'])->name('admin.asignaturas.store');
     Route::put('/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'update'])->name('admin.asignaturas.update');
     Route::delete('/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'destroy'])->name('admin.asignaturas.destroy');
+Route::post('/admin/asignaturas/{asignatura}/desvincular/{carrera}', 
+    [AsignaturasCrudController::class,'Desvincular'])
+    ->name('admin.asignaturas.desvincular');
+
+
+
 
     // -----------------------------
     // CURSADAS

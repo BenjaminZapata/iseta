@@ -121,5 +121,22 @@ class AsignaturasCrudController extends BaseController
         }
     }
 
+
+public function Desvincular($asignaturaId, $carreraId)
+{
+    Log::info('Desvincular llamado', ['asignaturaId'=>$asignaturaId,'carreraId'=>$carreraId]);
+
+    $asignatura = $this->asignaturasRepo->find($asignaturaId);
+    if ($asignatura && $asignatura->carrera()->where('id', $carreraId)->exists()) {
+        $asignatura->carrera()->detach($carreraId);
+        Log::info('Desvinculado correctamente', ['asignaturaId'=>$asignaturaId,'carreraId'=>$carreraId]);
+        return redirect()->back()->with('success','Asignatura desvinculada de la carrera.');
+    }
+
+    Log::warning('No se pudo desvincular', ['asignaturaId'=>$asignaturaId,'carreraId'=>$carreraId]);
+    return redirect()->back()->with('error','No se pudo desvincular la asignatura.');
+}
+
+
     
 }

@@ -3,6 +3,8 @@
 namespace App\Repositories\Admin;
 
 use App\Models\Asignatura;
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Database\Eloquent\Collection;
 
 class AsignaturaRepository
@@ -83,6 +85,46 @@ class AsignaturaRepository
         return $this->model->orderBy('nombre')->pluck('nombre', 'id')->toArray();
     }
 
+    public function Desvincular(int $asignaturaId, int $carreraId): bool
+{
+    Log::info('Desvincular iniciado', [
+        'asignaturaId' => $asignaturaId,
+        'carreraId' => $carreraId
+    ]);
+
+    $asignatura = $this->find($asignaturaId);
+
+    if (!$asignatura) {
+        Log::warning('Asignatura no encontrada', ['asignaturaId' => $asignaturaId]);
+        return false;
+    }
+
+    // Revisamos qué carreras tiene la asignatura
+    $carreras = $asignatura->carrera()->pluck('id_carrera')->toArray();
+    Log::info('Carreras actuales de la asignatura', $carreras);
+
+    if (!in_array($carreraId, $carreras)) {
+        Log::warning('La carrera no está vinculada a la asignatura', [
+            'carreraId' => $carreraId
+        ]);
+        return false;
+    }
+
+    // Intentamos desvincular
+    $deleted = $asignatura->carrera()
+        ->newPivotStatement()
+        ->where('id_asignatura', $asignaturaId)
+        ->where('id_carrera', $carreraId)
+        ->delete();
+
+    Log::info('Filas eliminadas del pivot', ['deleted' => $deleted]);
+
+    return $deleted > 0;
+}
+
+
+
+
     /**
      * Obtener cursantes de una asignatura.
      */
@@ -91,9 +133,13 @@ class AsignaturaRepository
         $asignatura = $this->find($id);
         return $asignatura ? $asignatura->cursantes() : collect();
     }
-    public function filter(array $filters, int $perPage = 15)
+
+    /**
+     * Filtrar asignaturas según los filtros.
+     */
+   public function filter(array $filters, int $perPage = 15)
 {
-    $query = $this->model->query();
+    $query = $this->model->query()->with('carrera');
 
     // 🔹 Si viene un ID de asignatura, devolver solo esa
     if (!empty($filters['filter_asignatura_id']) && $filters['filter_asignatura_id'] != 0) {
@@ -101,49 +147,81 @@ class AsignaturaRepository
                      ->paginate($perPage);
     }
 
-    // Filtrar por nombre
-    if (!empty($filters['nombre'])) {
-        $query->where('nombre', 'like', '%' . $filters['nombre'] . '%');
-    }
-
-    // Filtrar por año
-    if (!empty($filters['filter_anio']) && $filters['filter_anio'] !== 'Todos') {
-        $anio = (int)$filters['filter_anio'] - 1; // porque tu model decrementa el año
+    // Año (dropdown)
+    if (!empty($filters['filter_anio']) && $filters['filter_anio'] !== 'Todos' && $filters['filter_anio'] != 0) {
+        $anio = (int)$filters['filter_anio'] - 1; // en BD arranca en 0
         $query->where('anio', $anio);
     }
 
-    // Filtrar por tipo de módulo
+    // Tipo de módulo
     if (!empty($filters['tipo_modulo'])) {
         $query->where('tipo_modulo', $filters['tipo_modulo']);
     }
 
-    // Filtrar por carga horaria
+    // Carga horaria
     if (!empty($filters['filter_carga_horaria']) && $filters['filter_carga_horaria'] !== 'Cualquiera') {
         switch ($filters['filter_carga_horaria']) {
             case 'Menos de 10 hs':
-                $query->where('carga_horaria', '<', 10)
-                      ->orderBy('carga_horaria', 'desc');
+                $query->where('carga_horaria', '<', 10);
                 break;
             case '10 a 20 hs':
-                $query->whereBetween('carga_horaria', [10, 20])
-                      ->orderBy('carga_horaria', 'desc');
+                $query->whereBetween('carga_horaria', [10, 20]);
                 break;
             case 'Más de 20 hs':
-                $query->where('carga_horaria', '>', 20)
-                      ->orderBy('carga_horaria', 'desc');
+                $query->where('carga_horaria', '>', 20);
                 break;
         }
     }
 
-    // Filtrar por carrera
+    // Carrera
     if (!empty($filters['filter_carrera_id']) && $filters['filter_carrera_id'] != 0) {
         $query->whereHas('carrera', function ($q) use ($filters) {
             $q->where('id', $filters['filter_carrera_id']);
         });
     }
 
+    // 🔹 Field dinámico (search box)
+    if (!empty($filters['filter_search_box']) && !empty($filters['filter_field'])) {
+        $field = $filters['filter_field'];
+        $value = $filters['filter_search_box'];
+        $valor = mb_strtolower(trim($value));
+
+        if ($field === 'nombre' || $field === 'carga_horaria') {
+            $query->where($field, 'like', "%$value%");
+        }
+
+        if ($field === 'anio') {
+            // Mapear textos posibles a número de año
+            $map = [
+                '1' => 1, '1er' => 1, 'primer' => 1, 'primero' => 1, '1ro' => 1,
+                '2' => 2, '2do' => 2, 'segundo' => 2,
+                '3' => 3, '3ro' => 3, 'tercero' => 3,
+                '4' => 4, '4to' => 4, 'cuarto' => 4,
+                '5' => 5, '5to' => 5, 'quinto' => 5,
+            ];
+
+            $anio = null;
+            foreach ($map as $pattern => $numero) {
+                if (str_contains($valor, $pattern)) {
+                    $anio = $numero;
+                    break;
+                }
+            }
+
+            if ($anio) {
+                $query->where('anio', $anio - 1); // BD empieza en 0
+            }
+        }
+
+        if ($field === 'carrera') {
+            $query->whereHas('carrera', function ($q) use ($value) {
+                $q->where('nombre', 'like', "%$value%");
+            });
+        }
+    }
+
     return $query->orderBy('nombre')->paginate($perPage);
 }
 
-
 }
+
