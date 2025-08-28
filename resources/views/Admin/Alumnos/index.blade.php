@@ -37,20 +37,20 @@
     'filter_titulo',
     'Estado del título:',
     'label-input-y-100',
-    $filters->filter_titulo ?? null,
+    $filters->filter_titulo ?? 0,
     [
-        'Todos',
-        'No entregado',
-        'Fotocopia del título original secundario',
-        'Certificado de constancia de título en trámite',
-        'Constancia de alumno del último año del nivel secundario'
-    ]
-)],
+        0 => 'Todos',
+        1 => 'Fotocopia del título original secundario',
+        2 => 'Certificado de constancia de título en trámite',
+        3 => 'Constancia de alumno del último año del nivel secundario',
+        4 => 'No entregado',
+    ])
+],
        'fields' => [
     'alumno' => 'Alumno',
     'dni' => 'Dni',
     'telefono1' => 'Telefono',
-    'titulo_secundario' => 'Titulo' // coincide con el nombre real de la columna
+    'titulo_secundario' => 'Titulo' 
 ],
 
 
