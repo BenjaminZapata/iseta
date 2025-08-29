@@ -26,6 +26,7 @@ Route::prefix('preceptor')
   Route::post('/alumnos', [AlumnoPreceptorController::class, 'store'])->name('alumnos.store');
   Route::get('/alumnos/{alumno}/verificar', [AlumnoPreceptorController::class, 'verificar'])->name('alumnos.verificar');
   Route::post('/alumno/{alumno}/rematricular', [RematriculacionController::class, 'rematricular'])->name('alumno.rematricular');
+  Route::delete('/alumno/{alumno}/destroy', [AlumnoPreceptorController::class,'destroy'])->name('alumnos.destroy');
 
   // Inscriptos
   Route::get('/inscriptos/create', [InscripcionPreceptorController::class, 'create'])->name('inscriptos.create');
