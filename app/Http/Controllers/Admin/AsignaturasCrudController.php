@@ -117,7 +117,7 @@ class AsignaturasCrudController extends BaseController
                 ->with('mensaje', 'Se ha eliminado la asignatura');
         } catch (\Exception $e) {
             return redirect()->route('admin.asignaturas.index')
-                ->with('error', 'No se pudo eliminar la asignatura. Error: ' . $e->getMessage());
+                ->with('error', 'No se pudo eliminar la asignatura');
         }
     }
 
