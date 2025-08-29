@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Iseta manager</title>
 
-    <link rel="stylesheet" href="{{asset('css/Admin/auth.css') }}">
     <link rel="stylesheet" href="{{asset('css/Reset/reset.css')}}">
     <link rel="stylesheet" href="{{asset('css/Admin/Edit/edit-page.css')}}">
     <link rel="stylesheet" href="{{asset('css/Admin/main.css')}}">
