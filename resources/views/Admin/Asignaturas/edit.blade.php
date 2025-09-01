@@ -58,18 +58,6 @@
                 </div>
             </form>
 
-            {{-- ---------------- BOTÓN DESLINGAR SIEMPRE VISIBLE ---------------- --}}
-            @php 
-                $carreraId = $asignatura->carrera->first()?->pivot->id_carrera ?? 0; 
-            @endphp
-            <form method="POST"
-                  action="{{ route('admin.asignaturas.desvincular', ['asignatura' => $asignatura->id, 'carrera' => $carreraId]) }}">
-                @csrf
-                <button type="submit" class="btn-desligar">
-                    <i class="ti ti-unlink" style="font-size: 1.3em; margin-right: 8px;"></i>
-                    Desligar asignatura
-                </button>
-            </form>
 
             {{-- ---------------- BOTÓN ELIMINAR (solo si no está en modo seguro) ---------------- --}}
             @if (!$config['modo_seguro'])
