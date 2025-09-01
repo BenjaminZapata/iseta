@@ -1,4 +1,4 @@
-@extends('Admin.template')
+@extends('preceptor.template')
 
 @section('content')
     <style>
@@ -20,24 +20,32 @@
         {{-- BOTON CREAR --}}
 
         <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
-            <a href="{{ route('admin.alumnos.create') }}">
+            <a href="{{ route('preceptor.alumnos.create') }}">
                 <button class="btn_blue">
                     <i class="ti ti-circle-plus"></i>Agregar alumno</button>
             </a>
             {{-- FILTROS --}}
-            <?= $filtergen->generate('admin.alumnos.index', $filters, [
+            <?= $filtergen->generate('preceptor.alumnos.index', $filters, [
         'dropdowns' => [
             $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
             $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
-            $form->select('filter_estado_civil', 'Estado civil:', 'label-input-y-100', $filters, ['Todos', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
-            $form->select('filter_titulo', 'Titulo Secundario:', 'label-input-y-100', $filters, ['Todos', 'No Entregado', 'Constancia de título en trámite', 'Constancia ultimo año del nivel secundario', 'Titulo Secundario'])
-        ],
+            $form->select( 'filter_titulo',
+    'Estado del título:',
+    'label-input-y-100',
+    $filters->filter_titulo ?? 0,
+    [
+        0 => 'Todos',
+        1 => 'Fotocopia del título original secundario',
+        2 => 'Certificado de constancia de título en trámite',
+        3 => 'Constancia de alumno del último año del nivel secundario',
+        4 => 'No entregado',
+    ])],
+
         'fields' => [
             'alumno' => 'Alumno',
             'dni' => 'Dni',
-            'email' => 'Email',
             'ciudad' => 'Ciudad',
-            'telefono1' => 'Telefono',
+            'titulo_secundario' => 'Titulo' 
         ],
     ]) ?>
         </div>
@@ -83,12 +91,12 @@
                             <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                         </td>
                         <td class="flex just-center">
-                            <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }}">
+                            <a href="{{ route('preceptor.alumnos.edit', ['alumno' => $alumno->id]) }}">
                                 <button class="btn_blue"><i class="ti ti-file-info"
                                         style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                             </a>
                             <form id="form-eliminar-{{ $alumno->id }}"
-                                action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST"
+                                action="{{ route('preceptor.alumnos.destroy', $alumno->id) }}" method="POST"
                                 style="display: inline;">
                                 @csrf
                                 @method('DELETE')

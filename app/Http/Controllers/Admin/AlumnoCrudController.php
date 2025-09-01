@@ -37,6 +37,8 @@ class AlumnoCrudController extends BaseController
 
     public function index(Request $request)
     {
+        
+
         $this->setFilters($request);
         $this->data['alumnos'] = $this->alumnosRepo->index($request);
 

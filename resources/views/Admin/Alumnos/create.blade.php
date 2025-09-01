@@ -69,7 +69,7 @@
     $form->text('becas', 'Becas:', 'label-input-y-75', null),
     $form->text(
       'nombre_institucion_secundario',
-      'Secundaria:',
+      'Nombre de institucion Secundaria:',
       'label-input-y-75',
       null
     ),
