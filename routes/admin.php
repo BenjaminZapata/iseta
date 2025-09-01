@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Secretario\AlumnoSecretarioController;
 use App\Http\Controllers\Admin\AdminCopiaDB;
 use App\Http\Controllers\preceptor\AlumnoPreceptorController;
 use App\Http\Controllers\Admin\AdminAuthController;
@@ -75,9 +76,18 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // PRECEPTOR
     // -----------------------------
     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/preceptor/alumnos/index', [AlumnoPreceptorController::class, 'index'])
+        Route::get('/alumnos/index', [AlumnoPreceptorController::class, 'index'])
             ->name('preceptor.alumnos.index');
     });
+
+    //-----------------------------
+    // SECRETARIO
+    //-----------------------------
+     Route::middleware(['auth:admin'])->group(function () {
+        Route::get('/alumnos/index', [AlumnoSecretarioController::class, 'index'])
+            ->name('Secretario.alumnos.index');
+    });
+
 
     // -----------------------------
     // EGRESADOS

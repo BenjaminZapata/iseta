@@ -28,41 +28,45 @@
                         <option @selected($mesa->llamado == 2) value="2">Segundo</option>
                     </select>
                 </div>
-                <div class="perfil_dataname">
-                    <label>Prof. presidente:</label>
-                    <select class="campo_info rounded" name="prof_presidente">
-                        <option @selected($mesa->prof_presidente == 0) value="0">Vacio/A confirmar</option>
-                        @foreach ($profesores as $profesor)
-                        <option @selected($mesa->prof_presidente != 0 && $mesa->profesor->id == $profesor->id) value="{{ $profesor->id }}">
-                            {{ $profesor->apellidoNombre() }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="perfil_dataname">
-                    <label>Prof. vocal 1:</label>
-                    <select class="campo_info rounded" name="prof_vocal_1">
-                        <option @selected($mesa->prof_vocal_1 == 0) value="0">Vacio/A confirmar</option>
+               <div class="perfil_dataname">
+    <label>Prof. presidente:</label>
+    <select class="campo_info rounded" name="prof_presidente">
+        <option value="0" @selected($mesa->prof_presidente == 0)>Vacio/A confirmar</option>
+        @foreach ($profesores as $profesor)
+            <option value="{{ $profesor->id }}"
+                @selected($mesa->prof_presidente != 0 && $mesa->profesor?->id == $profesor->id)>
+                {{ $profesor->apellidoNombre() }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
-                        @foreach ($profesores as $profesor)
-                        <option @selected($mesa->prof_vocal_1 != 0 && $mesa->vocal1->id == $profesor->id) value="{{ $profesor->id }}">
-                            {{ $profesor->apellidoNombre() }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="perfil_dataname">
-                    <label>Prof. vocal 2:</label>
-                    <select class="campo_info rounded" name="prof_vocal_2">
-                        <option @selected($mesa->prof_vocal_2 == 0) value="0">Vacio/A confirmar</option>
-                        @foreach ($profesores as $profesor)
-                        <option @selected($mesa->prof_vocal_2 != 0 && $mesa->vocal2 && $mesa->vocal2->id == $profesor->id) value="{{ $profesor->id }}">
-                            {{ $profesor->apellidoNombre() }}
+<div class="perfil_dataname">
+    <label>Prof. vocal 1:</label>
+    <select class="campo_info rounded" name="prof_vocal_1">
+        <option value="0" @selected($mesa->prof_vocal_1 == 0)>Vacio/A confirmar</option>
+        @foreach ($profesores as $profesor)
+            <option value="{{ $profesor->id }}"
+                @selected($mesa->prof_vocal_1 != 0 && $mesa->vocal1?->id == $profesor->id)>
+                {{ $profesor->apellidoNombre() }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
+<div class="perfil_dataname">
+    <label>Prof. vocal 2:</label>
+    <select class="campo_info rounded" name="prof_vocal_2">
+        <option value="0" @selected($mesa->prof_vocal_2 == 0)>Vacio/A confirmar</option>
+        @foreach ($profesores as $profesor)
+            <option value="{{ $profesor->id }}"
+                @selected($mesa->prof_vocal_2 != 0 && $mesa->vocal2?->id == $profesor->id)>
+                {{ $profesor->apellidoNombre() }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
 
 
                 <div class="botones-derecha"
