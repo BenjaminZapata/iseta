@@ -55,10 +55,10 @@ class AlumnoRepository
         } elseif ($field === 'titulo_secundario') {
             // Mapeo de número → texto
             $map = [
-                1 => 'Fotocopia del título original secundario',
-                2 => 'Certificado de constancia de título en trámite',
-                3 => 'Constancia de alumno del último año del nivel secundario',  
-                4 => 'No entregado'
+                0 => 'Fotocopia del título original secundario',
+                1 => 'Certificado de constancia de título en trámite',
+                2 => 'Constancia de alumno del último año del nivel secundario',  
+                3 => 'No entregado'
             ];
 
             $normalize = function ($string) {
@@ -86,9 +86,10 @@ class AlumnoRepository
     }
 
     // Filtro directo por select de título
-    if ($request->has('filter_titulo') && $request->input('filter_titulo') != 0) {
-        $idsQuery->where('alumnos.titulo_secundario', $request->input('filter_titulo'));
-    }
+if (!is_null($request->input('filter_titulo'))) {
+    $idsQuery->where('alumnos.titulo_secundario', $request->input('filter_titulo'));
+}
+
 
     $ids = $idsQuery->distinct()->get()->pluck('id');
 
