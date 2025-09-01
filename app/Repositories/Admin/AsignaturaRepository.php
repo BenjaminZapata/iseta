@@ -116,13 +116,8 @@ class AsignaturaRepository
         ->where('id_asignatura', $asignaturaId)
         ->where('id_carrera', $carreraId)
         ->delete();
-
-    Log::info('Filas eliminadas del pivot', ['deleted' => $deleted]);
-
     return $deleted > 0;
 }
-
-
 
 
     /**

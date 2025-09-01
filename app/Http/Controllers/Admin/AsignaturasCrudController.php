@@ -109,32 +109,29 @@ class AsignaturasCrudController extends BaseController
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(Asignatura $asignatura)
-    {
-        try {
-            $asignatura->delete();
-            return redirect()->route('admin.asignaturas.index')
-                ->with('mensaje', 'Se ha eliminado la asignatura');
-        } catch (\Exception $e) {
-            return redirect()->route('admin.asignaturas.index')
-                ->with('error', 'No se pudo eliminar la asignatura. Error: ' . $e->getMessage());
-        }
-    }
-
-
-public function Desvincular($asignaturaId, $carreraId)
 {
-    Log::info('Desvincular llamado', ['asignaturaId'=>$asignaturaId,'carreraId'=>$carreraId]);
+    try {
+        // Verificar si la asignatura está vinculada a alguna carrera
+        if ($asignatura->carrera()->exists()) {
+            // Si tiene carreras vinculadas, las desvinculamos primero
+            $asignatura->carrera()->detach();
+            
+           return redirect()->route('admin.asignaturas.index')
+    ->with('mensaje', 'La asignatura fue desvinculada de sus carreras.');
 
-    $asignatura = $this->asignaturasRepo->find($asignaturaId);
-    if ($asignatura && $asignatura->carrera()->where('id', $carreraId)->exists()) {
-        $asignatura->carrera()->detach($carreraId);
-        Log::info('Desvinculado correctamente', ['asignaturaId'=>$asignaturaId,'carreraId'=>$carreraId]);
-        return redirect()->back()->with('success','Asignatura desvinculada de la carrera.');
+        }
+
+        // Si no tiene carreras vinculadas, procedemos a eliminarla
+        $asignatura->delete();
+
+        return redirect()->route('admin.asignaturas.index')
+            ->with('mensaje', 'Se ha eliminado la asignatura');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.asignaturas.index')
+            ->with('error', 'No se pudo eliminar la asignatura. Error: ' . $e->getMessage());
     }
-
-    Log::warning('No se pudo desvincular', ['asignaturaId'=>$asignaturaId,'carreraId'=>$carreraId]);
-    return redirect()->back()->with('error','No se pudo desvincular la asignatura.');
 }
 
 
