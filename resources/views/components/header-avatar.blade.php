@@ -8,8 +8,7 @@
     </div>
     <!-- DERECHA: Bienvenida + Avatar -->
     <div style="display: flex; align-items: center; gap: 1rem; position: relative; padding-right: 30px;">
-        <span style="font-size: 1rem; text-transform: none;">¡Bienvenido, Usuario!</span>
-
+        <span style="font-size: 1rem; text-transform: none;">¡Bienvenido, {{ auth()->user()->rol()}}! {{auth()->user()->username}} </span>
         <!-- Notificaciones -->
         <div>
             <livewire:notificaciones />
