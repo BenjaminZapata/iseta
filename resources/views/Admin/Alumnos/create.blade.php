@@ -74,19 +74,19 @@
       null
     ),
     $form->select(
-      'titulo_secundario',
-      'Titulo secundario:',
-      'label-input-y-75',
-      null,
-      [
-      'vacio',
-      'Fotocopia del título original secundario',
-      'Certificado de constancia de título en trámite',
-      'Constancia de alumno del último año del nivel secundario',
-      'No entregado',
-      ]
-    ),
-    ],
+    'titulo_secundario',
+    'Título secundario:',
+    'label-input-y-75',
+    null,
+    [
+        '' => 'Seleccione una opción',
+        'Fotocopia del título original secundario',
+        'Certificado de constancia de título en trámite',
+        'Constancia de alumno del último año del nivel secundario',
+        'No entregado'
+    ]
+)]
+,
     'Otros' => [
     $form->textarea(
       'observaciones',

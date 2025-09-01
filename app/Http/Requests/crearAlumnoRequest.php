@@ -33,7 +33,7 @@ class CrearAlumnoRequest extends FormRequest
             'piso' => ['nullable'],
             'estado_civil' => ['required'],
             'email' => ['nullable'],
-            'nombre_institucion_secundario' => ['required', 'string', 'max:255'],
+            'nombre_institucion_secundario' => ['nullable', 'string', 'max:255'],
             'titulo_anterior' => ['nullable'],
             'becas' => ['nullable'],
             'observaciones' => ['nullable'],
@@ -42,7 +42,7 @@ class CrearAlumnoRequest extends FormRequest
             'telefono3' => ['nullable', 'numeric'],
             'codigo_postal' => ['nullable', 'alpha_num'],
             'estado' => ['nullable'],
-            'titulo_secundario' => ['required'],
+            ' titulo_secundario ' => 'required|in:Fotocopia del título original secundario,Certificado de constancia de título en trámite,Constancia de alumno del último año del nivel secundario,No entregado',   
             'genero' => ['required']
 
         ];
