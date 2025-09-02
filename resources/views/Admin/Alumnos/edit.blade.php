@@ -2,13 +2,7 @@
 
 @section(section: 'content')
 <div class="perfil_one br">
-    @include('components.header-avatar', [
-    'tituloSeccion' => 'GESTIÓN DE ALUMNOS',
-    'breadcrumbs' => [
-    ['label' => 'Alumnos', 'url' => route('admin.alumnos.index')],
-    ['label' => 'Editar Alumno', 'url' => route('admin.alumnos.edit', ['alumno' => $alumno->id])],
-    ]
-    ])
+    @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUMNO'])
     <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
         'Alumno' => [
             $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno),

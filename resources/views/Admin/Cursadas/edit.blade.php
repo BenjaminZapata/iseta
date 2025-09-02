@@ -8,12 +8,7 @@
 </p> --}}
 <div class="edit-form-container">
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CURSADA',
-        'breadcrumbs' => [
-        ['label' => 'Cursadas', 'url' => route('admin.cursadas.index')],
-        ['label' => 'Modificar Cursadas', 'url' => route('admin.cursadas.edit', ['cursada' => $cursada->id])],
-        ]
-        ])
+        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CURSADA'])
         <div class="perfil__info">
 
             <form method="POST" action="{{ route('admin.cursadas.update', ['cursada' => $cursada->id]) }}">

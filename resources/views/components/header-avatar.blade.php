@@ -69,13 +69,19 @@
     </div>
 
     <!-- Renglón 2: Breadcrumb alineado a la izquierda -->
+    @php
+    use App\Services\NavegacionService;
+    $breadcrumbs = NavegacionService::detectarOrigen();
+    @endphp
+
+
     @if (!empty($breadcrumbs))
     <div class="breadcrumb-wrapper">
         <nav class="breadcrumb-nav" aria-label="breadcrumb">
             <ul class="breadcrumb-list">
                 @foreach ($breadcrumbs as $index => $breadcrumb)
                 <li class="breadcrumb-item">
-                    @if ($index !== count($breadcrumbs) - 1)
+                    @if ($breadcrumb['url'] && $index !== count($breadcrumbs) - 1)
                     <a href="{{ $breadcrumb['url'] }}">{{ $breadcrumb['label'] }}</a>
                     <span class="separator">›</span>
                     @else
@@ -87,5 +93,7 @@
         </nav>
     </div>
     @endif
+
+
 
 </div>

@@ -17,8 +17,7 @@
 <div class="table" data-name="tablaAlumnos">
 
 
-    @include('components.header-avatar', [
-    'tituloSeccion' => 'GESTIÓN DE ALUMNOS',])
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS',])
 
 
     {{-- BOTON CREAR --}}

@@ -3,12 +3,7 @@
 @section('content')
 <div class="edit-form-container">
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA',
-        'breadcrumbs' => [
-        ['label' => 'Carreras', 'url' => route('admin.carreras.index')],
-        ['label' => 'Editar carrera', 'url' => route('admin.carreras.edit', ['carrera' => $carrera->id])],
-        ]
-        ])
+        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
         <div class="perfil__info">
             {{-- BOTÓN SWITCH DE ESTADO --}}
             <div style="margin: 10px 5px; display: flex; align-items: center; gap: 12px; justify-content: flex-end; padding-right: 25px;">

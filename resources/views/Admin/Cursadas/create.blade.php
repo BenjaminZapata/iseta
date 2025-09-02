@@ -9,12 +9,7 @@ $ultimaAsignaturaSeleccionada = null;
 
 <div>
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA CURSADA',
-        'breadcrumbs' => [
-        ['label' => 'Cursadas', 'url' => route('admin.cursadas.index')],
-        ['label' => 'Crear Cursadas', 'url' => route('admin.cursadas.create')],
-        ]
-        ])
+        @include('components.header-avatar', ['tituloSeccion' => 'AGREGAR CURSADA'])
         <div class="perfil__info">
 
 
