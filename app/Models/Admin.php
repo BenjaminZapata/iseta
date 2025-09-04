@@ -26,9 +26,9 @@ class Admin extends Authenticatable
     public function rol()
     {
         $rol = [
-            0 => 'regente',
-            1 => 'preceptor',
-            2 => 'secretario'
+            0 => 'Regente',
+            1 => 'Preceptor',
+            2 => 'Secretario'
         ];
         return $rol[$this->rol] ?? 'Desconocido';
     }

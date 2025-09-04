@@ -17,7 +17,20 @@
             ],
             'Dirección' => [$form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno), $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', $alumno), $form->text('calle', 'Calle:', 'label-input-y-75', $alumno), $form->text('casa_numero', 'Altura:', 'label-input-y-75', $alumno), $form->text('dpto', 'Departamento:', 'label-input-y-75', $alumno), $form->text('piso', 'Piso:', 'label-input-y-75', $alumno)],
             'Contacto' => [$form->text('email', 'Email:', 'label-input-y-75', $alumno), $form->text('telefono1', 'Telefono 1:', 'label-input-y-75', $alumno), $form->text('telefono2', 'Telefono 2:', 'label-input-y-75', $alumno), $form->text('telefono3', 'Telefono 3:', 'label-input-y-75', $alumno)],
-            'Academico' => [$form->text('titulo_anterior', 'Titulo anterior:', 'label-input-y-75', $alumno), $form->text('becas', 'Becas:', 'label-input-y-75', $alumno), $form->text('nombre_institucion_secundario', 'Nombre de institucion Secundaria:', 'label-input-y-75', $alumno), $form->select('titulo_secundario', 'Titulo secundario:', 'label-input-y-75', $alumno, ['vacio', 'Fotocopia del título original secundario', 'Certificado de constancia de título en trámite', 'Constancia de alumno del último año del nivel secundario', 'No entregado'])],
+            'Academico' => [$form->text('titulo_anterior', 'Titulo anterior:', 'label-input-y-75', $alumno), $form->text('becas', 'Becas:', 'label-input-y-75', $alumno), $form->text('nombre_institucion_secundario', 'Nombre de institucion Secundaria:', 'label-input-y-75', $alumno),
+             $form->select(
+    'titulo_secundario',
+    'Título secundario:',
+    'label-input-y-75',
+    $alumno,
+    [
+        '' => 'Seleccione una opción',
+        'Fotocopia del título original secundario',
+        'Certificado de constancia de título en trámite',
+        'Constancia de alumno del último año del nivel secundario',
+        'No entregado'
+    ]
+)],
             'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)],
         ]) ?>
 

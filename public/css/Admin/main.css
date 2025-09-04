@@ -909,6 +909,118 @@ ul .campo_info {
   background-color: var(--blue-hover);
 }
 
+/* BOTON DESLIGAR */
+
+/* Estilo para el botón "Desligar asignatura" */
+/* BOTÓN DESLIGAR */
+.btn-desligar {
+  background-color: #FF7043;
+  /* Naranja suave (más distinto que el rojo) */
+  color: white;
+  font-size: 13px;
+  /* Tamaño consistente con los demás botones */
+  padding: 10px 20px;
+  /* Tamaño consistente con los otros botones */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Sombra suave para diferenciarlo */
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover (cuando el usuario pasa el mouse sobre el botón) */
+.btn-desligar:hover {
+  background-color: #686868;
+  /* Naranja más intenso para el hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+  /* Sombra más intensa en hover */
+}
+
+/* Efecto cuando el botón está deshabilitado */
+.btn-desligar:disabled {
+  background-color: var(--gris-fondo-tabla);
+  /* Gris claro para deshabilitado */
+  color: var(--gris-titulo);
+  /* Gris más claro para el texto */
+  cursor: not-allowed;
+}
+
+/* Efecto de "deslizar" en el hover, similar a los otros botones */
+.btn-desligar::after {
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  right: 100%;
+  transition: all 0.35s ease;
+  background-color: var(--azul-iseta);
+  /* Fondo azul más suave para el hover */
+}
+
+.btn-desligar:hover::after {
+  left: 0;
+  right: 0;
+}
+
+/* BOTONES SIGUIENTE Y ANTERIOR */
+
+.boton-anterior,
+.boton-siguiente {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px;
+  /* Espaciado horizontal */
+  padding: 10px 20px;
+  /* Aumenta el espacio alrededor */
+  border-radius: 8px;
+  /* Bordes redondeados */
+  background-color: #150a5c;
+  /* Color de fondo */
+  color: white;
+  cursor: pointer;
+}
+
+.boton-anterior button,
+.boton-siguiente button {
+  padding: 8px 12px;
+  background-color: #150a5c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  /* Bordes redondeados */
+  font-size: 1.1em;
+  /* Tamaño de texto más grande */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  /* Espacio entre el icono y el texto */
+  cursor: pointer;
+}
+
+.boton-anterior span,
+.boton-siguiente span {
+  margin-left: 12px;
+  font-weight: bold;
+  color: white;
+}
+
+.boton-anterior:hover,
+.boton-siguiente:hover {
+  background-color: #0c0844;
+  /* Cambio de color al pasar el mouse */
+}
+
+.boton-anterior button i,
+.boton-siguiente button i {
+  font-size: 1.4em;
+  /* Tamaño de los iconos ajustado */
+}
+
 /* Activar o desactivar carrera al hacer clic en el botón */
 
 /* Toggle estilo iOS */

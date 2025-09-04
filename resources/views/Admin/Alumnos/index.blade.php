@@ -37,13 +37,13 @@
     'filter_titulo',
     'Estado del título:',
     'label-input-y-100',
-    $filters->filter_titulo ?? 0,
+    $filters->filter_titulo ?? null,
     [
-        0 => 'Todos',
-        1 => 'Fotocopia del título original secundario',
-        2 => 'Certificado de constancia de título en trámite',
-        3 => 'Constancia de alumno del último año del nivel secundario',
-        4 => 'No entregado',
+        null => 'Todos',
+        0 => 'Fotocopia del título original secundario',
+        1 => 'Certificado de constancia de título en trámite',
+        2 => 'Constancia de alumno del último año del nivel secundario',
+        3 => 'No entregado',
     ])
 ],
        'fields' => [
