@@ -45,7 +45,7 @@
                 <td class="bold">{{ $cursada->asignatura->nombre }}</td>
 
                 <td>
-                    {{ $cursada->alumno->apellidoNombre() }}
+                    {{ $cursada->alumno?->apellidoNombre() ?? 'Sin alumno asignado' }}
                 </td>
                 <td>
                     {{ $cursada->aprobado() }}
