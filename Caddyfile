@@ -11,6 +11,6 @@ http://192.168.100.50 {
 	encode zstd br gzip
 	# Execute PHP files from the public/ directory and serve assets
 	php_server {
-		try_files index.php
+		try_files {path} index.php
 	}
 }
