@@ -135,6 +135,20 @@ class BtnCancelar extends Component
             }
         }
 
+        // NUEVO bloque Create genérico
+        if (request()->is('admin/*/create')) {
+            $parts = explode('.', $name);
+            if (count($parts) >= 2) {
+                $base = $parts[0] . '.' . $parts[1];
+                $candidate = $base . '.index';
+                if (Route::has($candidate)) {
+                    $this->url = route($candidate);
+                    return;
+                }
+            }
+        }
+
+
         /**
          * 4) Fallback final
          */
