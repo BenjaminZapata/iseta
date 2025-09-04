@@ -8,7 +8,7 @@
     </div>
     <!-- DERECHA: Bienvenida + Avatar -->
     <div style="display: flex; align-items: center; gap: 1rem; position: relative; padding-right: 30px;">
-        <span style="font-size: 1rem; text-transform: none;">¡Bienvenido, {{ auth()->user()->rol()}}! {{auth()->user()->username}} </span>
+        <span style="font-size: 1rem; text-transform: none;">¡Bienvenido, {{ auth()->user()->rol()}}! </span>
         <!-- Notificaciones -->
         <div>
             <livewire:notificaciones />
@@ -20,6 +20,7 @@
                 onclick="toggleUserMenu()">
                 <img src="{{ asset('img/user-icon.png') }}" alt="Regente" title="Usuario"
                     style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; background-color: white;" />
+                <span>{{auth()->user()->username}}</span>
                 <i id="avatar-arrow" class="ti ti-chevron-down"
                     style="color: white; font-size: 1rem; position: relative; top: -2px; transition: transform 0.2s ease;"></i>
             </div>

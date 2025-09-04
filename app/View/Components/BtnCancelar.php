@@ -40,6 +40,20 @@ class BtnCancelar extends Component
             return;
         }
 
+        if ($name === 'admin.inscriptos.create') {
+            $prev = url()->previous();
+
+            // Si venís desde un alumno → volver al alumno
+            if (preg_match('#/admin/alumnos/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.alumnos.edit', ['alumno' => $m[1]]);
+                return;
+            }
+
+            // Si no, volver al index de cursadas
+            $this->url = route('admin.inscriptos.index');
+            return;
+        }
+
         if ($name === 'admin.examenes.edit') {
             $prev = url()->previous();
 
