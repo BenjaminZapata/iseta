@@ -43,7 +43,9 @@ class CrearAlumnoRequest extends FormRequest
             'codigo_postal' => ['nullable', 'alpha_num'],
             'estado' => ['nullable'],
             'titulo_secundario' => ['required'],
-            'genero' => ['required']
+            'genero' => ['required'],
+            'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
+            // luar de nacimiento, determinar si contiene espacios, limite de caracteres y ademas copiarlo tal cual en EditarAlumnooRequest.
 
         ];
     }

@@ -43,7 +43,8 @@ class EditarAlumnoRequest extends FormRequest
             'codigo_postal' => ['nullable', 'alpha_num'],
             'estado' => ['nullable'],
             'titulo_secundario' => ['required'],
-            'genero' => ['required']
+            'genero' => ['required'],
+            'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
 
         ];
     }
