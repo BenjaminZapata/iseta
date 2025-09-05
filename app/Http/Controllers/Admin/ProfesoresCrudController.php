@@ -78,11 +78,24 @@ class ProfesoresCrudController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditarProfesorRequest $request, Profesor $profesor)
-    {
-        $profesor->update($request->all());
-        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se edito el profesor');
+   public function update(EditarProfesorRequest $request, Profesor $profesor)
+{
+    try {
+        $profesor->update($request->validated());
+        return redirect()->route('admin.profesores.index')
+                         ->with('mensaje', 'Se editó el profesor correctamente.');
+    } catch (\Illuminate\Database\QueryException $e) {
+        // Extraer el campo que dio error del mensaje
+        preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
+        $campo = $matches[1] ?? 'desconocido';
+        return redirect()->back()
+                         ->withInput()
+                         ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
     }
+}
+
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -91,10 +104,10 @@ class ProfesoresCrudController extends BaseController
     {
         try {
             $profesor->delete();
-            return redirect()->route('admin.profesor.index')
+            return redirect()->route('admin.profesores.index')
                 ->with('mensaje', 'Se ha eliminado el Profesor');
         } catch (\Exception $e) {
-            return redirect()->route('admin.profesor.index')
+            return redirect()->route('admin.profesores.index')
                 ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
         }
     }

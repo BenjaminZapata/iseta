@@ -96,6 +96,8 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     ])->except('show')->missing(function () {
         return redirect()->route('admin.profesores.index')->with('aviso', 'El profesor no existe o ha sido eliminado');
     });
+    Route::delete('profesores/{profesor}', [ProfesoresCrudController::class, 'destroy'])
+        ->name('admin.profesores.destroy');
 
     // -----------------------------
     // CARRERAS
