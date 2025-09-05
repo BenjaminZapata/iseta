@@ -12,7 +12,6 @@ use App\Models\Examen;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use stdClass;
 
 class AlumnoCrudController extends BaseController
 {
@@ -28,6 +27,7 @@ class AlumnoCrudController extends BaseController
     public function __construct(AlumnoRepository $alumnosRepo)
     {
         parent::__construct();
+        $this->middleware('auth:admin');
         $this->alumnosRepo = $alumnosRepo;
     }
 
@@ -37,7 +37,7 @@ class AlumnoCrudController extends BaseController
 
     public function index(Request $request)
     {
-        
+
 
         $this->setFilters($request);
         $this->data['alumnos'] = $this->alumnosRepo->index($request);

@@ -39,6 +39,7 @@ class MesasCrudController extends BaseController
     function __construct(MesaRepository $mesaRepo, MesasCheckerService $mesasService)
     {
         parent::__construct();
+        $this->middleware('auth:admin');
         $this->mesaRepo = $mesaRepo;
         $this->mesasService = $mesasService;
     }
