@@ -16,18 +16,19 @@
             <div class="boton-eliminar">
                 
                 <div>
-                    <form method="POST" class="form-eliminar"
-                        action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
-                        @csrf
-                        @method('delete')
-                          <button class="btn_red_outline"
-                            onclick="openGeneralModal('form-eliminar-{{ $profesor->id }}',
-                            '¿Estás seguro de que querés eliminar al alumno: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'
-                            )"
-                            class="btn_icon-danger" style=" margin-left: 10px;">
-                                <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar
-                            profesor/a
-                        </button>
+                   <!-- Formulario de eliminación -->
+                    <form method="POST" id="form-eliminar-{{ $profesor->id }}"
+                    action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
+                     @csrf
+                     @method('delete')
+                    <button type="button"
+                    class="btn_red_outline"
+                    onclick="openGeneralModal(
+                    'form-eliminar-{{ $profesor->id }}',
+                    '¿Estás seguro de que querés eliminar al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'
+                    )">
+                    <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar profesor/a
+                    </button>
                     </form>
                 </div> 
             </div>
@@ -72,4 +73,4 @@
             </div>
 
         </div>
-        @endsection
+@endsection

@@ -148,6 +148,18 @@ class BtnCancelar extends Component
             }
         }
 
+        //Carreras - Asignaturas Cancelar en add_asignatura
+        if (request()->is('admin/carreras/add_asignatura/*')) {
+            $this->url = route('admin.carreras.edit', ['carrera' => request()->route('carrera')]);
+            return;
+        }
+
+        //Carreras - Asignaturas Cancelar en create_asignatura
+        if(request()->is('admin/carreras/create_asignatura/*')){
+            $this->url = route('admin.carreras.edit', ['carrera' => request()->route('carrera')]);
+            return;
+        }
+
 
         /**
          * 4) Fallback final

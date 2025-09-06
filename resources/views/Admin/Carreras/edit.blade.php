@@ -192,11 +192,10 @@ $anio_actual = $asignatura->anio;
                             </div>
                         </td>
                         <td>
-                            <div style="display:flex; align-items: center; justify-content: center;">
-                                <button type="button" class="btn_blue" onclick="toggleFiltroExportar(this)">
-                                    <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                    Exportar materia
-                                </button>
+                            <div style="position: relative;">
+                <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
+                    <i class="ti ti-file-download"></i> Exportar materia
+                </button>
 
                                 <form method="GET"
                                     action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"

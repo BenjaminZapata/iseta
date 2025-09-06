@@ -14,7 +14,7 @@ class CarreraRepository
 {
 
     public $config;
-    public $availableFiels = ['nombre', 'asignatura'];
+    public $availableFiels = ['nombre', 'asignatura','resolucion'];
 
     public function __construct()
     {
@@ -41,15 +41,20 @@ class CarreraRepository
                 in_array($request->input('filter_field'), $this->availableFiels),
                 function ($query) use ($request) {
                     $word = str_replace(' ', '%', $request->input('filter_search_box'));
-                    if ($request->input('filter_field') === 'asignatura') {
+                    if ($request->input('filter_field') === 'asignatura)') {
                         $query->whereHas('asignaturas', function ($q) use ($word) {
-                            $q->where('nombre', 'LIKE', '%' . $word . '%');
+                            $q->where('nombre', 'LIKE', '%' . $word . '%'
+                        );
                         });
+
                     } else {
-                        $query->where($request->input('filter_field'), 'LIKE', '%' . $word . '%');
+                        $query->where($request->input('filter_field '), 'LIKE', '%' . $word . '%');
                     }
+
                 }
             )
+
+            
             ->orderByDesc('vigente')
             ->orderByDesc('anio_apertura')
             ->orderBy('nombre')

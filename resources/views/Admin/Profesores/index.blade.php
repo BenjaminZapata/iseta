@@ -60,12 +60,11 @@
                             <button class="btn_blue"><i class="ti ti-file-info"
                                     style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                         </a>
-                            <form method="POST" class="form-eliminar"
-                                action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}"
-                                style="margin-left: 10px;">
-                                @csrf
-                                @method('delete')
-                                <button class="btn_icon-danger"
+                             <form method="POST" id="form-eliminar-{{ $profesor->id }}"
+                            action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
+                             @csrf
+                             @method('delete')
+                            <button class="btn_icon-danger"
                                 onclick="openGeneralModal(
                                 'form-eliminar-{{ $profesor->id }}',
                                 '¿Estás seguro de que querés eliminar al alumno: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'

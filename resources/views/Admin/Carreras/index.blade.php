@@ -31,7 +31,11 @@
                 ])
 
             ],
-            'fields' => ['nombre' => 'Nombre', 'asignatura' => 'Asignatura']
+            'fields' => [
+             'nombre' => 'Nombre',
+            'asignatura' => 'Asignatura',
+            'resolucion' => 'Resolución'
+            ]
         ]) ?>
     </div>
     <table class="table__body">
