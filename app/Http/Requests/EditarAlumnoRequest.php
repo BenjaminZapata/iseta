@@ -22,7 +22,7 @@ class EditarAlumnoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => ['required', 'numeric', 'max:999999999'],
+            'dni' => ['required', 'numeric', 'max:99999999'],
             'nombre' => ['required'],
             'apellido' => ['required'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
