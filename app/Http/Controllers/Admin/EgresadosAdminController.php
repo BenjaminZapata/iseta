@@ -121,14 +121,18 @@ class EgresadosAdminController extends BaseController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($alumno)
-    {
-        Egresado::find($alumno)->delete();
-        return redirect()->route('admin.inscriptos.index')->with([
-            'mensaje' => [
-                'Se ha eliminado la inscripcion',
-                'Recuerda que puedes volver a crearla en el apartado "crear inscripcion"'
-            ]
-        ]);
-    }
+        public function destroy($id)
+{
+    $inscripto = Egresado::findOrFail($id);
+    $inscripto->delete();
+
+
+    return redirect()->route('admin.inscriptos.index')->with([
+        'mensaje' => [
+            'Se ha eliminado la inscripción',
+            'Recuerda que puedes volver a crearla en el apartado "crear inscripción".'
+        ]
+    ]);
 }
+
+    }

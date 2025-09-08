@@ -136,6 +136,10 @@ class Asignatura extends Model
         $this->attributes['observaciones'] = TextFormatService::ucfirst($value);
     }
 
+    public function examenes(): HasMany{
+        return $this -> hasMany(related: Examen::class, foreignKey: 'id_asignatura');
+    }
+
 
 }
 

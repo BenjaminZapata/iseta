@@ -42,7 +42,8 @@
             {{-- @dd($cursadas) --}}
             @foreach ($cursadas as $cursada)
             <tr>
-                <td class="bold">{{ $cursada->asignatura->nombre }}</td>
+                <td class="bold">{{ $cursada->asignatura?->nombre ?? 'Sin asignatura' }}</td>
+
 
                 <td>
                     {{ $cursada->alumno?->apellidoNombre() ?? 'Sin alumno asignado' }}
