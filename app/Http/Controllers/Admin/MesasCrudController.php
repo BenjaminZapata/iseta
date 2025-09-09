@@ -175,6 +175,13 @@ class MesasCrudController extends BaseController
     public function destroy(Mesa $mesa)
     {
         try {
+
+            //verificar que no tenga fecha hoy o futura
+            if ($mesa->fecha >= date('Y-m-d')) {
+                return redirect()->route('admin.mesa.index')
+                    ->with('error', 'No se pudo eliminar la mesa. Tiene fecha hoy o futura.');
+            }
+            
             $mesa->delete();
             return redirect()->route('admin.mesa.index')
                 ->with('mensaje', 'Se ha eliminado el alumno');

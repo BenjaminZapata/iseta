@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\crearProfesorRequest;
 use App\Http\Requests\EditarProfesorRequest;
 use App\Models\Configuracion;
@@ -103,12 +102,31 @@ class ProfesoresCrudController extends BaseController
     public function destroy(Profesor $profesor)
     {
         try {
+
+            //verficiar si el profesor tiene mesas asignadas en el futuro
+            $mesas = Mesa::where(function ($query) use ($profesor) {
+                $query->where('prof_presidente', $profesor->id)
+                    ->orWhere('prof_vocal_1', $profesor->id)
+                    ->orWhere('prof_vocal_2', $profesor->id);
+            })
+                ->whereRaw('fecha > NOW()')
+                ->count();
+
+            if ($mesas > 0) {
+                return redirect()->route('admin.profesores.index')
+                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas en el futuro.');}
+
+            //verificar si el profesor tiene asignaturas asignadas en la tabla pivote
+            if ($profesor->carrera_asignatura_profesor()->count() > 0) {
+                return redirect()->route('admin.profesores.index')
+                    ->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');}
+            
             $profesor->delete();
             return redirect()->route('admin.profesores.index')
-                ->with('mensaje', 'Se ha eliminado el Profesor');
+                ->with('mensaje', 'Se ha eliminado el Profesor.');
         } catch (\Exception $e) {
             return redirect()->route('admin.profesores.index')
-                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+                ->with('error', 'No se pudo eliminar el Profesor. ' . $e->getMessage());
         }
     }
 
