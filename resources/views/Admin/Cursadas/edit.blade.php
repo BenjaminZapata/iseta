@@ -1,6 +1,10 @@
 @extends('Admin.template')
 
 @section('content')
+@php
+$from = request()->query('from');
+@endphp
+
 {{-- <p class="w-100p">
     <a href="/admin/alumnos">Alumnos</a>/
     <a href="/admin/alumnos/{{$cursada->alumno->id}}/edit">{{$cursada->alumno->id}}</a>/ Cursada/
@@ -11,21 +15,28 @@
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CURSADA'])
         <nav aria-label="breadcrumb" class="mb-4">
             <ul class="breadcrumb flex items-center gap-2 text-sm text-gray-700">
-                <li class="flex items-center">
-                    <a href="/admin/cursadas">Cursadas</a>
-                </li>
-                <li>
-                    <a href="/admin/cursadas/{{ $cursada->carrera->id }}/edit">{{ $cursada->carrera->nombre }}</a>
-                </li>
-                <li>
-                    <a href="/admin/mesas/{{ $mesa->id }}/mesas">{{ $cursada->mesa->asignatura->nombre }}</a>
-                </li>
-                <li>
-                    <a href="/admin/alumnos/{{ $cursada->alumno->id }}/edit">{{ $cursada->alumno->apellido }} {{ $cursada->alumno->nombre }}</a>
-                </li>
+                <!-- SI VIENE DESDE ALUMNOS -->
+                @if ($from === 'alumnos')
+                <li><a href="/admin/alumnos">Alumnos</a></li>
+                <li><a href="/admin/alumnos/{{ $cursada->alumno->id }}/edit">{{ $cursada->alumno->apellido }} {{ $cursada->alumno->nombre }}</a></li>
+                <li><span class="text-gray-500" style="color: black;"> {{ $cursada->carrera->nombre }}</span></li>
+                <!-- SI VIENE DESDE CARRERAS -->
+                @elseif ($from === 'carreras')
+                <li><a href="/admin/cursadas">Cursadas</a></li>
+                <!-- SI VIENE DESDE MESAS -->
+                @elseif ($from === 'mesas')
+                <li><a href="/admin/mesas">Mesas</a></li>
+                <li><a href="/admin/mesas/{{ $asignatura = $cursada->carrera->asignaturas->firstWhere('id', $cursada->asignatura->id)}}/mesas">{{ $cursada->asignatura->nombre }}</a></li>
+                <li><span class="text-gray-500" style="color: black;"> {{ $cursada->carrera->nombre }}</span></li>
+                <!-- SI VIENE DESDE CURSADAS -->
+                @elseif ($from === 'cursadas')
+                <li><a href="/admin/cursadas">Cursadas</a></li>
+                <li><span class="text-gray-500" style="color: black;"> {{ $cursada->carrera->nombre }}</span></li>
+                @endif
 
             </ul>
         </nav>
+
         <div class="perfil__info">
 
             <form method="POST" action="{{ route('admin.cursadas.update', ['cursada' => $cursada->id]) }}">

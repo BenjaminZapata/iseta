@@ -52,7 +52,7 @@
                 </td>
                 <td class="flex just-center">
                     <div style="display: flex; justify-content: center;">
-                        <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}">
+                        <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id, 'from' => 'cursadas']) }}">
                             <button class="btn_blue"><i class="ti ti-file-info"
                                     style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                         </a>
@@ -80,9 +80,9 @@
     </table>
 </div>
 
-  {{-- PAGINACIÓN --}}
+{{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
     {{ $cursadas->appends(request()->query())->links('Componentes.pagination') }}
 </div>
-    <script src="{{ asset('js/obtener-materias.js') }}"></script>
+<script src="{{ asset('js/obtener-materias.js') }}"></script>
 @endsection
