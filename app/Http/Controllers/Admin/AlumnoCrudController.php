@@ -12,6 +12,7 @@ use App\Models\Examen;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\view\WithInput;
 
 class AlumnoCrudController extends BaseController
 {
@@ -40,6 +41,7 @@ class AlumnoCrudController extends BaseController
 
 
         $this->setFilters($request);
+        $request->flash();
         $this->data['alumnos'] = $this->alumnosRepo->index($request);
 
         return view('Admin.Alumnos.index', $this->data);
