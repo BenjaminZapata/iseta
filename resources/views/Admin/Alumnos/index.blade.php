@@ -38,12 +38,13 @@
                 old('filter_carrera_id', $filters->filter_carrera_id ?? null),
                 ['first_items' => ['Todas']]
             ),
+
             $form->select(
                 'filter_ciudad',
                 'Ciudad:',
                 'label-input-y-100',
                 old('filter_ciudad', $filters->filter_ciudad ?? null),
-                $alumnoM->ciudades()
+                ['' => 'Cualquiera'] + $alumnoM->ciudades()
             ),
 
             $form->select(
