@@ -3,12 +3,17 @@
 @section(section: 'content')
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUMNO/A'])
-        <div class="perfil__info">
-            <p class="w-100p">
-                <a href="/admin/alumnos">Alumnos</a>
-                <a href="/admin/alumnos/{{ $alumno->id }}/edit">{{ $alumno->apellido }} {{ $alumno->nombre }}</a>
-            </p>
-        </div>
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ul class="breadcrumb flex items-center gap-2 text-sm text-gray-700">
+                <li class="flex items-center">
+                    <a href="/admin/alumnos">Alumnos</a>
+                </li>
+                <li>
+                    <a href="/admin/alumnos/{{ $alumno->id }}/edit">{{ $alumno->apellido }} {{ $alumno->nombre }}</a>
+                </li>
+            </ul>
+        </nav>
+
         <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
                 'Alumno' => [
                     $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno),

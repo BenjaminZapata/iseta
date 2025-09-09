@@ -3,6 +3,19 @@
 @section('content')
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'CREAR MESA'])
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ul class="breadcrumb flex items-center gap-2 text-sm text-gray-700">
+                <li class="flex items-center">
+                    <a href="/admin/carreras">Carreras</a>
+                </li>
+                <li>
+                    <a href="/admin/carreras/{{ $carrera->id }}/edit">{{ $carrera->nombre }}</a>
+                </li>
+                <li>
+                    <a href="/admin/carreras/{{ $carrera->id }}/mesas">{{ $asignatura->nombre }}</a>
+                </li>
+            </ul>
+        </nav>
         <div class="contenedor_mesa">
 
             <form method="post"
@@ -56,14 +69,14 @@
 
                 <div class="perfil_dataname" id="fecha_llamado_1">
                     <label>Fecha llamado 1:</label>
-                    <input class="campo_info rounded" value="{{ old('fecha1') ? old('fecha1') : '' }}" type="datetime-local"
-                        name="fecha1">
+                    <input class="campo_info rounded" value="{{ old('fecha1') ? old('fecha1') : '' }}"
+                        type="datetime-local" name="fecha1">
                 </div>
 
                 <div class="perfil_dataname" id="fecha_llamado_2" style="display: none;">
                     <label>Fecha llamado 2:</label>
-                    <input class="campo_info rounded" value="{{ old('fecha2') ? old('fecha2') : '' }}" type="datetime-local"
-                        name="fecha2">
+                    <input class="campo_info rounded" value="{{ old('fecha2') ? old('fecha2') : '' }}"
+                        type="datetime-local" name="fecha2">
                 </div>
 
                 <div class="botones-derecha"
