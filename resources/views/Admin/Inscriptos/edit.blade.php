@@ -4,6 +4,16 @@
 <div>
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR INSCRIPTO'])
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ul class="breadcrumb flex items-center gap-2 text-sm text-gray-700">
+                <li class="flex items-center">
+                    <a href="/admin/inscriptos">Inscriptos</a>
+                </li>
+                <li>
+                    <a href="/admin/inscriptos/{{ $registro->alumno->id }}/edit">{{ $registro->alumno->apellido }} {{ $registro->alumno->nombre }}</a>
+                </li>
+            </ul>
+        </nav>
         <div class="perfil__info">
             <form method="post" action="{{ route('admin.inscriptos.update', ['inscripto' => $registro->id]) }}">
                 @csrf
