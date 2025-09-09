@@ -161,8 +161,8 @@
             <thead>
                 <tr>
                     <th>Alumno</th>
-                    <th>Nota</th>
-                    <th>Cursada</th>
+                    <th class="center">Nota</th>
+                    <th class="center">Cursada</th>
                     <th class="center">Acción</th>
                 </tr>
             </thead>
@@ -171,29 +171,43 @@
                 <tr>
                     <td>{{ $examen->alumno->apellidoNombre() }}</td>
                     <td>
-                        {{-- @dd($examen->id) --}}
-                        <form action="{{ route('admin.examenes.nota', ['examen' => $examen->id]) }}"
-                            method="POST">
-                            @csrf
-                            <input name="nota" placeholder="0 = sin rendir, a = ausente"
-                                class="p-1 rounded border-1" value="{{ $examen->nota() }}">
-                            <button class="p-1 rounded border-1">modificar</button>
-                        </form>
+                        <div style="display:flex; align-items: center; justify-content: center;" title="0 = sin rendir, a = ausente">
+                            <form action="{{ route('admin.examenes.nota', ['examen' => $examen->id]) }}" method="POST">
+                                @csrf
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                    <input name="nota" placeholder="0 = sin rendir, a = ausente" class="input-nota"
+                                        value="{{ $examen->nota() }}">
+                                    <button class="boton-nota">
+                                        <i class="ti ti-check" style="font-size: 1.3em;"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div style="display:flex; align-items: center; justify-content: center;">
+                            @php
+                            $cursada = $mesa->asignatura->aproboCursada($examen->alumno);
+                            @endphp
+                            <a class="flex items-center justify-center"
+                                href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}">
+                                <strong>ESTADO:</strong>
+                                <button class="btn_blue" style="text-transform: uppercase; margin-left: 8px;">
+                                    {{ $cursada->condicionString() }}
+                                    <i class="ti ti-edit" style="font-size: 1.3em; margin-left: 5px;"></i>
+                                </button>
+                            </a>
+                        </div>
                     </td>
                     <td>
-                        @php
-                        $cursada = $mesa->asignatura->aproboCursada($examen->alumno);
-                        @endphp
-                        <a class="flex items-center"
-                            href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}"><button class="btn_blue"><i class="ti ti-edit" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                {{ $cursada->condicionString() }} </button>
-                        </a>
-                    </td>
-                    <td class=" flex just-center">
-                        <a href="{{ route('admin.examenes.edit', ['examen' => $examen->id]) }}">
-                            <button class="btn_blue"><i class="ti ti-edit" style="font-size: 1.3em; margin-right: 8px;"></i>Editar</button>
-                        </a>
-
+                        <div style="display:flex; align-items: center; justify-content: center;">
+                            <a href="{{ route('admin.examenes.edit', ['examen' => $examen->id]) }}">
+                                <button class="btn_blue">
+                                    <i class="ti ti-edit" style="font-size: 1.3em; margin-right: 8px;"></i>Editar
+                                </button>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 @endforeach

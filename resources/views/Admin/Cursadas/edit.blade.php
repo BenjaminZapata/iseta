@@ -15,11 +15,15 @@
                     <a href="/admin/cursadas">Cursadas</a>
                 </li>
                 <li>
-                    <a href="/admin/cursadas/{{ $cursada->alumno->id }}/edit">{{ $cursada->alumno->apellido }} {{ $cursada->alumno->nombre }}</a>
-                </li>
-                <li>
                     <a href="/admin/cursadas/{{ $cursada->carrera->id }}/edit">{{ $cursada->carrera->nombre }}</a>
                 </li>
+                <li>
+                    <a href="/admin/mesas/{{ $mesa->id }}/mesas">{{ $cursada->mesa->asignatura->nombre }}</a>
+                </li>
+                <li>
+                    <a href="/admin/alumnos/{{ $cursada->alumno->id }}/edit">{{ $cursada->alumno->apellido }} {{ $cursada->alumno->nombre }}</a>
+                </li>
+
             </ul>
         </nav>
         <div class="perfil__info">
