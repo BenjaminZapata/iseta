@@ -26,7 +26,7 @@ $from = request()->query('from');
                 <!-- SI VIENE DESDE MESAS -->
                 @elseif ($from === 'mesas')
                 <li><a href="/admin/mesas">Mesas</a></li>
-                <li><a href="/admin/mesas/{{ $asignatura = $cursada->carrera->asignaturas->firstWhere('id', $cursada->asignatura->id)}}/mesas">{{ $cursada->asignatura->nombre }}</a></li>
+                <li><a href="/admin/mesas/{{ $asignatura = $mesa}}/mesas">{{ $cursada->asignatura->nombre }}</a></li>
                 <li><span class="text-gray-500" style="color: black;"> {{ $cursada->carrera->nombre }}</span></li>
                 <!-- SI VIENE DESDE CURSADAS -->
                 @elseif ($from === 'cursadas')

@@ -191,7 +191,7 @@
                             $cursada = $mesa->asignatura->aproboCursada($examen->alumno);
                             @endphp
                             <a class="flex items-center justify-center"
-                                href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id, 'from' => 'mesas']) }}">
+                                href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id, 'mesa' => $mesa->id ,'from' => 'mesas']) }}">
                                 <strong>ESTADO:</strong>
                                 <button class="btn_blue" style="text-transform: uppercase; margin-left: 8px;">
                                     {{ $cursada->condicionString() }}

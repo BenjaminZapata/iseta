@@ -52,7 +52,8 @@ class CursadasAdminController extends BaseController
             ->where('id_alumno', $cursada->id_alumno)
             ->value('nota'); // Equivalencia
         Log::debug("message", ['cursada' => $cursada]);
-        return view('Admin.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
+        $mesaId = $request->query('mesa');
+        return view('Admin.Cursadas.edit', compact('cursada') + ['nota' => $nota] + ['mesa' => $mesaId]);
     }
 
     function update(Request $request, Cursada $cursada)
