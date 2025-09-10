@@ -40,7 +40,7 @@ class EgresadosAdminController extends BaseController
         $this->setFilters($request);
         $this->data['inscripciones'] = $inscriptosRepo->index($request);
 
-
+        $request->flash();
         return view('Admin.Inscriptos.index', $this->data);
     }
 
@@ -122,24 +122,23 @@ class EgresadosAdminController extends BaseController
     /**
      * Remove the specified resource from storage.
      */
-        public function destroy($id)
-{
-    $inscripto = Egresado::findOrFail($id);
+    public function destroy($id)
+    {
+        $inscripto = Egresado::findOrFail($id);
 
-    //verificar que no tenga mesas futuras
-    if(Examen::where('id_alumno',$inscripto->id_alumno)->where('fecha','>',date('Y-m-d'))->exists()) {
-        return redirect()->route('admin.inscriptos.index')
-            ->with('error', 'No se pudo eliminar la inscripción porque el alumno tiene mesas de examen futuras.');
+        //verificar que no tenga mesas futuras
+        if (Examen::where('id_alumno', $inscripto->id_alumno)->where('fecha', '>', date('Y-m-d'))->exists()) {
+            return redirect()->route('admin.inscriptos.index')
+                ->with('error', 'No se pudo eliminar la inscripción porque el alumno tiene mesas de examen futuras.');
+        }
+        $inscripto->delete();
+
+
+        return redirect()->route('admin.inscriptos.index')->with([
+            'mensaje' => [
+                'Se ha eliminado la inscripción',
+                'Recuerda que puedes volver a crearla en el apartado "crear inscripción".'
+            ]
+        ]);
     }
-    $inscripto->delete();
-
-
-    return redirect()->route('admin.inscriptos.index')->with([
-        'mensaje' => [
-            'Se ha eliminado la inscripción',
-            'Recuerda que puedes volver a crearla en el apartado "crear inscripción".'
-        ]
-    ]);
 }
-
-    }

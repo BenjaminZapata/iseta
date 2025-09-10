@@ -27,7 +27,6 @@
                     'filter_carrera_id',
                     'Carrera:',
                     'label-input-y-100',
-                    $filters,
                     [
                         'first_items' => ['Todas'],
                         'id' => 'carrera_select',
@@ -39,32 +38,29 @@
                     'filter_asignatura_id',
                     'Asignatura:',
                     'label-input-y-100',
-                    $filters,
+                    old('filter_asignatura_id', $filters->filter_asignatura_id ?? null),
                     $asignaturasList->pluck('nombre', 'id')->prepend('Todas', 0)->toArray(),
-                    old('filter_asignatura_id', $filters->filter_asignatura_id ?? null)
                 ),
 
                 $form->select(
                     'filter_anio',
                     'Año:',
                     'label-input-y-100',
-                    $filters,
+                    old('filter_anio', $filters->filter_anio ?? null),
                     ['Todos', '1er Año', '2do Año', '3er Año', '4to Año', '5to Año'],
-                    old('filter_anio', $filters->filter_anio ?? null)
                 ),
 
                 $form->select(
                     'filter_carga_horaria',
                     'Carga Horaria:',
                     'label-input-y-100',
-                    $filters,
+                    old('filter_carga_horaria', $filters->filter_carga_horaria ?? null),
                     [
                         'Cualquiera' => 'Cualquiera',
                         'Menos de 10 hs' => 'Menos de 10 hs',
                         '10 a 20 hs' => '10 a 20 hs',
                         'Más de 20 hs' => 'Más de 20 hs',
                     ],
-                    old('filter_carga_horaria', $filters->filter_carga_horaria ?? null)
                 )
             ],
             'fields' => [
