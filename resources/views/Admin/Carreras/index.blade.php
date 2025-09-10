@@ -89,15 +89,17 @@
       style="margin-left: 10px;">
     @csrf
     @method('delete')
-    <button class="btn_icon-danger"
+    <button type="button" {{-- 🔹 evitar submit automático --}}
+            class="btn_icon-danger"
             style="background-color: red;"
             onclick="openGeneralModal(
                 'form-eliminar-{{ $carrera->id }}', 
-                '¿Estás seguro de que querés eliminar la carrera: {{ mb_strtoupper($carrera->nombre, "UTF-8") }}?\n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
+                '¿Estás seguro de que querés eliminar la carrera: {{ mb_strtoupper($carrera->nombre, 'UTF-8') }}?\n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
             )">
         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
     </button>
 </form>
+
 
 
                     </div>

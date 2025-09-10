@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Alumno;
 
 
 class Carrera extends Model
@@ -55,7 +56,7 @@ class Carrera extends Model
     public function textForSelect(){
         return $this->nombre;
     }
-
+  
     public static function getAsignaturas($id_carrera){
         $asignaturas = Asignatura::select("id_asignatura")
             -> where('id_carrera',$id_carrera)

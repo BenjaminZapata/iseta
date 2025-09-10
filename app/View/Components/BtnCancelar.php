@@ -35,6 +35,12 @@ class BtnCancelar extends Component
                 return;
             }
 
+            // si venis desde mesas → volver a la mesa
+            if (preg_match('#/admin/mesas/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.mesas.edit', ['mesa' => $m[1]]);
+                return;
+            }
+
             // Si no, volver al index de cursadas
             $this->url = route('admin.cursadas.index');
             return;
