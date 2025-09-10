@@ -23,8 +23,8 @@ class EditarAlumnoRequest extends FormRequest
     {
         return [
             'dni' => ['required', 'numeric', 'max:999999999'],
-            'nombre' => ['required'],
-            'apellido' => ['required'],
+            'nombre' => ['required','regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'],
+            'apellido' => ['required','regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
             'ciudad' => ['nullable'],
             'calle' => ['nullable'],
