@@ -2,17 +2,27 @@
 @section('content')
 <link rel="stylesheet" href="{{asset('css/Admin/rematriculacion.css')}}">
 
-@include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
 
-<div id="fondo-estudiantes" class="bg-light flex-col justify-center items-center gap-4 p-4 w-100">
-    <div class="info-box bg-white p-3 rounded shadow-sm text-sm">
-        <p>Si solo desea registrar que un alumno está inscripto en una carrera sin anotarlo en ninguna cursada, deje todos los campos con el valor "No matricular" y haga click en enviar.</p>
-        <p>Al hacer esto el alumno podrá visualizar esta carrera en el seleccionador de carreras y podrá inscribirse a las cursadas manualmente.</p>
+
+<div class="perfil_one br">
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
+    <button id="ayuda-btn" class="btn-ayuda" title="Información">
+        <i class="ti ti-help-circle"></i>
+    </button>
+
+    <div id="ayuda-modal" class="modal-ayuda none">
+        <div class="modal-content">
+            <h3>¿Cómo funciona la rematriculación?</h3>
+            <p>Si solo desea registrar que un alumno está inscripto en una carrera sin anotarlo en ninguna cursada, deje todos los campos con el valor "No matricular" y haga click en enviar.</p>
+            <p>Al hacer esto el alumno podrá visualizar esta carrera en el seleccionador de carreras y podrá inscribirse a las cursadas manualmente.</p>
+            <button id="cerrar-ayuda" class="btn-close">Cerrar</button>
+        </div>
     </div>
 
-    <div class="perfil_one br w-100p max-w-900">
+
+    <div class="perfil_one br">
         <div class="perfil__header mb-3">
-            <h2 class="text-lg font-bold border-b pb-2">Matricular</h2>
+            <h2 class="text-lg font-bold border-b pb-2">Matricular alumno</h2>
         </div>
 
         <div class="perfil__info">
@@ -63,7 +73,7 @@
         @endforeach
 
         <div class="text-right mt-4">
-            <button class="btn btn-primary"><i class="ti ti-send"></i> Enviar</button>
+            <button class="btn_blue"><i class="ti ti-send" style="margin-right: 8px; font-size: 1.3em;"></i> Matricular</button>
         </div>
         @endif
         </form>
@@ -79,4 +89,15 @@
         list.classList.toggle('none');
     }
 </script>
+
+<script>
+    const ayudaBtn = document.getElementById('ayuda-btn');
+    const ayudaModal = document.getElementById('ayuda-modal');
+    const cerrarAyuda = document.getElementById('cerrar-ayuda');
+
+    ayudaBtn.onclick = () => ayudaModal.classList.toggle('none');
+    cerrarAyuda.onclick = () => ayudaModal.classList.add('none');
+</script>
+
+
 @endsection

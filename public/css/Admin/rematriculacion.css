@@ -2,28 +2,78 @@
  background-color: #f5f7fa;
 }
 
-.breadcrumb-link {
+.alert-box {
+ background-color: #fff3cd;
+ color: #d8a407;
+}
+
+/* Card general */
+.asignatura-card {
+ background-color: #ffffff;
+ border: 1px solid #ddd;
+ border-radius: 8px;
+ padding: 1.2rem;
+ margin-bottom: 1.5rem;
+ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+ transition: box-shadow 0.2s ease;
+}
+
+.asignatura-card:hover {
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado de asignatura */
+.asignatura-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 1rem;
+}
+
+.asignatura-header label {
+ font-weight: 600;
+ color: #333;
+ margin-right: 0.5rem;
+}
+
+.asignatura-header span,
+.asignatura-header a {
+ font-weight: 500;
  color: #007bff;
  text-decoration: none;
 }
 
-.breadcrumb-link:hover {
+.asignatura-header a:hover {
  text-decoration: underline;
 }
 
-.breadcrumb-current {
- font-weight: bold;
- color: #333;
+/* Dropdown moderno */
+.form-select {
+ appearance: none;
+ background-color: #f8f9fa;
+ border: 1px solid #ccc;
+ border-radius: 6px;
+ padding: 0.5rem 1rem;
+ font-size: 0.95rem;
+ width: 100%;
+ transition: border-color 0.2s ease;
 }
 
-.alert-box {
- background-color: #fff3cd;
- color: #856404;
+.form-select:focus {
+ border-color: #007bff;
+ outline: none;
+ background-color: #fff;
 }
 
-.asignatura-card {
- border-left: 4px solid transparent;
+/* Detalles de correlativas */
+.equiv-list {
+ background-color: #f1f1f1;
+ border-left: 3px solid #ffc107;
+ padding: 0.5rem 1rem;
+ margin-top: 0.5rem;
+ border-radius: 4px;
 }
+
 
 .border-left-warning {
  border-left-color: #ffc107;
@@ -38,6 +88,53 @@
  font-size: 0.875rem;
 }
 
-.max-w-900 {
- max-width: 95%;
+.max-w-100p {
+ max-width: 100%;
+}
+
+/* Boton ayuda */
+
+.btn-ayuda {
+ position: fixed;
+ bottom: 20px;
+ right: 20px;
+ background-color: #150a5c;
+ color: white;
+ border-radius: 50%;
+ width: 50px;
+ height: 50px;
+ font-size: 1.5rem;
+ border: none;
+ cursor: pointer;
+ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+ z-index: 1000;
+}
+
+.modal-ayuda {
+ position: fixed;
+ bottom: 80px;
+ right: 20px;
+ width: 300px;
+ background: white;
+ border: 1px solid #ccc;
+ border-radius: 8px;
+ padding: 1rem;
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+ z-index: 1000;
+}
+
+.modal-content h3 {
+ margin-top: 0;
+ font-size: 1.1rem;
+ margin-bottom: 0.5rem;
+}
+
+.btn-close {
+ margin-top: 1rem;
+ background-color: #dc3545;
+ color: white;
+ border: none;
+ padding: 0.5rem 1rem;
+ border-radius: 4px;
+ cursor: pointer;
 }
