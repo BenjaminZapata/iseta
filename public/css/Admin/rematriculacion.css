@@ -1,0 +1,43 @@
+.bg-light {
+ background-color: #f5f7fa;
+}
+
+.breadcrumb-link {
+ color: #007bff;
+ text-decoration: none;
+}
+
+.breadcrumb-link:hover {
+ text-decoration: underline;
+}
+
+.breadcrumb-current {
+ font-weight: bold;
+ color: #333;
+}
+
+.alert-box {
+ background-color: #fff3cd;
+ color: #856404;
+}
+
+.asignatura-card {
+ border-left: 4px solid transparent;
+}
+
+.border-left-warning {
+ border-left-color: #ffc107;
+}
+
+.none {
+ display: none;
+}
+
+.btn-sm {
+ padding: 0.25rem 0.5rem;
+ font-size: 0.875rem;
+}
+
+.max-w-900 {
+ max-width: 95%;
+}
