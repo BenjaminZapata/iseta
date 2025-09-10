@@ -22,10 +22,56 @@
                 inscripcion</button></a>
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.inscriptos.index', $filters, [
-            'dropdowns' => [$carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']), $form->select('filter_vigente', 'Estado Carreras: ', 'label-input-y-100', $filters, ['Todas', 'No Vigentes', 'Vigentes']), $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-100', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']), $form->select('filter_estado', 'Estado: ', 'label-input-y-100', $filters, ['Cursando', 'Egresado', 'Desertor']), $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades())],
+            'dropdowns' => [
+                $carreraM->dropdown(
+                    'filter_carrera_id',
+                    'Carrera:',
+                    'label-input-y-100',
+                    old('filter_carrera_id', $filters->filter_carrera_id ?? null),
+                    [
+                        'first_items' => ['Todas'],
+                        'id' => 'carrera_select'
+                    ]
+                ),
+
+                $form->select(
+                    'filter_vigente',
+                    'Estado Carreras:',
+                    'label-input-y-100',
+                    old('filter_vigente', $filters->filter_vigente ?? null),
+                    ['Todas', 'No Vigentes', 'Vigentes']
+                ),
+
+                $alumnoM->dropdown(
+                    'filter_alumno_id',
+                    'Alumno:',
+                    'label-input-y-100',
+                    old('filter_alumno_id', $filters->filter_alumno_id ?? null),
+                    [
+                        'first_items' => ['Todos'],
+                        'filter' => 'orderByApellidoNombre'
+                    ]
+                ),
+
+                $form->select(
+                    'filter_estado',
+                    'Estado:',
+                    'label-input-y-100',
+                    old('filter_estado', $filters->filter_estado ?? null),
+                    ['Cursando', 'Egresado', 'Desertor']
+                ),
+
+                $form->select(
+                    'filter_ciudad',
+                    'Ciudad:',
+                    'label-input-y-100',
+                    old('filter_ciudad', $filters->filter_ciudad ?? null),
+                     ['' => 'Cualquiera'] + $alumnoM->ciudades()
+                ),
+            ],
 
             'fields' => [
-                'anio_inscripcion' => 'Año de inscripción',
+                'anio_inscripcion'  => 'Año de inscripción',
                 'anio_finalizacion' => 'Año de finalización',
             ],
         ]) ?>
@@ -81,8 +127,8 @@
                             style="background-color: red; margin-left: 10px;">
                             <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                             </button>
-                            </form> 
-                        @endif  
+                            </form>
+                        @endif
                     </div>
 </td>
 

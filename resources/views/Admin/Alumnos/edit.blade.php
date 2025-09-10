@@ -26,10 +26,10 @@
     $alumno,
     [
         '' => 'Seleccione una opción',
-        'Fotocopia del título original secundario',
+        'No entregado',
         'Certificado de constancia de título en trámite',
         'Constancia de alumno del último año del nivel secundario',
-        'No entregado'
+        'Fotocopia del título original secundario'
     ]
 )],
             'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)],

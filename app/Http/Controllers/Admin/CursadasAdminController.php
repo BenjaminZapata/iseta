@@ -36,6 +36,7 @@ class CursadasAdminController extends BaseController
         $this->setFilters($request);
         $this->data['cursadas'] = $cursadaRepo->index($request);
         session(['return_to' => url()->previous()]);
+        $request->flash();
         return view('Admin.Cursadas.index', $this->data);
     }
 

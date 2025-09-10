@@ -23,24 +23,32 @@
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.asignaturas.index', $filters, [
             'dropdowns' => [
-                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
+                $carreraM->dropdown(
+                    'filter_carrera_id',
+                    'Carrera:',
+                    'label-input-y-100',
+                    [
+                        'first_items' => ['Todas'],
+                        'id' => 'carrera_select',
+                        'value' => old('filter_carrera_id', $filters->filter_carrera_id ?? null)
+                    ]
+                ),
+
                 $form->select(
                     'filter_asignatura_id',
                     'Asignatura:',
                     'label-input-y-100',
-                    $filters,
-                    $asignaturasList->pluck('nombre', 'id')->prepend('Todas', 0)->toArray()
+                    old('filter_asignatura_id', $filters->filter_asignatura_id ?? null),
+                    $asignaturasList->pluck('nombre', 'id')->prepend('Todas', 0)->toArray(),
                 ),
 
-
-
                 $form->select('filter_anio', 'Año:', 'label-input-y-100', $filters, ['Todos', '1er Año', '2do Año', '3er Año', '4to Año', '5to Año']),
-                $form->select('filter_carga_horaria', 'Carga Horaria:', 'label-input-y-100', $filters, [
-                    'Cualquiera' => 'Cualquiera',
-                    'Menos de 10 hs' => 'Menos de 10 hs',
-                    '10 a 20 hs' => '10 a 20 hs',
-                    'Más de 20 hs' => 'Más de 20 hs',
-                ])
+               $form->select('filter_carga_horaria', 'Carga Horaria:', 'label-input-y-100', $filters, [
+    'Cualquiera' => 'Cualquiera',
+    'Menos de 10 hs' => 'Menos de 10 hs',
+    '10 a 20 hs' => '10 a 20 hs',
+    'Más de 20 hs' => 'Más de 20 hs',
+])
 
             ],
             'fields' => [
@@ -98,7 +106,7 @@
                             @csrf
                             @method('DELETE')
                             <button type="button"
-                                onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', 
+                                onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
                                     '¿Estás seguro de que querés eliminar a la asignatura: {{ strtoupper($asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                                 class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
                                 <i class="ti ti-trash" style="font-size: 1.3em;"></i>
