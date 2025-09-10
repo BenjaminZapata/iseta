@@ -41,6 +41,7 @@ class EditarProfesorRequest extends FormRequest
     'telefono2' => ['nullable', 'numeric'],
     'telefono3' => ['nullable', 'numeric'],
     'codigo_postal' => ['required', 'alpha_num'],
+    'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
     ];
     }
 }

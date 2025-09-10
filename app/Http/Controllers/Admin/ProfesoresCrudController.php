@@ -80,7 +80,7 @@ class ProfesoresCrudController extends BaseController
      */
     public function update(EditarProfesorRequest $request, Profesor $profesor)
     {
-        $profesor->update($request->all());
+        $profesor->update($request->validated());
         return redirect()->route('admin.profesores.index')->with('mensaje', 'Se edito el profesor');
     }
 
