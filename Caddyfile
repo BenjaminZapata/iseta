@@ -1,6 +1,6 @@
 {
 	frankenphp
-    http_port 8845
+    http_port 80
 }
 
 # The domain name of your server

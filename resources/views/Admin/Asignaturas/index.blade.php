@@ -31,7 +31,7 @@
                     [
                         'first_items' => ['Todas'],
                         'id' => 'carrera_select',
-                        'value' => old('filter_carrera_id', $filters['filter_carrera_id'] ?? null)
+                        'value' => old('filter_carrera_id', $filters->filter_carrera_id ?? null)
                     ]
                 ),
 
@@ -41,7 +41,7 @@
                     'label-input-y-100',
                     $filters,
                     $asignaturasList->pluck('nombre', 'id')->prepend('Todas', 0)->toArray(),
-                    old('filter_asignatura_id', $filters['filter_asignatura_id'] ?? null)
+                    old('filter_asignatura_id', $filters->filter_asignatura_id ?? null)
                 ),
 
                 $form->select(
@@ -50,7 +50,7 @@
                     'label-input-y-100',
                     $filters,
                     ['Todos', '1er Año', '2do Año', '3er Año', '4to Año', '5to Año'],
-                    old('filter_anio', $filters['filter_anio'] ?? null)
+                    old('filter_anio', $filters->filter_anio ?? null)
                 ),
 
                 $form->select(
@@ -64,7 +64,7 @@
                         '10 a 20 hs' => '10 a 20 hs',
                         'Más de 20 hs' => 'Más de 20 hs',
                     ],
-                    old('filter_carga_horaria', $filters['filter_carga_horaria'] ?? null)
+                    old('filter_carga_horaria', $filters->filter_carga_horaria ?? null)
                 )
             ],
             'fields' => [
