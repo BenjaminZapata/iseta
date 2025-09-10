@@ -207,10 +207,6 @@ tbody tr:nth-child(even) {
   background: #0000000b;
 }
 
-tbody tr:hover {
-  background: var(--gris-hover);
-}
-
 table,
 th,
 td {
