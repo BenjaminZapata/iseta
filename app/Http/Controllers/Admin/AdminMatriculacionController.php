@@ -13,9 +13,12 @@ use Illuminate\Http\Request;
 
 class AdminMatriculacionController extends Controller
 {
-    public function __construct()
+    protected $AlumnoMatriculacionService;
+
+    public function __construct(AlumnoMatriculacionService $AlumnoMatriculacionService)
     {
         $this->middleware('auth:admin');
+        $this->AlumnoMatriculacionService = $AlumnoMatriculacionService;
     }
 
     /*
@@ -25,20 +28,26 @@ class AdminMatriculacionController extends Controller
      */
     function rematriculacion_vista(Request $request, Alumno $alumno, AlumnoMatriculacionService $matriculacionService)
     {
+$carrera = Carrera::where('id', $request->input('carrera'))->first();
 
-        $carrera = Carrera::where('id', $request->input('carrera'))->first();
+if (!$carrera) {
+    // 🚨 Error: no tiene carreras
+    return redirect()
+        ->route('admin.alumnos.edit', ['alumno' => $alumno->id])
+        ->with('error', "El alumno {$alumno->apellido}, {$alumno->nombre} no tiene ninguna carrera asignada para matricular.");
+}
 
+$anotables = $matriculacionService->matriculables($alumno, $carrera);
 
-
-
-        $anotables = $matriculacionService->matriculables($alumno, $carrera);
-
-        return view('Admin.Alumnos.rematriculacion', [
-            'asignaturas' => $anotables,
-            'carrera' => $carrera,
-            'alumno' => $alumno
-        ]);
+return view('Admin.Alumnos.rematriculacion', [
+    'asignaturas' => $anotables,
+    'carrera' => $carrera,
+    'alumno' => $alumno
+]);
     }
+
+
+
 
 
     /*

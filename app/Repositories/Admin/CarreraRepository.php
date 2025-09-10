@@ -14,47 +14,39 @@ class CarreraRepository
 {
 
     public $config;
-    public $availableFiels = ['nombre', 'asignatura'];
+    public $availableFiels = ['nombre', 'asignatura','resolucion'];
 
     public function __construct()
     {
         $this->config = Configuracion::todas();
     }
+public function index($request)
+{
+    $filterVigente = $request->filled('filter_vigente') ? $request->input('filter_vigente') : '1';
 
-    public function index($request)
-    {
-        // Usamos valor por defecto si el filtro no viene del usuario
-        $filterVigente = $request->filled('filter_vigente')
-            ? $request->input('filter_vigente')
-            : '1'; // mostrar solo vigentes por defecto
+    $query = Carrera::with('asignaturas')
+        ->when($filterVigente !== '', fn($q) => $q->where('vigente', (int) $filterVigente))
+        ->when(
+            $request->filled('filter_search_box') && in_array($request->input('filter_field'), ['nombre','resolucion','asignatura']),
+            function ($query) use ($request) {
+                $word = str_replace(' ', '%', $request->input('filter_search_box'));
+                $field = $request->input('filter_field');
 
-        return Carrera::query()
-            ->with('asignaturas')
-            ->when(
-                $filterVigente !== '',
-                function ($query) use ($filterVigente) {
-                    $query->where('vigente', (int) $filterVigente);
+                if ($field === 'asignatura') {
+                    $query->whereHas('asignaturas', fn($q) => $q->where('nombre', 'LIKE', "%$word%"));
+                } else {
+                    $query->where($field, 'LIKE', "%$word%");
                 }
-            )
-            ->when(
-                $request->filled('filter_search_box') &&
-                in_array($request->input('filter_field'), $this->availableFiels),
-                function ($query) use ($request) {
-                    $word = str_replace(' ', '%', $request->input('filter_search_box'));
-                    if ($request->input('filter_field') === 'asignatura') {
-                        $query->whereHas('asignaturas', function ($q) use ($word) {
-                            $q->where('nombre', 'LIKE', '%' . $word . '%');
-                        });
-                    } else {
-                        $query->where($request->input('filter_field'), 'LIKE', '%' . $word . '%');
-                    }
-                }
-            )
-            ->orderByDesc('vigente')
-            ->orderByDesc('anio_apertura')
-            ->orderBy('nombre')
-            ->paginate($this->config['filas_por_tabla']);
-    }
+            }
+        )
+        ->orderByDesc('vigente')
+        ->orderByDesc('anio_apertura')
+        ->orderBy('nombre');
+
+    $carreras = $query->paginate($this->config['filas_por_tabla']);
+    
+    return $carreras;
+}
 
 
 

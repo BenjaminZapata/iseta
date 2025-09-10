@@ -11,15 +11,15 @@
             $form->text('nombre', 'Nombre:', 'label-input-y-75', null),
             $form->text('apellido', 'Apellido:', 'label-input-y-75', null),
             $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', null),
-            $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', null, ['Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
+            $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', null, ['vacio','Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
             $form->text('lugar_nacimiento', 'Lugar de nacimiento:', 'label-input-y-75', null),
         ],
         'Dirección' => [
             $form->text('ciudad', 'Ciudad:', 'label-input-y-75', null),
             $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', null),
             $form->text('calle', 'Calle:', 'label-input-y-75', null),
-            $form->text('casa_numero', 'Altura:', 'label-input-y-75', null),
-            $form->text('departamento', 'Departamento:', 'label-input-y-75', null),
+            $form->text('casa_numero', 'Numero de casa:', 'label-input-y-75', null),
+            $form->text('dpto', 'Departamento:', 'label-input-y-75', null),
             $form->text('piso', 'Piso:', 'label-input-y-75', null)
         ],
         'Academico' => [

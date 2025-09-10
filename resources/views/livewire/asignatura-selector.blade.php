@@ -35,12 +35,5 @@
             <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
             <input type="hidden" name="carrera_id" value="{{ $carrera->id }}">
         </div>
-        <div class="upd">
-            <button class="btn_blue" type="submit">
-                <i class="ti ti-circle-plus">
-                </i>
-                Agregar
-            </button>
-        </div>
     </div>
 </form>

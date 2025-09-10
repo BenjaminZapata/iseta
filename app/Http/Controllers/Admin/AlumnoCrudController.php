@@ -12,7 +12,6 @@ use App\Models\Examen;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use stdClass;
 
 class AlumnoCrudController extends BaseController
 {
@@ -28,6 +27,7 @@ class AlumnoCrudController extends BaseController
     public function __construct(AlumnoRepository $alumnosRepo)
     {
         parent::__construct();
+        $this->middleware('auth:admin');
         $this->alumnosRepo = $alumnosRepo;
     }
 
@@ -37,6 +37,8 @@ class AlumnoCrudController extends BaseController
 
     public function index(Request $request)
     {
+
+
         $this->setFilters($request);
         $this->data['alumnos'] = $this->alumnosRepo->index($request);
 
@@ -136,12 +138,35 @@ class AlumnoCrudController extends BaseController
     public function destroy(Alumno $alumno)
     {
         try {
+
+            //verificar si tiene cursadas
+            if($alumno->cursadas()->exists()) {
+                return redirect()->route('admin.alumnos.index')
+                    ->with('error', 'No se pudo eliminar el alumno porque tiene cursadas asociadas.');
+            }
+
+            //verificar si tiene mesas futuras
+            if(Examen::where('id_alumno',$alumno->id)->where('fecha','>',date('Y-m-d'))->exists()) {
+                return redirect()->route('admin.alumnos.index')
+                    ->with('error', 'No se pudo eliminar el alumno porque tiene mesas de examen futuras.');
+            }
+            
+
+            //verificar si esta inscripto en alguna carrera
+            if($alumno->carreras()->exists()) {
+                return redirect()->route('admin.alumnos.index')
+                    ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras.');
+            }
+
+
+
+            //eliminar alumno
             $alumno->delete();
             return redirect()->route('admin.alumnos.index')
                 ->with('mensaje', 'Se ha eliminado el alumno');
         } catch (\Exception $e) {
             return redirect()->route('admin.alumnos.index')
-                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+                ->with('error', 'No se pudo eliminar el alumno.');
         }
     }
 

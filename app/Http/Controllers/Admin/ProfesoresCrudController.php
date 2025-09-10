@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\crearProfesorRequest;
 use App\Http\Requests\EditarProfesorRequest;
 use App\Models\Configuracion;
@@ -78,11 +77,31 @@ class ProfesoresCrudController extends BaseController
     /**
      * Update the specified resource in storage.
      */
+<<<<<<< HEAD
     public function update(EditarProfesorRequest $request, Profesor $profesor)
     {
         $profesor->update($request->validated());
         return redirect()->route('admin.profesores.index')->with('mensaje', 'Se edito el profesor');
+=======
+   public function update(EditarProfesorRequest $request, Profesor $profesor)
+{
+    try {
+        $profesor->update($request->validated());
+        return redirect()->route('admin.profesores.index')
+                         ->with('mensaje', 'Se editó el profesor correctamente.');
+    } catch (\Illuminate\Database\QueryException $e) {
+        // Extraer el campo que dio error del mensaje
+        preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
+        $campo = $matches[1] ?? 'desconocido';
+        return redirect()->back()
+                         ->withInput()
+                         ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
+>>>>>>> 95c700409b99567150d4492925b2f4c43ddd2ca9
     }
+}
+
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -90,12 +109,31 @@ class ProfesoresCrudController extends BaseController
     public function destroy(Profesor $profesor)
     {
         try {
+
+            //verficiar si el profesor tiene mesas asignadas en el futuro
+            $mesas = Mesa::where(function ($query) use ($profesor) {
+                $query->where('prof_presidente', $profesor->id)
+                    ->orWhere('prof_vocal_1', $profesor->id)
+                    ->orWhere('prof_vocal_2', $profesor->id);
+            })
+                ->whereRaw('fecha > NOW()')
+                ->count();
+
+            if ($mesas > 0) {
+                return redirect()->route('admin.profesores.index')
+                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas en el futuro.');}
+
+            //verificar si el profesor tiene asignaturas asignadas en la tabla pivote
+            if ($profesor->carrera_asignatura_profesor()->count() > 0) {
+                return redirect()->route('admin.profesores.index')
+                    ->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');}
+            
             $profesor->delete();
-            return redirect()->route('admin.profesor.index')
-                ->with('mensaje', 'Se ha eliminado el Profesor');
+            return redirect()->route('admin.profesores.index')
+                ->with('mensaje', 'Se ha eliminado el Profesor.');
         } catch (\Exception $e) {
-            return redirect()->route('admin.profesor.index')
-                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+            return redirect()->route('admin.profesores.index')
+                ->with('error', 'No se pudo eliminar el Profesor. ' . $e->getMessage());
         }
     }
 

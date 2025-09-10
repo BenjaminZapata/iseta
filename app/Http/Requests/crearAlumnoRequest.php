@@ -22,9 +22,9 @@ class CrearAlumnoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => ['required', 'numeric', 'max:255'],
-            'nombre' => ['required'],
-            'apellido' => ['required'],
+            'dni' => ['required', 'numeric'],
+            'nombre' => ['required', 'string'],
+            'apellido' => ['required', 'string'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
             'ciudad' => ['nullable'],
             'calle' => ['nullable'],
@@ -33,16 +33,16 @@ class CrearAlumnoRequest extends FormRequest
             'piso' => ['nullable'],
             'estado_civil' => ['required'],
             'email' => ['nullable'],
-            'nombre_institucion_secundario' => ['required', 'string', 'max:255'],
+            'nombre_institucion_secundario' => ['nullable', 'string', 'max:255'],
             'titulo_anterior' => ['nullable'],
-            'becas' => ['nullable'],
+            'becas' => ['nullable', 'integer', 'in:0,1'],
             'observaciones' => ['nullable'],
             'telefono1' => ['nullable', 'numeric'],
             'telefono2' => ['nullable', 'numeric'],
             'telefono3' => ['nullable', 'numeric'],
             'codigo_postal' => ['nullable', 'alpha_num'],
             'estado' => ['nullable'],
-            'titulo_secundario' => ['required'],
+            'titulo_secundario ' => ['required|in:Fotocopia del título original secundario,Certificado de constancia de título en trámite,Constancia de alumno del último año del nivel secundario,No entregado'],   
             'genero' => ['required']
 
         ];

@@ -22,17 +22,22 @@
             </button>
         </a>
         {{-- FILTROS --}}
-        <?= $filtergen->generate('admin.carreras.index', $filters, [
-            'dropdowns' => [
-                $form->select('filter_vigente', 'Condición: ', 'label-input-y-100', $filters, [
-                    '' => 'Todas',
-                    0 => 'No Vigentes',
-                    1 => 'Vigentes',
-                ])
+       <?= $filtergen->generate('admin.carreras.index', $filters, [
+    'dropdowns' => [
+        $form->select('filter_vigente', 'Condición: ', 'label-input-y-100', $filters, [
+            '' => 'Todas',
+            0 => 'No Vigentes',
+            1 => 'Vigentes',
+        ])
+    ],
+    'fields' => [
+        'nombre' => 'Nombre',
+        'resolucion' => 'Resolución',
+        'asignatura' => 'Asignatura'
+    ]
+]) ?>
 
-            ],
-            'fields' => ['nombre' => 'Nombre', 'asignatura' => 'Asignatura']
-        ]) ?>
+
     </div>
     <table class="table__body">
         <thead>
