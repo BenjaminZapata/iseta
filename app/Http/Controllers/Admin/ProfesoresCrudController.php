@@ -77,12 +77,6 @@ class ProfesoresCrudController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-<<<<<<< HEAD
-    public function update(EditarProfesorRequest $request, Profesor $profesor)
-    {
-        $profesor->update($request->validated());
-        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se edito el profesor');
-=======
    public function update(EditarProfesorRequest $request, Profesor $profesor)
 {
     try {
@@ -96,7 +90,6 @@ class ProfesoresCrudController extends BaseController
         return redirect()->back()
                          ->withInput()
                          ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
->>>>>>> 95c700409b99567150d4492925b2f4c43ddd2ca9
     }
 }
 
