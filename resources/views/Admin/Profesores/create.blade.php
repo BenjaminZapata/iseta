@@ -9,6 +9,9 @@
                     <li class="flex items-center">
                         <a href="/admin/profesores">Profesores</a>
                     </li>
+                    <li>
+                        <span class="text-gray-500" style="color: black;"> Crear profesor/a</span>
+                    </li>
                 </ul>
             </nav>
             <div class="perfil__info">

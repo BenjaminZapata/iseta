@@ -12,7 +12,7 @@
                     <a href="/admin/carreras/{{ $carrera->id }}/edit">{{ $carrera->nombre }}</a>
                 </li>
                 <li>
-                    <a href="/admin/carreras/{{ $carrera->id }}/mesas">{{ $asignatura->nombre }}</a>
+                    <span class="text-gray-500" style="color: black;"> {{ $asignatura->nombre }}</span>
                 </li>
             </ul>
         </nav>

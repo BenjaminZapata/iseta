@@ -10,6 +10,9 @@
                     <li class="flex items-center">
                         <a href="/admin/asignaturas">Asignaturas</a>
                     </li>
+                    <li>
+                        <span class="text-gray-500" style="color: black;"> Crear asignatura</span>
+                    </li>
                 </ul>
             </nav>
             <div class="perfil__header">

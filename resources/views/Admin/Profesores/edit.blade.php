@@ -10,8 +10,9 @@
                         <a href="/admin/profesores">Profesores</a>
                     </li>
                     <li>
-                        <a href="/admin/profesores/{{ $profesor->id }}/edit">{{ $profesor->apellido }}
-                            {{ $profesor->nombre }}</a>
+                        <span class="text-gray-500" style="color: black;">
+                            {{ $profesor->apellido }} {{ $profesor->nombre }}
+                        </span>
                     </li>
                 </ul>
             </nav>

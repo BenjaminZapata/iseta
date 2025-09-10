@@ -1,17 +1,35 @@
 @extends('Admin.template')
 
 @section('content')
+    @php
+        $from = request()->query('from');
+    @endphp
     <div class="edit-form-container">
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
             <nav aria-label="breadcrumb" class="mb-4">
                 <ul class="breadcrumb flex items-center gap-2 text-sm text-gray-700">
-                    <li class="flex items-center">
-                        <a href="/admin/asignaturas">Asignaturas</a>
-                    </li>
-                    <li>
-                        <a href="/admin/asignaturas/{{ $asignatura->id }}/edit">{{ $asignatura->nombre }}</a>
-                    </li>
+                    <!-- SI VIENE DESDE ASIGNATURAS -->
+                    @if ($from === 'asignaturas')
+                        <li class="flex items-center"><a href="/admin/asignaturas">Asignaturas</a></li>
+                        <li>
+                            <span class="text-gray-500" style="color: black;">
+                                {{ $asignatura->nombre }}
+                            </span>
+                        </li>
+                        <!-- SI VIENE DESDE CARRERAS -->
+                    @elseif ($from === 'carreras')
+                        <li class="flex items-center">
+                            <a href="/admin/carreras">Carreras</a>
+                        </li>
+                        <li>
+                            <a href="/admin/carreras/{{ $asignatura->id }}/edit">
+                                {{ $asignatura->nombre }}</a>
+                        </li>
+                        <li>
+                            <span class="text-gray-500" style="color: black;"> {{ $asignatura->nombre }}</span>
+                        </li>
+                    @endif
                 </ul>
             </nav>
 

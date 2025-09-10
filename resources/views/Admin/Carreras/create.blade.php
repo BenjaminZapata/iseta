@@ -9,6 +9,9 @@
                     <li class="flex items-center">
                         <a href="/admin/carreras">Carreras</a>
                     </li>
+                    <li>
+                        <span class="text-gray-500" style="color: black;"> Crear carrera</span>
+                    </li>
                 </ul>
             </nav>
             <div class="perfil__info">
