@@ -10,23 +10,19 @@
     }
 </style>
 
-
-
 {{-- CONTENT --}}
 
 <div class="table" data-name="tablaAlumnos">
 
-
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
 
     {{-- BOTON CREAR --}}
-
     <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
-            <a href="{{ route('admin.alumnos.create') }}">
-                <button class="btn_blue">
-                    <i class="ti ti-circle-plus"></i>Agregar alumno
-                </button>
-            </a>
+        <a href="{{ route('admin.alumnos.create') }}">
+            <button class="btn_blue">
+                <i class="ti ti-circle-plus"></i>Agregar alumno
+            </button>
+        </a>
 
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.alumnos.index', $filters, [
@@ -53,38 +49,8 @@
                 'telefono1' => 'Telefono',
                 'titulo_secundario' => 'Titulo'
             ],
-        {{-- FILTROS --}}
-        <?= $filtergen->generate('admin.alumnos.index', $filters, [
-            'dropdowns' => [
-                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
-                $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters->filter_ciudad ?? null, $alumnoM->ciudades()),
-                $form->select(
-                    'filter_titulo',
-                    'Estado del título:',
-                    'label-input-y-100',
-                    $filters->filter_titulo ?? null,
-                    [
-                        null => 'Todos',
-                        0 => 'Fotocopia del título original secundario',
-                        1 => 'Certificado de constancia de título en trámite',
-                        2 => 'Constancia de alumno del último año del nivel secundario',
-                        3 => 'No entregado',
-                    ]
-                )
-            ],
-            'fields' => [
-                'alumno' => 'Alumno',
-                'dni' => 'Dni',
-                'telefono1' => 'Telefono',
-                'titulo_secundario' => 'Titulo'
-            ],
-
-
-            ]) ?>
-
-
+        ]) ?>
     </div>
-
 
     {{-- TABLA --}}
     <table class="table__body">
@@ -100,7 +66,6 @@
             </tr>
         </thead>
 
-
         {{-- TBODY --}}
         <tbody>
             @foreach ($alumnos as $alumno)
@@ -111,8 +76,7 @@
                 </td>
 
                 <td>
-                    <p style="text-transform: none;">{{ $alumno->email ? $alumno->email : 'Sin mail registrado' }}
-                    </p>
+                    <p style="text-transform: none;">{{ $alumno->email ? $alumno->email : 'Sin mail registrado' }}</p>
                     @if ($alumno->telefono1)
                     <p>tel: {{ $alumno->telefono1 }}</p>
                     @elseif ($alumno->telefono2)
@@ -149,6 +113,7 @@
                                     onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}', '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido)}} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                                     class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
                                     <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                </button>
                             </form>
                         </div>
                         @endif
@@ -159,9 +124,6 @@
         </tbody>
     </table>
 </div>
-
-
-
 
 {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
