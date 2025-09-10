@@ -23,8 +23,8 @@
                             <a href="/admin/carreras">Carreras</a>
                         </li>
                         <li>
-                            <a href="/admin/carreras/{{ $asignatura->id }}/edit">
-                                {{ $asignatura->nombre }}</a>
+                            <a href="/admin/carreras/{{ $asignatura->id_carrera }}/edit">
+                                {{ $asignatura->carrera->first()->nombre }}</a>
                         </li>
                         <li>
                             <span class="text-gray-500" style="color: black;"> {{ $asignatura->nombre }}</span>
