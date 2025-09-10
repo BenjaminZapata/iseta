@@ -24,23 +24,23 @@
         <?= $filtergen->generate('admin.asignaturas.index', $filters, [
             'dropdowns' => [
                 $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
-              $form->select(
-    'filter_asignatura_id',
-    'Asignatura:',
-    'label-input-y-100',
-    $filters,
-    $asignaturasList->pluck('nombre', 'id')->prepend('Todas', 0)->toArray()
-),
+                $form->select(
+                    'filter_asignatura_id',
+                    'Asignatura:',
+                    'label-input-y-100',
+                    $filters,
+                    $asignaturasList->pluck('nombre', 'id')->prepend('Todas', 0)->toArray()
+                ),
 
 
 
                 $form->select('filter_anio', 'Año:', 'label-input-y-100', $filters, ['Todos', '1er Año', '2do Año', '3er Año', '4to Año', '5to Año']),
-               $form->select('filter_carga_horaria', 'Carga Horaria:', 'label-input-y-100', $filters, [
-    'Cualquiera' => 'Cualquiera',
-    'Menos de 10 hs' => 'Menos de 10 hs',
-    '10 a 20 hs' => '10 a 20 hs',
-    'Más de 20 hs' => 'Más de 20 hs',
-])
+                $form->select('filter_carga_horaria', 'Carga Horaria:', 'label-input-y-100', $filters, [
+                    'Cualquiera' => 'Cualquiera',
+                    'Menos de 10 hs' => 'Menos de 10 hs',
+                    '10 a 20 hs' => '10 a 20 hs',
+                    'Más de 20 hs' => 'Más de 20 hs',
+                ])
 
             ],
             'fields' => [
@@ -51,7 +51,7 @@
             ],
         ]) ?>
     </div>
-        
+
 
     {{-- TABLA DE ASIGNATURAS --}}
     <table class="table__body">
@@ -59,23 +59,32 @@
             <tr>
                 <th>Asignatura</th>
                 <th>Carrera</th>
-                <th>Año</th>
-                <th>Carga horaria</th>
-                <th>Acción</th>
+                <th class="center">Año</th>
+                <th class="center">Carga horaria</th>
+                <th class="center">Acción</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($asignaturas as $asignatura)
-                <tr>
-                    <td>{{ $asignatura->nombre }}</td>
-                    <td>
-                        @foreach ($asignatura->carrera as $carrera)
-                            {{ $carrera->nombre }}<br>
-                        @endforeach
-                    </td>
-                    <td>{{ $asignatura->anioStr() }}</td>
-                    <td>{{ $asignatura->carga_horaria }} hs</td>
-                    <td class="flex just-center">
+            <tr>
+                <td class="bold">{{ $asignatura->nombre }}</td>
+                <td>
+                    @foreach ($asignatura->carrera as $carrera)
+                    {{ $carrera->nombre }}<br>
+                    @endforeach
+                </td>
+                <td>
+                    <div style="display: flex; justify-content: center;">
+                        {{ $asignatura->anioStr() }}
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex; justify-content: center;">
+                        {{ $asignatura->carga_horaria }} hs
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex; justify-content: center;">
                         <a href="{{ route('admin.asignaturas.edit', $asignatura->id) }}">
                             <button class="btn_blue">
                                 <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>
@@ -84,19 +93,20 @@
                         </a>
 
                         <form id="form-eliminar-{{ $asignatura->id }}"
-                              action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}" method="POST"
-                              style="display: inline;">
+                            action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}" method="POST"
+                            style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="button"
-                                    onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', 
+                                onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', 
                                     '¿Estás seguro de que querés eliminar a la asignatura: {{ strtoupper($asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                                class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
                                 <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                             </button>
                         </form>
-                    </td>
-                </tr>
+                    </div>
+                </td>
+            </tr>
             @endforeach
         </tbody>
     </table>
