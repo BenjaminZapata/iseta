@@ -22,10 +22,10 @@ class EditarAsignaturaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => ['required'],
-            'tipo_modulo' => ['required'],
-            'carga_horaria' => ['required', 'regex:/^\d+$/'],
-            'anio' => ['required', 'regex:/^\d+$/'],
+            'nombre' => ['required','regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u', 'min:5','max:50'],
+            'tipo_modulo' => ['nullable'],
+            'carga_horaria' => ['required', 'integer'],
+            'anio' => ['required', 'integer', 'min:1', 'max:6'],
             'observaciones' => ['nullable'],
         ];
     }

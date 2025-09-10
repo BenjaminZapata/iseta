@@ -22,7 +22,7 @@ class EditarAlumnoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => ['required', 'numeric', 'max:999999999'],
+            'dni' => ['required', 'numeric', 'max:99999999'],
             'nombre' => ['required'],
             'apellido' => ['required'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
@@ -43,7 +43,8 @@ class EditarAlumnoRequest extends FormRequest
             'codigo_postal' => ['nullable', 'alpha_num'],
             'estado' => ['nullable'],
             'titulo_secundario' => ['required'],
-            'genero' => ['required']
+            'genero' => ['required'],
+            'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
 
         ];
     }

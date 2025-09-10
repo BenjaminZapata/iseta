@@ -22,9 +22,9 @@ class CrearAlumnoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => ['required', 'numeric'],
-            'nombre' => ['required', 'string'],
-            'apellido' => ['required', 'string'],
+            'dni' => ['required', 'numeric', 'max:99999999'],
+            'nombre' => ['required'],
+            'apellido' => ['required'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
             'ciudad' => ['nullable'],
             'calle' => ['nullable'],
@@ -42,8 +42,10 @@ class CrearAlumnoRequest extends FormRequest
             'telefono3' => ['nullable', 'numeric'],
             'codigo_postal' => ['nullable', 'alpha_num'],
             'estado' => ['nullable'],
-            'titulo_secundario ' => ['required|in:Fotocopia del título original secundario,Certificado de constancia de título en trámite,Constancia de alumno del último año del nivel secundario,No entregado'],   
-            'genero' => ['required']
+            'titulo_secundario' => ['required'],
+            'genero' => ['required'],
+            'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
+            // luar de nacimiento, determinar si contiene espacios, limite de caracteres y ademas copiarlo tal cual en EditarAlumnooRequest.
 
         ];
     }

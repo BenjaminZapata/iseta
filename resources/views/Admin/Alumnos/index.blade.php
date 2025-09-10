@@ -22,11 +22,11 @@
     {{-- BOTON CREAR --}}
 
     <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
-    <a href="{{ route('admin.alumnos.create') }}">
-        <button class="btn_blue">
-            <i class="ti ti-circle-plus"></i>Agregar alumno
-        </button>
-    </a>
+        <a href="{{ route('admin.alumnos.create') }}">
+            <button class="btn_blue">
+                <i class="ti ti-circle-plus"></i>Agregar alumno
+            </button>
+        </a>
 
     {{-- FILTROS --}}
     <?= $filtergen->generate('admin.alumnos.index', $filters, [
@@ -77,6 +77,7 @@
     ]) ?>
 
 
+
     </div>
 
 
@@ -89,6 +90,7 @@
                 <th>Alumno</th>
                 <th>Contacto</th>
                 <th>Dirección</th>
+                <th>Lugar de nacimiento</th>
                 <th class="center">Acción</th>
             </tr>
         </thead>
@@ -119,6 +121,9 @@
                 <td>
                     <p>{{ $alumno->ciudad }}</p>
                     <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
+                </td>
+                <td>
+                    <p> {{$alumno->lugar_nacimiento}} </p>
                 </td>
                 <td class="flex just-center">
                     <div style="display: flex; justify-content: center;">

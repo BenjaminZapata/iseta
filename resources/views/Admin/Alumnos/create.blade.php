@@ -18,6 +18,7 @@
       null,
       ['inputclass' => 'p-1 w-75p']
     ),
+    $form->text('lugar_nacimiento', 'Lugar de nacimiento:', 'label-input-y-75', null),
     $form->select(
       'estado_civil',
       'Estado civil:',
