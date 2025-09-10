@@ -35,7 +35,9 @@ class Profesor extends Authenticatable
         'telefono2',
         'telefono3',
         'codigo_postal',
-        'password'
+        'password',
+        'lugar_nacimiento',
+        
     ];
 
     protected $casts = [
