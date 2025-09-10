@@ -139,7 +139,7 @@ class AlumnoCrudController extends BaseController
     {
         try {
 
-            //verificar si tiene cursadas
+            //verificar si tiene cursadas pero con el estado 
             if($alumno->cursadas()->exists()) {
                 return redirect()->route('admin.alumnos.index')
                     ->with('error', 'No se pudo eliminar el alumno porque tiene cursadas asociadas.');
@@ -152,12 +152,11 @@ class AlumnoCrudController extends BaseController
             }
             
 
-            //verificar si esta inscripto en alguna carrera
-            if($alumno->carreras()->exists()) {
-                return redirect()->route('admin.alumnos.index')
-                    ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras.');
-            }
-
+            //verificar si esta inscripto en alguna carrera pero con el estado regular
+            if ($alumno->carreras()->where('estado', 'regular')->exists()) {
+    return redirect()->route('admin.alumnos.index')
+        ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras como regular');
+}
 
 
             //eliminar alumno

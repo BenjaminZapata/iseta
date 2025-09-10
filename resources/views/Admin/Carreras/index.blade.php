@@ -22,20 +22,34 @@
             </button>
         </a>
         {{-- FILTROS --}}
-       <?= $filtergen->generate('admin.carreras.index', $filters, [
+     <?= $filtergen->generate('admin.carreras.index', $filters, [
     'dropdowns' => [
-        $form->select('filter_vigente', 'Condición: ', 'label-input-y-100', $filters, [
-            '' => 'Todas',
-            0 => 'No Vigentes',
-            1 => 'Vigentes',
-        ])
+        $form->select(
+            'filter_vigente', 
+            'Condición: ', 
+            'label-input-y-100', 
+            [], // $item vacío si no hay registro
+            [
+                ''  => '',             // primera opción VACÍA
+                1   => 'Vigentes',    
+                0   => 'No Vigentes',
+            ],
+            [
+                'value' => request()->input('filter_vigente', '') // valor por defecto
+            ]
+        )
     ],
     'fields' => [
-        'nombre' => 'Nombre',
+        'nombre'     => 'Nombre',
         'resolucion' => 'Resolución',
         'asignatura' => 'Asignatura'
     ]
 ]) ?>
+
+
+
+
+
 
 
     </div>
@@ -66,21 +80,28 @@
                             </button>
                         </a>
                     </div>
-                    @if (!$config['modo_seguro'])
+                    
+                    {{-- @if (!$config['modo_seguro']) --}}
                     <div>
-                        <form method="POST" class="form-eliminar"
-                            action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}"
-                            style="margin-left: 10px;">
-                            @csrf
-                            @method('delete')
-                            <button class="btn_icon-danger" style="background-color: red"
-                                onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                                <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                            </button>
-                        </form>
+                        <form method="POST" 
+      id="form-eliminar-{{ $carrera->id }}" 
+      action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}"
+      style="margin-left: 10px;">
+    @csrf
+    @method('delete')
+    <button class="btn_icon-danger"
+            style="background-color: red;"
+            onclick="openGeneralModal(
+                'form-eliminar-{{ $carrera->id }}', 
+                '¿Estás seguro de que querés eliminar la carrera: {{ mb_strtoupper($carrera->nombre, "UTF-8") }}?\n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
+            )">
+        <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+    </button>
+</form>
+
+
                     </div>
-                    @endif
+                    {{-- @endif --}}
                 </td>
 
             </tr>

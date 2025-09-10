@@ -117,9 +117,9 @@ class ProfesoresCrudController extends BaseController
                     ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas en el futuro.');}
 
             //verificar si el profesor tiene asignaturas asignadas en la tabla pivote
-            if ($profesor->carrera_asignatura_profesor()->count() > 0) {
-                return redirect()->route('admin.profesores.index')
-                    ->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');}
+            //if ($profesor->carrera_asignatura_profesor()->count() > 0) {
+                //return redirect()->route('admin.profesores.index')
+                    //->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');}
             
             $profesor->delete();
             return redirect()->route('admin.profesores.index')

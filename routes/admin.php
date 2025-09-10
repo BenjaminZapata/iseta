@@ -160,7 +160,7 @@ Route::post('/admin/asignaturas/{asignatura}/desvincular/{carrera}',
     Route::post('cursadas/create', [CursadasAdminController::class, 'store'])->name('admin.cursadas.store');
     Route::get('cursadas/{cursada}/edit', [CursadasAdminController::class, 'edit'])->name('admin.cursadas.edit');
     Route::put('cursadas/{cursada}/edit', [CursadasAdminController::class, 'update'])->name('admin.cursadas.update');
-    Route::delete('cursadas/{cursada}', [CursadasAdminController::class, 'delete'])->name('admin.cursadas.destroy');
+    Route::delete('cursadas/{cursada}', [CursadasAdminController::class, 'destroy'])->name('admin.cursadas.destroy');
 
     Route::get('cursadas/{asignatura}', [AdminCursadasLotes::class, 'vista'])->name('admin.cursadas.masivo');
     Route::post('masivo/cursadas', [AdminCursadasLotes::class, 'cargar'])->name('admin.cursadas.masivo.post');

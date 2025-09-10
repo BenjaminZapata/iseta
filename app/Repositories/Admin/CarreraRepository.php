@@ -8,6 +8,7 @@ use App\Models\CarreraAsignatura;
 use App\Models\CarreraAsignaturaProfesor;
 use App\Models\Configuracion;
 use PhpParser\Node\Expr\FuncCall;
+use Illuminate\Support\Facades\Log;
 
 
 class CarreraRepository
@@ -22,29 +23,66 @@ class CarreraRepository
     }
 public function index($request)
 {
-    $filterVigente = $request->filled('filter_vigente') ? $request->input('filter_vigente') : '1';
+    $filterVigente = $request->input('filter_vigente', null); // '', '0', '1'
+    $hasSearch     = $request->filled('filter_search_box') && $request->filled('filter_field');
+    $query         = Carrera::with('asignaturas');
 
-    $query = Carrera::with('asignaturas')
-        ->when($filterVigente !== '', fn($q) => $q->where('vigente', (int) $filterVigente))
-        ->when(
-            $request->filled('filter_search_box') && in_array($request->input('filter_field'), ['nombre','resolucion','asignatura']),
-            function ($query) use ($request) {
-                $word = str_replace(' ', '%', $request->input('filter_search_box'));
-                $field = $request->input('filter_field');
+    if ($hasSearch) {
+        $word  = trim($request->input('filter_search_box'));
+        $field = $request->input('filter_field');
 
-                if ($field === 'asignatura') {
-                    $query->whereHas('asignaturas', fn($q) => $q->where('nombre', 'LIKE', "%$word%"));
-                } else {
-                    $query->where($field, 'LIKE', "%$word%");
-                }
-            }
-        )
-        ->orderByDesc('vigente')
-        ->orderByDesc('anio_apertura')
-        ->orderBy('nombre');
+        switch ($field) {
+            case 'asignatura':
+                $query->whereHas('asignaturas', function ($q) use ($word) {
+                    $tokens = array_filter(array_map('trim', preg_split('/[^\p{L}\p{N}]+/u', $word)));
+                    foreach ($tokens as $t) {
+                        if (mb_strlen($t) < 2) continue;
+                        $q->whereRaw(
+                            "asignaturas.nombre COLLATE utf8mb4_unicode_ci LIKE ?",
+                            ["%{$t}%"]
+                        );
+                    }
+                });
+                break;
+
+            case 'resolucion':
+                $query->whereRaw(
+                    "CAST(carreras.resolucion AS CHAR) COLLATE utf8mb4_unicode_ci LIKE ?",
+                    ["%{$word}%"]
+                );
+                break;
+
+            case 'nombre':
+            default:
+                $tokens = array_filter(array_map('trim', preg_split('/[^\p{L}\p{N}]+/u', $word)));
+                $query->where(function ($sub) use ($tokens) {
+                    foreach ($tokens as $t) {
+                        if (mb_strlen($t) < 2) continue;
+                        $sub->whereRaw(
+                            "carreras.nombre COLLATE utf8mb4_unicode_ci LIKE ?",
+                            ["%{$t}%"]
+                        );
+                    }
+                });
+                break;
+        }
+
+    } else {
+        // 🔹 Caso sin búsqueda
+        if ($filterVigente === '0' || $filterVigente === '1') {
+            $query->where('carreras.vigente', (int)$filterVigente);
+        } else {
+            // Sin filtro y sin búsqueda → mostrar solo vigentes
+            $query->where('carreras.vigente', 1);
+        }
+    }
+
+    $query->orderByDesc('carreras.vigente')
+          ->orderByDesc('carreras.anio_apertura')
+          ->orderBy('carreras.nombre');
 
     $carreras = $query->paginate($this->config['filas_por_tabla']);
-    
+
     return $carreras;
 }
 
