@@ -22,41 +22,42 @@
     {{-- BOTON CREAR --}}
 
     <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
-    <a href="{{ route('admin.alumnos.create') }}">
-        <button class="btn_blue">
-            <i class="ti ti-circle-plus"></i>Agregar alumno
-        </button>
-    </a>
+        <a href="{{ route('admin.alumnos.create') }}">
+            <button class="btn_blue">
+                <i class="ti ti-circle-plus"></i>Agregar alumno
+            </button>
+        </a>
 
-    {{-- FILTROS --}}
-    <?= $filtergen->generate('admin.alumnos.index', $filters, [
-        'dropdowns' => [
-            $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
-            $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters->filter_ciudad ?? null, $alumnoM->ciudades()),
-            $form->select(
-    'filter_titulo',
-    'Estado del título:',
-    'label-input-y-100',
-    $filters->filter_titulo ?? null,
-    [
-        null => 'Todos',
-        0 => 'Fotocopia del título original secundario',
-        1 => 'Certificado de constancia de título en trámite',
-        2 => 'Constancia de alumno del último año del nivel secundario',
-        3 => 'No entregado',
-    ])
-],
-       'fields' => [
-    'alumno' => 'Alumno',
-    'dni' => 'Dni',
-    'telefono1' => 'Telefono',
-    'titulo_secundario' => 'Titulo' 
-],
+        {{-- FILTROS --}}
+        <?= $filtergen->generate('admin.alumnos.index', $filters, [
+            'dropdowns' => [
+                $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
+                $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters->filter_ciudad ?? null, $alumnoM->ciudades()),
+                $form->select(
+                    'filter_titulo',
+                    'Estado del título:',
+                    'label-input-y-100',
+                    $filters->filter_titulo ?? null,
+                    [
+                        null => 'Todos',
+                        0 => 'Fotocopia del título original secundario',
+                        1 => 'Certificado de constancia de título en trámite',
+                        2 => 'Constancia de alumno del último año del nivel secundario',
+                        3 => 'No entregado',
+                    ]
+                )
+            ],
+            'fields' => [
+                'alumno' => 'Alumno',
+                'dni' => 'Dni',
+                'telefono1' => 'Telefono',
+                'titulo_secundario' => 'Titulo'
+            ],
 
 
-    ]) ?>
+        ]) ?>
 
-    
+
     </div>
 
 
@@ -102,7 +103,7 @@
                     <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                 </td>
                 <td>
-                    <p> {{$alumno->lugar_nacimiento}} </p> 
+                    <p> {{$alumno->lugar_nacimiento}} </p>
                 </td>
                 <td class="flex just-center">
                     <div style="display: flex; justify-content: center;">
