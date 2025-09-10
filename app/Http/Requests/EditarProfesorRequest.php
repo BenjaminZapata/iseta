@@ -3,23 +3,14 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class EditarProfesorRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return \true;
+        return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
           return [
@@ -41,6 +32,7 @@ class EditarProfesorRequest extends FormRequest
     'telefono2' => ['nullable', 'numeric'],
     'telefono3' => ['nullable', 'numeric'],
     'codigo_postal' => ['required', 'alpha_num'],
+    'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
     ];
     }
 }

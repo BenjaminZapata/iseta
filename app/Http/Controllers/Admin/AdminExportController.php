@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Log;
 
 class AdminExportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     function cursadasAsignatura(Request $request, Asignatura $asignatura)
     {
 
@@ -50,5 +54,4 @@ class AdminExportController extends Controller
 
         return view('Admin.Exportar.cursadas', compact('carrera', 'aniosCalendario'));
     }
-
 }

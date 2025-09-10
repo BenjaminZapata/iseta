@@ -11,6 +11,7 @@ use App\Models\Configuracion;
 use App\Models\Egresado;
 use App\Repositories\Admin\InscripcionRepository;
 use Illuminate\Http\Request;
+use App\Models\Examen;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -121,14 +122,24 @@ class EgresadosAdminController extends BaseController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($alumno)
-    {
-        Egresado::find($alumno)->delete();
-        return redirect()->route('admin.inscriptos.index')->with([
-            'mensaje' => [
-                'Se ha eliminado la inscripcion',
-                'Recuerda que puedes volver a crearla en el apartado "crear inscripcion"'
-            ]
-        ]);
+        public function destroy($id)
+{
+    $inscripto = Egresado::findOrFail($id);
+
+    //verificar que no tenga mesas futuras
+    if(Examen::where('id_alumno',$inscripto->id_alumno)->where('fecha','>',date('Y-m-d'))->exists()) {
+        return redirect()->route('admin.inscriptos.index')
+            ->with('error', 'No se pudo eliminar la inscripción porque el alumno tiene mesas de examen futuras.');
     }
+    $inscripto->delete();
+
+
+    return redirect()->route('admin.inscriptos.index')->with([
+        'mensaje' => [
+            'Se ha eliminado la inscripción',
+            'Recuerda que puedes volver a crearla en el apartado "crear inscripción".'
+        ]
+    ]);
 }
+
+    }

@@ -64,24 +64,26 @@
                             <button class="btn_blue"><i class="ti ti-file-info"
                                     style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                         </a>
-                        {{-- Boton eliminar 
-                        @if (!$config['modo_seguro'])
-                        <div>
-                            <form method="POST" class="form-eliminar"
-                                action="{{ route('admin.inscriptos.destroy', ['inscripto' => $inscripcion->id]) }}"
-                        style="margin-left: 10px;">
-                        @csrf
-                        @method('delete')
-                        <button class="btn_icon-danger" style="background-color: red"
-                            onclick="openGeneralModal('form-eliminar-{{ $inscripcion->id }}', '¿Estás seguro de que querés eliminar al inscripto: {{ strtoupper($inscripcion->alumno->apellido) }} {{ strtoupper($inscripcion->alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                            class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                        <!-- Boton eliminar -->
+                       @if (!$config['modo_seguro'])
+                            <form method="POST"
+                             id="form-eliminar-{{ $inscripcion->id }}"
+                            action="{{ route('admin.inscriptos.destroy', $inscripcion->id) }}"
+                            class="form-eliminar"
+                            style="margin-left: 10px;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                            onclick="openGeneralModal(
+                            'form-eliminar-{{ $inscripcion->id }}',
+                            '¿Estás seguro de que querés eliminar al inscripto: {{ strtoupper($inscripcion->alumno->apellido) }} {{ strtoupper($inscripcion->alumno->nombre) }}? \n\nESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                            class="btn_icon-danger"
+                            style="background-color: red; margin-left: 10px;">
                             <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                        </button>
-                        </form>
+                            </button>
+                            </form> 
+                        @endif  
                     </div>
-                    @endif
-                    --}}
-</div>
 </td>
 
 </tr>

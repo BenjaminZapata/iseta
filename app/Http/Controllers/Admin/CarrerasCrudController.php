@@ -11,6 +11,7 @@ use App\Models\Asignatura;
 use App\Repositories\Admin\CarreraRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class CarrerasCrudController extends BaseController
 {
@@ -24,6 +25,7 @@ class CarrerasCrudController extends BaseController
     public function __construct(CarreraRepository $carreraRepo)
     {
         parent::__construct();
+        $this->middleware('auth:admin');
         $this->carreraRepo = $carreraRepo;
     }
 
@@ -88,7 +90,7 @@ class CarrerasCrudController extends BaseController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, Carrera $carrera)
+    public function edit(Carrera $carrera)
     {
         $carrera->load('asignaturas');
 
@@ -205,9 +207,11 @@ class CarrerasCrudController extends BaseController
     public function destroy(Carrera $carrera)
     {
         try {
+            //verificar si contiene alumnos o profesores o mesas futuras
+            
+
             // Desvincular todas las asignaturas relacionadas
             $carrera->asignaturas()->detach();
-
             // Ahora eliminar la carrera
             $carrera->delete();
 

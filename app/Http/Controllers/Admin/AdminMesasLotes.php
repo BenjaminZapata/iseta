@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Log;
 class AdminMesasLotes extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     /**
      * Muestra la vista de crear mesas en lote para una asignatura y una carrera en particular.
      *

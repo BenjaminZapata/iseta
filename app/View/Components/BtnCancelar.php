@@ -40,6 +40,20 @@ class BtnCancelar extends Component
             return;
         }
 
+        if ($name === 'admin.inscriptos.create') {
+            $prev = url()->previous();
+
+            // Si venís desde un alumno → volver al alumno
+            if (preg_match('#/admin/alumnos/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.alumnos.edit', ['alumno' => $m[1]]);
+                return;
+            }
+
+            // Si no, volver al index de cursadas
+            $this->url = route('admin.inscriptos.index');
+            return;
+        }
+
         if ($name === 'admin.examenes.edit') {
             $prev = url()->previous();
 
@@ -54,6 +68,33 @@ class BtnCancelar extends Component
                 $this->url = route('admin.mesas.edit', ['mesa' => $m[1]]);
                 return;
             }
+
+            // Si no encuentra origen claro → seguir con lógica existente
+            $this->url = route('admin.alumnos.index');
+            return;
+        }
+
+        if ($name === 'admin.asignaturas.edit') {
+            $prev = url()->previous();
+
+            // Si venís del index de asignaturas
+            if (preg_match('#/admin/asignaturas$#', $prev)) {
+                $this->url = route('admin.asignaturas.index');
+                return;
+            }
+
+            // Si venís del edit de carreras
+            if (preg_match('#/admin/carreras/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.carreras.edit', ['carrera' => $m[1]]);
+                return;
+            }
+
+            // Si no reconoce el origen, usar index de asignaturas por defecto
+            $this->url = route('admin.asignaturas.index');
+            return;
+
+
+
 
             // Si no encuentra origen claro → seguir con lógica existente
         }
@@ -93,6 +134,32 @@ class BtnCancelar extends Component
                 }
             }
         }
+
+        // NUEVO bloque Create genérico
+        if (request()->is('admin/*/create')) {
+            $parts = explode('.', $name);
+            if (count($parts) >= 2) {
+                $base = $parts[0] . '.' . $parts[1];
+                $candidate = $base . '.index';
+                if (Route::has($candidate)) {
+                    $this->url = route($candidate);
+                    return;
+                }
+            }
+        }
+
+        //Carreras - Asignaturas Cancelar en add_asignatura
+        if (request()->is('admin/carreras/add_asignatura/*')) {
+            $this->url = route('admin.carreras.edit', ['carrera' => request()->route('carrera')]);
+            return;
+        }
+
+        //Carreras - Asignaturas Cancelar en create_asignatura
+        if(request()->is('admin/carreras/create_asignatura/*')){
+            $this->url = route('admin.carreras.edit', ['carrera' => request()->route('carrera')]);
+            return;
+        }
+
 
         /**
          * 4) Fallback final
