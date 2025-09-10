@@ -10,17 +10,13 @@
     }
 </style>
 
-
-
 {{-- CONTENT --}}
 
 <div class="table" data-name="tablaAlumnos">
 
-
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
 
     {{-- BOTON CREAR --}}
-
     <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
         <a href="{{ route('admin.alumnos.create') }}">
             <button class="btn_blue">
@@ -80,7 +76,6 @@
 
     </div>
 
-
     {{-- TABLA --}}
     <table class="table__body">
 
@@ -90,11 +85,10 @@
                 <th>Alumno</th>
                 <th>Contacto</th>
                 <th>Dirección</th>
-                <th>Lugar de nacimiento</th>
+                <th class="center">Lugar de nacimiento</th>
                 <th class="center">Acción</th>
             </tr>
         </thead>
-
 
         {{-- TBODY --}}
         <tbody>
@@ -106,8 +100,7 @@
                 </td>
 
                 <td>
-                    <p style="text-transform: none;">{{ $alumno->email ? $alumno->email : 'Sin mail registrado' }}
-                    </p>
+                    <p style="text-transform: none;">{{ $alumno->email ? $alumno->email : 'Sin mail registrado' }}</p>
                     @if ($alumno->telefono1)
                     <p>tel: {{ $alumno->telefono1 }}</p>
                     @elseif ($alumno->telefono2)
@@ -123,7 +116,9 @@
                     <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                 </td>
                 <td>
-                    <p> {{$alumno->lugar_nacimiento}} </p>
+                    <div style="display: flex; justify-content: center;">
+                        <p> {{$alumno->lugar_nacimiento}} </p>
+                    </div>
                 </td>
                 <td class="flex just-center">
                     <div style="display: flex; justify-content: center;">
@@ -142,6 +137,7 @@
                                     onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}', '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido)}} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                                     class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
                                     <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                </button>
                             </form>
                         </div>
                         @endif
@@ -152,9 +148,6 @@
         </tbody>
     </table>
 </div>
-
-
-
 
 {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
