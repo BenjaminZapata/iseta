@@ -122,9 +122,10 @@
                             
                             <x-btn-cancelar />
                 <button type="submit" class="btn_blue">
-                    <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                       Crear
-                 </button>
+                        
+                <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+                Guardar
+                    </button>
             </div>
             </div>
         </div>
