@@ -2,18 +2,18 @@
     @csrf
 
     @if ($method == 'put')
-        @method('put')
+    @method('put')
     @endif
 
     @foreach ($fieldsets as $legend => $inputs)
-        <fieldset class="p-2" style="margin: 10px;">
-            <legend class="font-600 font-7">{{ $legend }}</legend>
-            <div class="grid-2 gap-2 p-0">
-                @foreach ($inputs as $input)
-                    <?= $input ?>
-                @endforeach
-            </div>
-        </fieldset>
+    <fieldset class="p-2" style="margin: 10px;">
+        <legend class="font-600 font-7">{{ $legend }}</legend>
+        <div class="grid-2 gap-2 p-0">
+            @foreach ($inputs as $input)
+            <?= $input ?>
+            @endforeach
+        </div>
+    </fieldset>
     @endforeach
 
     <div class="botones-derecha">
@@ -23,11 +23,14 @@
         <x-btn-cancelar />
         <button type="submit" class="btn_blue">
             @if ($method == 'put')
-                <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                Actualizar
-            @else
-                <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                Guardar
+            <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
+            Actualizar
+            @elseif ($method == 'post')
+            <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+            Guardar
+            @else ($method == 'create')
+            <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+            Crear
             @endif
             {{-- @endif --}}
         </button>
