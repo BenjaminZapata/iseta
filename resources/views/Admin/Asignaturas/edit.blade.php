@@ -4,7 +4,7 @@
 <div class="edit-form-container">
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
-        
+
         <div class="perfil__header">
             <h2>Asignatura</h2>
         </div>
@@ -13,7 +13,7 @@
             <form method="post" action="{{ route('admin.asignaturas.update', ['asignatura' => $asignatura->id]) }}">
                 @csrf
                 @method('put')
-                
+
                 <div class="perfil_dataname">
                     <label>Asignatura:</label>
                     <input class="campo_info rounded" value="{{ $asignatura->nombre }}" name="nombre">
@@ -55,22 +55,27 @@
                         <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
                         Actualizar
                     </button>
+
                 </div>
+                <div class="botones-derecha">
+                    {{-- ---------------- BOTÓN ELIMINAR (solo si no está en modo seguro) ---------------- --}}
+                    @if (!$config['modo_seguro'])
+                    <form method="POST" class="form-eliminar"
+                        action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
+                        @csrf
+                        @method('delete')
+                        <button class="btn_red_outline">
+                            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>
+                            Eliminar asignatura
+                        </button>
+                    </form>
+                    @endif
+                </div>
+
             </form>
 
 
-            {{-- ---------------- BOTÓN ELIMINAR (solo si no está en modo seguro) ---------------- --}}
-            @if (!$config['modo_seguro'])
-            <form method="POST" class="form-eliminar"
-                  action="{{ route('admin.asignaturas.destroy', ['asignatura' => $asignatura->id]) }}">
-                @csrf
-                @method('delete')
-                <button class="btn_red_outline">
-                    <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>
-                    Eliminar asignatura
-                </button>
-            </form>
-            @endif
+
 
         </div>
     </div>
@@ -88,7 +93,7 @@
             </div>
             @if (!$config['modo_seguro'])
             <form method="post" class="form-eliminar"
-                  action="{{ route('correlativa.eliminar', ['asignatura' => $asignatura->id, 'asignatura_correlativa' => $correlativa->asignatura->id]) }}">
+                action="{{ route('correlativa.eliminar', ['asignatura' => $asignatura->id, 'asignatura_correlativa' => $correlativa->asignatura->id]) }}">
                 @csrf
                 @method('delete')
                 <div class="flex items-center m-1 mx-4">
@@ -105,9 +110,9 @@
                     <select class="campo_info rounded" id="asignatura_select" name="id_asignatura">
                         @foreach ($asignatura->carrera->first()->asignaturas->where('anio', '<=', $asignatura->anio) as $asignatura_carrera)
                             @if ($asignatura_carrera->id != $asignatura->id)
-                                <option value="{{ $asignatura_carrera->id }}">{{ $asignatura_carrera->nombre }}</option>
+                            <option value="{{ $asignatura_carrera->id }}">{{ $asignatura_carrera->nombre }}</option>
                             @endif
-                        @endforeach
+                            @endforeach
                     </select>
                 </div>
                 <div class="upd">
