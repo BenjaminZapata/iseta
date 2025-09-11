@@ -21,7 +21,54 @@
                 cursada</button></a>
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.cursadas.index', $filters, [
-            'dropdowns' => [$carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']), $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', $filters, ['Seleccione una carrera'], ['id' => 'asignatura_select']), $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-100', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']), $form->select('filter_condicion', 'Condición: ', 'label-input-y-100', $filters, ['Cualquiera', 'Libre', 'Regular', 'Promoción', 'Equivalencia', 'Desertor']), $form->select('filter_aprobada', 'Estado: ', 'label-input-y-100', $filters, ['Cualquiera', 'Aprobada', 'Desaprobada', 'Cursando'])],
+            'dropdowns' => [
+                $carreraM->dropdown(
+                    'filter_carrera_id',
+                    'Carrera:',
+                    'label-input-y-100',
+                    old('filter_carrera_id', $filters->filter_carrera_id ?? null),
+                    [
+                        'first_items' => ['Todas'],
+                        'id' => 'carrera_select',
+                    ]
+                ),
+
+                $form->select(
+                    'filter_asignatura_id',
+                    'Asignatura:',
+                    'label-input-y-100',
+                    old('filter_asignatura_id', $filters->filter_asignatura_id ?? null),
+                    ['Seleccione una asignatura'],
+                    ['id' => 'asignatura_select']
+                ),
+
+                $alumnoM->dropdown(
+                    'filter_alumno_id',
+                    'Alumno:',
+                    'label-input-y-100',
+                    [
+                        'first_items' => ['Todos'],
+                        'filter' => 'orderByApellidoNombre',
+                        'value' => old('filter_alumno_id', $filters->filter_alumno_id ?? null)
+                    ]
+                ),
+
+                $form->select(
+                    'filter_condicion',
+                    'Condición:',
+                    'label-input-y-100',
+                    old('filter_condicion', $filters->filter_condicion ?? null),
+                    ['Cualquiera', 'Libre', 'Regular', 'Promoción', 'Equivalencia', 'Desertor']
+                ),
+
+                $form->select(
+                    'filter_aprobada',
+                    'Estado:',
+                    'label-input-y-100',
+                    old('filter_aprobada', $filters->filter_aprobada ?? null),
+                    ['Cualquiera', 'Aprobada', 'Desaprobada', 'Cursando']
+                ),
+            ],
 
             'fields' => [
                 'anio_cursada' => 'Año',

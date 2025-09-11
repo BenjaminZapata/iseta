@@ -1,4 +1,4 @@
-@extends('Admin.template')
+@extends('preceptor.template')
 
 @section('content')
 <style>
@@ -15,13 +15,13 @@
 
     {{-- BOTÓN CREAR Y FILTROS --}}
     <div class="perfil__header-alt">
-        <a href="{{ route('admin.asignaturas.create') }}">
+        <a href="{{ route('preceptor.asignaturas.create') }}">
             <button class="btn_blue">
                 <i class="ti ti-circle-plus"></i>Agregar asignatura
             </button>
         </a>
         {{-- FILTROS --}}
-        <?= $filtergen->generate('admin.asignaturas.index', $filters, [
+        <?= $filtergen->generate('preceptor.asignaturas.index', $filters, [
             'dropdowns' => [
                 $carreraM->dropdown(
                     'filter_carrera_id',
@@ -93,7 +93,7 @@
                 </td>
                 <td>
                     <div style="display: flex; justify-content: center;">
-                        <a href="{{ route('admin.asignaturas.edit', $asignatura->id) }}">
+                        <a href="{{ route('preceptor.asignaturas.edit', $asignatura->id) }}">
                             <button class="btn_blue">
                                 <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>
                                 Modificar
@@ -101,7 +101,7 @@
                         </a>
 
                         <form id="form-eliminar-{{ $asignatura->id }}"
-                            action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}" method="POST"
+                            action="{{ route('preceptor.asignaturas.destroy', $asignatura->id) }}" method="POST"
                             style="display: inline;">
                             @csrf
                             @method('DELETE')
