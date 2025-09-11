@@ -32,7 +32,6 @@ class ProfesoresCrudController extends BaseController
         $this->data['profesores'] = $this->profeRepo->index($request);
 
         return view('Admin.Profesores.index', $this->data);
-
     }
 
     /**
@@ -40,7 +39,7 @@ class ProfesoresCrudController extends BaseController
      */
     public function create()
     {
-        return view('admin.profesores.create');
+        return view('Admin.Profesores.create');
     }
 
     /**
@@ -77,21 +76,21 @@ class ProfesoresCrudController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-   public function update(EditarProfesorRequest $request, Profesor $profesor)
-{
-    try {
-        $profesor->update($request->validated());
-        return redirect()->route('admin.profesores.index')
-                         ->with('mensaje', 'Se editó el profesor correctamente.');
-    } catch (\Illuminate\Database\QueryException $e) {
-        // Extraer el campo que dio error del mensaje
-        preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
-        $campo = $matches[1] ?? 'desconocido';
-        return redirect()->back()
-                         ->withInput()
-                         ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
+    public function update(EditarProfesorRequest $request, Profesor $profesor)
+    {
+        try {
+            $profesor->update($request->validated());
+            return redirect()->route('admin.profesores.index')
+                ->with('mensaje', 'Se editó el profesor correctamente.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Extraer el campo que dio error del mensaje
+            preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
+            $campo = $matches[1] ?? 'desconocido';
+            return redirect()->back()
+                ->withInput()
+                ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
+        }
     }
-}
 
 
 
@@ -114,13 +113,14 @@ class ProfesoresCrudController extends BaseController
 
             if ($mesas > 0) {
                 return redirect()->route('admin.profesores.index')
-                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas en el futuro.');}
+                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas en el futuro.');
+            }
 
             //verificar si el profesor tiene asignaturas asignadas en la tabla pivote
             //if ($profesor->carrera_asignatura_profesor()->count() > 0) {
-                //return redirect()->route('admin.profesores.index')
-                    //->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');}
-            
+            //return redirect()->route('admin.profesores.index')
+            //->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');}
+
             $profesor->delete();
             return redirect()->route('admin.profesores.index')
                 ->with('mensaje', 'Se ha eliminado el Profesor.');
@@ -129,7 +129,4 @@ class ProfesoresCrudController extends BaseController
                 ->with('error', 'No se pudo eliminar el Profesor. ' . $e->getMessage());
         }
     }
-
-
-
 }
