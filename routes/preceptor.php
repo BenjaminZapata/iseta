@@ -10,6 +10,8 @@ use App\Http\Controllers\Admin\AdminPdfController;
 use App\Http\Controllers\Preceptor\AsignaturasPreceptorController;
 use App\Http\Controllers\Preceptor\CarrerasPreceptorController;
 use App\Http\Controllers\Admin\AdminMatriculacionController;
+use App\Http\Controllers\Preceptor\PreceptorCursadasLotes;
+use App\Http\Controllers\Preceptor\PreceptorMesasLotes;
 
 Route::prefix('preceptor')
  ->middleware(['auth:admin'])
@@ -41,25 +43,32 @@ Route::get('alumnos/verificar/{alumno}', [AlumnoPreceptorController::class, 'ver
   Route::get('/inscriptos/create', [InscripcionPreceptorController::class, 'create'])->name('inscriptos.create');
 
   // Cursadas
-  Route::get('/cursadas', [CursadasPreceptorController::class, 'index'])->name('cursadas.index');
-  Route::get('/cursadas/create', [CursadasPreceptorController::class, 'create'])->name('cursadas.create');
-  Route::get('/cursadas/{cursada}/edit', [CursadasPreceptorController::class, 'edit'])->name('cursadas.edit');
-  Route::post('/cursadas', [CursadasPreceptorController::class, 'store'])->name('cursadas.store');
+   Route::get('cursadas', [CursadasPreceptorController::class, 'index'])->name('preceptor.cursadas.index');
+    Route::get('cursadas/create', [CursadasPreceptorController::class, 'create'])->name('preceptor.cursadas.create');
+    Route::post('cursadas/create', [CursadasPreceptorController::class, 'store'])->name('preceptor.cursadas.store');
+    Route::get('cursadas/{cursada}/edit', [CursadasPreceptorController::class, 'edit'])->name('preceptor.cursadas.edit');
+    Route::put('cursadas/{cursada}/edit', [CursadasPreceptorController::class, 'update'])->name('preceptor.cursadas.update');
+    Route::delete('cursadas/{cursada}', [CursadasPreceptorController::class, 'destroy'])->name('preceptor.cursadas.destroy');
 
-  // Exámenes
-  Route::get('/examenes/{examen}/edit', [ExamenPreceptorController::class, 'edit'])->name('examenes.edit');
-  Route::post('/examenes', [ExamenPreceptorController::class, 'store'])->name('examenes.store');
-  Route::put('/examenes/{examen}', [ExamenPreceptorController::class, 'update'])->name('examenes.update');
-  Route::post('/examenes/{examen}/nota', [ExamenPreceptorController::class, 'modificarNota'])->name('examenes.nota');
-  Route::delete('/examenes/{examen}', [ExamenPreceptorController::class, 'destroy'])->name('examenes.destroy');
+    Route::get('cursadas/{asignatura}', [PreceptorCursadasLotes::class, 'vista'])->name('preceptor.cursadas.masivo');
+    Route::post('masivo/cursadas', [PreceptorCursadasLotes::class, 'cargar'])->name('preceptor.cursadas.masivo.post');
 
-  // Mesas
-  Route::get('/mesas', [MesaPreceptorController::class, 'index'])->name('mesas.index');
-  Route::get('/mesas/create', [MesaPreceptorController::class, 'create'])->name('mesas.create');
-  Route::post('/mesas', [MesaPreceptorController::class, 'store'])->name('mesas.store');
-  Route::get('/mesas/{mesa}/edit', [MesaPreceptorController::class, 'edit'])->name('mesas.edit');
-  Route::put('/mesas/{mesa}', [MesaPreceptorController::class, 'update'])->name('mesas.update');
-  Route::delete('/mesas/{mesa}', [MesaPreceptorController::class, 'destroy'])->name('mesas.destroy');
+    // mesas y examen
+ Route::resource('mesas', MesaPreceptorController::class, ['as' => 'admin'])->middleware('auth:admin')->except('show');
+
+    Route::get('mesas-dual/{carrera}/{asignatura}', [PreceptorMesasLotes::class, 'vista'])->name('preceptor.mesas.dual');
+    Route::post('mesas-dual/{carrera}/{asignatura}', [PreceptorMesasLotes::class, 'store'])->name('preceptor.mesas.dualpost');
+
+    Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('preceptor.mesas.acta');
+    Route::get('/mesas/acta-volante-prom/{mesa}', [AdminPdfController::class, 'actaVolantePromocion'])->name('preceptor.mesas.actaprom');
+    Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('preceptor.mesas.actalibre');
+
+    Route::resource('examenes', ExamenPreceptorController::class, [
+        'as' => 'admin',
+        'parameters' => ['examenes' => 'examen']
+    ])->only('store', 'edit', 'update', 'destroy');
+    Route::post('examenes/{examen}/nota', [ExamenPreceptorController::class, 'modificarNota'])->name('preceptor.examenes.nota');
+
 
   // Actas PDF
   Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('mesas.acta');
