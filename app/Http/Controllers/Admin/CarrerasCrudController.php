@@ -233,6 +233,18 @@ class CarrerasCrudController extends BaseController
 
     public function desactivar(Carrera $carrera)
     {
+         //verificar si contiene inscriptos
+            if ($carrera->inscriptos()->exists()) {
+                return redirect()->route('admin.carreras.index')
+                    ->with('error', 'No se pudo Desactivar la carrera. Tiene alumnos asociados.');
+            }
+            //verificar si contiene alumnos en mesas futuras
+            if ($carrera->mesas()->where('fecha', '>=', now())->exists()) {
+                return redirect()->route('admin.carreras.index')
+                    ->with('error', 'No se pudo Desactivar la carrera. Tiene mesas futuras asociadas.');
+            }
+
+
         $carrera->vigente = false;
         $carrera->anio_fin = now()->year;
         $carrera->save();

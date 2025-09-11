@@ -26,5 +26,18 @@
                 <span>Mesas</span>
             </a>
         </li>
+        <li>
+            <a href="{{ route('preceptor.carreras.index') }}">
+                <i class="ti ti-school"></i>
+                <span>Carreras</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('preceptor.asignaturas.index') }}">
+                <i class="ti ti-book"></i>
+                <span>Asignaturas</span>
+            </a>
+        </li>
+        
     </ul>
 </aside>

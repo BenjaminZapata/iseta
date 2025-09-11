@@ -1,4 +1,4 @@
-@extends('Admin.template')
+@extends('Preceptor.template')
 
 @section('content')
     <div>
