@@ -8,16 +8,23 @@
     </div>
 
     <ul>
-        <li>
+       <li>
             <a href="{{ route('preceptor.alumnos.index') }}">
                 <i class="ti ti-user"></i>
                 <span>Alumnos</span>
             </a>
         </li>
+      
         <li>
-            <a href="{{ route('preceptor.cursadas.index') }}">
-                <i class="ti ti-books"></i>
-                <span>Cursadas</span>
+            <a href="{{ route('preceptor.carreras.index') }}">
+                <i class="ti ti-folders"></i>
+                <span>Carreras</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('preceptor.asignaturas.index') }}">
+                <i class="ti ti-notes"></i>
+                <span>Asignaturas</span>
             </a>
         </li>
         <li>
@@ -27,15 +34,15 @@
             </a>
         </li>
         <li>
-            <a href="{{ route('preceptor.carreras.index') }}">
-                <i class="ti ti-school"></i>
-                <span>Carreras</span>
+            <a href="{{ route('preceptor.cursadas.index') }}">
+                <i class="ti ti-books"></i>
+                <span>Cursadas</span>
             </a>
         </li>
         <li>
-            <a href="{{ route('preceptor.asignaturas.index') }}">
-                <i class="ti ti-book"></i>
-                <span>Asignaturas</span>
+            <a href="{{ route('preceptor.inscriptos.index') }}">
+                <i class="ti ti-file-invoice"></i>
+                <span>Inscriptos</span>
             </a>
         </li>
         
