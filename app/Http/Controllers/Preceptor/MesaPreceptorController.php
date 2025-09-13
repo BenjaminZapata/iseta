@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\preceptor;
+namespace App\Http\Controllers\Preceptor;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
@@ -39,6 +39,7 @@ class MesaPreceptorController extends BaseController
     function __construct(MesaRepository $mesaRepo, MesasCheckerService $mesasService)
     {
         parent::__construct();
+        $this->middleware('auth:admin');
         $this->mesaRepo = $mesaRepo;
         $this->mesasService = $mesasService;
     }
@@ -51,7 +52,7 @@ class MesaPreceptorController extends BaseController
         $this->setFilters($request);
         $this->data['mesas'] = $this->mesaRepo->index($request);
 
-        return view('Preceptor.Mesas.index', $this->data);
+        return view('preceptor.Mesas.index', $this->data);
     }
 
     /**
@@ -72,7 +73,7 @@ class MesaPreceptorController extends BaseController
         $carreras = Carrera::where('vigente', 1)->get();
         $profesores = Profesor::orderBy('apellido', 'asc')->orderBy('apellido', 'asc')->get();
 
-        return view('Preceptor.Mesas.create', [
+        return view('preceptor.Mesas.create', [
             'carreras' => $carreras,
             'profesores' => $profesores,
             'precargados' => $precargados,
@@ -85,7 +86,7 @@ class MesaPreceptorController extends BaseController
      */
     public function store(CrearMesaRequest $request)
     {
-        // configuracion //INFO: no se si esto es necesario
+        // configuracion
         $config = Configuracion::todas();
 
         // obtener datos validados
@@ -131,7 +132,7 @@ class MesaPreceptorController extends BaseController
         $inscribibles = $this->mesaRepo->inscribibles($mesa);
 
 
-        return view('Preceptor.Mesas.edit', [
+        return view('preceptor.Mesas.edit', [
             'mesa' => $mesa,
             'profesores' => Profesor::orderBy('apellido')->orderBy('nombre')->get(),
             'inscribibles' => $inscribibles
@@ -173,7 +174,33 @@ class MesaPreceptorController extends BaseController
      */
     public function destroy(Mesa $mesa)
     {
-        $this->mesaRepo->delete($mesa);
-        return redirect()->route('Preceptor.Mesas.index')->with('mensaje', 'Se ha eliminado la mesa');
+        try {
+
+            //verificar que no tenga fecha hoy o futura
+            if ($mesa->fecha >= date('Y-m-d')) {
+                return redirect()->route('preceptor.mesa.index')
+                    ->with('error', 'No se pudo eliminar la mesa. Tiene fecha hoy o futura.');
+            }
+
+            //Verificar que no tenga alumnos inscriptos
+            if ($mesa->alumnos()->exists()) {
+                return redirect()->route('preceptor.mesa.index')
+                    ->with('error', 'No se pudo eliminar la mesa. Tiene alumnos inscriptos.');
+            }
+
+            //verificar que no tenga profesores asignados
+            if ($mesa->prof_presidente != 0 || $mesa->prof_vocal_1 != 0 || $mesa->prof_vocal_2 != 0) {
+                return redirect()->route('preceptor.mesa.index')
+                    ->with('error', 'No se pudo eliminar la mesa. Tiene profesores asignados.');
+            }
+            
+            //eliminar mesa
+            $mesa->delete();
+            return redirect()->route('preceptor.mesa.index')
+                ->with('mensaje', 'Se ha eliminado el alumno');
+        } catch (\Exception $e) {
+            return redirect()->route('preceptor.mesa.index')
+                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+        }
     }
 }

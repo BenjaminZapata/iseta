@@ -18,92 +18,78 @@ class AlumnoRepository
         $this->config = Configuracion::todas();
     }
 
-  public function index($request)
-{
-    $idsQuery = Alumno::select('alumnos.id')
-        ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id')
-        ->leftJoin('carreras', 'carreras.id', '=', 'egresadoinscripto.id_carrera');
+    public function index($request)
+    {
+        $query = Alumno::select('alumnos.*')
+            ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id')
+            ->leftJoin('carreras', 'carreras.id', '=', 'egresadoinscripto.id_carrera');
 
-    // Filtro por carrera
-    if ($request->has('filter_carrera_id') && $request->input('filter_carrera_id') != 0) {
-        $idsQuery->where('egresadoinscripto.id_carrera', $request->input('filter_carrera_id'));
-    }
-
-    // Filtro por ciudad
-    if ($request->has('filter_ciudad') && $request->input('filter_ciudad') != 0) {
-        $idsQuery->where('alumnos.ciudad', $request->input('filter_ciudad'));
-    }
-
-    // Filtro por estado civil
-    if ($request->has('filter_estado_civil') && $request->input('filter_estado_civil') != 0) {
-        $idsQuery->where('alumnos.estado_civil', $request->input('filter_estado_civil'));
-    }
-
-    // Búsqueda por campo + texto
-    if ($request->filled('filter_search_box') && in_array($request->input('filter_field'), $this->availableFiels)) {
-        $field = $request->input('filter_field');
-        $search = trim($request->input('filter_search_box'));
-
-        if ($field === 'alumno') {
-            $word = str_replace(' ', '%', $search);
-            $idsQuery->whereRaw("
-                (CONCAT(alumnos.nombre,' ',alumnos.apellido) LIKE ? 
-                 OR CONCAT(alumnos.apellido,' ',alumnos.nombre) LIKE ?)",
-                ["%$word%", "%$word%"]
-            );
-
-        } elseif ($field === 'titulo_secundario') {
-            // Mapeo de número → texto
-            $map = [
-                1 => 'Fotocopia del título original secundario',
-                2 => 'Certificado de constancia de título en trámite',
-                3 => 'Constancia de alumno del último año del nivel secundario',  
-                4 => 'No entregado'
-            ];
-
-            $normalize = function ($string) {
-                return strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $string));
-            };
-
-            $searchNormalized = $normalize($search);
-            $matchedKeys = [];
-
-            foreach ($map as $k => $texto) {
-                if (stripos($normalize($texto), $searchNormalized) !== false) {
-                    $matchedKeys[] = $k;
-                }
-            }
-
-            if (!empty($matchedKeys)) {
-                $idsQuery->whereIn('alumnos.titulo_secundario', $matchedKeys);
-            } else {
-                $idsQuery->whereRaw('1 = 0'); // nada coincide → vacía
-            }
-
-        } else {
-            $idsQuery->where("alumnos.$field", 'LIKE', "%$search%");
+        // Filtro por carrera
+        if ($request->filled('filter_carrera_id') && $request->input('filter_carrera_id') != 0) {
+            $query->where('egresadoinscripto.id_carrera', $request->input('filter_carrera_id'));
         }
+
+        // Filtro por ciudad
+        if ($request->filled('filter_ciudad') && $request->input('filter_ciudad') != 0) {
+            $query->where('alumnos.ciudad', $request->input('filter_ciudad'));
+        }
+
+        // Búsqueda por campo + texto
+        if ($request->filled('filter_search_box') && in_array($request->input('filter_field'), $this->availableFiels)) {
+            $field = $request->input('filter_field');
+            $search = trim($request->input('filter_search_box'));
+
+            if ($field === 'alumno') {
+                $word = str_replace(' ', '%', $search);
+                $query->where(function ($q) use ($word) {
+                    $q->whereRaw("CONCAT(alumnos.nombre,' ',alumnos.apellido) LIKE ?", ["%$word%"])
+                        ->orWhereRaw("CONCAT(alumnos.apellido,' ',alumnos.nombre) LIKE ?", ["%$word%"]);
+                });
+            } elseif ($field === 'titulo_secundario') {
+                $map = [
+                    0 => 'No entregado',
+                    1 => 'Certificado de constancia de título en trámite',
+                    2 => 'Constancia de alumno del último año del nivel secundario',
+                    3 => 'Fotocopia del título original secundario',
+                ];
+
+                $normalize = fn($string) => strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $string));
+                $searchNormalized = $normalize($search);
+
+                $matchedKeys = collect($map)
+                    ->filter(fn($texto) => stripos($normalize($texto), $searchNormalized) !== false)
+                    ->keys()
+                    ->all();
+
+                if (!empty($matchedKeys)) {
+                    $query->whereIn('alumnos.titulo_secundario', $matchedKeys);
+                    if ($request->filter_vencido) {
+                        $query->where('alumnos.titulo_secundario', 3)
+                            ->whereDate('alumnos.fecha_titulo_secundario', '<=', now()->subDays(60));
+                    }
+                } else {
+                    $query->whereRaw('1=0'); // sin coincidencias
+                }
+            } else {
+                $query->where("alumnos.$field", 'LIKE', "%$search%");
+            }
+        }
+
+        // Filtro directo por título
+        if (!is_null($request->input('filter_titulo'))) {
+            $query->where('alumnos.titulo_secundario', $request->input('filter_titulo'));
+        }
+
+        // Orden y paginación
+        $query->orderBy('apellido')->orderBy('nombre');
+
+        $filasPorTabla = (int) ($this->config['filas_por_tabla'] ?? 15);
+        if ($filasPorTabla <= 0) {
+            $filasPorTabla = 15;
+        }
+
+        return $query->paginate($filasPorTabla);
     }
-
-    // Filtro directo por select de título
-    if ($request->has('filter_titulo') && $request->input('filter_titulo') != 0) {
-        $idsQuery->where('alumnos.titulo_secundario', $request->input('filter_titulo'));
-    }
-
-    $ids = $idsQuery->distinct()->get()->pluck('id');
-
-    $query = Alumno::select('alumnos.*')
-        ->whereIn('alumnos.id', $ids)
-        ->orderBy('apellido')
-        ->orderBy('nombre');
-
-    $filasPorTabla = $this->config['filas_por_tabla'] ?? 15;
-    if (!is_numeric($filasPorTabla)) {
-        $filasPorTabla = 15;
-    }
-
-    return $query->paginate((int) $filasPorTabla);
-}
 
 
 
@@ -128,5 +114,4 @@ class AlumnoRepository
 
         return $alumno;
     }
-
 }

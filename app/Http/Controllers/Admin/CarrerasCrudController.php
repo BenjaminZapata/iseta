@@ -11,6 +11,8 @@ use App\Models\Asignatura;
 use App\Repositories\Admin\CarreraRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+use App\Models\Alumno;
 
 class CarrerasCrudController extends BaseController
 {
@@ -24,6 +26,7 @@ class CarrerasCrudController extends BaseController
     public function __construct(CarreraRepository $carreraRepo)
     {
         parent::__construct();
+        $this->middleware('auth:admin');
         $this->carreraRepo = $carreraRepo;
     }
 
@@ -88,7 +91,7 @@ class CarrerasCrudController extends BaseController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, Carrera $carrera)
+    public function edit(Carrera $carrera)
     {
         $carrera->load('asignaturas');
 
@@ -205,9 +208,17 @@ class CarrerasCrudController extends BaseController
     public function destroy(Carrera $carrera)
     {
         try {
-            // Desvincular todas las asignaturas relacionadas
-            $carrera->asignaturas()->detach();
-
+            //verificar si contiene inscriptos
+            if ($carrera->inscriptos()->exists()) {
+                return redirect()->route('admin.carreras.index')
+                    ->with('error', 'No se pudo eliminar la carrera. Tiene alumnos asociados.');
+            }
+            //verificar si contiene alumnos en mesas futuras
+            if ($carrera->mesas()->where('fecha', '>=', now())->exists()) {
+                return redirect()->route('admin.carreras.index')
+                    ->with('error', 'No se pudo eliminar la carrera. Tiene mesas futuras asociadas.');
+            }
+    
             // Ahora eliminar la carrera
             $carrera->delete();
 
@@ -215,13 +226,25 @@ class CarrerasCrudController extends BaseController
                 ->with('success', 'Carrera eliminada correctamente');
         } catch (\Throwable $e) {
             return redirect()->route('admin.carreras.index')
-                ->with('error', 'No se pudo eliminar la carrera. Verifique que no tenga relaciones asociadas.');
+                ->with('error', 'No se pudo eliminar la carrera. Verifique que no tenga relaciones asociadas.'. $e->getMessage());
         }
     }
 
 
     public function desactivar(Carrera $carrera)
     {
+         //verificar si contiene inscriptos
+            if ($carrera->inscriptos()->exists()) {
+                return redirect()->route('admin.carreras.index')
+                    ->with('error', 'No se pudo Desactivar la carrera. Tiene alumnos asociados.');
+            }
+            //verificar si contiene alumnos en mesas futuras
+            if ($carrera->mesas()->where('fecha', '>=', now())->exists()) {
+                return redirect()->route('admin.carreras.index')
+                    ->with('error', 'No se pudo Desactivar la carrera. Tiene mesas futuras asociadas.');
+            }
+
+
         $carrera->vigente = false;
         $carrera->anio_fin = now()->year;
         $carrera->save();

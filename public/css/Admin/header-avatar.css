@@ -3,6 +3,7 @@
 .header-avatar {
  display: flex;
  justify-content: space-between;
+ border-radius: 0.8rem 0.8rem 0 0;
  align-items: center;
  padding: 1rem;
  border-bottom: 1px solid #ddd;

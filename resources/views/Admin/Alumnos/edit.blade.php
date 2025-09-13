@@ -12,6 +12,7 @@
                     'default' => $alumno->fecha_nacimiento->format('Y-m-d'),
                     'inputclass' => 'p-1 w-75p',
                 ]),
+                $form->text('lugar_nacimiento','Lugar de nacimiento:','label-input-y-75', $alumno),
                 $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, ['Vacio', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
                 $form->select('genero', 'Género:', 'label-input-y-75', $alumno, ['Vacio', 'Masculino', 'Femenino', 'Otro']),
             ],
@@ -25,10 +26,10 @@
     $alumno,
     [
         '' => 'Seleccione una opción',
-        'Fotocopia del título original secundario',
+        'No entregado',
         'Certificado de constancia de título en trámite',
         'Constancia de alumno del último año del nivel secundario',
-        'No entregado'
+        'Fotocopia del título original secundario'
     ]
 )],
             'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)],

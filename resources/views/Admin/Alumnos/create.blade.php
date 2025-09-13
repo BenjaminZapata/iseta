@@ -18,6 +18,7 @@
       null,
       ['inputclass' => 'p-1 w-75p']
     ),
+    $form->text('lugar_nacimiento', 'Lugar de nacimiento:', 'label-input-y-75', null),
     $form->select(
       'estado_civil',
       'Estado civil:',
@@ -79,11 +80,11 @@
     'label-input-y-75',
     null,
     [
-        '' => 'Seleccione una opción',
-        'Fotocopia del título original secundario',
-        'Certificado de constancia de título en trámite',
-        'Constancia de alumno del último año del nivel secundario',
-        'No entregado'
+        null => 'Seleccione una opción',
+        0 =>'Fotocopia del título original secundario',
+        1 => ' Certificado de constancia de título en trámite',
+        2 =>'Constancia de alumno del último año del nivel secundario',
+        3 =>'No entregado'
     ]
 )]
 ,

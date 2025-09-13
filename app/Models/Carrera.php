@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Alumno;
+use App\Models\mesa;
 
 
 class Carrera extends Model
@@ -55,7 +57,7 @@ class Carrera extends Model
     public function textForSelect(){
         return $this->nombre;
     }
-
+  
     public static function getAsignaturas($id_carrera){
         $asignaturas = Asignatura::select("id_asignatura")
             -> where('id_carrera',$id_carrera)
@@ -111,5 +113,12 @@ class Carrera extends Model
         $this->attributes['observaciones'] = TextFormatService::ucfirst($value);
     }
 
+    public function inscriptos(){
+        return $this->hasMany(Egresado::class, 'id_carrera', 'id');
+    }
+
+    public function mesas(){
+        return $this->hasMany(Mesa::class, 'id_carrera', 'id');
+    }
 
 }

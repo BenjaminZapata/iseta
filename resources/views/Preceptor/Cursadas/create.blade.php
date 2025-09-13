@@ -1,11 +1,9 @@
 @extends('preceptor.template')
 
 @section('content')
-
     @php
         $ultimaCarreraSeleccionada = null;
         $ultimaAsignaturaSeleccionada = null;
-
 
     @endphp
 
@@ -15,7 +13,7 @@
             <div class="perfil__info">
 
 
-                <form method="post" action="{{route('preceptor.cursadas.store')}}">
+                <form method="post" action="{{ route('preceptor.cursadas.store') }}">
                     @csrf
                     <div class="perfil_dataname">
                         <label>Carrera:</label>
@@ -27,7 +25,7 @@
                                         $ultimaCarreraSeleccionada = $carrera;
                                     }
                                 @endphp
-                                <option @selected(old('carrera') == $carrera->id) value="{{$carrera->id}}">{{$carrera->nombre}}
+                                <option @selected(old('carrera') == $carrera->id) value="{{ $carrera->id }}">{{ $carrera->nombre }}
                                 </option>
                             @endforeach
                         </select>
@@ -37,9 +35,8 @@
                         <select id="asignatura_select" class="asignatura campo_info rounded" name="asignatura">
                             <option disabled selected>Selecciona una materia</option>
                             @if ($ultimaCarreraSeleccionada)
-                                <option value="{{old('asignatura')}}">
-                                    {{$ultimaCarreraSeleccionada->asignaturas->first()->nombre}}
-                                </option>
+                                <option value="{{ old('asignatura') }}">
+                                    {{ $ultimaCarreraSeleccionada->asignaturas->first()->nombre }}</option>
                             @endif
                         </select>
                     </div>
@@ -47,18 +44,17 @@
                         <label>Alumno:</label>
                         <select class="alumno campo_info rounded" name="alumno">
                             <option disabled selected>Selecciona un alumno</option>
-                            @foreach($alumnos as $alumno)
-                                <option @selected(old('id_alumno') == $alumno->id) value="{{$alumno->id}}">
-                                    {{$alumno->apellidoNombre()}}
-                                </option>
+                            @foreach ($alumnos as $alumno)
+                                <option @selected(old('id_alumno') == $alumno->id) value="{{ $alumno->id }}">
+                                    {{ $alumno->apellidoNombre() }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="perfil_dataname">
                         <label>Año de cursada:</label>
                         <input class="campo_info rounded"
-                            value="{{old('anio_cursada') ? old('anio_cursada') : $config['anio_remat']}}"
-                            placeholder="{{$config['anio_remat']}}" name="anio_cursada">
+                            value="{{ old('anio_cursada') ? old('anio_cursada') : $config['anio_remat'] }}"
+                            placeholder="{{ $config['anio_remat'] }}" name="anio_cursada">
                     </div>
                     <div class="perfil_dataname">
                         <label>Condicion:</label>
@@ -100,5 +96,5 @@
             </div>
         </div>
     </div>
-    <script src="{{asset('js/obtener-materias.js')}}"></script>
+    <script src="{{ asset('js/obtener-materias.js') }}"></script>
 @endsection

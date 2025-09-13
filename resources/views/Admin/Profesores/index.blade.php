@@ -16,13 +16,14 @@
             // 'dropdowns' => [
             //     $carreraM->dropdown('filter_carrera_id','Carrera:', 'label-input-y-100',$filters, ['first_items' => ['Todas']])
             // ],
-            'fields' => [
-                'profesor' => 'Profesor',
-                'dni' => 'Dni',
-                'email' => 'Email',
-                'ciudad' => 'Ciudad',
-                'telefono1' => 'Telefono',
-            ],
+            'fields' => [   
+    'profesor' => 'Profesor',
+    'dni' => 'Dni',
+    'email' => 'Email',
+    'ciudad' => 'Ciudad',
+    'telefono1' => 'Telefono',
+],
+
         ]) ?>
     </div>
     <table class="table__body">
@@ -59,17 +60,21 @@
                             <button class="btn_blue"><i class="ti ti-file-info"
                                     style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                         </a>
-                            <form method="POST" class="form-eliminar"
-                                action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}"
-                                style="margin-left: 10px;">
-                                @csrf
-                                @method('delete')
-                                <button class="btn_icon-danger"
-                                    onclick="openGeneralModal('form-eliminar-{{ $profesor->id }}', '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($profesor->apellido)}} {{ strtoupper($profesor->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                </button>
-                            </form>
+                             <form method="POST" id="form-eliminar-{{ $profesor->id }}"
+      action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
+    @csrf
+    @method('delete')
+    <button type="button" 
+            class="btn_icon-danger"
+            onclick="openGeneralModal(
+                'form-eliminar-{{ $profesor->id }}',
+                '¿Estás seguro de que querés eliminar al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
+            )"
+            style="background-color: red; margin-left: 10px;">
+        <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+    </button>
+</form>
+
                     </div>
                 </td>
               

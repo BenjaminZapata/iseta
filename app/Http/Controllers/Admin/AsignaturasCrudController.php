@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Log;
 
 class AsignaturasCrudController extends BaseController
 {
-   public $asignaturasRepo;
+    public $asignaturasRepo;
 
-   public $mensajes = ['mensaje' => [], 'error' => [], 'aviso' => []];
+    public $mensajes = ['mensaje' => [], 'error' => [], 'aviso' => []];
 
     function __construct(AsignaturaRepository $asignaturasRepo)
     {
@@ -28,41 +28,41 @@ class AsignaturasCrudController extends BaseController
     /**
      * Display a listing of the resource.
      */
-      public function index(Request $request)
-{
-    $filters = $request->all();
-    $carreraId = $filters['filter_carrera_id'] ?? null;
+    public function index(Request $request)
+    {
+        $filters = $request->all();
+        $carreraId = $filters['filter_carrera_id'] ?? null;
 
-    // Asignaturas para el dropdown del select
-    if ($carreraId && $carreraId != 0) {
-        // Solo las asignaturas de esa carrera
-        $asignaturasList = Asignatura::whereHas('carrera', function($q) use ($carreraId) {
-            $q->where('id', $carreraId);
-        })->orderBy('nombre')->get();
-    } else {
-        // Todas las asignaturas
-        $asignaturasList = Asignatura::orderBy('nombre')->get();
+        // Asignaturas para el dropdown del select
+        if ($carreraId && $carreraId != 0) {
+            // Solo las asignaturas de esa carrera
+            $asignaturasList = Asignatura::whereHas('carrera', function ($q) use ($carreraId) {
+                $q->where('id', $carreraId);
+            })->orderBy('nombre')->get();
+        } else {
+            // Todas las asignaturas
+            $asignaturasList = Asignatura::orderBy('nombre')->get();
+        }
+
+        // Aplicar filtros al repositorio
+        $asignaturas = $this->asignaturasRepo->filter($filters);
+        $request->flash();
+        return view('Admin.Asignaturas.index', [
+            'filters' => $filters,
+            'asignaturas' => $asignaturas,
+            'asignaturasList' => $asignaturasList,
+        ]);
     }
-
-    // Aplicar filtros al repositorio
-    $asignaturas = $this->asignaturasRepo->filter($filters);
-
-    return view('Admin.Asignaturas.index', [
-        'filters' => $filters,
-        'asignaturas' => $asignaturas,
-        'asignaturasList' => $asignaturasList,
-    ]);
-}
 
     /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
-{
-    return view('Admin.Asignaturas.create', [
-        'asignatura' => null,
-    ]);
-}
+    {
+        return view('Admin.Asignaturas.create', [
+            'asignatura' => null,
+        ]);
+    }
 
 
     /**
@@ -111,29 +111,45 @@ class AsignaturasCrudController extends BaseController
      */
 
     public function destroy(Asignatura $asignatura)
-{
-    try {
-        // Verificar si la asignatura está vinculada a alguna carrera
-        if ($asignatura->carrera()->exists()) {
-            // Si tiene carreras vinculadas, las desvinculamos primero
-            $asignatura->carrera()->detach();
-            
-           return redirect()->route('admin.asignaturas.index')
-    ->with('mensaje', 'La asignatura fue desvinculada de sus carreras.');
+    {
+        try {
+            // Verificar si la asignatura está vinculada a alguna carrera
+            if ($asignatura->carrera()->exists()) {
+                // Si tiene carreras vinculadas, las desvinculamos primero
+                $asignatura->carrera()->detach();
 
+                return redirect()->route('admin.asignaturas.index')
+                    ->with('mensaje', 'La asignatura fue desvinculada de sus carreras.');
+            }
+
+            // Verificar si la asignatura tiene relaciones con cursadas
+            if ($asignatura->cursadas()->exists()) {
+                return redirect()->route('admin.asignaturas.index')
+                    ->with('error', 'No se pudo eliminar la asignatura porque tiene cursadas asociadas.');
+            }
+
+            //verificar si la asignatura tiene relaciones con mesas
+            if ($asignatura->mesas()->exists()) {
+                return redirect()->route('admin.asignaturas.index')
+                    ->with('error', 'No se pudo eliminar la asignatura porque tiene mesas asociadas.');
+            }
+
+            //verificar si la asignatura tiene relaciones con examenes
+            if ($asignatura->examenes()->exists()) {
+                return redirect()->route('admin.asignaturas.index')
+                    ->with('error', 'No se pudo eliminar la asignatura porque tiene examenes asociados.');
+            }
+
+            // Si no tiene relaciones, procedemos a eliminarla
+            $asignatura->delete();
+
+
+
+            return redirect()->route('admin.asignaturas.index')
+                ->with('mensaje', 'Se ha eliminado la asignatura');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.asignaturas.index')
+                ->with('error', 'No se pudo eliminar la asignatura' . $e->getMessage());
         }
-
-        // Si no tiene carreras vinculadas, procedemos a eliminarla
-        $asignatura->delete();
-
-        return redirect()->route('admin.asignaturas.index')
-            ->with('mensaje', 'Se ha eliminado la asignatura');
-    } catch (\Exception $e) {
-        return redirect()->route('admin.asignaturas.index')
-            ->with('error', 'No se pudo eliminar la asignatura. Error: ' . $e->getMessage());
     }
-}
-
-
-    
 }

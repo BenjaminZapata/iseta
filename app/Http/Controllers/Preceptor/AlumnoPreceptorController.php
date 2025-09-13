@@ -12,8 +12,7 @@ use App\Models\Examen;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use stdClass;
-use App\Http\Controllers\Controller;
+use Illuminate\view\WithInput;
 
 class AlumnoPreceptorController extends BaseController
 {
@@ -28,6 +27,8 @@ class AlumnoPreceptorController extends BaseController
 
     public function __construct(AlumnoRepository $alumnosRepo)
     {
+        parent::__construct();
+        $this->middleware('auth:admin');
         $this->alumnosRepo = $alumnosRepo;
     }
 
@@ -37,10 +38,13 @@ class AlumnoPreceptorController extends BaseController
 
     public function index(Request $request)
     {
+
+
         $this->setFilters($request);
+        $request->flash();
         $this->data['alumnos'] = $this->alumnosRepo->index($request);
 
-        return view('Preceptor.Alumnos.index', $this->data);
+        return view('preceptor.Alumnos.index', $this->data);
     }
 
     /**
@@ -48,7 +52,7 @@ class AlumnoPreceptorController extends BaseController
      */
     public function create(): View
     {
-        return view('Preceptor.Alumnos.create');
+        return view('preceptor.Alumnos.create');
     }
 
     /**
@@ -101,7 +105,7 @@ class AlumnoPreceptorController extends BaseController
             ->orderBy('examenes.fecha', 'desc')
             ->get();
 
-        return view('Preceptor.Alumnos.edit', [
+        return view('preceptor.Alumnos.edit', [
             'alumno' => $alumno,
             'cursadas' => $cursadas,
             'examenes' => $examenes,
@@ -136,14 +140,37 @@ class AlumnoPreceptorController extends BaseController
     public function destroy(Alumno $alumno)
     {
         try {
+
+            //verificar si tiene cursadas pero con el estado 
+            if($alumno->cursadas()->exists()) {
+                return redirect()->route('preceptor.alumnos.index')
+                    ->with('error', 'No se pudo eliminar el alumno porque tiene cursadas asociadas.');
+            }
+
+            //verificar si tiene mesas futuras
+            if(Examen::where('id_alumno',$alumno->id)->where('fecha','>',date('Y-m-d'))->exists()) {
+                return redirect()->route('preceptor.alumnos.index')
+                    ->with('error', 'No se pudo eliminar el alumno porque tiene mesas de examen futuras.');
+            }
+            
+
+            //verificar si esta inscripto en alguna carrera pero con el estado regular
+            if ($alumno->carreras()->where('estado', 'regular')->exists()) {
+    return redirect()->route('prepcetor.alumnos.index')
+        ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras como regular');
+}
+
+
+            //eliminar alumno
             $alumno->delete();
             return redirect()->route('preceptor.alumnos.index')
                 ->with('mensaje', 'Se ha eliminado el alumno');
         } catch (\Exception $e) {
             return redirect()->route('preceptor.alumnos.index')
-                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+                ->with('error', 'No se pudo eliminar el alumno.');
         }
     }
+
 
 
     public function verificar(Request $request, Alumno $alumno)
@@ -160,6 +187,6 @@ class AlumnoPreceptorController extends BaseController
             $this->mensajes['mensaje'][] = 'Se utilizará su dni como clave de acceso';
         }
         // dd($this->mensajes,['mensaje'=>['Se ha verificado al alumno','Se utilizará su dni como clave de acceso']]);
-        return redirect()->route('preceptor.alumnos.index')->with('mensajes', $this->mensajes);
+        return redirect()->route('admin.alumnos.index')->with('mensajes', $this->mensajes);
     }
 }

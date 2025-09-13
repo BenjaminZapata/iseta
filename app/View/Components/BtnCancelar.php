@@ -35,8 +35,28 @@ class BtnCancelar extends Component
                 return;
             }
 
+            // si venis desde mesas → volver a la mesa
+            if (preg_match('#/admin/mesas/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.mesas.edit', ['mesa' => $m[1]]);
+                return;
+            }
+
             // Si no, volver al index de cursadas
             $this->url = route('admin.cursadas.index');
+            return;
+        }
+
+        if ($name === 'admin.inscriptos.create') {
+            $prev = url()->previous();
+
+            // Si venís desde un alumno → volver al alumno
+            if (preg_match('#/admin/alumnos/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.alumnos.edit', ['alumno' => $m[1]]);
+                return;
+            }
+
+            // Si no, volver al index de cursadas
+            $this->url = route('admin.inscriptos.index');
             return;
         }
 
@@ -120,6 +140,32 @@ class BtnCancelar extends Component
                 }
             }
         }
+
+        // NUEVO bloque Create genérico
+        if (request()->is('admin/*/create')) {
+            $parts = explode('.', $name);
+            if (count($parts) >= 2) {
+                $base = $parts[0] . '.' . $parts[1];
+                $candidate = $base . '.index';
+                if (Route::has($candidate)) {
+                    $this->url = route($candidate);
+                    return;
+                }
+            }
+        }
+
+        //Carreras - Asignaturas Cancelar en add_asignatura
+        if (request()->is('admin/carreras/add_asignatura/*')) {
+            $this->url = route('admin.carreras.edit', ['carrera' => request()->route('carrera')]);
+            return;
+        }
+
+        //Carreras - Asignaturas Cancelar en create_asignatura
+        if(request()->is('admin/carreras/create_asignatura/*')){
+            $this->url = route('admin.carreras.edit', ['carrera' => request()->route('carrera')]);
+            return;
+        }
+
 
         /**
          * 4) Fallback final

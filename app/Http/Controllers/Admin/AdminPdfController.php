@@ -19,6 +19,10 @@ use PSpell\Config;
 
 class AdminPdfController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     function acta_volante(Request $request, Mesa $mesa)
     {
         // Traigo todos los exámenes de esa mesa que cumplan con condicion == 1
@@ -63,7 +67,6 @@ class AdminPdfController extends Controller
         return pdf()
             ->view('pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'PROMOCION'])
             ->name('acta-volante-promocion.pdf');
-
     }
 
     public function actaVolanteLibre(Request $request, Mesa $mesa)
@@ -91,7 +94,6 @@ class AdminPdfController extends Controller
         return pdf()
             ->view('pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'LIBRE'])
             ->name('acta-volante-libre.pdf');
-
     }
     public function constanciaRegular(Alumno $alumno, Carrera $carrera, Configuracion $config)
     {
