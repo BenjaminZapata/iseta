@@ -27,51 +27,51 @@
                 <?= $form->generate(route('admin.asignaturas.update', ['asignatura' => $asignatura->id]), 'put', [
                         'Información' => [
                             '<div class="perfil_dataname">
-                                                                                                                <label>Asignatura:</label>
-                                                                                                                <input class="campo_info rounded" value="' .
+                                                                                                                    <label>Asignatura:</label>
+                                                                                                                    <input class="campo_info rounded" value="' .
                         e($asignatura->nombre) .
                         '" name="nombre">
-                                                                                                            </div>',
+                                                                                                                </div>',
 
                             '<div class="perfil_dataname">
-                                                                                                                <label>Carrera:</label>
-                                                                                                                <span class="campo_info2">' .
+                                                                                                                    <label>Carrera:</label>
+                                                                                                                    <span class="campo_info2">' .
                             e($asignatura->carrera->first()?->nombre ?? 'N/A') .
                             '</span>
-                                                                                                            </div>',
+                                                                                                                </div>',
 
                             '<div class="perfil_dataname">
-                                                                                                                <label>Tipo módulo:</label>
-                                                                                                                <select class="campo_info rounded" name="tipo_modulo">
-                                                                                                                    <option ' .
+                                                                                                                    <label>Tipo módulo:</label>
+                                                                                                                    <select class="campo_info rounded" name="tipo_modulo">
+                                                                                                                        <option ' .
                             ($asignatura->tipo_modulo == 1 ? 'selected' : '') .
                             ' value="1">Modulos</option>
-                                                                                                                    <option ' .
+                                                                                                                        <option ' .
                             ($asignatura->tipo_modulo == 2 ? 'selected' : '') .
                             ' value="2">Horas</option>
-                                                                                                                </select>
-                                                                                                            </div>',
+                                                                                                                    </select>
+                                                                                                                </div>',
 
                             '<div class="perfil_dataname">
-                                                                                                                <label>Carga horaria:</label>
-                                                                                                                <input class="campo_info rounded" value="' .
+                                                                                                                    <label>Carga horaria:</label>
+                                                                                                                    <input class="campo_info rounded" value="' .
                         e($asignatura->carga_horaria) .
                         '" name="carga_horaria">
-                                                                                                            </div>',
+                                                                                                                </div>',
 
                             '<div class="perfil_dataname">
-                                                                                                                <label>Año:</label>
-                                                                                                                <input class="campo_info rounded" value="' .
+                                                                                                                    <label>Año:</label>
+                                                                                                                    <input class="campo_info rounded" value="' .
                         e($asignatura->anio) .
                         '" name="anio">
-                                                                                                            </div>',
+                                                                                                                </div>',
 
                             '<div class="perfil_dataname">
-                                                                                                                <label>Observaciones:</label>
-                                                                                                                <input class="campo_info rounded" value="' .
+                                                                                                                    <label>Observaciones:</label>
+                                                                                                                    <input class="campo_info rounded" value="' .
                         e($asignatura->observaciones) .
                         '" name="observaciones">
-                                                                                                            </div>',
+                                                                                                                </div>',
 
                             $form->texthidden(url()->previous()),
                         ],
