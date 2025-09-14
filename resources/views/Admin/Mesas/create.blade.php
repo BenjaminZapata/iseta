@@ -104,14 +104,14 @@
 
                     <div class="perfil_dataname" id="fecha_llamado_1">
                         <label>Fecha llamado 1:</label>
-                        <input class="campo_info rounded" value="{{ old('fecha1') ? old('fecha1') : '' }}"
-                            type="datetime-local" name="fecha1">
+                        <input class="campo_info rounded" value="{{ 'fecha_1' ? old('fecha_1') : '' }}"
+                            type="datetime-local" name="fecha_1">
                     </div>
 
                     <div class="perfil_dataname" id="fecha_llamado_2" style="display: none;">
                         <label>Fecha llamado 2:</label>
-                        <input class="campo_info rounded" value="{{ old('fecha2') ? old('fecha2') : '' }}"
-                            type="datetime-local" name="fecha2">
+                        <input class="campo_info rounded" value="{{ 'fecha_2' ? old('fecha_2') : '' }}"
+                            type="datetime-local" name="fecha_2">
                     </div>
 
                     <div class="botones-derecha"

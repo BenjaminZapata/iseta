@@ -56,11 +56,6 @@ class AdminMesasLotes extends Controller
 
         $data = ['id_asignatura' => $asignatura->id, 'fecha' => null, 'llamado' => null];
 
-        // se añade el id de la carrera al registro de mesa, ya que no viene en el formulario
-        // no deberia ser necesario pero la base de datos anterior hacia uso de esta duplicidad
-
-
-
         // Que los profes no sean los mismos
         if (
             $request->input('prof_presidente') == $request->input('prof_vocal_1') ||
