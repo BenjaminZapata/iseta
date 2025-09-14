@@ -209,28 +209,28 @@ class MesasCrudController extends BaseController
 
             //verificar que no tenga fecha hoy o futura
             if ($mesa->fecha >= date('Y-m-d')) {
-                return redirect()->route('admin.mesa.index')
+                return redirect()->route('admin.mesas.index')
                     ->with('error', 'No se pudo eliminar la mesa. Tiene fecha hoy o futura.');
             }
 
             //Verificar que no tenga alumnos inscriptos
             if ($mesa->alumnos()->exists()) {
-                return redirect()->route('admin.mesa.index')
+                return redirect()->route('admin.mesas.index')
                     ->with('error', 'No se pudo eliminar la mesa. Tiene alumnos inscriptos.');
             }
 
             //verificar que no tenga profesores asignados
             if ($mesa->prof_presidente != 0 || $mesa->prof_vocal_1 != 0 || $mesa->prof_vocal_2 != 0) {
-                return redirect()->route('admin.mesa.index')
+                return redirect()->route('admin.mesas.index')
                     ->with('error', 'No se pudo eliminar la mesa. Tiene profesores asignados.');
             }
 
             //eliminar mesa
             $mesa->delete();
-            return redirect()->route('admin.mesa.index')
+            return redirect()->route('admin.mesas.index')
                 ->with('mensaje', 'Se ha eliminado el alumno');
         } catch (\Exception $e) {
-            return redirect()->route('admin.mesa.index')
+            return redirect()->route('admin.mesas.index')
                 ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
         }
     }
