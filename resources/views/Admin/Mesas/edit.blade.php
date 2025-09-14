@@ -132,22 +132,35 @@
             </div>
 
         </div>
-        <div class="perfil_one br">
-            <div class="table__header">
+        <div class="table" style="border-radius: 0.8rem">
+            <div class="table__header" style="border-radius: 0.8rem 0.8rem 0 0 ;">
                 <h2>Acta volante</h2>
                 <div class="flex just-center">
-                    <a href="{{ route('admin.mesas.acta', ['mesa' => $mesa->id]) }}" target="_blank">
-                        <button class="btn_grey"><i class="ti ti-file-download"
-                                style="font-size: 1.3em; margin-right: 8px;"></i>
-                            Regular</button>
-                    </a>
-                    <a href="{{ route('admin.mesas.actaprom', ['mesa' => $mesa->id]) }}" target="_blank"><button
-                            class="btn_grey"><i class="ti ti-file-download"
-                                style="font-size: 1.3em; margin-right: 8px;"></i>Promoción</button></a>
-                    <a href="{{ route('admin.mesas.actalibre', ['mesa' => $mesa->id]) }}" target="_blank"><button
-                            class="btn_grey"><i class="ti ti-file-download"
-                                style="font-size: 1.3em; margin-right: 8px;"></i>Libre</button></a>
-
+                    <div class="dropdown" style="position: relative;">
+                        <button class="btn_exportar" onclick="toggleExportar()" type="button">
+                            <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px;"></i>Exportar lista
+                            de alumnos...
+                        </button>
+                        <div id="exportar-opciones"
+                            style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; padding: 8px; z-index: 99;">
+                            <a href="{{ route('admin.mesas.acta', ['mesa' => $mesa->id]) }}" target="_blank">
+                                <button class="btn_sky" type="button" style="margin-right: 8px; width: 120px">
+                                    <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px; "></i>Regular
+                                </button>
+                            </a>
+                            <a href="{{ route('admin.mesas.actaprom', ['mesa' => $mesa->id]) }}" target="_blank">
+                                <button class="btn_sky" type="button" style="margin-right: 8px; width: 120px">
+                                    <i class="ti ti-file-download"
+                                        style="font-size: 1.3em; margin-right: 8px; "></i>Promoción
+                                </button>
+                            </a>
+                            <a href="{{ route('admin.mesas.actalibre', ['mesa' => $mesa->id]) }}" target="_blank">
+                                <button class="btn_sky" style="margin-right: 8px; width: 120px">
+                                    <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px;"></i>Libre
+                                </button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -170,7 +183,8 @@
                                     <form action="{{ route('admin.examenes.nota', ['examen' => $examen->id]) }}"
                                         method="POST">
                                         @csrf
-                                        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        <div
+                                            style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                                             <input name="nota" placeholder="0 = sin rendir, a = ausente"
                                                 class="input-nota" value="{{ $examen->nota() }}">
                                             <button class="boton-nota">
@@ -211,4 +225,22 @@
             </table>
         </div>
     </div>
+
 @endsection
+
+<script>
+    function toggleExportar() {
+        const opciones = document.getElementById('exportar-opciones');
+        opciones.style.display = opciones.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Opcional: cerrar si clickean fuera
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('exportar-opciones');
+        const button = event.target.closest('.dropdown');
+
+        if (!button) {
+            dropdown.style.display = 'none';
+        }
+    });
+</script>
