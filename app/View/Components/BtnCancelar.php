@@ -55,7 +55,7 @@ class BtnCancelar extends Component
             }
 
             // Si no, volver al index de profesores
-            $this->url = route('admin.profesores.index');
+            $this->url = route('admin.mesas.index');
             return;
         }
 
