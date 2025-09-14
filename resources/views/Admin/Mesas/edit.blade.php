@@ -67,13 +67,8 @@
 
 
 
-                    <div class="botones-derecha"
-                        style="margin-right: 27px; padding-top: 10px; display: flex; gap: 12px; justify-content: flex-end;">
-                        <a href="{{ route('admin.mesas.index') }}" style="display: flex; align-items: center;">
-                            <button class="btn_cancelar" type="button">
-                                <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar
-                            </button>
-                        </a>
+                    <div class="botones-derecha">
+                        <x-btn-cancelar />
                         <button type="submit" class="btn_blue">
                             <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
                             Actualizar
@@ -138,8 +133,8 @@
                 <div class="flex just-center">
                     <div class="dropdown" style="position: relative;">
                         <button class="btn_exportar" onclick="toggleExportar()" type="button">
-                            <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px;"></i>Exportar lista
-                            de alumnos...
+                            <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px;"></i>Exportar acta
+                            volante...
                         </button>
                         <div id="exportar-opciones"
                             style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; padding: 8px; z-index: 99;">
