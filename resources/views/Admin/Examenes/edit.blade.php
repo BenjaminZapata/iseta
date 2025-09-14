@@ -2,13 +2,6 @@
 
 @section('content')
 
-    <p class="w-100p">
-        <a href="/admin/alumnos">Alumnos</a>/
-        <a
-            href="/admin/alumnos/{{ $examen->alumno->id }}/edit">{{ $examen->alumno->apellido }}{{ $examen->alumno->nombre }}</a>/
-        Examen/
-        <a>{{ $examen->asignatura->nombre }}</a>
-    </p>
     <div class="edit-form-container">
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR FICHA DE EXAMEN'])
@@ -157,6 +150,22 @@
                             <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
                             Actualizar
                         </button>
+                    </div>
+                    <div class="boton-eliminar">
+                        @if (!$config['modo_seguro'])
+                            <div>
+                                <form method="POST" class="form-eliminar"
+                                    action="{{ route('admin.examenes.destroy', ['examen' => $examen->id]) }}">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="btn_red_outline"
+                                        onclick="openGeneralModal('form-eliminar-{{ $examen->id }}', '¿Estás seguro de que querés eliminar la ficha de examen de: {{ strtoupper($examen->alumno->apellido) }} {{ strtoupper($examen->alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                        class="btn_icon-danger" style="margin-left: 10px;">
+                                        <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar ficha de examen
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
                     </div>
                 </form>
 
