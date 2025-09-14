@@ -19,7 +19,7 @@
         <div class="perfil__header-alt">
             <a href="{{ route('admin.mesas.create') }}">
                 <button class="btn_blue">
-                    <i class="ti ti-circle-plus"></i>Agregar mesa
+                    <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>Agregar mesa
                 </button>
             </a>
             {{-- FILTROS --}}
