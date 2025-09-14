@@ -22,12 +22,14 @@ class CrearMesaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id_asignatura'=>['required'],
-            'prof_presidente'=>['required'],
-            'prof_vocal_1'=>['required'],
-            'prof_vocal_2'=>['required'],
-            'llamado'=>['required'],
-            'fecha'=>['required','date']
+            'carrera' => ['required'],
+            'id_asignatura' => ['required'],
+            'prof_presidente' => ['required'],
+            'prof_vocal_1' => ['required'],
+            'prof_vocal_2' => ['required'],
+            'cantidad_llamados' => ['required'],
+            'fecha_1' => ['required', 'date'],
+            'fecha_2' => ['exclude_if:cantidad_llamados,1', 'required', 'date']
         ];
     }
 }

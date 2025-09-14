@@ -86,23 +86,21 @@ class MesasCrudController extends BaseController
      */
     public function store(CrearMesaRequest $request)
     {
-        // configuracion
-        $config = Configuracion::todas();
 
         // obtener datos validados
         $data = $request->validated();
 
-        $esDiaValido = $this->mesasService->esDiaHabil($data['fecha']);
+        $esDiaValido = $this->mesasService->esDiaHabil($data['fecha_1']);
 
         if (!$esDiaValido['success']) {
             return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
         }
 
-        // se añade el id de la carrera al registro de mesa, ya que no viene en el formulario
-        // no deberia ser necesario pero la base de datos anterior hacia uso de esta duplicidad
-        $data['id_carrera'] = Asignatura::find($data['id_asignatura'])->carrera->first()->id;
-
-        $llamadoYaExiste = $this->mesasService->llamadoYaExiste($data);
+        $llamadoYaExiste = $this->mesasService->llamadoYaExiste([
+            'id_asignatura' => $data['id_asignatura'],
+            'fecha' => $data['fecha_1'],
+            'llamado' => 1
+        ]);
 
         if ($llamadoYaExiste['success']) {
             return redirect()->back()->with('error', $llamadoYaExiste['mensaje'])->withInput();
@@ -116,8 +114,41 @@ class MesasCrudController extends BaseController
         ) {
             return redirect()->back()->with('error', 'Hay profesores repetidos');
         }
+        if ($data['cantidad_llamados'] == 2) {
 
-        Mesa::create($data);
+            $esDiaValido = $this->mesasService->esDiaHabil($data['fecha_2']);
+            if (!$esDiaValido['success']) {
+                return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
+            }
+            $llamadoYaExiste = $this->mesasService->llamadoYaExiste([
+                'id_asignatura' => $data['id_asignatura'],
+                'fecha' => $data['fecha_2'],
+                'llamado' => 2
+            ]);
+
+            if ($llamadoYaExiste['success']) {
+                return redirect()->back()->with('error', $llamadoYaExiste['mensaje'])->withInput();
+            }
+            Mesa::create([
+                'id_carrera' => $data['carrera'],
+                'id_asignatura' => $data['id_asignatura'],
+                'fecha' => $data['fecha_2'],
+                'llamado' => 2,
+                'prof_presidente' => $data['prof_vocal_1'],
+                'prof_vocal_1' => $data['prof_vocal_2'],
+                'prof_vocal_2' => $data['prof_presidente']
+            ]);
+        }
+
+        Mesa::create([
+            'id_carrera' => $data['carrera'],
+            'id_asignatura' => $data['id_asignatura'],
+            'fecha' => $data['fecha_1'],
+            'llamado' => 1,
+            'prof_presidente' => $data['prof_presidente'],
+            'prof_vocal_1' => $data['prof_vocal_1'],
+            'prof_vocal_2' => $data['prof_vocal_2']
+        ]);
         return \redirect()->back()->with('mensaje', 'Se creo la mesa');
     }
 
@@ -193,7 +224,7 @@ class MesasCrudController extends BaseController
                 return redirect()->route('admin.mesa.index')
                     ->with('error', 'No se pudo eliminar la mesa. Tiene profesores asignados.');
             }
-            
+
             //eliminar mesa
             $mesa->delete();
             return redirect()->route('admin.mesa.index')
