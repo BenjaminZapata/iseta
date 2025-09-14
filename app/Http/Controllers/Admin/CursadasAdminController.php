@@ -181,11 +181,11 @@ class CursadasAdminController extends BaseController
     {
         try {
             $cursada->delete();
-            return redirect()->route('admin.cursada.index')
-                ->with('mensaje', 'Se ha eliminado el alumno');
+            return redirect()->route('admin.cursadas.index')
+                ->with('mensaje', 'Se ha eliminado la cursada');
         } catch (\Exception $e) {
-            return redirect()->route('admin.cursada.index')
-                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+            return redirect()->route('admin.cursadas.index')
+                ->with('error', 'No se pudo eliminar la cursada. Error: ' . $e->getMessage());
         }
     }
 }
