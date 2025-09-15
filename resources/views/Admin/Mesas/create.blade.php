@@ -123,16 +123,7 @@
                         </button>
                     </div>
                 </form>
-                 <div class="botones-derecha"
-                            style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
-                            
-                            <x-btn-cancelar />
-                <button type="submit" class="btn_blue">
-                        
-                <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                Guardar
-                    </button>
-            </div>
+                 
             </div>
         </div>
     </div>
