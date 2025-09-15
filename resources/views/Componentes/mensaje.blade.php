@@ -1,98 +1,101 @@
+{{-- Mensajes agrupados por tipo --}}
 @if (Session::get('mensajes'))
-
-
-<div class="z-index-top flex.col right-3 bottom-3 fixed">
-  @foreach (Session::get('mensajes') as $tipo => $lista)
-  {{-- <div class="z-index-top flex.col right-3 bottom-3 fixed"> --}}
-        @foreach ($lista as $msj)
-          <div @class([
-            'up-not_green' => $tipo=='mensaje',
-            'up-not_yellow' => $tipo=='aviso',
-            'up-not_red' => $tipo=='error',
-            'toast px-3 py-2 gap-2 my-1 flex items-center rounded shadow-md' => true])>
-            @if ($tipo=='error')
-            <i class="ti ti-circle-x-filled"></i>
-          @elseif ($tipo=='aviso')
-            <i class="ti ti-alert-circle-filled"></i>
-          @else
-            <i class="ti ti-circle-check-filled"></i>
-          @endif
-            <span class="w-100p">{{$msj}}</span>
-            <span class="close pointer">&times;</span>
-          </div>
+    <div class="alert-container">
+        @foreach (Session::get('mensajes') as $tipo => $lista)
+            @foreach ($lista as $msj)
+                <div @class([
+                    'alert',
+                    'alert-mensaje' => $tipo === 'mensaje',
+                    'alert-aviso' => $tipo === 'aviso',
+                    'alert-error' => $tipo === 'error',
+                ])>
+                    <span class="icon">
+                        @if ($tipo === 'error')
+                            <i class="ti ti-circle-x-filled"></i>
+                        @elseif ($tipo === 'aviso')
+                            <i class="ti ti-alert-circle-filled"></i>
+                        @else
+                            <i class="ti ti-circle-check-filled"></i>
+                        @endif
+                    </span>
+                    <span class="message">{{ $msj }}</span>
+                    <span class="close pointer">&times;</span>
+                </div>
+            @endforeach
         @endforeach
-  {{-- </div> --}}
-  @endforeach
-  </div>
+    </div>
 @endif
 
-
+{{-- Mensaje individual --}}
 @if (Session::get('mensaje'))
-  <div class="z-index-top flex.col right-3 bottom-3 fixed">
-    @if (is_array(Session::get('mensaje')))
-        @foreach (Session::get('mensaje') as $msj)
-          <div class="toast px-3 py-2 gap-2 my-1 flex just-between items-center rounded shadow-md up-not_green">
-            <span class="">{{$msj}}</span>
-            <span class="close pointer">&times;</span>
-          </div>
-        @endforeach
-    @else
-      <div class="toast px-3 py-2 gap-2 my-1 flex just-between items-center rounded shadow-md up-not_green">
-        <i class="ti ti-circle-check-filled"></i>
-        <p class="">{{ Session::get('mensaje') }}</p>
-        <span class="close pointer">&times;</span>
-      </div>
-    @endif
-  </div>
+    <div class="alert-container">
+        @if (is_array(Session::get('mensaje')))
+            @foreach (Session::get('mensaje') as $msj)
+                <div class="alert alert-mensaje">
+                    <span class="message">{{ $msj }}</span>
+                    <span class="close pointer">&times;</span>
+                </div>
+            @endforeach
+        @else
+            <div class="alert alert-mensaje">
+                <i class="ti ti-circle-check-filled"></i>
+                <span class="message">{{ Session::get('mensaje') }}</span>
+                <span class="close pointer">&times;</span>
+            </div>
+        @endif
+    </div>
 @endif
 
+{{-- Aviso individual --}}
 @if (Session::get('aviso'))
-  <div class="z-index-top flex.col right-3 bottom-3 fixed">
-    @if (is_array(Session::get('aviso')))
-        @foreach (Session::get('aviso') as $msj)
-          <div class="toast px-3 py-2 gap-2 my-1 flex just-between items-center rounded shadow-md up-not_yellow">
-            <span class="">{{$msj}}</span>
-            <span class="close pointer">&times;</span>
-          </div>
-        @endforeach
-    @else
-      <div class="toast px-3 py-2 gap-2 my-1 flex just-between items-center rounded shadow-md up-not_yellow">
-        <i class="ti ti-alert-circle-filled"></i>
-        <p class="">{{ Session::get('aviso') }}</p>
-        <span class="close pointer">&times;</span>
-      </div>
-    @endif
-  </div>
+    <div class="alert-container">
+        @if (is_array(Session::get('aviso')))
+            @foreach (Session::get('aviso') as $msj)
+                <div class="alert alert-aviso">
+                    <span class="message">{{ $msj }}</span>
+                    <span class="close pointer">&times;</span>
+                </div>
+            @endforeach
+        @else
+            <div class="alert alert-aviso">
+                <i class="ti ti-alert-circle-filled"></i>
+                <span class="message">{{ Session::get('aviso') }}</span>
+                <span class="close pointer">&times;</span>
+            </div>
+        @endif
+    </div>
 @endif
 
+{{-- Error individual --}}
 @if (Session::get('error'))
-  <div class="z-index-top flex.col right-3 bottom-3 fixed">
-    @if (is_array(Session::get('error')))
-        @foreach (Session::get('error') as $msj)
-          <div class=" toast px-3 py-2 gap-2 my-1 flex just-between items-center rounded shadow-md up-not_red">
-            <span class="">{{$msj}}</span>
-            <span class="close pointer">&times;</span>
-          </div>
-        @endforeach
-    @else
-      <div class="toast px-3 py-2 gap-2 my-1 flex just-between items-center rounded shadow-md up-not_red">
-              <i class="ti ti-circle-x-filled"></i>
-              <p class="">{!! Session::get('error') !!}</p>
-              <span class="close pointer">&times;</span>
-      </div>
-    @endif
-  </div>
+    <div class="alert-container">
+        @if (is_array(Session::get('error')))
+            @foreach (Session::get('error') as $msj)
+                <div class="alert alert-error">
+                    <span class="message">{{ $msj }}</span>
+                    <span class="close pointer">&times;</span>
+                </div>
+            @endforeach
+        @else
+            <div class="alert alert-error">
+                <i class="ti ti-circle-x-filled"></i>
+                <span class="message">{!! Session::get('error') !!}</span>
+                <span class="close pointer">&times;</span>
+            </div>
+        @endif
+    </div>
 @endif
 
-
+{{-- Errores de validación --}}
 @if ($errors->any())
-  <div class="z-index-top toast px-2 py-1 gap-2 fixed flex rounded right-3 bottom-3 shadow-md up-not_red">
-    <div class="flex-col">
-    @foreach ($errors->all() as $error)
-      <p class="">{{$error}}</p>
-    @endforeach
-  </div>
-    <span class="pointer close">&times;</span>
-  </div>
-
+    <div class="alert-container">
+        <div class="alert alert-error">
+            <div class="message">
+                @foreach ($errors->all() as $error)
+                    <p>{{ $error }}</p>
+                @endforeach
+            </div>
+            <span class="close pointer">&times;</span>
+        </div>
+    </div>
 @endif
