@@ -116,7 +116,7 @@
 
             <form method="POST" action="{{ route('admin.examenes.store') }}">
                 @csrf
-                <select class="rounded" name="id_alumno">
+                <select class="rounded" name="id_alumno" required>
                     <option value="">Selecciona un alumno</option>
                     @foreach ($inscribibles as $inscribible)
                     <option value="{{ $inscribible->id }}">{{ $inscribible->apellidoNombre() }}</option>

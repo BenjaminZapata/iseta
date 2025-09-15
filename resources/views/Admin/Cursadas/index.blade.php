@@ -42,16 +42,16 @@
                     ['id' => 'asignatura_select']
                 ),
 
-                $alumnoM->dropdown(
-                    'filter_alumno_id',
-                    'Alumno:',
-                    'label-input-y-100',
-                    [
-                        'first_items' => ['Todos'],
-                        'filter' => 'orderByApellidoNombre',
-                        'value' => old('filter_alumno_id', $filters->filter_alumno_id ?? null)
-                    ]
-                ),
+             $alumnoM->dropdown(
+    'filter_alumno_id',
+    'Alumno:',
+    'label-input-y-100',
+    old('filter_alumno_id', $filters->filter_alumno_id ?? null),
+    [
+        'first_items' => ['Todos'],
+        'filter' => 'orderByApellidoNombre',
+    ]
+),
 
                 $form->select(
                     'filter_condicion',

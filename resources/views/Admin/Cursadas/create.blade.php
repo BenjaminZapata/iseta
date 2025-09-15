@@ -32,7 +32,7 @@
                     </div>
                     <div class="perfil_dataname">
                         <label>Materia:</label>
-                        <select id="asignatura_select" class="asignatura campo_info rounded" name="asignatura">
+                        <select id="asignatura_select" class="asignatura campo_info rounded" name="asignatura" required>
                             <option disabled selected>Selecciona una materia</option>
                             @if ($ultimaCarreraSeleccionada)
                                 <option value="{{ old('asignatura') }}">
@@ -52,9 +52,15 @@
                     </div>
                     <div class="perfil_dataname">
                         <label>Año de cursada:</label>
-                        <input class="campo_info rounded"
-                            value="{{ old('anio_cursada') ? old('anio_cursada') : $config['anio_remat'] }}"
-                            placeholder="{{ $config['anio_remat'] }}" name="anio_cursada">
+                        
+<input class="campo_info rounded" 
+       type="number" 
+       min="2020" 
+       max="{{ date('Y') + 5 }}"
+       value="{{ old('anio_cursada') ? old('anio_cursada') : $config['anio_remat'] }}" 
+       placeholder="{{ $config['anio_remat'] }}" 
+       name="anio_cursada"
+       required>
                     </div>
                     <div class="perfil_dataname">
                         <label>Condicion:</label>
