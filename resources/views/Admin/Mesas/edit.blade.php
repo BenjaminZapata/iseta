@@ -4,6 +4,16 @@
     <div class="edit-form-container">
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR MESA'])
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ul class="breadcrumb flex items-center gap-2 text-sm text-gray-700">
+                    <li class="flex items-center">
+                        <a href="/admin/mesas">Mesas</a>
+                    </li>
+                    <li>
+                        <a href="/admin/mesas/{{ $mesa->id }}/mesas">{{ $mesa->asignatura->nombre }}</a>
+                    </li>
+                </ul>
+            </nav>
             <div class="perfil__header">
                 <h2>{{ $mesa->asignatura?->nombre }}</h2>
             </div>
@@ -67,8 +77,13 @@
 
 
 
-                    <div class="botones-derecha">
-                        <x-btn-cancelar />
+                    <div class="botones-derecha"
+                        style="margin-right: 27px; padding-top: 10px; display: flex; gap: 12px; justify-content: flex-end;">
+                        <a href="{{ route('admin.mesas.index') }}" style="display: flex; align-items: center;">
+                            <button class="btn_cancelar" type="button">
+                                <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar
+                            </button>
+                        </a>
                         <button type="submit" class="btn_blue">
                             <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
                             Actualizar
@@ -128,50 +143,23 @@
             </div>
 
         </div>
-    </div>
+        <div class="table">
+            <div class="table__header">
+                <h2>Acta volante</h2>
+                <div class="flex just-center">
+                    <a href="{{ route('admin.mesas.acta', ['mesa' => $mesa->id]) }}" target="_blank">
+                        <button class="btn_grey"><i class="ti ti-file-download"
+                                style="font-size: 1.3em; margin-right: 8px;"></i>
+                            Regular</button>
+                    </a>
+                    <a href="{{ route('admin.mesas.actaprom', ['mesa' => $mesa->id]) }}" target="_blank"><button
+                            class="btn_grey"><i class="ti ti-file-download"
+                                style="font-size: 1.3em; margin-right: 8px;"></i>Promoción</button></a>
+                    <a href="{{ route('admin.mesas.actalibre', ['mesa' => $mesa->id]) }}" target="_blank"><button
+                            class="btn_grey"><i class="ti ti-file-download"
+                                style="font-size: 1.3em; margin-right: 8px;"></i>Libre</button></a>
 
-
-
-    <div class="perfil_one br">
-        {{-- <p>La funcion de agregar alumnos se elimino hasta que se arreglen algunos errores</p> --}}
-        <div class="perfil__header">
-            <h2>Alumnos inscriptos</h2>
-        </div>
-        <div class="matricular">
-            @if (true || strtotime($mesa->fecha) > time())
-            <p class="py-2">Estos alumnos han aprobado la cursada de esta materia, luego se volvera a validar
-                sobre correlativas y tiempos</p>
-
-            <form method="POST" action="{{ route('admin.examenes.store') }}">
-                @csrf
-                <select class="rounded" name="id_alumno" required>
-                    <option value="">Selecciona un alumno</option>
-                    @foreach ($inscribibles as $inscribible)
-                    <option value="{{ $inscribible->id }}">{{ $inscribible->apellidoNombre() }}</option>
-                    @endforeach
-                </select>
-                <input name="id_mesa" value="{{ $mesa->id }}" type="hidden">
-
-                <div class="upd"><button class="btn_blue"><i class="ti ti-upload"></i>Cargar</button></div>
-
-            </form>
-            @else
-            Ya no se pueden agregar alumnos
-            @endif
-        </div>
-
-    </div>
-    <div class="table">
-        <div class="table__header">
-            <h2>Acta volante</h2>
-            <div class="flex just-center">
-                <a href="{{ route('admin.mesas.acta', ['mesa' => $mesa->id]) }}" target="_blank"><button
-                        class="btn_grey">Regular</button></a>
-                <a href="{{ route('admin.mesas.actaprom', ['mesa' => $mesa->id]) }}" target="_blank"><button
-                        class="btn_grey">Promoción</button></a>
-                <a href="{{ route('admin.mesas.actalibre', ['mesa' => $mesa->id]) }}" target="_blank"><button
-                        class="btn_grey">Libre</button></a>
-
+                </div>
             </div>
 
             <table class="table__body">
@@ -235,22 +223,4 @@
             </table>
         </div>
     </div>
-
 @endsection
-
-<script>
-    function toggleExportar() {
-        const opciones = document.getElementById('exportar-opciones');
-        opciones.style.display = opciones.style.display === 'none' ? 'block' : 'none';
-    }
-
-    // Opcional: cerrar si clickean fuera
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('exportar-opciones');
-        const button = event.target.closest('.dropdown');
-
-        if (!button) {
-            dropdown.style.display = 'none';
-        }
-    });
-</script>

@@ -163,11 +163,11 @@ class MesasCrudController extends BaseController
 
         $inscribibles = $this->mesaRepo->inscribibles($mesa);
 
-       $inscribibles = Alumno::whereHas('cursadas', function ($q) use ($mesa) {
-    $q->where('id_asignatura', $mesa->id_asignatura);
-    $q->where('id_carrera', $mesa->asignatura->carrera->first()->id);
-    $q->where('aprobada', 1); // 1 = aprobada
-})->get();
+        $inscribibles = Alumno::whereHas('cursadas', function ($q) use ($mesa) {
+            $q->where('id_asignatura', $mesa->id_asignatura);
+            $q->where('id_carrera', $mesa->asignatura->carrera->first()->id);
+            $q->where('aprobada', 1); // 1 = aprobada
+        })->get();
 
 
         return view('Admin.Mesas.edit', [
@@ -236,10 +236,10 @@ class MesasCrudController extends BaseController
             //eliminar mesa
             $mesa->delete();
             return redirect()->route('admin.mesas.index')
-                ->with('mensaje', 'Se ha eliminado el alumno');
+                ->with('mensaje', 'Se ha eliminado la mesa');
         } catch (\Exception $e) {
             return redirect()->route('admin.mesas.index')
-                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+                ->with('error', 'No se pudo eliminar la mesa. Error: ' . $e->getMessage());
         }
     }
 }
