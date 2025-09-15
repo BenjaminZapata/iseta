@@ -29,4 +29,4 @@ Route::fallback(function () {
 });
 
 
-Route::resource('/asignaturas-gestion', AsignaturaGestionController::class);
+

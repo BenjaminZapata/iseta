@@ -37,7 +37,7 @@ class CursadasPreceptorController extends BaseController
         $this->data['cursadas'] = $cursadaRepo->index($request);
         session(['return_to' => url()->previous()]);
         $request->flash();
-        return view('preceptor.Cursadas.index', $this->data);
+        return view('preceptor.cursadas.index', $this->data);
     }
 
     function delete(Cursada $cursada)
@@ -181,10 +181,10 @@ class CursadasPreceptorController extends BaseController
     {
         try {
             $cursada->delete();
-            return redirect()->route('preceptor.cursada.index')
+            return redirect()->route('preceptor.cursadas.index')
                 ->with('mensaje', 'Se ha eliminado el alumno');
         } catch (\Exception $e) {
-            return redirect()->route('preceptor.cursada.index')
+            return redirect()->route('preceptor.cursadas.index')
                 ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
         }
     }

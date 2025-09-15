@@ -2,32 +2,143 @@
 
 namespace App\Http\Controllers\Preceptor;
 
-use App\Models\Configuracion;
-use App\Models\Examen;
-use App\Models\Mesa;
-use App\Repositories\Admin\InscripcionRepository;
-use App\Services\AlumnoInscripcionService;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\crearAlumnoRequest;
+use App\Models\Alumno;
+use App\Models\Carrera;
+use App\Models\Configuracion;
+use App\Models\Egresado;
+use App\Repositories\Admin\InscripcionRepository;
+use Illuminate\Http\Request;
+use App\Models\Examen;
 
-class InscripcionPreceptorController extends Controller
+use function PHPUnit\Framework\returnSelf;
+
+class InscripcionPreceptorController extends BaseController
 {
- public $inscripcionService;
- public $inscripcionRepo;
 
- public function __construct(AlumnoInscripcionService $alumnoInscripcionService, InscripcionRepository $inscripcionRepo)
- {
-  $this->inscripcionService = $alumnoInscripcionService;
-  $this->inscripcionRepo = $inscripcionRepo;
+    public $defaultFilters = [
+        'filter_carrera_id' => 0,
+        'filter_alumno_id' => 0,
+        'filter_vigente' => 0,
+        'filter_finalizada' => 0,
+        'filter_ciudad' => 0
+    ];
 
-  $this->middleware('auth:admin');
-  $this->middleware('verificado')->only([
-   'inscribirse',
-   'bajarse',
-  ]);
- }
- public function create()
- {
-  return view('Preceptor.inscripcion.create');
- }
+    function __construct()
+    {
+        parent::__construct();
+        $this->middleware('auth:admin');
+    }
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request, InscripcionRepository $inscriptosRepo)
+    {
+        $this->setFilters($request);
+        $this->data['inscripciones'] = $inscriptosRepo->index($request);
+
+        $request->flash();
+        return view('preceptor.Inscriptos.index', $this->data);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('preceptor.Inscriptos.create', [
+            'alumnos' => Alumno::orderBy('apellido')->orderBy('nombre')->get(),
+            'carreras' => Carrera::where('vigente', '1')->get()
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'id_alumno' => ['required'],
+            'id_carrera' => ['required'],
+            'anio_inscripcion' => ['required'],
+            'indice_libro_matriz' => ['nullable'],
+            'anio_finalizacion' => ['nullable'],
+            'estado' => ['required']
+        ]);
+
+        Egresado::create($data);
+
+        if ($request->has('redirect'))
+            return redirect()->to($request->input('redirect'))->with('mensaje', 'Se creo la inscripción');
+        else
+            return redirect()->route('preceptor.Inscriptos.index')->with('mensaje', 'Se creo la inscripción');
+    }
+
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request, $registro)
+    {
+        $registro = Egresado::find($registro);
+        if (!$registro)
+            return \redirect()->route('preceptor.Inscriptos.index')->with('aviso', 'La inscripcion no existe');
+
+
+        return view('preceptor.Inscriptos.edit', [
+            'registro' => $registro,
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $registro)
+    {
+        $validated = $request->validate([
+            'anio_inscripcion' => 'required|integer',
+            'indice_libro_matriz' => 'nullable|string',
+            'anio_finalizacion' => 'nullable|integer|gte:anio_inscripcion',
+            'estado' => 'required|in:0,1,2',
+        ], [
+            'anio_finalizacion.gte' => 'El año de finalización no puede ser menor que el año de inscripción.',
+        ]);
+
+        $registro = Egresado::find($registro);
+
+        if (!$registro) {
+            return redirect()->route('preceptor.Inscriptos.index')->with('aviso', 'La inscripción no existe');
+        }
+
+        $registro->update($validated);
+
+        return redirect()->back()->with('mensaje', 'Se actualizó correctamente');
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $inscripto = Egresado::findOrFail($id);
+
+        //verificar que no tenga mesas futuras
+        if (Examen::where('id_alumno', $inscripto->id_alumno)->where('fecha', '>', date('Y-m-d'))->exists()) {
+            return redirect()->route('preceptor.inscriptos.index')
+                ->with('error', 'No se pudo eliminar la inscripción porque el alumno tiene mesas de examen futuras.');
+        }
+        $inscripto->delete();
+
+
+        return redirect()->route('preceptor.inscriptos.index')->with([
+            'mensaje' => [
+                'Se ha eliminado la inscripción',
+                'Recuerda que puedes volver a crearla en el apartado "crear inscripción".'
+            ]
+        ]);
+    }
 }

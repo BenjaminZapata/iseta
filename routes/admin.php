@@ -266,9 +266,4 @@ Route::post('/asignaturas/{asignatura}/desvincular/{carrera}',
         return redirect()->back()->with('mensaje', 'Se han normalizado los datos');
     });
 
-    // -----------------------------
-    // COPIA DE SEGURIDAD / RESTAURACION
-    // -----------------------------
-    Route::get('copia', [AdminCopiaDB::class, 'crearCopia']);
-    Route::get('restaurar', [AdminCopiaDB::class, 'restaurarCopia']);
 });

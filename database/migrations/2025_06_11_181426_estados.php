@@ -9,18 +9,18 @@ class estados extends Migration
     /**
      * Run the migrations.
      */
-   public function up()
-{
-    Schema::table('egresadoinscripto', function (Blueprint $table) {
-        $table->integer('estado')->default(0);
-    });
+    public function up()
+    {
+        Schema::table('egresadoinscripto', function (Blueprint $table) {
+            $table->integer('estado')->default(0);
+        });
 
-    // Agregá este delay para asegurarte que la columna fue creada antes del update (opcional)
-    DB::statement('SET SESSION sql_mode = ""'); // Por si tenés modo estricto
+        // Agregá este delay para asegurarte que la columna fue creada antes del update (opcional)
+        DB::statement('SET SESSION sql_mode = ""'); // Por si tenés modo estricto
 
-    // Ahora hacé el update
-    DB::table('egresadoinscripto')->whereNotNull('anio_finalizacion')->update(['estado' => 1]);
-}
+        // Ahora hacé el update
+        DB::table('egresadoinscripto')->whereNotNull('anio_finalizacion')->update(['estado' => 1]);
+    }
 
 
     /**
@@ -28,8 +28,8 @@ class estados extends Migration
      */
     public function down(): void
     {
-        Schema::table('egresadoinscripto', function (Blueprint $table){
-            if(Schema::hasColumn('egresadoinscripto', 'estado')) {
+        Schema::table('egresadoinscripto', function (Blueprint $table) {
+            if (Schema::hasColumn('egresadoinscripto', 'estado')) {
                 $table->dropColumn('estado');
             }
         });
