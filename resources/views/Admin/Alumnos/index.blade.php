@@ -60,7 +60,7 @@
             $form->checkbox(
                 'filter_vencido',
                 'Solo títulos vencidos',
-                'label-input-y-100',
+                'label-input-y-150',
                 old('filter_vencido', $filters->filter_vencido ?? false)
             ),
         ],
