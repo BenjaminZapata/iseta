@@ -33,7 +33,7 @@ class CrearAlumnoRequest extends FormRequest
             'piso' => ['nullable'],
             'estado_civil' => ['required'],
             'email' => ['nullable'],
-            'nombre_institucion_secundario' => ['nullable', 'string', 'max:255'],
+            'nombre_institucion_secundario' => ['required', 'string', 'max:255',],
             'titulo_anterior' => ['nullable'],
             'becas' => ['nullable', 'integer', 'in:0,1'],
             'observaciones' => ['nullable'],
