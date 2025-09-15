@@ -85,7 +85,7 @@
                                         Modificar
                                     </button>
                                 </a>
-
+                                @if (!$config['modo_seguro'])
                                 <form id="form-eliminar-{{ $asignatura->id }}"
                                     action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}" method="POST"
                                     style="display: inline;">
@@ -98,6 +98,7 @@
                                         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                                     </button>
                                 </form>
+                                @endif
                             </div>
                         </td>
                     </tr>
