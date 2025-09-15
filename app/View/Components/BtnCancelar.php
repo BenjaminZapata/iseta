@@ -49,6 +49,19 @@ class BtnCancelar extends Component
             return;
         }
 
+        if ($name === 'admin.mesas.edit') {
+            $prev = url()->previous();
+
+            if (preg_match('#/admin/profesores/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.profesores.edit', ['profesor' => $m[1]]);
+                return;
+            }
+
+            // Si no, volver al index de profesores
+            $this->url = route('admin.mesas.index');
+            return;
+        }
+
         if ($name === 'admin.inscriptos.create') {
             $prev = url()->previous();
 
@@ -58,7 +71,7 @@ class BtnCancelar extends Component
                 return;
             }
 
-            // Si no, volver al index de cursadas
+            // Si no, volver al index de inscriptos
             $this->url = route('admin.inscriptos.index');
             return;
         }
@@ -77,6 +90,8 @@ class BtnCancelar extends Component
                 $this->url = route('admin.mesas.edit', ['mesa' => $m[1]]);
                 return;
             }
+
+
 
             // Si no encuentra origen claro → seguir con lógica existente
             $this->url = route('admin.alumnos.index');
@@ -164,7 +179,7 @@ class BtnCancelar extends Component
         }
 
         //Carreras - Asignaturas Cancelar en create_asignatura
-        if(request()->is('admin/carreras/create_asignatura/*')){
+        if (request()->is('admin/carreras/create_asignatura/*')) {
             $this->url = route('admin.carreras.edit', ['carrera' => request()->route('carrera')]);
             return;
         }

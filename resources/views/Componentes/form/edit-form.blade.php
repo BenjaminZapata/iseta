@@ -25,8 +25,8 @@
             @if ($method == 'put')
                 <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
                 Actualizar
-            @else
-                <i class="ti ti-user-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+            @elseif ($method == 'post')
+                <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
                 Guardar
             @endif
             {{-- @endif --}}

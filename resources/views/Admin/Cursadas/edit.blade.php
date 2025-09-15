@@ -100,20 +100,25 @@
                         </button>
                     </div>
                 </form>
-                @if (!$config['modo_seguro'])
-                    <div class="boton-eliminar">
-                        <form class="form-eliminar" method="post"
-                            action="{{ route('admin.cursadas.destroy', ['cursada' => $cursada->id]) }}">
-                            @csrf
-                            @method('delete')
-                            <button class="btn_red_outline"
-                                onclick="openGeneralModal('form-eliminar-{{ $cursada->id }}', '¿Estás seguro de que querés eliminar la cursada: {{ strtoupper($cursada->asignatura->nombre) }} del alumno: {{ strtoupper($cursada->alumno->apellido) }} {{ strtoupper($cursada->alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                class="btn_icon-danger" style="margin-left: 10px;">
-                                <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar cursada
-                            </button>
-                        </form>
-                    </div>
-                @endif
+                <div class="botones-derecha">
+                    @if (!$config['modo_seguro'])
+                        <div>
+                            <form id="form-eliminar-{{ $cursada->id }}"
+                                action="{{ route('admin.cursadas.destroy', $cursada->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button"
+                                    onclick="openGeneralModal('form-eliminar-{{ $cursada->id }}',
+                                    '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre) }} de la carrera {{ strtoupper($cursada->carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                    class="btn_red_outline">
+                                    <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar
+                                    cursada
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
 

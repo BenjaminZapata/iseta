@@ -8,12 +8,22 @@
     </div>
 
     <ul>
-        <li>
-            <a href="{{ route('admin.alumnos.index') }}">
+        <li class="dropdown">
+            <a href="#" onclick="toggleDropdown(event)">
                 <i class="ti ti-user"></i>
                 <span>Alumnos</span>
+                <i class="ti ti-chevron-down arrow"></i>
             </a>
+            <ul class="submenu">
+                <li>
+                    <a href="{{ route('admin.alumnos.index') }}">Listado de Alumnos</a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.inscriptos.index') }}">Inscriptos</a>
+                </li>
+            </ul>
         </li>
+
         <li>
             <a href="{{ route('admin.profesores.index') }}">
                 <i class="ti ti-users"></i>
@@ -44,11 +54,13 @@
                 <span>Cursadas</span>
             </a>
         </li>
-        <li>
-            <a href="{{ route('admin.inscriptos.index') }}">
-                <i class="ti ti-file-invoice"></i>
-                <span>Inscriptos</span>
-            </a>
-        </li>
     </ul>
 </aside>
+
+<script>
+    function toggleDropdown(event) {
+        event.preventDefault();
+        const li = event.currentTarget.closest('.dropdown');
+        li.classList.toggle('open');
+    }
+</script>

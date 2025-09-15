@@ -4,13 +4,11 @@
     @php
         $carrera_previa = null;
     @endphp
-    @php
-        $mostrar_botones = false; // Controla si mostrar o no los botones
-    @endphp
 
     <div>
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'CREAR MESA'])
+
 
             <div class="perfil__info">
                 <form method="post" action="{{ route('admin.mesas.store') }}">
@@ -53,7 +51,8 @@
 
                             @if ($precargados['asignatura'])
                                 <option selected value="{{ $precargados['asignatura']->id }}">
-                                    {{ $precargados['asignatura']->nombre }}</option>
+                                    {{ $precargados['asignatura']->nombre }}
+                                </option>
                             @elseif($asig)
                                 <option selected value="{{ $asig->id }}">{{ $asig->nombre }}</option>
                             @endif
@@ -105,17 +104,24 @@
 
                     <div class="perfil_dataname" id="fecha_llamado_1">
                         <label>Fecha llamado 1:</label>
-                        <input class="campo_info rounded" value="{{ old('fecha1') ? old('fecha1') : '' }}"
-                            type="datetime-local" name="fecha1">
+                        <input class="campo_info rounded" value="{{ 'fecha_1' ? old('fecha_1') : '' }}"
+                            type="datetime-local" name="fecha_1">
                     </div>
 
                     <div class="perfil_dataname" id="fecha_llamado_2" style="display: none;">
                         <label>Fecha llamado 2:</label>
-                        <input class="campo_info rounded" value="{{ old('fecha2') ? old('fecha2') : '' }}"
-                            type="datetime-local" name="fecha2">
+                        <input class="campo_info rounded" value="{{ 'fecha_2' ? old('fecha_2') : '' }}"
+                            type="datetime-local" name="fecha_2">
                     </div>
 
-
+                    <div class="botones-derecha"
+                        style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                        <x-btn-cancelar />
+                        <button type="submit" class="btn_blue">
+                            <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+                            Crear
+                        </button>
+                    </div>
                 </form>
                  <div class="botones-derecha"
                             style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
