@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Secretario;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
@@ -32,7 +32,7 @@ class ProfesoresSecretarioController extends BaseController
 
         $this->data['profesores'] = $this->profeRepo->index($request);
 
-        return view('secretario.Profesores.index', $this->data);
+        return view('secretario.profesores.index', $this->data);
 
     }
 
@@ -69,7 +69,7 @@ class ProfesoresSecretarioController extends BaseController
             ->whereRaw('fecha > NOW()')
             ->get();
 
-        return view('secretario.Profesores.edit', [
+        return view('secretario.profesores.edit', [
             'profesor' => $profesor,
             'mesas' => $mesas
         ]);

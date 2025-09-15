@@ -34,7 +34,7 @@ class AlumnoSecretarioController extends BaseController
         $this->setFilters($request);
         $this->data['alumnos'] = $this->alumnosRepo->index($request);
 
-        return view('Secretario.Alumnos.index', $this->data);
+        return view('secretario.alumnos.index', $this->data);
     }
 
     /**
