@@ -120,9 +120,10 @@ class AlumnoCrudController extends BaseController
      * Update the specified resource in storage.
      */
     public function update(EditarAlumnoRequest $request, Alumno $alumno)
-    {
+{
+    try {
         $data = $request->validated();
-
+        
         $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
 
         if ($data['dni'] && Alumno::where('id', '!=', $alumno->id)->where('dni', $data['dni'])->exists()) {
@@ -131,8 +132,31 @@ class AlumnoCrudController extends BaseController
 
         $alumno->update($data);
         $mensajes['mensaje'][] = 'Se actualizo el alumno';
+        
         return redirect()->back()->with('mensajes', $mensajes);
+        
+    } catch (\Illuminate\Database\QueryException $e) {
+        $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
+        
+        if (str_contains($e->getMessage(), 'Incorrect integer value')) {
+            if (str_contains($e->getMessage(), 'becas')) {
+                $mensajes['error'][] = 'El campo de becas debe ser un número entero o dejarse vacío.';
+            } else {
+                $mensajes['error'][] = 'Uno de los campos numéricos contiene un valor inválido.';
+            }
+        } else {
+            $mensajes['error'][] = 'Error al actualizar los datos del alumno.';
+        }
+        
+        return redirect()->back()->with('mensajes', $mensajes)->withInput();
+        
+    } catch (\Exception $e) {
+        $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
+        $mensajes['error'][] = 'Ocurrió un error inesperado. Intenta nuevamente.';
+        
+        return redirect()->back()->with('mensajes', $mensajes)->withInput();
     }
+}
 
     /**
      * Remove the specified resource from storage.

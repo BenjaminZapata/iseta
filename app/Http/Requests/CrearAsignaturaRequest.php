@@ -24,7 +24,7 @@ class CrearAsignaturaRequest extends FormRequest
         return [
             'nombre' => ['required','regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u', 'min:5','max:50'],
             'tipo_modulo' => ['nullable'],
-            'carga_horaria' => ['required', 'integer'],
+            'carga_horaria' => ['required', 'integer','min:1','max:128'],
             'anio' => ['required', 'integer', 'min:1', 'max:6'],
             'observaciones' => ['nullable'],
         ];

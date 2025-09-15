@@ -104,6 +104,25 @@
             </form>
 
 
+            {{-- ---------------- BOTÓN ELIMINAR (solo si no está en modo seguro) ---------------- --}}
+           
+    <form id="form-eliminar-{{ $asignatura->id }}"
+          action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
+          method="POST"
+          style="display: inline;">
+        @csrf
+        @method('DELETE')
+        <button type="button"
+            onclick="openGeneralModal(
+                'form-eliminar-{{ $asignatura->id }}',
+                '¿Estás seguro de que querés eliminar la asignatura: {{ strtoupper($asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'
+            )"
+            class="btn_red_outline" style="margin-left: 10px;">
+            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>
+            Eliminar asignatura
+        </button>
+    </form>
+
 
 
         </div>

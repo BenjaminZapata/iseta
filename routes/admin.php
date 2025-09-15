@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminCopiaDB;
 use App\Http\Controllers\preceptor\AlumnoPreceptorController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminCorrelativasController;
@@ -256,9 +255,4 @@ Route::post('/asignaturas/{asignatura}/desvincular/{carrera}',
         return redirect()->back()->with('mensaje', 'Se han normalizado los datos');
     });
 
-    // -----------------------------
-    // COPIA DE SEGURIDAD / RESTAURACION
-    // -----------------------------
-    Route::get('copia', [AdminCopiaDB::class, 'crearCopia']);
-    Route::get('restaurar', [AdminCopiaDB::class, 'restaurarCopia']);
 });

@@ -30,11 +30,16 @@
 
                         $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', old('filter_asignatura_id', $filters->filter_asignatura_id ?? null), ['Seleccione una asignatura'], ['id' => 'asignatura_select']),
 
-                        $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-100', [
-                            'first_items' => ['Todos'],
-                            'filter' => 'orderByApellidoNombre',
-                            'value' => old('filter_alumno_id', $filters->filter_alumno_id ?? null),
-                        ]),
+             $alumnoM->dropdown(
+    'filter_alumno_id',
+    'Alumno:',
+    'label-input-y-100',
+    old('filter_alumno_id', $filters->filter_alumno_id ?? null),
+    [
+        'first_items' => ['Todos'],
+        'filter' => 'orderByApellidoNombre',
+    ]
+),
 
                         $form->select('filter_condicion', 'Condición:', 'label-input-y-100', old('filter_condicion', $filters->filter_condicion ?? null), ['Cualquiera', 'Libre', 'Regular', 'Promoción', 'Equivalencia', 'Desertor']),
 

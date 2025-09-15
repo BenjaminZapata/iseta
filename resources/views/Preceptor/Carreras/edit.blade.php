@@ -59,7 +59,7 @@
                 <button class="btn_blue"><i class="ti ti-circle-plus"
                         style="font-size: 1.3em; margin-right: 8px;"></i>Agregar asignatura</button>
             </a>
-            <a href="{{ route('admin.carreras.createAsignaturaView', ['carrera' => $carrera->id]) }}">
+            <a href="{{ route('preceptor.carreras.createAsignaturaView', ['carrera' => $carrera->id]) }}">
                 <button class="btn_blue"><i class="ti ti-circle-plus"
                         style="font-size: 1.3em; margin-right: 8px;"></i>Crear asignatura</button>
             </a>
@@ -111,11 +111,11 @@
 
             {{-- Formularios ocultos --}}
             <form id="form-desactivar-{{ $carrera->id }}"
-                action="{{ route('admin.preceptor.desactivar', $carrera) }}" method="POST" style="display:none;">
+                action="{{ route('preceptor.carreras.desactivar', $carrera) }}" method="POST" style="display:none;">
                 @csrf
             </form>
             <form id="form-reactivar-{{ $carrera->id }}"
-                action="{{ route('admin.preceptor.reactivar', $carrera) }}" method="POST" style="display:none;">
+                action="{{ route('preceptor.carreras.reactivar', $carrera) }}" method="POST" style="display:none;">
                 @csrf
             </form>
             </td>
@@ -176,7 +176,7 @@ $anio_actual = $asignatura->anio;
                         <td>{{ $asignatura->nombre }}</td>
                         <td class="center">{{ $asignatura->carga_horaria }} horas</td>
                         <td style="display:flex; align-items: center; justify-content: center;">
-                            <form action="{{ route('admin.preceptor.edit', ['asignatura' => $asignatura->id]) }}">
+                            <form action="{{ route('preceptor.asignaturas.edit', ['asignatura' => $asignatura->id]) }}">
                                 <button class="btn_blue"><i class="ti ti-edit"
                                         style="font-size: 1.3em; margin-right: 8px;"></i>Editar</button>
                             </form>
