@@ -1,4 +1,4 @@
-<aside id="sidebar" onmouseover="this.style.width='16rem'" onmouseout="this.style.width='4rem'">
+<aside id="sidebar" onmouseover="expandSidebar()" onmouseout="handleSidebarMouseOut(event)"">
     <div class="sidebar-header">
         {{-- Logo colapsado (chico) --}}
         <img src="{{ asset('img/logo-mini.png') }}" alt="Logo Mini" class="logo-mini">
@@ -58,6 +58,39 @@
 </aside>
 
 <script>
+    function toggleDropdown(event) {
+        event.preventDefault();
+        const li = event.currentTarget.closest('.dropdown');
+        li.classList.toggle('open');
+    }
+
+    function expandSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.style.width = '16rem';
+        sidebar.classList.add('expanded');
+    }
+
+    function handleSidebarMouseOut(event) {
+        const sidebar = document.getElementById('sidebar');
+        const toElement = event.relatedTarget;
+
+        // Si el cursor sigue dentro del sidebar o sus hijos, no colapsar
+        if (sidebar.contains(toElement)) return;
+
+        collapseSidebar();
+    }
+
+    function collapseSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.style.width = '4rem';
+        sidebar.classList.remove('expanded');
+
+        // Cerrar dropdowns
+        document.querySelectorAll('.dropdown.open').forEach(el => {
+            el.classList.remove('open');
+        });
+    }
+
     function toggleDropdown(event) {
         event.preventDefault();
         const li = event.currentTarget.closest('.dropdown');
