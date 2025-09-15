@@ -120,43 +120,29 @@ class AlumnoCrudController extends BaseController
      * Update the specified resource in storage.
      */
     public function update(EditarAlumnoRequest $request, Alumno $alumno)
-{
-    try {
-        $data = $request->validated();
-        
-        $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
+    {
+        try {
+            $data = $request->validated();
 
-        if ($data['dni'] && Alumno::where('id', '!=', $alumno->id)->where('dni', $data['dni'])->exists()) {
-            $mensajes['aviso'][] = 'Ya hay un usuario con ese numero de dni';
-        }
+            $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
 
-        $alumno->update($data);
-        $mensajes['mensaje'][] = 'Se actualizo el alumno';
-        
-        return redirect()->back()->with('mensajes', $mensajes);
-        
-    } catch (\Illuminate\Database\QueryException $e) {
-        $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
-        
-        if (str_contains($e->getMessage(), 'Incorrect integer value')) {
-            if (str_contains($e->getMessage(), 'becas')) {
-                $mensajes['error'][] = 'El campo de becas debe ser un número entero o dejarse vacío.';
-            } else {
-                $mensajes['error'][] = 'Uno de los campos numéricos contiene un valor inválido.';
-            }
-        } else {
+            $alumno->update($data);
+            $mensajes['mensaje'][] = 'Se actualizo el alumno';
+
+            return redirect()->back()->with('mensajes', $mensajes);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
             $mensajes['error'][] = 'Error al actualizar los datos del alumno.';
+
+
+            return redirect()->back()->with('mensajes', $mensajes)->withInput();
+        } catch (\Exception $e) {
+            $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
+            $mensajes['error'][] = 'Ocurrió un error inesperado. Intenta nuevamente.';
+
+            return redirect()->back()->with('mensajes', $mensajes)->withInput();
         }
-        
-        return redirect()->back()->with('mensajes', $mensajes)->withInput();
-        
-    } catch (\Exception $e) {
-        $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
-        $mensajes['error'][] = 'Ocurrió un error inesperado. Intenta nuevamente.';
-        
-        return redirect()->back()->with('mensajes', $mensajes)->withInput();
     }
-}
 
     /**
      * Remove the specified resource from storage.
@@ -165,24 +151,24 @@ class AlumnoCrudController extends BaseController
     {
         try {
 
-            //verificar si tiene cursadas pero con el estado 
-            if($alumno->cursadas()->exists()) {
+            //verificar si tiene cursadas pero con el estado
+            if ($alumno->cursadas()->exists()) {
                 return redirect()->route('admin.alumnos.index')
                     ->with('error', 'No se pudo eliminar el alumno porque tiene cursadas asociadas.');
             }
 
             //verificar si tiene mesas futuras
-            if(Examen::where('id_alumno',$alumno->id)->where('fecha','>',date('Y-m-d'))->exists()) {
+            if (Examen::where('id_alumno', $alumno->id)->where('fecha', '>', date('Y-m-d'))->exists()) {
                 return redirect()->route('admin.alumnos.index')
                     ->with('error', 'No se pudo eliminar el alumno porque tiene mesas de examen futuras.');
             }
-            
+
 
             //verificar si esta inscripto en alguna carrera pero con el estado regular
             if ($alumno->carreras()->where('estado', 'regular')->exists()) {
-    return redirect()->route('admin.alumnos.index')
-        ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras como regular');
-}
+                return redirect()->route('admin.alumnos.index')
+                    ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras como regular');
+            }
 
 
             //eliminar alumno

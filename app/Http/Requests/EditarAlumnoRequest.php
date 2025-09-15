@@ -42,7 +42,7 @@ class EditarAlumnoRequest extends FormRequest
             'email' => ['nullable', 'email', 'max:255'],
             'nombre_institucion_secundario' => ['required', 'string', 'max:255'],
             'titulo_anterior' => ['nullable'],
-            'becas' => ['nullable'],
+            'becas' => ['nullable', 'integer', 'gte:0'],
             'observaciones' => ['nullable'],
             'telefono1' => ['nullable', 'numeric'],
             'telefono2' => ['nullable', 'numeric'],
