@@ -17,6 +17,7 @@ use App\Services\Admin\MesasCheckerService;
 use App\Services\DiasHabiles;
 use DateInterval;
 use DateTime;
+use App\Models\Alumno;
 use Illuminate\Http\Request;
 
 class MesasCrudController extends BaseController
@@ -162,12 +163,19 @@ class MesasCrudController extends BaseController
 
         $inscribibles = $this->mesaRepo->inscribibles($mesa);
 
+       $inscribibles = Alumno::whereHas('cursadas', function ($q) use ($mesa) {
+    $q->where('id_asignatura', $mesa->id_asignatura);
+    $q->where('id_carrera', $mesa->asignatura->carrera->first()->id);
+    $q->where('aprobada', 1); // 1 = aprobada
+})->get();
+
 
         return view('Admin.Mesas.edit', [
             'mesa' => $mesa,
             'profesores' => Profesor::orderBy('apellido')->orderBy('nombre')->get(),
             'inscribibles' => $inscribibles
         ]);
+
     }
 
     /**

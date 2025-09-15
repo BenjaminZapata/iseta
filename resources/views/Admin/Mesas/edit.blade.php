@@ -128,36 +128,50 @@
             </div>
 
         </div>
-        <div class="table" style="border-radius: 0.8rem">
-            <div class="table__header" style="border-radius: 0.8rem 0.8rem 0 0 ;">
-                <h2>Acta volante</h2>
-                <div class="flex just-center">
-                    <div class="dropdown" style="position: relative;">
-                        <button class="btn_exportar" onclick="toggleExportar()" type="button">
-                            <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px;"></i>Exportar acta
-                            volante...
-                        </button>
-                        <div id="exportar-opciones"
-                            style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ccc; padding: 8px; z-index: 99;">
-                            <a href="{{ route('admin.mesas.acta', ['mesa' => $mesa->id]) }}" target="_blank">
-                                <button class="btn_sky" type="button" style="margin-right: 8px; width: 120px">
-                                    <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px; "></i>Regular
-                                </button>
-                            </a>
-                            <a href="{{ route('admin.mesas.actaprom', ['mesa' => $mesa->id]) }}" target="_blank">
-                                <button class="btn_sky" type="button" style="margin-right: 8px; width: 120px">
-                                    <i class="ti ti-file-download"
-                                        style="font-size: 1.3em; margin-right: 8px; "></i>Promoción
-                                </button>
-                            </a>
-                            <a href="{{ route('admin.mesas.actalibre', ['mesa' => $mesa->id]) }}" target="_blank">
-                                <button class="btn_sky" style="margin-right: 8px; width: 120px">
-                                    <i class="ti ti-file-download" style="font-size: 1.3em; margin-right: 8px;"></i>Libre
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    </div>
+
+
+
+    <div class="perfil_one br">
+        {{-- <p>La funcion de agregar alumnos se elimino hasta que se arreglen algunos errores</p> --}}
+        <div class="perfil__header">
+            <h2>Alumnos inscriptos</h2>
+        </div>
+        <div class="matricular">
+            @if (true || strtotime($mesa->fecha) > time())
+            <p class="py-2">Estos alumnos han aprobado la cursada de esta materia, luego se volvera a validar
+                sobre correlativas y tiempos</p>
+
+            <form method="POST" action="{{ route('admin.examenes.store') }}">
+                @csrf
+                <select class="rounded" name="id_alumno" required>
+                    <option value="">Selecciona un alumno</option>
+                    @foreach ($inscribibles as $inscribible)
+                    <option value="{{ $inscribible->id }}">{{ $inscribible->apellidoNombre() }}</option>
+                    @endforeach
+                </select>
+                <input name="id_mesa" value="{{ $mesa->id }}" type="hidden">
+
+                <div class="upd"><button class="btn_blue"><i class="ti ti-upload"></i>Cargar</button></div>
+
+            </form>
+            @else
+            Ya no se pueden agregar alumnos
+            @endif
+        </div>
+
+    </div>
+    <div class="table">
+        <div class="table__header">
+            <h2>Acta volante</h2>
+            <div class="flex just-center">
+                <a href="{{ route('admin.mesas.acta', ['mesa' => $mesa->id]) }}" target="_blank"><button
+                        class="btn_grey">Regular</button></a>
+                <a href="{{ route('admin.mesas.actaprom', ['mesa' => $mesa->id]) }}" target="_blank"><button
+                        class="btn_grey">Promoción</button></a>
+                <a href="{{ route('admin.mesas.actalibre', ['mesa' => $mesa->id]) }}" target="_blank"><button
+                        class="btn_grey">Libre</button></a>
+
             </div>
 
             <table class="table__body">

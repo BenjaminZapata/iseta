@@ -60,7 +60,6 @@ class CursadasAdminController extends BaseController
     {
         $data = $request->except('_token', '_method');
         $mensajes = [];
-
         if (
             $request->input('condicion') == 0 ||
             $request->input('condicion') == 2 ||
@@ -94,7 +93,8 @@ class CursadasAdminController extends BaseController
                     // 'acta' => $request->acta,
                     'nota' => $request->nota,
                     //  'fecha' => $request->fecha,
-                    'aprobado' => 1
+                    'aprobado' => 1,
+                   
                 ]
             );
         }
@@ -105,7 +105,7 @@ class CursadasAdminController extends BaseController
         return redirect()->back()->with('mensaje', $mensajes);
     }
 
-    function create()
+    function create(request $request)
     {
         $alumnos = Alumno::orderBy('nombre', 'asc')->orderBy('apellido', 'asc')->get();
         $carreras = Carrera::vigentes();
@@ -126,7 +126,9 @@ class CursadasAdminController extends BaseController
 
         $asignatura = Asignatura::where('id', $request->asignatura)->with('correlativas.asignatura')->first();
         $alumno = Alumno::find($request->alumno);
-
+ if (!$asignatura) {
+        return redirect()->back()->with('error', 'La asignatura seleccionada no existe')->withInput();
+    }
 
         // Ver que no este ya anotado o que ya la haya aprobado
         $yaAnotadoEnCursada = Cursada::where('id_alumno', $alumno->id)

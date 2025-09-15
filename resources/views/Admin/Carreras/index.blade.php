@@ -80,6 +80,7 @@
 
                             {{-- @if (!$config['modo_seguro']) --}}
                             <div>
+                                @if (!$config['modo_seguro'])
                                 <form method="POST" id="form-eliminar-{{ $carrera->id }}"
                                     action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}"
                                     style="margin-left: 10px;">
@@ -94,9 +95,7 @@
                                         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                                     </button>
                                 </form>
-
-
-
+                                @endif
                             </div>
                             {{-- @endif --}}
                         </td>

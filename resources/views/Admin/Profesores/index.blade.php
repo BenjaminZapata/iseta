@@ -59,6 +59,7 @@
                                     <button class="btn_blue"><i class="ti ti-file-info"
                                             style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                                 </a>
+                                @if (!$config['modo_seguro'])
                                 <form method="POST" id="form-eliminar-{{ $profesor->id }}"
                                     action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
                                     @csrf
@@ -72,7 +73,7 @@
                                         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                                     </button>
                                 </form>
-
+                                @endif
                             </div>
                         </td>
 

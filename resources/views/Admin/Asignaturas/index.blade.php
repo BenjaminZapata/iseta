@@ -23,12 +23,10 @@
             {{-- FILTROS --}}
             <?= $filtergen->generate('admin.asignaturas.index', $filters, [
                 'dropdowns' => [
-                    $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', [
-                        'first_items' => ['Todas'],
-                        'id' => 'carrera_select',
-                        'value' => old('filter_carrera_id', $filters->filter_carrera_id ?? null),
-                    ]),
-
+                    $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', old('filter_carrera_id', $filters->filter_carrera_id ?? null), [
+                            'first_items' => ['Todas'],
+                            'id' => 'carrera_select',
+                        ]),
                     $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', old('filter_asignatura_id', $filters->filter_asignatura_id ?? null), $asignaturasList->pluck('nombre', 'id')->prepend('Todas', 0)->toArray()),
 
                     $form->select('filter_anio', 'Año:', 'label-input-y-100', $filters, ['Todos', '1er Año', '2do Año', '3er Año', '4to Año', '5to Año']),
@@ -87,7 +85,7 @@
                                         Modificar
                                     </button>
                                 </a>
-
+                                @if (!$config['modo_seguro'])
                                 <form id="form-eliminar-{{ $asignatura->id }}"
                                     action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}" method="POST"
                                     style="display: inline;">
@@ -100,6 +98,7 @@
                                         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                                     </button>
                                 </form>
+                                @endif
                             </div>
                         </td>
                     </tr>

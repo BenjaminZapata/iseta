@@ -51,9 +51,11 @@ class AlumnoPreceptorController extends BaseController
      * Show the form for creating a new resource.
      */
     public function create(): View
-    {
-        return view('preceptor.Alumnos.create');
-    }
+{
+    return view('Preceptor.Alumnos.create'); 
+    // ojo: respetá mayúsculas/minúsculas y carpetas!
+}
+
 
     /**
      * Guarda un nuevo alumno creado
