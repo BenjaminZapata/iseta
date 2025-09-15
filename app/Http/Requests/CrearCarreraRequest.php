@@ -19,14 +19,24 @@ class CrearCarreraRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
-    {
-        return [
-            'nombre' => ['required', 'regex:/^[^\d]*$/'],
-            "resolucion" => ['required'],
-            "anio_apertura" => ['required', 'numeric', 'min:1900', 'max:2100'],
-            "anio_fin" => ['nullable', 'numeric','min:1900', 'max:2100' ,'gte:anio_apertura'],
-            "observaciones" => ['nullable']
-        ];
-    }
+  public function rules()
+{
+    return [
+        'nombre' => ['required', 'string', 'max:255'],
+        'resolucion' => ['nullable', 'string', 'max:255'],
+        'anio_apertura' => ['required', 'integer', 'min:1900'],
+        'anio_fin' => ['nullable', 'integer', 'min:2000', 'gte:anio_apertura'],
+        'observaciones' => ['nullable', 'string'],
+    ];
+}
+
+public function messages()
+{
+    return [
+        'anio_fin.min' => 'El año de cierre debe ser igual o posterior al año 2000.',
+        'anio_fin.gte' => 'El año de cierre debe ser igual o posterior al año de apertura.',
+    ];
+}
+
+
 }
