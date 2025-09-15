@@ -24,11 +24,11 @@ class EditarCarreraRequest extends FormRequest
         return [
             'nombre' => ['required', 'regex:/^[^\d]*$/'],
             "resolucion" => ['required'],
-            "anio_apertura" => ['required', 'numeric'],
-            "anio_fin" => ['nullable', 'numeric', 'gte:anio_apertura'],
+            "anio_apertura" => ['required', 'numeric', 'min:1900', 'max:2100'],
+            "anio_fin" => ['nullable', 'numeric','min:1900', 'max:2100' ,'gte:anio_apertura'],
             "observaciones" => ['nullable'],
             "vigente" => ['nullable'],
-            "resolucion_archivo" => ['nullable']
+            "resolucion_archivo" => ['nullable'],
         ];
     }
 }
