@@ -60,7 +60,6 @@ class CursadasAdminController extends BaseController
     {
         $data = $request->except('_token', '_method');
         $mensajes = [];
-
         if (
             $request->input('condicion') == 0 ||
             $request->input('condicion') == 2 ||

@@ -30,56 +30,71 @@
                         <label>Año de cursada:</label>
                         <input class="campo_info rounded" value="{{ $cursada->anio_cursada }}" name="anio_cursada">
                     </div>
-                    <div class="perfil_dataname">
-                        <label>Condicion:</label>
-                        @php
-                            $condiciones = [
-                                0 => 'Libre',
-                                1 => 'Regular',
-                                2 => 'Promocion',
-                                3 => 'Equivalencia',
-                                4 => 'Desertor',
-                                5 => 'Itinerante',
-                                6 => 'Oyente',
-                            ];
+                    <div x-data="{
+                            condicion: '{{ (string) $cursada->condicion }}',
+                            aprobada: '{{ (string) $cursada->aprobada }}'
+                        }"
+                        x-init="$watch('condicion', value => { if (value === '6') aprobada = null })">
 
-                            // Valores que NO deben mostrarse en el dropdown
-                            $condicionesExcluidas = [2, 3, 4]; // Promocion, Equivalencia, Desertor
+                        <div class="perfil_dataname">
+                            <label>Condicion:</label>
+                            @php
+                                $condiciones = [
+                                    0 => 'Libre',
+                                    1 => 'Regular',
+                                    2 => 'Promocion',
+                                    3 => 'Equivalencia',
+                                    4 => 'Desertor',
+                                    5 => 'Itinerante',
+                                    6 => 'Oyente',
+                                ];
 
-                            $condicionActual = $cursada->condicion;
-                        @endphp
+                                $condicionesExcluidas = [2, 3, 4];
+                                $condicionActual = $cursada->condicion;
+                            @endphp
 
-                        <select class="campo_info rounded" name="condicion">
-                            {{-- Mostrar la condición actual si está entre las excluidas --}}
-                            @if (in_array($condicionActual, $condicionesExcluidas))
-                                <option value="{{ $condicionActual }}" selected hidden>{{ $condiciones[$condicionActual] }}
-                                </option>
-                            @endif
-
-                            {{-- Mostrar las condiciones que NO están en las excluidas --}}
-                            @foreach ($condiciones as $valor => $texto)
-                                @if (!in_array($valor, $condicionesExcluidas))
-                                    <option value="{{ $valor }}" @selected($condicionActual == $valor)>{{ $texto }}
+                            <select class="campo_info rounded" name="condicion" x-model="condicion">
+                                @if (in_array($condicionActual, $condicionesExcluidas))
+                                    <option value="{{ $condicionActual }}" selected hidden>
+                                        {{ $condiciones[$condicionActual] }}
                                     </option>
                                 @endif
-                            @endforeach
-                        </select>
-                    </div>
-                    <div x-data="{ aprobada: '{{ (string) $cursada->aprobada }}' }">
-                        <div class="perfil_dataname">
-                            <label>Estado:</label>
-                            <select class="campo_info rounded" name="aprobada" x-model="aprobada">
-                                <option value="1">Aprobada</option>
-                                <option value="2">Desaprobada</option>
-                                <option value="3">Cursando</option>
-                                <option value="4">Promocionada</option>
-                                <option value="5">Equivalencia</option>
+
+                                @foreach ($condiciones as $valor => $texto)
+                                    @if (!in_array($valor, $condicionesExcluidas))
+                                        <option value="{{ $valor }}" @selected($condicionActual == $valor)>
+                                            {{ $texto }}
+                                        </option>
+                                    @endif
+                                @endforeach
                             </select>
                         </div>
-                        <div class="perfil_dataname" x-show="aprobada === '5'" x-transition>
-                            <label>Nota:</label>
-                            <input class="campo_info rounded" value="{{ $nota }}" name="nota" type="number" />
-                        </div>
+
+                        {{-- Estado (solo aparece si no es Oyente) --}}
+                        <template x-if="condicion !== '6'">
+                            <div x-transition>
+                                <div class="perfil_dataname">
+                                    <label>Estado:</label>
+                                    <select class="campo_info rounded" name="aprobada" x-model="aprobada">
+                                        <option value="1">Aprobada</option>
+                                        <option value="2">Desaprobada</option>
+                                        <option value="3">Cursando</option>
+                                        <option value="4">Promocionada</option>
+                                        <option value="5">Equivalencia</option>
+                                    </select>
+                                </div>
+
+                                <div class="perfil_dataname" x-show="aprobada === '5'" x-transition>
+                                    <label>Nota:</label>
+                                    <input class="campo_info rounded" value="{{ $nota }}" name="nota" type="number" />
+                                </div>
+                            </div>
+                    </template>
+
+                        {{-- Hidden para mandar null si condicion es Oyente --}}
+                        <template x-if="condicion === '6'">
+                            <input type="hidden" name="aprobada" :value="null">
+                        </template>
                     </div>
                     <input type="hidden" value="{{ url()->previous() }}" name="redirect">
 
