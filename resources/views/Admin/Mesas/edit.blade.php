@@ -14,9 +14,25 @@
                         {{ $mesa->asignatura->anioStr() }}
                     </p>
                 </div>
-                <form method="post" action="{{ route('admin.mesas.update', ['mesa' => $mesa->id]) }}">
-                    @csrf
-                    @method('put')
+                <div class="perfil_dataname">
+                    <label>Llamado:</label>
+                    <select class="campo_info rounded" name="llamado">
+                        <option @selected($mesa->llamado == 1) value="1">Primero</option>
+                        <option @selected($mesa->llamado == 2) value="2">Segundo</option>
+                    </select>
+                </div>
+               <div class="perfil_dataname">
+    <label>Prof. presidente:</label>
+    <select class="campo_info rounded" name="prof_presidente">
+        <option value="0" @selected($mesa->prof_presidente == 0)>Vacio/A confirmar</option>
+        @foreach ($profesores as $profesor)
+            <option value="{{ $profesor->id }}"
+                @selected($mesa->prof_presidente != 0 && $mesa->profesor?->id == $profesor->id)>
+                {{ $profesor->apellidoNombre() }}
+            </option>
+        @endforeach
+    </select>
+</div>
 
                     <div class="perfil_dataname">
                         <label>Fecha:</label>
