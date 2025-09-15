@@ -55,7 +55,7 @@
                         </td>
                         <td class="flex just-center">
                             <div style="display: flex; justify-content: center;">
-                                <a href="{{ route('secretaio.profesores.edit', ['profesor' => $profesor->id]) }}">
+                                <a href="{{ route('secretario.profesores.edit', ['profesor' => $profesor->id]) }}">
                                     <button class="btn_blue"><i class="ti ti-file-info"
                                             style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                                 </a>

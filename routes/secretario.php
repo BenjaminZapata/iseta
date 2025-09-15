@@ -14,6 +14,7 @@ Route::prefix('secretario')
             ->name('alumnos.index');
         Route::get('alumnos/{alumno}', [AlumnoSecretarioController::class, 'show'])
             ->name('alumnos.show');
+        
 
         //profesores
         Route::get('profesores', [ProfesoresSecretarioController::class, 'index'])
