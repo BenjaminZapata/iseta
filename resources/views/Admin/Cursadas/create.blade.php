@@ -52,15 +52,7 @@
                     </div>
                     <div class="perfil_dataname">
                         <label>Año de cursada:</label>
-                        
-<input class="campo_info rounded" 
-       type="number" 
-       min="2020" 
-       max="{{ date('Y') + 5 }}"
-       value="{{ old('anio_cursada') ? old('anio_cursada') : $config['anio_remat'] }}" 
-       placeholder="{{ $config['anio_remat'] }}" 
-       name="anio_cursada"
-       required>
+                        <input class="campo_info rounded" type="number" name="anio_cursada" required>
                     </div>
                     <div x-data="{
                         condicion: '{{ old('condicion', '') }}',

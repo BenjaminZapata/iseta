@@ -32,38 +32,53 @@
     </div>
 
     <div class="table br">
-        <table class="table__body">
-            <thead>
+    <table class="table__body">
+        <thead>
+            <tr>
+                <th class="center">Id</th>
+                <th>Usuario</th>
+                @if (!$config['modo_seguro'])
+                    <th class="center">Acción</th>
+                @endif
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                $nombresRol = [
+                    0 => 'Regente',
+                    1 => 'Preceptor',
+                    2 => 'Secretario',
+                ];
+            @endphp
+
+            @foreach ($admins as $admin)
                 <tr>
-                    <th class="center">Id</th>
-                    <th>Usuario</th>
+                    <td class="center">{{ $admin->id }}</td>
+                    <td>{{ $admin->username }}</td>
+
                     @if (!$config['modo_seguro'])
-                        <th class="center">Acción</th>
+                        <td class="center">
+                            <form id="form-eliminar-{{ $admin->id }}"
+                                action="{{ route('admin.admins.destroy', ['admin' => $admin->id]) }}"
+                                method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button"
+                                    onclick="openGeneralModal('form-eliminar-{{ $admin->id }}',
+                                        '¿Estás seguro de que querés eliminar al usuario: {{ strtoupper($admin->apellido) }} {{ strtoupper($admin->nombre) }}?\n\nRol asignado: {{ $nombresRol[$admin->rol] ?? 'Sin rol definido' }}\n\nESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                    class="btn_icon-danger"
+                                    style="background-color: red; margin-left: 10px;">
+                                    <i class="ti ti-trash" style="font-size: 1.3em"></i>
+                                </button>
+                            </form>
+                        </td>
                     @endif
                 </tr>
-            </thead>
-            <tbody>
-                @foreach ($admins as $admin)
-                    <tr>
-                        <td class="center">{{$admin->id}}</td>
-                        <td>{{$admin->username}}</td>
-                        {{---<td><a href="{{route('admin.admins.edit', ['admin' => $admin->id])}}"><button
-                                    class="btn_edit">Editar</button></a></td>---}}
-                        @if (!$config['modo_seguro'])
-                            <td class="center">
-                                <form method="POST" class="form-eliminar"
-                                    action="{{route('admin.admins.destroy', ['admin' => $admin->id])}}">
-                                    @csrf
-                                    @method('delete')
-                                    <input type="submit" value="Eliminar" class="btn_borrar-alt">
-                                </form>
-                            </td>
-                        @endif
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
 
     <div class="w-1/2 mx-auto p-5">
         {{ $admins->appends(request()->query())->links() }}

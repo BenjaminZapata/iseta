@@ -56,54 +56,63 @@ class CursadasAdminController extends BaseController
         return view('Admin.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
     }
 
-    function update(Request $request, Cursada $cursada)
-    {
-        $data = $request->except('_token', '_method');
-        $mensajes = [];
-        if (
-            $request->input('condicion') == 0 ||
-            $request->input('condicion') == 2 ||
-            $request->input('condicion') == 3
-        ) {
+    public function update(Request $request, Cursada $cursada)
+{
+    $mensajes = [];
 
+    // Validación de año de cursada
+    $request->validate([
+        'anio_cursada' => ['required', 'integer', 'min:2020', 'max:' . (date('Y') + 5)]
+    ], [
+        'anio_cursada.min' => 'El año de cursada no puede ser menor a 2020',
+        'anio_cursada.max' => 'El año de cursada no puede superar ' . (date('Y') + 5),
+        'anio_cursada.required' => 'El año de cursada es obligatorio',
+        'anio_cursada.integer' => 'El año de cursada debe ser un número válido'
+    ]);
 
-            if ($cursada->aprobada == 1 && ($request->aprobada == 2 || $request->aprobada == 3)) {
-                $mensajes[] = "No puedes desaprobar una cursada libre, promocionada o aprobada por equivalencias";
-            }
+    $data = $request->except('_token', '_method');
 
-            $data['aprobada'] = 1;
-        }
-        if ($request->aprobada == 5) {
-            if ($request->nota < 4 || $request->nota > 10) {
-                $mensajes[] = "La nota debe estar entre 4 y 10";
-                return redirect()->back()->with('error', $mensajes)->withInput();
-            }
-            Examen::updateOrInsert(
-                [
-                    'id_carrera' => $cursada->id_carrera,
-                    'id_asignatura' => $cursada->id_asignatura,
-                    'id_alumno' => $cursada->id_alumno
-                ],
-                [
-                    'id_carrera' => $cursada->id_carrera,
-                    'id_asignatura' => $cursada->id_asignatura,
-                    'id_alumno' => $cursada->id_alumno,
-                    'tipo_final' => 4, // Equivalencia
-                    // 'libro' => $request->libro,
-                    // 'acta' => $request->acta,
-                    'nota' => $request->nota,
-                    //  'fecha' => $request->fecha,
-                    'aprobado' => 1,
-                   
-                ]
-            );
+    if (
+        $request->input('condicion') == 0 ||
+        $request->input('condicion') == 2 ||
+        $request->input('condicion') == 3
+    ) {
+        if ($cursada->aprobada == 1 && ($request->aprobada == 2 || $request->aprobada == 3)) {
+            $mensajes[] = "No puedes desaprobar una cursada libre, promocionada o aprobada por equivalencias";
         }
 
-        $cursada->update($data);
-        $mensajes[] = 'Se ha editado correctamente';
-
-        return redirect()->back()->with('mensaje', $mensajes);
+        $data['aprobada'] = 1;
     }
+
+    if ($request->aprobada == 5) {
+        if ($request->nota < 4 || $request->nota > 10) {
+            $mensajes[] = "La nota debe estar entre 4 y 10";
+            return redirect()->back()->with('error', $mensajes)->withInput();
+        }
+
+        Examen::updateOrInsert(
+            [
+                'id_carrera' => $cursada->id_carrera,
+                'id_asignatura' => $cursada->id_asignatura,
+                'id_alumno' => $cursada->id_alumno
+            ],
+            [
+                'id_carrera' => $cursada->id_carrera,
+                'id_asignatura' => $cursada->id_asignatura,
+                'id_alumno' => $cursada->id_alumno,
+                'tipo_final' => 4, // Equivalencia
+                'nota' => $request->nota,
+                'aprobado' => 1
+            ]
+        );
+    }
+
+    $cursada->update($data);
+    $mensajes[] = 'Se ha editado correctamente';
+
+    return redirect()->back()->with('mensaje', $mensajes);
+}
+
 
     function create(request $request)
     {
@@ -122,6 +131,7 @@ class CursadasAdminController extends BaseController
             'carrera' => ['required'],
             'asignatura' => ['required'],
             'alumno' => ['required'],
+            'anio_cursada' => ['required', 'integer', 'min:2020', 'max:' . (date('Y') + 5)],
         ]);
 
         $asignatura = Asignatura::where('id', $request->asignatura)->with('correlativas.asignatura')->first();
