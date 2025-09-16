@@ -46,7 +46,7 @@ class CrearProfesorRequest extends FormRequest
             'dpto' => ['nullable', 'string', 'max:5'],
             'piso' => ['nullable', 'numeric', 'max_digits:15'],
             'estado_civil' => ['required', 'integer', 'between:0,5'],
-            'email' => ['nullable', 'email', 'max:50'],
+            'email' => ['required', 'email', 'max:50'],
             'formacion_academica' => ['required', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u', 'max:150'],
             'titulo' => ['nullable', 'numeric'],
             'observaciones' => ['nullable', 'string', 'max:150'],
