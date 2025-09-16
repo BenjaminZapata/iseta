@@ -175,7 +175,6 @@ class MesasCrudController extends BaseController
             'profesores' => Profesor::orderBy('apellido')->orderBy('nombre')->get(),
             'inscribibles' => $inscribibles
         ]);
-
     }
 
     /**
@@ -222,15 +221,9 @@ class MesasCrudController extends BaseController
             }
 
             //Verificar que no tenga alumnos inscriptos
-            if ($mesa->alumnos()->exists()) {
+            if ($mesa->examenes()->exists()) {
                 return redirect()->route('admin.mesas.index')
                     ->with('error', 'No se pudo eliminar la mesa. Tiene alumnos inscriptos.');
-            }
-
-            //verificar que no tenga profesores asignados
-            if ($mesa->prof_presidente != 0 || $mesa->prof_vocal_1 != 0 || $mesa->prof_vocal_2 != 0) {
-                return redirect()->route('admin.mesas.index')
-                    ->with('error', 'No se pudo eliminar la mesa. Tiene profesores asignados.');
             }
 
             //eliminar mesa

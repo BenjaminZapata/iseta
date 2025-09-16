@@ -110,7 +110,7 @@
                     @if (!$config['modo_seguro'])
                         <div>
                             <form id="form-eliminar-{{ $mesa->id }}"
-                                action="{{ route('admin.mesas.destroy', $mesa->id) }}" method="POST"
+                                action="{{ route('admin.mesas.destroy', ['mesa' => $mesa->id]) }}" method="POST"
                                 style="display: inline;">
                                 @csrf
                                 @method('DELETE')
