@@ -115,7 +115,7 @@ Si prefieres instalar el sistema directamente en tu PC (sin usar máquinas virtu
 # Dentro del Server
 
 1. Una vez que entramos al servidor tendremos una pantalla la cual nos dara para elegir entre 4 opciones, de esas opciones elegir la opcion que dice **ISETASV live/installation mode**.
-2. Donde te encontrarias en este paso seria el *"Live System"*. Tendrias que estar viendo una terminal la cual te pida un usuario y contraseña, en la terminal tendria que aparecerte algo asi: ``isetasv:``, primero se ingresa un usuario el cual es **"Admin"** y despues la contraseña la cual es **"4123"**.
-3. Ya dentro del sistema hay que poner el siguiente comando en la terminal ``cd /srv/pm2025``, este comando los va a llevar a la carpeta del servidor, ahora deben escribir el ``frankenphp run``, esto les va a iniciar el servidor completamente configurado.
+2. Donde te encontrarias en este paso seria el *"Live System"*. Tendrias que estar viendo una terminal la cual te pida un usuario y contraseña, en la terminal tendria que aparecerte algo asi: ``isetasv:``, primero se ingresa un usuario el cual es **"root"** y despues la contraseña la cual es **"4123"**.
+4. Ya dentro del sistema hay que iniciar sesion como el administrador para que el servidor funcione como se debe, para eso se usa el siguiente comando: ``su admin``, ahora hay que poner el siguiente comando en la terminal ``cd /srv/pm2025``, este comando los va a llevar a la carpeta del servidor, ahora deben escribir el ``frankenphp run``, esto les va a iniciar el servidor completamente configurado.
 
 * si al escribir el comando ``frankenphp run``al final de los mensajes les aparece algo como *"127.0.0.1:2019 bind addres already in use"*, tiren el comando ``sudo systemctl stop frankenphp``, y vuelvan a tirar el comando ``frankenphp run``.
