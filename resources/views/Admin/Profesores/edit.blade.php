@@ -5,16 +5,50 @@
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR PROFESOR/A'])
         <div class="perfil__info">
-
             <?= $form->generate(route('admin.profesores.update', ['profesor' => $profesor->id]), 'put', [
-                'Profesor' => [$form->text('dni', 'DNI:', 'label-input-y-75', $profesor), $form->text('nombre', 'Nombre:', 'label-input-y-75', $profesor), $form->text('apellido', 'Apellido:', 'label-input-y-75', $profesor), $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $profesor, ['default' => $profesor->fecha_nacimiento->format('Y-m-d')]), $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $profesor, ['Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])],
-                'Dirección' => [$form->text('ciudad', 'Ciudad:', 'label-input-y-75', $profesor), $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', $profesor), $form->text('calle', 'Calle:', 'label-input-y-75', $profesor), $form->text('casa_numero', 'Altura:', 'label-input-y-75', $profesor), $form->text('dpto', 'Departamento:', 'label-input-y-75', $profesor), $form->text('piso', 'Piso:', 'label-input-y-75', $profesor)],
-                'Profesor' => [$form->text('dni', 'DNI:', 'label-input-y-75', $profesor), $form->text('nombre', 'Nombre:', 'label-input-y-75', $profesor), $form->text('apellido', 'Apellido:', 'label-input-y-75', $profesor),$form->text('lugar_nacimiento', 'Lugar de nacimiento:', 'label-input-y-75', $profesor) ,$form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $profesor, ['default' => $profesor->fecha_nacimiento->format('Y-m-d')]), $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $profesor, ['Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])],
-                'Dirección' => [$form->text('ciudad', 'Ciudad:', 'label-input-y-75', $profesor), $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', $profesor), $form->text('calle', 'Calle:', 'label-input-y-75', $profesor), $form->text('casa_numero', 'Altura:', 'label-input-y-75', $profesor), $form->text('dpto', 'Departamento:', 'label-input-y-75', $profesor), $form->text('piso', 'Piso:', 'label-input-y-75', $profesor)],
-                'Academico' => [$form->text('formacion_academica', 'Formacion academica:', 'label-input-y-75', $profesor), $form->text('anio_ingreso', 'Año de ingreso:', 'label-input-y-75', $profesor)],
-                'Contacto' => [$form->text('email', 'Email:', 'label-input-y-75', $profesor), $form->text('telefono_1', 'Telefono 1:', 'label-input-y-75', $profesor), $form->text('telefono_2', 'Telefono 2:', 'label-input-y-75', $profesor), $form->text('telefono_3', 'Telefono 3:', 'label-input-y-75', $profesor)],
-                'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $profesor)],
-
+                'Profesor' => [
+                    $form->text('dni', 'DNI:', 'label-input-y-75', old('dni') ?? $profesor),
+                    $form->text('nombre', 'Nombre:', 'label-input-y-75', old('nombre') ?? $profesor),
+                    $form->text('apellido', 'Apellido:', 'label-input-y-75', old('apellido') ?? $profesor),
+                    $form->text('lugar_nacimiento', 'Lugar de nacimiento:', 'label-input-y-75', old('lugar_nacimiento') ?? $profesor),
+                    $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', old('fecha_nacimiento') ?? $profesor, [
+                        'default' => $profesor->fecha_nacimiento?->format('Y-m-d') ?? old('fecha_nacimiento')
+                    ]),
+                    $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', old('estado_civil') ?? $profesor, [
+                        'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'
+                    ])
+                ],
+                'Dirección' => [
+                    $form->text('ciudad', 'Ciudad:', 'label-input-y-75', old('ciudad') ?? $profesor),
+                    $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', old('codigo_postal') ?? $profesor),
+                    $form->text('calle', 'Calle:', 'label-input-y-75', old('calle') ?? $profesor),
+                    $form->text('casa_numero', 'Altura:', 'label-input-y-75', old('casa_numero') ?? $profesor),
+                    $form->text('dpto', 'Departamento:', 'label-input-y-75', old('dpto') ?? $profesor),
+                    $form->text('piso', 'Piso:', 'label-input-y-75', old('piso') ?? $profesor)
+                ],
+                'Academico' => [
+                    $form->text('formacion_academica', 'Formacion academica:', 'label-input-y-75', old('formacion_academica') ?? $profesor),
+                    $form->text('anio_ingreso', 'Año de ingreso:', 'label-input-y-75', old('anio_ingreso') ?? $profesor)
+                ],
+                'Contacto' => [
+                    $form->text('email', 'Email:', 'label-input-y-75', old('email') ?? $profesor),
+                    $form->text('telefono_1', 'Telefono 1:', 'label-input-y-75', old('telefono_1') ?? $profesor),
+                    '<div class="input-group">' .
+                        $form->text('telefono_2', 'Telefono 2:', 'label-input-y-75', old('telefono_2') ?? $profesor, [
+                            'placeholder' => '+54-11-12345678'
+                        ]) .
+                        '<small class="text-muted">Ejemplo: +54-11-12345678</small>' .
+                    '</div>',
+                    '<div class="input-group">' .
+                        $form->text('telefono_3', 'Telefono 3:', 'label-input-y-75', old('telefono_3') ?? $profesor, [
+                            'placeholder' => '+54-11-87654321'
+                        ]) .
+                        '<small class="text-muted">Ejemplo: +54-11-87654321</small>' .
+                    '</div>'
+                ],
+                'Otros' => [
+                    $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones') ?? $profesor)
+                ],
             ]) ?>
             <div class="boton-eliminar">
 

@@ -5,9 +5,8 @@ namespace App\Http\Requests;
 use App\Rules\Telefono;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
-use Illuminate\Validation\Rule;
 
-use function Livewire\after;
+
 
 class CrearProfesorRequest extends FormRequest
 {
