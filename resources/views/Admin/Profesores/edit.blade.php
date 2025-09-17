@@ -5,19 +5,19 @@
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR PROFESOR/A'])
         <div class="perfil__info">
-           
+
             <?= $form->generate(route('admin.profesores.update', ['profesor' => $profesor->id]), 'put', [
                 'Profesor' => [$form->text('dni', 'DNI:', 'label-input-y-75', $profesor), $form->text('nombre', 'Nombre:', 'label-input-y-75', $profesor), $form->text('apellido', 'Apellido:', 'label-input-y-75', $profesor), $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $profesor, ['default' => $profesor->fecha_nacimiento->format('Y-m-d')]), $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $profesor, ['Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])],
                 'Dirección' => [$form->text('ciudad', 'Ciudad:', 'label-input-y-75', $profesor), $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', $profesor), $form->text('calle', 'Calle:', 'label-input-y-75', $profesor), $form->text('casa_numero', 'Altura:', 'label-input-y-75', $profesor), $form->text('dpto', 'Departamento:', 'label-input-y-75', $profesor), $form->text('piso', 'Piso:', 'label-input-y-75', $profesor)],
                 'Profesor' => [$form->text('dni', 'DNI:', 'label-input-y-75', $profesor), $form->text('nombre', 'Nombre:', 'label-input-y-75', $profesor), $form->text('apellido', 'Apellido:', 'label-input-y-75', $profesor),$form->text('lugar_nacimiento', 'Lugar de nacimiento:', 'label-input-y-75', $profesor) ,$form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $profesor, ['default' => $profesor->fecha_nacimiento->format('Y-m-d')]), $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $profesor, ['Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'])],
                 'Dirección' => [$form->text('ciudad', 'Ciudad:', 'label-input-y-75', $profesor), $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', $profesor), $form->text('calle', 'Calle:', 'label-input-y-75', $profesor), $form->text('casa_numero', 'Altura:', 'label-input-y-75', $profesor), $form->text('dpto', 'Departamento:', 'label-input-y-75', $profesor), $form->text('piso', 'Piso:', 'label-input-y-75', $profesor)],
                 'Academico' => [$form->text('formacion_academica', 'Formacion academica:', 'label-input-y-75', $profesor), $form->text('anio_ingreso', 'Año de ingreso:', 'label-input-y-75', $profesor)],
-                'Contacto' => [$form->text('email', 'Email:', 'label-input-y-75', $profesor), $form->text('telefono1', 'Telefono 1:', 'label-input-y-75', $profesor), $form->text('telefono2', 'Telefono 2:', 'label-input-y-75', $profesor), $form->text('telefono3', 'Telefono 3:', 'label-input-y-75', $profesor)],
+                'Contacto' => [$form->text('email', 'Email:', 'label-input-y-75', $profesor), $form->text('telefono_1', 'Telefono 1:', 'label-input-y-75', $profesor), $form->text('telefono_2', 'Telefono 2:', 'label-input-y-75', $profesor), $form->text('telefono_3', 'Telefono 3:', 'label-input-y-75', $profesor)],
                 'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $profesor)],
-                
+
             ]) ?>
             <div class="boton-eliminar">
-                
+
                 <div>
                    <!-- Formulario de eliminación -->
                     <form method="POST" id="form-eliminar-{{ $profesor->id }}"
@@ -33,7 +33,7 @@
                     <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar profesor/a
                     </button>
                     </form>
-                </div> 
+                </div>
             </div>
 
 
