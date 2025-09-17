@@ -11,7 +11,7 @@
 </style>
 
 <div class="table" data-name="tablaAsignatura">
-    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
+   @include('preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
 
     {{-- BOTÓN CREAR Y FILTROS --}}
     <div class="perfil__header-alt">
