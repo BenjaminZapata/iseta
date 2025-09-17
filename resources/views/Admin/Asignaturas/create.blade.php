@@ -14,8 +14,8 @@
                 {{-- Nombre --}}
                 <div class="perfil_dataname">
                     <label>Asignatura:</label>
-                    <input class="campo_info rounded" 
-                           name="nombre" 
+                    <input class="campo_info rounded"
+                           name="nombre"
                            value="{{ old('nombre') }}">
                     @error('nombre')
                         <small class="text-red-500">{{ $message }}</small>

@@ -56,9 +56,9 @@
     ],
     'Contacto' => [
     $form->text('email', 'Email:', 'label-input-y-75', null),
-    $form->text('telefono1', 'Telefono 1:', 'label-input-y-75', null),
-    $form->text('telefono2', 'Telefono 2:', 'label-input-y-75', null),
-    $form->text('telefono3', 'Telefono 3:', 'label-input-y-75', null),
+    $form->text('telefono_1', 'Telefono 1:', 'label-input-y-75', null),
+    $form->text('telefono_2', 'Telefono 2:', 'label-input-y-75', null),
+    $form->text('telefono_3', 'Telefono 3:', 'label-input-y-75', null),
     ],
     'Academico' => [
     $form->text(
