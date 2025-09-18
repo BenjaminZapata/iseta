@@ -18,18 +18,16 @@
     <div class="edit-form-container">
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
-
             <div class="perfil__header">
                 <h2>Asignatura</h2>
             </div>
-
             <div class="perfil__info">
                 <?= $form->generate(route('admin.asignaturas.update', ['asignatura' => $asignatura->id]), 'put', [
                         'Información' => [
                             '<div class="perfil_dataname">
                                                                                                                     <label>Asignatura:</label>
                                                                                                                     <input class="campo_info rounded" value="' .
-                        e($asignatura->nombre) .
+                        e(old('nombre') ?? $asignatura->nombre) .
                         '" name="nombre">
                                                                                                                 </div>',
 
@@ -55,21 +53,21 @@
                             '<div class="perfil_dataname">
                                                                                                                     <label>Carga horaria:</label>
                                                                                                                     <input class="campo_info rounded" value="' .
-                        e($asignatura->carga_horaria) .
+                        e(old('carga_horaria') ?? $asignatura->carga_horaria) .
                         '" name="carga_horaria">
                                                                                                                 </div>',
 
                             '<div class="perfil_dataname">
                                                                                                                     <label>Año:</label>
                                                                                                                     <input class="campo_info rounded" value="' .
-                        e($asignatura->anio) .
+                        e( old('anio') ?? $asignatura->anio) .
                         '" name="anio">
                                                                                                                 </div>',
 
                             '<div class="perfil_dataname">
                                                                                                                     <label>Observaciones:</label>
                                                                                                                     <input class="campo_info rounded" value="' .
-                        e($asignatura->observaciones) .
+                        e(  old('observaciones') ?? $asignatura->observaciones) .
                         '" name="observaciones">
                                                                                                                 </div>',
 
@@ -93,38 +91,7 @@
                         </form>
                     @endif
                 </div>
-
-
-
             </div>
-
-
-
-
-            </form>
-
-
-            {{-- ---------------- BOTÓN ELIMINAR (solo si no está en modo seguro) ---------------- --}}
-           
-    <form id="form-eliminar-{{ $asignatura->id }}"
-          action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
-          method="POST"
-          style="display: inline;">
-        @csrf
-        @method('DELETE')
-        <button type="button"
-            onclick="openGeneralModal(
-                'form-eliminar-{{ $asignatura->id }}',
-                '¿Estás seguro de que querés eliminar la asignatura: {{ strtoupper($asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'
-            )"
-            class="btn_red_outline" style="margin-left: 10px;">
-            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>
-            Eliminar asignatura
-        </button>
-    </form>
-
-
-
         </div>
     </div>
 

@@ -52,7 +52,9 @@ class AlumnoCrudController extends BaseController
      */
     public function create(): View
     {
-        return view('Admin.Alumnos.create');
+        return view('Admin.Alumnos.create', [
+            'carreras' => \App\Models\Carrera::orderBy('nombre')->where('vigente', '1')->get(),
+        ]);
     }
 
     /**
@@ -61,13 +63,21 @@ class AlumnoCrudController extends BaseController
     public function store(crearAlumnoRequest $request)
     {
         $data = $request->validated();
+
+        $egresados = new EgresadosAdminController();
         $response = redirect()->back();
 
-        if (Alumno::where('dni', strtolower($data['dni']))->first()) {
-            return $response->with('aviso', 'Ya hay un usuario con ese numero de documento')->withInput();
-        } else {
-            Alumno::create($data);
-            return $response->with('mensaje', 'Se creo el alumno');
+        $alumno = Alumno::create($data);
+        return $response->with('mensaje', 'Se creo el alumno');
+        foreach ($data['carrera'] as $i => $valor) {
+            $egresados->store(new Request([
+                'id_alumno' => $alumno->id,
+                'id_carrera' => $data['carrera'][$i],
+                'anio_inscripcion' => $data['anio_inscripcion'][$i],
+                'anio_finalizacion' => $data['anio_finalizacion'][$i] ?? null,
+                'finalizada' => 0,
+                'estado' => 'regular',
+            ]));
         }
     }
 

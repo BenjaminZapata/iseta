@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Secretario\AlumnoSecretarioController;
+use App\Http\Controllers\Admin\AdminCopiaDB;
 use App\Http\Controllers\preceptor\AlumnoPreceptorController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminCorrelativasController;
@@ -74,9 +76,18 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // PRECEPTOR
     // -----------------------------
     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/preceptor/alumnos/index', [AlumnoPreceptorController::class, 'index'])
+        Route::get('/alumnos/index', [AlumnoPreceptorController::class, 'index'])
             ->name('preceptor.alumnos.index');
     });
+
+    //-----------------------------
+    // SECRETARIO
+    //-----------------------------
+    Route::middleware(['auth:admin'])->group(function () {
+        Route::get('/alumnos/index', [AlumnoSecretarioController::class, 'index'])
+            ->name('secretario.alumnos.index');
+    });
+
 
     // -----------------------------
     // EGRESADOS
@@ -144,9 +155,11 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::post('/asignaturas', [AsignaturasCrudController::class, 'store'])->name('admin.asignaturas.store');
     Route::put('/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'update'])->name('admin.asignaturas.update');
     Route::delete('/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'destroy'])->name('admin.asignaturas.destroy');
-Route::post('/asignaturas/{asignatura}/desvincular/{carrera}', 
-    [AsignaturasCrudController::class,'Desvincular'])
-    ->name('admin.asignaturas.desvincular');
+    Route::post(
+        '/asignaturas/{asignatura}/desvincular/{carrera}',
+        [AsignaturasCrudController::class, 'Desvincular']
+    )
+        ->name('admin.asignaturas.desvincular');
     // -----------------------------
     // CURSADAS
     // -----------------------------
@@ -163,7 +176,7 @@ Route::post('/asignaturas/{asignatura}/desvincular/{carrera}',
     // -----------------------------
     // MESAS / EXAMENES
     // -----------------------------
-    Route::resource('mesas', MesasCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->except('show');
+    Route::resource('mesas', MesasCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->except('show', 'destroy');
 
     Route::get('mesas-dual/{carrera}/{asignatura}', [AdminMesasLotes::class, 'vista'])->name('admin.mesas.dual');
     Route::post('mesas-dual/{carrera}/{asignatura}', [AdminMesasLotes::class, 'store'])->name('admin.mesas.dualpost');
@@ -171,7 +184,7 @@ Route::post('/asignaturas/{asignatura}/desvincular/{carrera}',
     Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('admin.mesas.acta');
     Route::get('/mesas/acta-volante-prom/{mesa}', [AdminPdfController::class, 'actaVolantePromocion'])->name('admin.mesas.actaprom');
     Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('admin.mesas.actalibre');
-
+    Route::delete('mesas/{mesa}/edit/eliminar', [MesasCrudController::class, 'destroy'])->name('admin.mesas.destroy');
     Route::resource('examenes', ExamenesCrudController::class, [
         'as' => 'admin',
         'parameters' => ['examenes' => 'examen']
@@ -254,5 +267,4 @@ Route::post('/asignaturas/{asignatura}/desvincular/{carrera}',
 
         return redirect()->back()->with('mensaje', 'Se han normalizado los datos');
     });
-
 });
