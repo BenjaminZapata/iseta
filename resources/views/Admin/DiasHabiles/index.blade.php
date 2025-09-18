@@ -46,8 +46,11 @@
                         @endfor
                     </ul>
                 </div>
-               </div><br>
+               </div>
            @endforeach
+           <div class="botones-derecha">
+        <x-btn-cancelar />
+    </div>
         </div>
     </div>
 @endsection

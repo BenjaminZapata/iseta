@@ -184,7 +184,11 @@ class BtnCancelar extends Component
             return;
         }
 
-
+        //alumnos edit - rematriculacion
+        if (request()->is('admin/matricular/*')) {
+            $this->url = route('admin.alumnos.edit', ['alumno' => request()->route('alumno')]);
+            return;
+        }
         /**
          * 4) Fallback final
          */
@@ -347,13 +351,6 @@ class BtnCancelar extends Component
             return;
         }
 
-
-        /**
-         * 4) Fallback final
-         */
-        $this->url = route('preceptor.alumnos.index');
-    
-        
     }
 
     public function render()
