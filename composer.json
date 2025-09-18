@@ -10,7 +10,7 @@
         "laravel/framework": "12.19.3",
         "laravel/sanctum": "^4.1",
         "laravel/tinker": "^2.10.1",
-        "livewire/livewire": "^3.6.3",
+        "livewire/livewire": "^3.6",
         "maatwebsite/excel": "^3.1.64",
         "spatie/browsershot": "^5.0",
         "spatie/laravel-pdf": "^1.6"
