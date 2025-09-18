@@ -70,15 +70,6 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'fecha_nacimiento' => 'datetime',
     ];
 
-    protected static function booted()
-    {
-        static::creating(function ($user) {
-            // Si no tiene id_provisoria, lo generamos
-            if (!$user->id_provisorio) {
-                $user->id_provisorio = (string) Str::ulid();
-            }
-        });
-    }
     public function egresado()
     {
         return $this->hasMany(Egresado::class, 'id_alumno');

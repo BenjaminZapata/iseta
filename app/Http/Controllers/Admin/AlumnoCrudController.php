@@ -64,21 +64,9 @@ class AlumnoCrudController extends BaseController
     {
         $data = $request->validated();
 
-        $egresados = new EgresadosAdminController();
-        $response = redirect()->back();
+        $response = flash()->back();
 
-        $alumno = Alumno::create($data);
         return $response->with('mensaje', 'Se creo el alumno');
-        foreach ($data['carrera'] as $i => $valor) {
-            $egresados->store(new Request([
-                'id_alumno' => $alumno->id,
-                'id_carrera' => $data['carrera'][$i],
-                'anio_inscripcion' => $data['anio_inscripcion'][$i],
-                'anio_finalizacion' => $data['anio_finalizacion'][$i] ?? null,
-                'finalizada' => 0,
-                'estado' => 'regular',
-            ]));
-        }
     }
 
     /**

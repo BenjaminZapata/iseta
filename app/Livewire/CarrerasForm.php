@@ -7,6 +7,8 @@ use Livewire\Component;
 class CarrerasForm extends Component
 {
     public $todasCarreras;
+
+    public $alumno;
     public $carrerasSeleccionadas = [];
 
     protected $listeners = ['carrerasSeleccionadasUpdated'];
@@ -25,6 +27,10 @@ class CarrerasForm extends Component
         }
     }
 
+    public function agregarInscripcion($carreras)
+    {
+        $this->dispatch('abrirInscripcionForm', $carreras, $alumno['id_provisorio'] ?? null);
+    }
     public function eliminarCarrera($carreraId)
     {
         $this->carrerasSeleccionadas = array_filter($this->carrerasSeleccionadas, fn($id) => $id != $carreraId);

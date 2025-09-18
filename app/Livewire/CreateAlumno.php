@@ -2,46 +2,34 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Forms\AlumnoForm;
 use Livewire\Component;
+use Illuminate\Validation\Rule;
 
-class AlumnoForm extends Component
+
+class CreateAlumno extends Component
 {
-    public $alumno = [
-        'nombre' => '',
-        'apellido' => '',
-        'dni' => '',
-        'fecha_nacimiento' => '',
-        'lugar_nacimiento' => '',
-        'estado_civil' => '',
-        'genero' => '',
-        'ciudad' => '',
-        'codigo_postal' => '',
-        'calle' => '',
-        'casa_numero' => '',
-        'dpto' => '',
-        'piso' => '',
-        'email' => '',
-        'telefono_1' => '',
-        'telefono_2' => '',
-        'telefono_3' => '',
-        'titulo_anterior' => '',
-        'becas' => '',
-        'nombre_institucion_secundario' => '',
-        'titulo_secundario' => '',
-        'observaciones' => '',
-    ];
-
+    public $alumno;
     public $carrerasSeleccionadas = [];
     public $step = 1;
 
+    public AlumnoForm $form;
     protected $listeners = [
         'agregarCarrera',
-        'eliminarCarrera'
+        'eliminarCarrera',
+        'agregarInscripcion'
     ];
+
+
 
     public function siguientePaso()
     {
-        $this->step++;
+        if ($this->step == 1) {
+            $this->alumno = $this->form->validateAlumnos();
+            $this->step++;
+        } else {
+            $this->step++;
+        }
     }
 
     public function pasoAnterior()
@@ -63,9 +51,8 @@ class AlumnoForm extends Component
 
     public function guardarTodo()
     {
-        $alumno = \App\Models\Alumno::create($this->alumno);
+        $alumno = $this->alumno->save();
         foreach ($this->carrerasSeleccionadas as $carreraId) {
-            $alumno->carreras()->attach($carreraId);
         }
 
         session()->flash('message', 'Alumno creado e inscrito correctamente.');
@@ -75,6 +62,6 @@ class AlumnoForm extends Component
 
     public function render()
     {
-        return view('livewire.alumno-form');
+        return view('livewire.create-alumno');
     }
 }
