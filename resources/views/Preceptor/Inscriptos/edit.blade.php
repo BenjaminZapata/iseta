@@ -3,7 +3,7 @@
 @section('content')
 <div>
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR INSCRIPTO'])
+        @include('preceptor.header-avatar', ['tituloSeccion' => 'MODIFICAR INSCRIPTO'])
         <div class="perfil__info">
             <form method="post" action="{{ route('preceptor.inscriptos.update', ['inscripto' => $registro->id]) }}">
                 @csrf
