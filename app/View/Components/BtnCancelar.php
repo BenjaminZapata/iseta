@@ -44,6 +44,12 @@ class BtnCancelar extends Component
                 return;
             }
 
+            // si venis desde asignaturas → volver a la asignatura
+            if (preg_match('#/admin/asignaturas/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.asignaturas.edit', ['asignatura' => $m[1]]);
+                return;
+            }
+
             // Si no, volver al index de cursadas
             $this->url = route('admin.cursadas.index');
             return;

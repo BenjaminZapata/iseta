@@ -218,6 +218,11 @@ class CarrerasCrudController extends BaseController
                 return redirect()->route('admin.carreras.index')
                     ->with('error', 'No se pudo eliminar la carrera. Tiene mesas futuras asociadas.');
             }
+             // Verificar si la carrera no contiene el año de finalización
+            if (!$carrera->anio_fin) {
+             return redirect()->route('admin.carreras.index')
+            ->with('error', 'No se pudo Desactivar la carrera. No tiene un año de finalización.');
+            }
     
             // Ahora eliminar la carrera
             $carrera->delete();
@@ -233,7 +238,7 @@ class CarrerasCrudController extends BaseController
 
     public function desactivar(Carrera $carrera)
     {
-         //verificar si contiene inscriptos
+            //verificar si contiene inscriptos
             if ($carrera->inscriptos()->exists()) {
                 return redirect()->route('admin.carreras.index')
                     ->with('error', 'No se pudo Desactivar la carrera. Tiene alumnos asociados.');
@@ -244,6 +249,11 @@ class CarrerasCrudController extends BaseController
                     ->with('error', 'No se pudo Desactivar la carrera. Tiene mesas futuras asociadas.');
             }
 
+             // Verificar si la carrera no contiene el año de finalización
+            if (!$carrera->anio_fin) {
+                return redirect()->route('admin.carreras.index')
+                ->with('error', 'No se pudo Desactivar la carrera. No tiene un año de finalización.');
+            }
 
         $carrera->vigente = false;
         $carrera->anio_fin = now()->year;
