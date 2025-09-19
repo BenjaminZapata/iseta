@@ -2,7 +2,7 @@
 
 ## Iniciar servidor con ISO
 
-Descargar el archivo llamado `Isetasv_vx.x.x-x.iso` en la pestaña Release de Github. (las x en el nombre de la ISO representan partes que pueden cambiar y hacen referencia a la versión).
+Descargar el archivo llamado `Isetasv_vx.x.x-x.iso` en la pestaña Release de Github o desde este link a mediafire [https://www.mediafire.com/file/gc1rjkq25tf7qx0/isetasv_amd64_2025-09-11_2321.iso/file](https://www.mediafire.com/file/gc1rjkq25tf7qx0/isetasv_amd64_2025-09-11_2321.iso/file). (las x en el nombre de la ISO representan partes que pueden cambiar y hacen referencia a la versión).
 Usar la ISO se puede hacer de varias maneras, aquí están 4 opciones:
 
 ---
