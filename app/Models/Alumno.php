@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class Alumno extends Authenticatable implements MustVerifyEmail
 {
@@ -55,6 +56,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $hidden = [
+
         'password',
         'remember_token',
     ];
@@ -68,7 +70,6 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'fecha_nacimiento' => 'datetime',
     ];
-
 
     public function egresado()
     {
