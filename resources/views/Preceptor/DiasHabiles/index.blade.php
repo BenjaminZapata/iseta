@@ -1,8 +1,8 @@
-@extends('Admin.template')
+@extends('preceptor.template')
 
 @section('content')
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'DIAS NO HÁBILES']) 
+        @include('preceptor.header-avatar', ['tituloSeccion' => 'DIAS NO HÁBILES']) 
 
         @php
             $meses = [31,29,31,30,31,30,31,31,30,31,30,31];
@@ -29,11 +29,11 @@
                         @endphp
 
                             @if (in_array($fecha,$noHabiles))
-                                <form method="post" action="{{route('admin.habiles.destroy',['habil' => $fecha])}}">
+                                <form method="post" action="{{route('preceptor.habiles.destroy',['habil' => $fecha])}}">
                                 @csrf
                                 @method('delete')    
                             @else    
-                                <form method="post" action="{{route('admin.habiles.store')}}">
+                                <form method="post" action="{{route('preceptor.habiles.store')}}">
                             @endif
                                 @csrf
                                 <input  name="fecha" type="hidden" value="{{$fecha}}">
@@ -46,11 +46,8 @@
                         @endfor
                     </ul>
                 </div>
-               </div>
+               </div><br>
            @endforeach
-           <div class="botones-derecha">
-        <x-btn-cancelar />
-    </div>
         </div>
     </div>
 @endsection

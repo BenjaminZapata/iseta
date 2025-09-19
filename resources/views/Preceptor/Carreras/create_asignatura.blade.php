@@ -3,7 +3,7 @@
 @section('content')
     <div>
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA ASIGNATURA'])
+           @include('preceptor.header-avatar', ['tituloSeccion' => 'CREAR NUEVA ASIGNATURA'])
             <div class="perfil__info">
                 <form method="post" action="{{route('preceptor.carreras.createAsignatura', ['carrera' => $carrera->id])}}"
                     id="create_asignatura">

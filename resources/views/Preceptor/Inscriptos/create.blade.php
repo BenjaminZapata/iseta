@@ -13,7 +13,7 @@
 
     <div>
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'INSCRIBIR ALUMNO'])
+            @include('preceptor.header-avatar', ['tituloSeccion' => 'INSCRIBIR ALUMNO'])
 
             <div class="perfil__info">
                 <form method="post" action="{{ route('preceptor.inscriptos.store') }}">

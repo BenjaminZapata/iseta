@@ -14,7 +14,7 @@
 
     {{-- HEADER AVATAR --}}
 
-    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE MESAS'])
+    @include('preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE MESAS'])
 
     <div class="perfil__header-alt">
         <a href="{{ route('preceptor.mesas.create') }}">

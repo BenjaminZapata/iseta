@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Preceptor\PreceptorDiasHabiles;
 use App\Http\Controllers\Preceptor\InscripcionPreceptorController;
 use App\Http\Controllers\Preceptor\CursadasPreceptorController;
 use App\Http\Controllers\Preceptor\AlumnoPreceptorController;
@@ -12,7 +13,9 @@ use App\Http\Controllers\Preceptor\CarrerasPreceptorController;
 use App\Http\Controllers\Admin\AdminMatriculacionController;
 use App\Http\Controllers\Preceptor\PreceptorCursadasLotes;
 use App\Http\Controllers\Preceptor\PreceptorMesasLotes;
+use App\Http\Controllers\Preceptor\PreceptorConfigController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('preceptor')
     ->middleware(['auth:admin'])
@@ -136,4 +139,17 @@ Route::prefix('preceptor')
             ->missing(function () {
                 return redirect()->route('preceptor.inscriptos.index')->with('aviso', 'La inscripcion no existe o ha sido eliminada');
             })->except('show');
+
+        // Dias habiles
+        Route::get('dias-habiles', [PreceptorDiasHabiles::class, 'index'])->name('habiles.index');
+    Route::post('dias-habiles', [PreceptorDiasHabiles::class, 'store'])->name('habiles.store');
+    Route::delete('dias-habiles/{habil}', [PreceptorDiasHabiles::class, 'destroy'])->name('habiles.destroy');
+
+     // -----------------------------
+    // CONFIGURACION
+    // -----------------------------
+    Route::get('config', [PreceptorConfigController::class, 'index'])->name('config.index');
+    Route::post('config', [PreceptorConfigController::class, 'setear'])->name('config.set');
+    Route::post('config/one', [PreceptorConfigController::class, 'setOnly'])->name('config.setone');
+    Route::get('config/modoseguro', [PreceptorConfigController::class, 'modoSeguro'])->name('config.modoseguro');
     });

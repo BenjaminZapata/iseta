@@ -44,6 +44,12 @@ class BtnCancelar extends Component
                 return;
             }
 
+            // si venis desde asignaturas → volver a la asignatura
+            if (preg_match('#/admin/asignaturas/(\d+)/edit#', $prev, $m)) {
+                $this->url = route('admin.asignaturas.edit', ['asignatura' => $m[1]]);
+                return;
+            }
+
             // Si no, volver al index de cursadas
             $this->url = route('admin.cursadas.index');
             return;
@@ -184,7 +190,11 @@ class BtnCancelar extends Component
             return;
         }
 
-
+        //alumnos edit - rematriculacion
+        if (request()->is('admin/matricular/*')) {
+            $this->url = route('admin.alumnos.edit', ['alumno' => request()->route('alumno')]);
+            return;
+        }
         /**
          * 4) Fallback final
          */
@@ -347,13 +357,6 @@ class BtnCancelar extends Component
             return;
         }
 
-
-        /**
-         * 4) Fallback final
-         */
-        $this->url = route('preceptor.alumnos.index');
-    
-        
     }
 
     public function render()

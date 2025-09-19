@@ -4,7 +4,7 @@
 @section('content')
 <div>
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'CREAR ASIGNATURA'])
+       @include('preceptor.header-avatar', ['tituloSeccion' => 'CREAR ASIGNATURA'])
         <div class="perfil__header">
             <h2>Crear asignatura</h2>
         </div>

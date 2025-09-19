@@ -4,16 +4,6 @@
     <div class="edit-form-container">
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR MESA'])
-            <nav aria-label="breadcrumb" class="mb-4">
-                <ul class="breadcrumb flex items-center gap-2 text-sm text-gray-700">
-                    <li class="flex items-center">
-                        <a href="/admin/mesas">Mesas</a>
-                    </li>
-                    <li>
-                        <a href="/admin/mesas/{{ $mesa->id }}/mesas">{{ $mesa->asignatura->nombre }}</a>
-                    </li>
-                </ul>
-            </nav>
             <form method="POST" action="{{ route('admin.mesas.update', ['mesa' => $mesa->id]) }}">
                 @csrf
                 @method('PUT')

@@ -3,7 +3,7 @@
 @section('content')
 <div class="edit-form-container">
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR MESA'])
+        @include('preceptor.header-avatar', ['tituloSeccion' => 'MODIFICAR MESA'])
         <div class="perfil__header">
             <h2>{{ $mesa->asignatura?->nombre }}</h2>
         </div>

@@ -82,10 +82,12 @@
                             </div>
                         @endforeach
 
-                        <div class="text-right mt-4">
+                        <div class="text-right mt-4"  style="display: inline-flex; align-items: center; text-transform: none;">   
                             <button class="btn_blue"><i class="ti ti-send" style="margin-right: 8px; font-size: 1.3em;"></i>
                                 Matricular</button>
+                                
                         </div>
+                        <x-btn-cancelar />
                     @endif
                 </form>
             </div>
