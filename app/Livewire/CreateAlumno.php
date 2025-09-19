@@ -3,25 +3,27 @@
 namespace App\Livewire;
 
 use App\Livewire\Forms\AlumnoForm;
+use App\Livewire\Forms\InscripcionForm;
+use App\Models\Egresado;
 use Livewire\Component;
 use App\Models\Alumno;
+use Illuminate\Support\Facades\Log;
 use App\Models\Carrera;
 
 class CreateAlumno extends Component
 {
     // Paso 1: datos alumno
     public AlumnoForm $form;
+
+    public InscripcionForm $iForm;
     public $alumno;
 
     // Paso 2: carreras + inscripción
     public $todasCarreras = [];
     public $carrerasSeleccionadas = [];
 
-    public ?Carrera $carrera = null; // carrera en edición de inscripción
-
-    public $anio_inscripcion;
-    public $indice_libro_matriz;
-    public $anio_finalizacion;
+    public $idCarreras = [];
+    public ?array $carrera = null; // carrera en edición de inscripción
     public $estado;
     public $show = false; // controla visibilidad del form de inscripción
 
@@ -30,15 +32,14 @@ class CreateAlumno extends Component
 
     public function mount()
     {
-        $this->todasCarreras = Carrera::all();
+        $this->todasCarreras = Carrera::where('vigente', 1)->get();
     }
 
     /* ----------- Paso 1 ----------- */
     public function siguientePaso()
     {
         if ($this->step == 1) {
-            $data = $this->form->validateAlumnos();
-            $this->alumno = new Alumno($data);
+            $this->alumno  = $this->form->validateAlumnos();
         }
         $this->step++;
     }
@@ -49,13 +50,12 @@ class CreateAlumno extends Component
     }
 
     /* ----------- Paso 2: carreras ----------- */
-    public function agregarInscripcion($carreraId)
+    public function agregarInscripcion($carreraStd)
     {
-        $this->carrera = Carrera::find($carreraId);
-        if (!$this->carrera) return;
-
+        $carrera = (array)json_decode($carreraStd);
+        $this->carrera = $carrera;
+        Log::info($this->carrera['id']);
         // reset datos previos de inscripción
-        $this->reset(['anio_inscripcion', 'indice_libro_matriz', 'anio_finalizacion', 'estado']);
         $this->show = true;
     }
 
@@ -65,26 +65,25 @@ class CreateAlumno extends Component
             $this->carrerasSeleccionadas,
             fn($c) => $c['id_carrera'] != $carreraId
         );
+        $this->idCarreras = array_filter(
+            $this->idCarreras,
+            fn($c) => $c != $carreraId
+        );
     }
 
     public function guardarInscripcion()
     {
-        $this->validate([
-            'anio_inscripcion' => ['required', 'integer', 'min:1900', 'max:' . (date('Y') + 10)],
-            'indice_libro_matriz' => ['nullable', 'string', 'max:50'],
-            'anio_finalizacion' => ['nullable', 'integer', 'min:1900', 'max:' . (date('Y') + 10)],
-            'estado' => ['required', 'integer'],
-        ]);
-
+        $data = $this->iForm->validateInscripcion();
+        $data['id_carrera'] = $this->carrera['id'];
+        $this->idCarreras[] = $this->carrera['id'];
         $this->carrerasSeleccionadas[] = [
-            'id_carrera' => $this->carrera->id,
-            'carrera_nombre' => $this->carrera->nombre,
-            'anio_inscripcion' => $this->anio_inscripcion,
-            'indice_libro_matriz' => $this->indice_libro_matriz,
-            'anio_finalizacion' => $this->anio_finalizacion,
-            'estado' => $this->estado,
+            'carrera_nombre' => $this->carrera['nombre'],
+            'anio_inscripcion' => $data['anio_inscripcion'],
+            'indice_libro_matriz' => $data['indice_libro_matriz'],
+            'anio_finalizacion' => $data['anio_finalizacion'],
+            'estado' => $data['estado'],
+            'id_carrera' => $data['id_carrera'],
         ];
-
         $this->show = false;
         $this->carrera = null;
     }
@@ -92,11 +91,12 @@ class CreateAlumno extends Component
     /* ----------- Paso 3: guardar todo ----------- */
     public function guardarTodo()
     {
-        $alumno = Alumno::create($this->form->all());
+        $alumno = Alumno::create($this->alumno);
 
         foreach ($this->carrerasSeleccionadas as $c) {
-            $alumno->inscripciones()->create([
-                'carrera_id' => $c['id_carrera'],
+            Egresado::create([
+                'id_alumno' => $alumno->id,
+                'id_carrera' => $c['id_carrera'],
                 'anio_inscripcion' => $c['anio_inscripcion'],
                 'indice_libro_matriz' => $c['indice_libro_matriz'],
                 'anio_finalizacion' => $c['anio_finalizacion'],
@@ -104,11 +104,11 @@ class CreateAlumno extends Component
             ]);
         }
 
-        session()->flash('message', 'Alumno creado e inscrito correctamente.');
+        session()->flash('message', 'Alumno creado e inscripto correctamente.');
 
         $this->reset();
         $this->step = 1;
-        $this->todasCarreras = Carrera::all();
+        $this->todasCarreras = Carrera::where('vigente', 1)->get();
     }
 
     public function render()

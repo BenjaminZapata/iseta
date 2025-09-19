@@ -170,63 +170,63 @@
 
     <!-- Step 2: Seleccionar carreras + inscripción -->
     <div x-show="step === 2">
-        <fieldset class="p-2" style="margin:10px;">
-            <legend class="font-600 font-7">Carreras</legend>
-            <div class="grid-2 gap-2 p-0">
-                <label class="label-input-y-75">Agregar carrera:
-                    <select x-on:change="$wire.agregarInscripcion($event.target.value)">
-                        <option value="">Seleccione...</option>
-                        @foreach($todasCarreras as $carrera)
-                            @if(!in_array($carrera->id, $carrerasSeleccionadas))
-                                <option value="{{ $carrera }}">{{ $carrera->nombre }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </label>
-            </div>
-            <ul>
-                @foreach($carrerasSeleccionadas as $c)
-                    <li>
-                        {{$c['carrera_nombre'] }}
-                        <button type="button" wire:click="eliminarCarrera({{ $c->id_carrera }})">Eliminar</button>
-                    </li>
-                @endforeach
-            </ul>
-        </fieldset>
+        <div x-data="{show: $wire.entangle('show').live}" x-cloak>
+            <fieldset class="p-2" style="margin:10px;">
+                <legend class="font-600 font-7">Carreras</legend>
+                <div class="grid-2 gap-2 p-0">
+                    <label class="label-input-y-75">Agregar carrera:
+                        <select x-on:change="$wire.agregarInscripcion($event.target.value)">
+                            <option value="">Seleccione...</option>
+                            @foreach($todasCarreras as $carrera)
+                                @if(!in_array($carrera->id, $idCarreras))
+                                    <option value="{{ $carrera }}">{{ $carrera->nombre }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </label>
+                </div>
+                <ul>
+                    @foreach($carrerasSeleccionadas as $c)
+                        <li>
+                            {{$c['carrera_nombre'] }}
+                            <button type="button" wire:click="eliminarCarrera({{ $c['id_carrera'] }})">Eliminar</button>
+                        </li>
+                    @endforeach
+                </ul>
+            </fieldset>
 
         <!-- Inscripción -->
-        <div x-data="$wire.entangle('show').live" x-cloak>
             <div x-show="show">
-                <form wire:submit="guardar" class="p-3 border rounded bg-gray-50">
+                <form wire:submit="guardarInscripcion" class="p-3 border rounded bg-gray-50">
                     <h3 class="font-bold mb-2">Datos de inscripción</h3>
                     
                     <label class="block mb-2">
                         Año de inscripción:
-                        <input type="number" wire:model="anio_inscripcion" class="input">
-                        @error('anio_inscripcion') <span class="text-red-500">{{ $message }}</span> @enderror
+                        <input type="number" wire:model.fill="iForm.anio_inscripcion" class="input" value="{{ now()->year }}">
+                        @error('iForm.anio_inscripcion') <span class="text-red-500">{{ $message }}</span> @enderror
                     </label>
 
                     <label class="block mb-2">
                         Índice libro matriz:
-                        <input type="text" wire:model="indice_libro_matriz" class="input">
-                        @error('indice_libro_matriz') <span class="text-red-500">{{ $message }}</span> @enderror
+                        <input type="text" wire:model="iForm.indice_libro_matriz" class="input">
+                        @error('iForm.indice_libro_matriz') <span class="text-red-500">{{ $message }}</span> @enderror
                     </label>
 
                     <label class="block mb-2">
                         Año de finalización:
-                        <input type="number" wire:model="anio_finalizacion" class="input">
-                        @error('anio_finalizacion') <span class="text-red-500">{{ $message }}</span> @enderror
+                        <input type="number" wire:model="iForm.anio_finalizacion" class="input">
+                        @error('iForm.anio_finalizacion') <span class="text-red-500">{{ $message }}</span> @enderror
                     </label>
 
                     <label class="block mb-2">
                         Estado:
-                        <select wire:model="estado" class="input">
+                        <select wire:model="iForm.estado" class="input">
                             <option value="">Seleccione...</option>
                             <option value="0">Activo</option>
                             <option value="1">Suspendido</option>
                             <option value="2">Finalizado</option>
                         </select>
-                        @error('estado') <span class="text-red-500">{{ $message }}</span> @enderror
+                        @error('iForm.estado') <span class="text-red-500">{{ $message }}</span> @enderror
                     </label>
 
                     <div class="mt-3 flex gap-2">
@@ -245,7 +245,7 @@
     <div x-show="step === 3">
         <fieldset class="p-2" style="margin:10px;">
             <legend class="font-600 font-7">Confirmación</legend>
-            <p><strong>Alumno:</strong> {{ $alumno['apellido'] ?? '' }} {{ $alumno['nombre'] ?? '' }}</p>
+            <p><strong>Alumno:</strong> {{ $alumno['apellido'] ?? ''}} {{ $alumno['nombre'] ?? '' }}</p>
             <p><strong>Carreras seleccionadas:</strong></p>
             <ul>
                 @foreach($carrerasSeleccionadas as $c)
