@@ -24,6 +24,14 @@
 </head>
 
 <body>
+    @include('Componentes.mensaje')
+    @include('Componentes.aside')
+    @include('Componentes.confirmacion')
+
+
+    <div class="admin-main">
+        @yield('content')
+    </div>
     <script src="{{ asset('js/libs/ElementEv.js') }}"></script>
     <script src="{{ asset('js/libs/ElementList.js') }}"></script>
     <script src="{{ asset('js/ocultar-mensaje.js') }}"></script>
@@ -37,17 +45,6 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
     @livewireScripts
-
-    @include('Componentes.mensaje')
-    @include('Componentes.aside')
-    @include('Componentes.confirmacion')
-
-
-    <div class="admin-main">
-        @yield('content')
-    </div>
-
-
 
 </body>
 
