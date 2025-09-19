@@ -30,6 +30,7 @@ class AlumnoForm extends Form
     public $codigo_postal;
     public $titulo_secundario;
     public $lugar_nacimiento;
+
     public function rules()
     {
         return [
@@ -58,6 +59,7 @@ class AlumnoForm extends Form
         ];
     }
 
+
     public function messages()
     {
         return [
@@ -69,8 +71,6 @@ class AlumnoForm extends Form
     }
     public function validateAlumnos(): array
     {
-        $data = $this->validate();
-        $data['id_provisorio'] = (string) \Illuminate\Support\Str::ulid();
-        return $data;
+        return $this->validate();
     }
 }

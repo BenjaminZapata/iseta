@@ -2,16 +2,23 @@
 
 namespace App\Livewire;
 
+use App\Models\Carrera;
 use Livewire\Component;
+use Illuminate\Support\Facades\Log;
+use Livewire\Attributes\Reactive;
 
 class CarrerasForm extends Component
 {
     public $todasCarreras;
 
-    public $alumno;
     public $carrerasSeleccionadas = [];
 
-    protected $listeners = ['carrerasSeleccionadasUpdated'];
+    #[Reactive]
+    public Carrera $carrera;
+
+    protected $listeners = [
+        'carrerasSeleccionadasUpdated',
+    ];
 
     public function mount($todasCarreras, $carrerasSeleccionadas)
     {
@@ -19,17 +26,18 @@ class CarrerasForm extends Component
         $this->carrerasSeleccionadas = $carrerasSeleccionadas;
     }
 
-    public function agregarCarrera($carreraId)
+
+    public function agregarCarrera($carrera)
     {
-        if ($carreraId && !in_array($carreraId, $this->carrerasSeleccionadas)) {
-            $this->carrerasSeleccionadas[] = $carreraId;
-            $this->dispatch('agregarCarrera', $carreraId);
-        }
+        $this->carrerasSeleccionadas[] = $carrera;
+        $this->dispatch('agregarCarrera', $carrera);
     }
 
-    public function agregarInscripcion($carreras)
+    public function agregarInscripcion($carrera)
     {
-        $this->dispatch('abrirInscripcionForm', $carreras, $alumno['id_provisorio'] ?? null);
+        $this->carrera = $carrera;
+        Log::info('Carrera en CarrerasForm: ' . $this->carrera->id);
+        $this->dispatch('abrirInscripcionForm');
     }
     public function eliminarCarrera($carreraId)
     {
@@ -39,6 +47,6 @@ class CarrerasForm extends Component
 
     public function render()
     {
-        return view('livewire.carreras-form');
+        return view('livewire.carreras-form', ['carrera' => $this->carrera]);
     }
 }
