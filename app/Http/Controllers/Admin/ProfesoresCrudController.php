@@ -10,6 +10,7 @@ use App\Models\Mesa;
 use App\Models\Profesor;
 use App\Repositories\Admin\ProfesorRepository;
 use Illuminate\Http\Request;
+use Log;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -101,27 +102,25 @@ class ProfesoresCrudController extends BaseController
     public function destroy(Profesor $profesor)
     {
         try {
-
-            //verficiar si el profesor tiene mesas asignadas en el futuro
-            $mesas = Mesa::where(function ($query) use ($profesor) {
-                $query->where('prof_presidente', $profesor->id)
-                    ->orWhere('prof_vocal_1', $profesor->id)
-                    ->orWhere('prof_vocal_2', $profesor->id);
-            })
-                ->whereRaw('fecha > NOW()')
-                ->count();
-
-            if ($mesas > 0) {
+            if (!empty($profesor->profesor_mesa()->first())) {
                 return redirect()->route('admin.profesores.index')
-                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas en el futuro.');
+                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
+            } elseif (!empty($profesor->profesor_mesa_vocal()->first())) {
+                return redirect()->route('admin.profesores.index')
+                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
+
+            } elseif (!empty($profesor->profesor_mesa_vocal2()->first())) {
+                return redirect()->route('admin.profesores.index')
+                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
             }
 
             //verificar si el profesor tiene asignaturas asignadas en la tabla pivote
-            //if ($profesor->carrera_asignatura_profesor()->count() > 0) {
-            //return redirect()->route('admin.profesores.index')
-            //->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');}
+            if (!empty($profesor->asignaturas()->where('id_profesor', $profesor->id)->first())) {
+                return redirect()->route('admin.profesores.index')
+                    ->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');
+            }
 
-            $profesor->delete();
+
             return redirect()->route('admin.profesores.index')
                 ->with('mensaje', 'Se ha eliminado el Profesor.');
         } catch (\Exception $e) {

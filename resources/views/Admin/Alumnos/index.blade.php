@@ -27,25 +27,52 @@
             {{-- FILTROS --}}
             <?= $filtergen->generate('admin.alumnos.index', $filters, [
                     'dropdowns' => [
-                        $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', old('filter_carrera_id', $filters->filter_carrera_id ?? null), ['first_items' => ['Todas']]),
+                        $carreraM->dropdown(
+                            'filter_carrera_id',
+                            'Carrera:',
+                            'label-input-y-100',
+                            old('filter_carrera_id', $filters->filter_carrera_id ?? null),
+                            ['first_items' => ['Todas']]
+                        ),
 
-                        $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', old('filter_ciudad', $filters->filter_ciudad ?? null), ['' => 'Cualquiera'] + $alumnoM->ciudades()),
+                        $form->select(
+                            'filter_ciudad',
+                            'Ciudad:',
+                            'label-input-y-100',
+                            old('filter_ciudad', $filters->filter_ciudad ?? null),
+                            ['' => 'Cualquiera'] + $alumnoM->ciudades()),
 
-                        $form->select('filter_titulo', 'Estado del título:', 'label-input-y-100', old('filter_titulo', $filters->filter_titulo ?? null), [
-                            null => 'Todos',
-                            0 => 'No entregado',
-                            1 => 'Certificado de constancia de título en trámite',
-                            2 => 'Constancia de alumno del último año del nivel secundario',
-                            3 => 'Fotocopia del título original secundario',
-                        ]),
+                        $form->select(
+                            'filter_titulo',
+                            'Estado del título:',
+                            'label-input-y-100',
+                            old('filter_titulo', $filters->filter_titulo ?? null),
+                            [
+                                null => 'Todos',
+                                0 => 'No entregado',
+                                1 => 'Certificado de constancia de título en trámite',
+                                2 => 'Constancia de alumno del último año del nivel secundario',
+                                3 => 'Fotocopia del título original secundario',
+                            ]
+                        ),
 
-                        $form->select('filter_vencido', 'Plazo de entrega del título:', 'label-input-y-100', old('filter_vencido', $filters->filter_vencido ?? 'null'), [
-                            null => 'Todos',
-                            1 => 'Vencido',
-                            0 => 'No vencido',
-                        ]),
+                        $form->select(
+                            'filter_vencido',
+                            'Plazo de entrega del título:',
+                            'label-input-y-100',
+                            old('filter_vencido', $filters->filter_vencido ?? 'null'),
+                            [
+                                null => 'Todos',
+                                1 => 'Vencido',
+                                0 => 'No vencido',
+                            ]
+                    ),
 
-                        $form->checkbox('filter_vencido', 'Solo títulos vencidos', 'label-input-y-100', old('filter_vencido', $filters->filter_vencido ?? false)),
+                        $form->checkbox(
+                            'filter_vencido',
+                            'Solo títulos vencidos',
+                            'label-input-y-100',
+                            old('filter_vencido', $filters->filter_vencido ?? false)),
                     ],
                     'fields' => [
                         'alumno' => 'Alumno',
@@ -54,9 +81,6 @@
                         'titulo_secundario' => 'Titulo',
                     ],
                 ]) ?>
-
-
-
         </div>
 
         {{-- TABLA --}}
