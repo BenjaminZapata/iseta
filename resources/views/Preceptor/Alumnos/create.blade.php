@@ -3,7 +3,7 @@
 @section('content')
   <div>
     <div class="perfil_one br">
-    @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVO ALUMNO/A'])
+    @include('preceptor.header-avatar', ['tituloSeccion' => 'CREAR NUEVO ALUMNO/A'])
     <div class="perfil__info">
 
       <?= $form->generate(route('preceptor.alumnos.store'), 'post', [

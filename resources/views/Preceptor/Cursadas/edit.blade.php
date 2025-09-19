@@ -8,7 +8,7 @@
 </p> --}}
     <div class="edit-form-container">
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CURSADA'])
+          @include('preceptor.header-avatar', ['tituloSeccion' => 'MODIFICAR CURSADA'])
             <div class="perfil__info">
 
                 <form method="POST" action="{{ route('preceptor.cursadas.update', ['cursada' => $cursada->id]) }}">

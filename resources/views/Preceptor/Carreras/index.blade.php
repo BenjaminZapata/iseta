@@ -13,7 +13,7 @@
 {{-- TABLA --}}
 <div class="table" data-name="tablaCarreras">
 
-    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CARRERAS'])
+   @include('preceptor.header-avatar',['tituloSeccion' => 'GESTIÓN DE CARRERAS'])
 
     <div class="perfil__header-alt">
         <a href="{{ route('preceptor.carreras.create') }}">

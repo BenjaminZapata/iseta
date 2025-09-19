@@ -3,7 +3,7 @@
 @section('content')
 <div class="edit-form-container">
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
+       @include('preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
         
         <div class="perfil__header">
             <h2>Asignatura</h2>

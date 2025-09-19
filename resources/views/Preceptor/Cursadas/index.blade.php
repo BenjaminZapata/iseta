@@ -14,7 +14,7 @@
 
     {{-- HEADER AVATAR --}}
 
-    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CURSADAS'])
+   @include('preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CURSADAS'])
 
     <div class="perfil__header-alt">
         <a href="{{ route('preceptor.cursadas.create') }}"><button class="btn_blue"><i class="ti ti-circle-plus"></i>Agregar
