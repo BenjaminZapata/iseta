@@ -29,4 +29,17 @@ class EditarAsignaturaRequest extends FormRequest
             'observaciones' => ['nullable'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'nombre.regex' => 'El nombre solo puede contener letras y espacios.',
+            'nombre.min' => 'El nombre debe tener al menos 5 caracteres.',
+            'nombre.max' => 'El nombre no puede tener más de 50 caracteres.',
+            'carga_horaria.integer' => 'La carga horaria debe ser un número entero.',
+            'anio.integer' => 'El año debe ser un número entero.',
+            'anio.min' => 'El año debe ser al menos 1.',
+            'anio.max' => 'El año no puede ser mayor a 6.',
+        ];
+    }
 }

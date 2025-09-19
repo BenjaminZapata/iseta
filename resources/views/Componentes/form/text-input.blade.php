@@ -1,6 +1,6 @@
 
 @php
-    $default = '';
+    $item = $item ?? null;
 
     if($item  && isset($item->$name)){
         if(isset($options['default'])){
@@ -18,13 +18,13 @@
 @endphp
 
 <div class="{{$class}}">
-    
+
     <label>{{$label}}</label>
     {{-- @dd($item->$name); --}}
     @if ($item)
-        <input value="{{$default}}" type="{{$type}}" name="{{$name}}" class="{{$options['inputclass']}}">        
+        <input value="{{$default}}" type="{{$type}}" name="{{$name}}" class="{{$options['inputclass']}}">
     @else
-        <input value="{{$default}}" type="{{$type}}" name="{{$name}}" class="{{$options['inputclass']}}">        
+        <input value="{{$default}}" type="{{$type}}" name="{{$name}}" class="{{$options['inputclass']}}">
     @endif
 
 </div>

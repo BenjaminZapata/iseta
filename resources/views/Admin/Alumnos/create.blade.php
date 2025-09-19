@@ -6,7 +6,7 @@
     @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVO ALUMNO/A'])
     <div class="perfil__info">
 
-      <?= $form->generate(route('admin.alumnos.store'), 'post', [
+    <?= $form->generate(route('admin.alumnos.store'), 'post', [
     'Alumno' => [
     $form->text('nombre', 'Nombre:', 'label-input-y-75', null),
     $form->text('apellido', 'Apellido:', 'label-input-y-75', null),
@@ -56,9 +56,9 @@
     ],
     'Contacto' => [
     $form->text('email', 'Email:', 'label-input-y-75', null),
-    $form->text('telefono1', 'Telefono 1:', 'label-input-y-75', null),
-    $form->text('telefono2', 'Telefono 2:', 'label-input-y-75', null),
-    $form->text('telefono3', 'Telefono 3:', 'label-input-y-75', null),
+    $form->text('telefono_1', 'Telefono 1:', 'label-input-y-75', null),
+    $form->text('telefono_2', 'Telefono 2:', 'label-input-y-75', null),
+    $form->text('telefono_3', 'Telefono 3:', 'label-input-y-75', null),
     ],
     'Academico' => [
     $form->text(
@@ -94,6 +94,11 @@
       'Observaciones:',
       'label-input-y-75',
       null
+    ),
+    ],
+    'Carreras' => [
+    $form->select(
+    'carrera_id', 'Carrera:', 'label-input-y-75', null, $carreras->pluck('nombre', 'id')->toArray(),
     ),
     ],
   ]) ?>

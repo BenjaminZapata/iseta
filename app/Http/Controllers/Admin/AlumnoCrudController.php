@@ -52,7 +52,9 @@ class AlumnoCrudController extends BaseController
      */
     public function create(): View
     {
-        return view('Admin.Alumnos.create');
+        return view('Admin.Alumnos.create', [
+            'carreras' => \App\Models\Carrera::orderBy('nombre')->where('vigente', '1')->get(),
+        ]);
     }
 
     /**
@@ -61,13 +63,21 @@ class AlumnoCrudController extends BaseController
     public function store(crearAlumnoRequest $request)
     {
         $data = $request->validated();
+
+        $egresados = new EgresadosAdminController();
         $response = redirect()->back();
 
-        if (Alumno::where('dni', strtolower($data['dni']))->first()) {
-            return $response->with('aviso', 'Ya hay un usuario con ese numero de documento')->withInput();
-        } else {
-            Alumno::create($data);
-            return $response->with('mensaje', 'Se creo el alumno');
+        $alumno = Alumno::create($data);
+        return $response->with('mensaje', 'Se creo el alumno');
+        foreach ($data['carrera'] as $i => $valor) {
+            $egresados->store(new Request([
+                'id_alumno' => $alumno->id,
+                'id_carrera' => $data['carrera'][$i],
+                'anio_inscripcion' => $data['anio_inscripcion'][$i],
+                'anio_finalizacion' => $data['anio_finalizacion'][$i] ?? null,
+                'finalizada' => 0,
+                'estado' => 'regular',
+            ]));
         }
     }
 
@@ -121,17 +131,27 @@ class AlumnoCrudController extends BaseController
      */
     public function update(EditarAlumnoRequest $request, Alumno $alumno)
     {
-        $data = $request->validated();
+        try {
+            $data = $request->validated();
 
-        $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
+            $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
 
-        if ($data['dni'] && Alumno::where('id', '!=', $alumno->id)->where('dni', $data['dni'])->exists()) {
-            $mensajes['aviso'][] = 'Ya hay un usuario con ese numero de dni';
+            $alumno->update($data);
+            $mensajes['mensaje'][] = 'Se actualizo el alumno';
+
+            return redirect()->back()->with('mensajes', $mensajes);
+        } catch (\Illuminate\Database\QueryException $e) {
+            $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
+            $mensajes['error'][] = 'Error al actualizar los datos del alumno.';
+
+
+            return redirect()->back()->with('mensajes', $mensajes)->withInput();
+        } catch (\Exception $e) {
+            $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
+            $mensajes['error'][] = 'Ocurrió un error inesperado. Intenta nuevamente.';
+
+            return redirect()->back()->with('mensajes', $mensajes)->withInput();
         }
-
-        $alumno->update($data);
-        $mensajes['mensaje'][] = 'Se actualizo el alumno';
-        return redirect()->back()->with('mensajes', $mensajes);
     }
 
     /**
@@ -141,24 +161,24 @@ class AlumnoCrudController extends BaseController
     {
         try {
 
-            //verificar si tiene cursadas pero con el estado 
-            if($alumno->cursadas()->exists()) {
+            //verificar si tiene cursadas pero con el estado
+            if ($alumno->cursadas()->exists()) {
                 return redirect()->route('admin.alumnos.index')
                     ->with('error', 'No se pudo eliminar el alumno porque tiene cursadas asociadas.');
             }
 
             //verificar si tiene mesas futuras
-            if(Examen::where('id_alumno',$alumno->id)->where('fecha','>',date('Y-m-d'))->exists()) {
+            if (Examen::where('id_alumno', $alumno->id)->where('fecha', '>', date('Y-m-d'))->exists()) {
                 return redirect()->route('admin.alumnos.index')
                     ->with('error', 'No se pudo eliminar el alumno porque tiene mesas de examen futuras.');
             }
-            
+
 
             //verificar si esta inscripto en alguna carrera pero con el estado regular
             if ($alumno->carreras()->where('estado', 'regular')->exists()) {
-    return redirect()->route('admin.alumnos.index')
-        ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras como regular');
-}
+                return redirect()->route('admin.alumnos.index')
+                    ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras como regular');
+            }
 
 
             //eliminar alumno

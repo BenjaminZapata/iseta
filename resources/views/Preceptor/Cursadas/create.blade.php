@@ -9,7 +9,7 @@
 
     <div>
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA CURSADA'])
+            @include('preceptor.header-avatar', ['tituloSeccion' => 'CREAR NUEVA CURSADA'])
             <div class="perfil__info">
 
 

@@ -1,4 +1,4 @@
-<aside id="sidebar" onmouseover="this.style.width='16rem'" onmouseout="this.style.width='4rem'">
+<aside id="sidebar" onmouseover="expandSidebar()" onmouseout="handleSidebarMouseOut(event)"">
     <div class="sidebar-header">
         {{-- Logo colapsado (chico) --}}
         <img src="{{ asset('img/logo-mini.png') }}" alt="Logo Mini" class="logo-mini">
@@ -8,12 +8,22 @@
     </div>
 
     <ul>
-        <li>
-            <a href="{{ route('admin.alumnos.index') }}">
+        <li class="dropdown">
+            <a href="#" onclick="toggleDropdown(event)">
                 <i class="ti ti-user"></i>
                 <span>Alumnos</span>
+                <i class="ti ti-chevron-down arrow"></i>
             </a>
+            <ul class="submenu">
+                <li>
+                    <a href="{{ route('admin.alumnos.index') }}">Listado de Alumnos</a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.inscriptos.index') }}">Inscriptos</a>
+                </li>
+            </ul>
         </li>
+
         <li>
             <a href="{{ route('admin.profesores.index') }}">
                 <i class="ti ti-users"></i>
@@ -44,11 +54,46 @@
                 <span>Cursadas</span>
             </a>
         </li>
-        <li>
-            <a href="{{ route('admin.inscriptos.index') }}">
-                <i class="ti ti-file-invoice"></i>
-                <span>Inscriptos</span>
-            </a>
-        </li>
     </ul>
 </aside>
+
+<script>
+    function toggleDropdown(event) {
+        event.preventDefault();
+        const li = event.currentTarget.closest('.dropdown');
+        li.classList.toggle('open');
+    }
+
+    function expandSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.style.width = '16rem';
+        sidebar.classList.add('expanded');
+    }
+
+    function handleSidebarMouseOut(event) {
+        const sidebar = document.getElementById('sidebar');
+        const toElement = event.relatedTarget;
+
+        // Si el cursor sigue dentro del sidebar o sus hijos, no colapsar
+        if (sidebar.contains(toElement)) return;
+
+        collapseSidebar();
+    }
+
+    function collapseSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.style.width = '4rem';
+        sidebar.classList.remove('expanded');
+
+        // Cerrar dropdowns
+        document.querySelectorAll('.dropdown.open').forEach(el => {
+            el.classList.remove('open');
+        });
+    }
+
+    function toggleDropdown(event) {
+        event.preventDefault();
+        const li = event.currentTarget.closest('.dropdown');
+        li.classList.toggle('open');
+    }
+</script>

@@ -13,7 +13,7 @@
 
     <div>
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'INSCRIBIR ALUMNO'])
+            @include('preceptor.header-avatar', ['tituloSeccion' => 'INSCRIBIR ALUMNO'])
 
             <div class="perfil__info">
                 <form method="post" action="{{ route('preceptor.inscriptos.store') }}">
@@ -76,8 +76,8 @@
                     {{-- Redirección --}}
                     <input type="hidden" name="redirect" value="{{ url()->previous() }}">
 
-                    <div class="botones-derecha"
-                        style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <div class="botones-derecha">
+                        <x-btn-cancelar />
                         <button class="btn_blue" style="margin-top: 10px"><i class="ti ti-circle-plus"
                                 style="font-size: 1.3em; margin-right: 8px;"></i> Crear</button>
                     </div>

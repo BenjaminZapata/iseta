@@ -22,30 +22,38 @@ class ExamenesCrudController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request, AlumnoInscripcionService $inscripcionService)
-    {
-
-        if (!$request->has('id_alumno'))
-            return redirect()->back()->with('error', 'No has seleccionado ningun alumno');
-
-        $mesa = Mesa::find($request->input('id_mesa'));
-        $alumno = Alumno::find($request->input('id_alumno'));
-
-        $comprobacion = $inscripcionService->puedeInscribirse($mesa, $alumno);
-
-        if (!$comprobacion['success'])
-            return \redirect()->back()->with('error', $comprobacion['mensaje']);
-
-        Examen::create([
-            'id_alumno' => $alumno->id,
-            'id_mesa' => $mesa->id,
-            'id_asignatura' => $mesa->id_asignatura,
-            'nota' => 0,
-            'aprobado' => 0,
-            'fecha' => now()
-        ]);
-
-        return redirect()->back()->with('mensaje', 'Se ha inscrito al alumno');
+{
+    if (!$request->has('id_alumno')) {
+        return redirect()->back()->with('error', 'No has seleccionado ningún alumno.');
     }
+
+    $mesa = Mesa::find($request->input('id_mesa'));
+    if (!$mesa) {
+        return redirect()->back()->with('error', 'La mesa seleccionada no existe.');
+    }
+
+    $alumno = Alumno::find($request->input('id_alumno'));
+    if (!$alumno) {
+        return redirect()->back()->with('error', 'El alumno seleccionado no existe o no se pudo cargar correctamente.');
+    }
+
+    $comprobacion = $inscripcionService->puedeInscribirse($mesa, $alumno);
+    if (!$comprobacion['success']) {
+        return redirect()->back()->with('error', $comprobacion['mensaje']);
+    }
+
+    Examen::create([
+        'id_alumno' => $alumno->id,
+        'id_mesa' => $mesa->id,
+        'id_asignatura' => $mesa->id_asignatura,
+        'nota' => 0,
+        'aprobado' => 0,
+        'fecha' => now()
+    ]);
+
+    return redirect()->back()->with('mensaje', 'Se ha inscrito al alumno');
+}
+
 
 
     /**

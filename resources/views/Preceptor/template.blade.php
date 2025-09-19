@@ -27,7 +27,8 @@
  <script src="{{ asset('js/libs/ElementEv.js') }}"></script>
  <script src="{{ asset('js/libs/ElementList.js') }}"></script>
 
- @include('Componentes.mensaje')
+
+ @include('Preceptor.mensaje')
  @include('Preceptor.aside') {{-- Aside específico para preceptor --}}
  @include('Componentes.confirmacion')
 

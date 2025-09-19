@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Resolucion;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CrearCarreraRequest extends FormRequest
 {
@@ -19,14 +21,28 @@ class CrearCarreraRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-            'nombre' => ['required', 'regex:/^[^\d]*$/'],
-            "resolucion" => ['required'],
-            "anio_apertura" => ['required', 'numeric'],
-            "anio_fin" => ['nullable', 'numeric', 'gte:anio_apertura'],
-            "observaciones" => ['nullable']
+            'nombre' => ['required', 'string', 'max:151'],
+            'resolucion' => ['required', new Resolucion],
+            'anio_apertura' => [
+                'required',
+                'numeric',
+                Rule::numeric()->between(now()->year - 1, now()->year + 1),
+            ],
+            'anio_fin' => ['nullable', 'integer', 'gt:anio_apertura', 'max_digits:4'],
+            'observaciones' => ['nullable', 'string', 'max:255'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'anio_fin.gte' => 'El año de cierre debe ser posterior al año de apertura.',
+            'anio_apertura.between' => 'El año de apertura debe estar entre ' . (now()->year - 1) . ' y ' . (now()->year + 1) . '.',
+            'anio_apertura.numeric' => 'El año de apertura debe ser un número válido.',
+            'anio_fin.max_digits' => 'El año de cierre no debe tener más de 4 dígitos.',
         ];
     }
 }

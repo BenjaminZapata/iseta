@@ -1,7 +1,7 @@
 @extends('preceptor.template')
 @section('content')
 
-@include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
+@include('preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
 
 <main id="fondo-estudiantes" class="black flex-col justify-center items-center gap-3 p-3 w-100">
     <p class="w-100p">

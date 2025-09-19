@@ -11,7 +11,7 @@
     </p>
     <div class="edit-form-container">
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR FICHA DE EXAMEN'])
+            @include('preceptor.header-avatar', ['tituloSeccion' => 'MODIFICAR FICHA DE EXAMEN'])
             <div class="perfil__header">
                 <h2>Ficha examen</h2>
             </div>

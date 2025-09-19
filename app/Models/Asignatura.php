@@ -72,10 +72,14 @@ class Asignatura extends Model
     }
 
     public function aproboExamen($alumno): ?Examen{
-        $examen = Examen::where(column: 'id_alumno',operator: $alumno->id)
-            -> where(column: 'id_asignatura', operator: $this->id)
-            -> where(column: 'nota',operator: '>=',value: 4)
-            -> first();
+         if (!$alumno || !$alumno->id) {
+        throw new \InvalidArgumentException('No se recibió un alumno válido para verificar si aprobó el examen.');
+    }
+
+    return Examen::where('id_alumno', $alumno->id)
+        ->where('id_asignatura', $this->id)
+        ->where('nota', '>=', 4)
+        ->first();
 
         if ($examen) {
             return $examen;

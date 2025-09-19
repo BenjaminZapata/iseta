@@ -10,7 +10,7 @@
 
     <div>
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'CREAR MESA'])
+            @include('preceptor.header-avatar', ['tituloSeccion' => 'CREAR MESA'])
 
             <div class="perfil__info">
                 <form method="post" action="{{ route('preceptor.mesas.store') }}">

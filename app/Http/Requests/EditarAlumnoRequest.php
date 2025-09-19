@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EditarAlumnoRequest extends FormRequest
@@ -22,7 +23,13 @@ class EditarAlumnoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => ['required', 'numeric', 'max:99999999'],
+            'dni' => [
+                'required',
+                Rule::unique('alumnos', 'dni')->ignore($this->route('alumno')->id),
+                'numeric',
+                'min_digits:7',
+                'max_digits:10'
+            ],
             'nombre' => ['required'],
             'apellido' => ['required'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
@@ -35,7 +42,7 @@ class EditarAlumnoRequest extends FormRequest
             'email' => ['nullable', 'email', 'max:255'],
             'nombre_institucion_secundario' => ['required', 'string', 'max:255'],
             'titulo_anterior' => ['nullable'],
-            'becas' => ['nullable'],
+            'becas' => ['nullable', 'integer', 'gte:0'],
             'observaciones' => ['nullable'],
             'telefono1' => ['nullable', 'numeric'],
             'telefono2' => ['nullable', 'numeric'],
@@ -45,13 +52,16 @@ class EditarAlumnoRequest extends FormRequest
             'titulo_secundario' => ['required'],
             'genero' => ['required'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
-
         ];
     }
     public function messages()
     {
         return [
             'fecha_nacimiento.before' => 'El campo debe ser menor que la fecha actual.',
+            'dni.unique' => 'Ya hay un alumno con ese DNI.',
+            'dni.min_digits' => 'El campo debe tener al menos 7 dígitos.',
+            'dni.max_digits' => 'El campo debe tener 10 dígitos.'
+
         ];
     }
 }

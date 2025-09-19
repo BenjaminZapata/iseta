@@ -2,7 +2,7 @@
 
 @section(section: 'content')
     <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUMNO/A'])
+        @include('preceptor.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUMNO/A'])
         <?= $form->generate(route('preceptor.alumnos.update', ['alumno' => $alumno->id]), 'put', [
             'Alumno' => [
                 $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno),

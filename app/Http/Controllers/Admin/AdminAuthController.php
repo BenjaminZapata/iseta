@@ -78,7 +78,7 @@ class AdminAuthController extends Controller
         return match ($request->rol) {
             'preceptor' => redirect()->route('preceptor.alumnos.index'),
             'regente' => redirect()->route('admin.alumnos.index'),
-            'secretario' => redirect()->route('admin.secretario.dashboard'),
+            'secretario' => redirect()->route('secretario.alumnos.index'),
             default => redirect()->route('admin.alumnos.index'),
         };
     }

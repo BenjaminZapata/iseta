@@ -97,3 +97,36 @@
     border: none;
     border-top: 1px solid #e5e7eb;
 }
+
+/* Dropdown de alumnos */
+
+.dropdown .submenu {
+    display: none;
+    padding-left: 1rem;
+}
+
+.dropdown.open .submenu {
+    display: block;
+}
+
+.arrow {
+    float: right;
+    transition: transform 0.3s ease;
+}
+
+.dropdown.open .arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown .submenu {
+    display: none;
+    padding-left: 1rem;
+}
+
+.dropdown.open .submenu {
+    display: block;
+}
+
+#sidebar:not(.expanded) .dropdown .submenu {
+    display: none !important;
+}
