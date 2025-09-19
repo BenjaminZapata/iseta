@@ -54,7 +54,7 @@ class CrearProfesorRequest extends FormRequest
             'telefono_3' => ['nullable', new Telefono, 'max:30'],
             'codigo_postal' => ['nullable', 'alpha_num', 'max:10'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
-            'año_ingreso' => ['required', 'date_format:Y', 'before_or_equal:now', 'after:1980'],
+            'anio_ingreso' => ['required', 'date_format:Y', 'before_or_equal:now', 'after:1980'],
         ];
     }
 
