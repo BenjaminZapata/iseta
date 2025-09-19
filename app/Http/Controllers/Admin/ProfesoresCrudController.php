@@ -102,9 +102,6 @@ class ProfesoresCrudController extends BaseController
     public function destroy(Profesor $profesor)
     {
         try {
-            Log::info($profesor->profesor_mesa()->get());
-            Log::info($profesor->profesor_mesa_vocal()->get());
-            Log::info($profesor->profesor_mesa_vocal2()->get());
             if (!empty($profesor->profesor_mesa()->first())) {
                 return redirect()->route('admin.profesores.index')
                     ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
