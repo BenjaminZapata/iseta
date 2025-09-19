@@ -168,16 +168,16 @@ class AlumnoCrudController extends BaseController
             }
 
             //verificar si tiene mesas futuras
-            if (Examen::where('id_alumno', $alumno->id)->where('fecha', '>', date('Y-m-d'))->exists()) {
+            if ($alumno->examenes()->exists()) {
                 return redirect()->route('admin.alumnos.index')
                     ->with('error', 'No se pudo eliminar el alumno porque tiene mesas de examen futuras.');
             }
 
 
             //verificar si esta inscripto en alguna carrera pero con el estado regular
-            if ($alumno->carreras()->where('estado', 'regular')->exists()) {
+            if ($alumno->carreras()->exists()) {
                 return redirect()->route('admin.alumnos.index')
-                    ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras como regular');
+                    ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras');
             }
 
 
@@ -191,6 +191,18 @@ class AlumnoCrudController extends BaseController
         }
     }
 
+    public function softDelete(Alumno $alumno)
+    {
+        try {
+            $alumno->estado = 2;
+            $alumno->save();
+            return redirect()->route('admin.alumnos.index')
+                ->with('mensaje', 'Se ha inhabilitado el alumno');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.alumnos.index')
+                ->with('error', 'No se pudo inhabilitar el alumno.');
+        }
+    }
 
 
     public function verificar(Request $request, Alumno $alumno)
