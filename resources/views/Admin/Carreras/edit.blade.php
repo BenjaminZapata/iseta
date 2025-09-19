@@ -52,10 +52,6 @@
                     <button class="btn_blue"><i class="ti ti-circle-plus"
                             style="font-size: 1.3em; margin-right: 8px;"></i>Agregar asignatura</button>
                 </a>
-                <a href="{{ route('admin.carreras.createAsignaturaView', ['carrera' => $carrera->id]) }}">
-                    <button class="btn_blue"><i class="ti ti-circle-plus"
-                            style="font-size: 1.3em; margin-right: 8px;"></i>Crear asignatura</button>
-                </a>
 
                 {{-- BOTÓN GENERAL DE EXPORTACIÓN --}}
                 <div style="position: relative;">
