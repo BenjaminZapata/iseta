@@ -173,10 +173,20 @@
                             <td>{{ $asignatura->nombre }}</td>
                             <td class="center">{{ $asignatura->carga_horaria }} horas</td>
                             <td style="display:flex; align-items: center; justify-content: center;">
-                                <form action="{{ route('admin.asignaturas.edit', ['asignatura' => $asignatura->id]) }}">
-                                    <button class="btn_blue"><i class="ti ti-edit"
-                                            style="font-size: 1.3em; margin-right: 8px;"></i>Editar</button>
+                                    @if (!$config['modo_seguro'])
+                                <form id="form-eliminar-{{ $asignatura->id }}"
+                                    action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}" method="POST"
+                                    style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button"
+                                        onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
+                                    '¿Estás seguro de que querés eliminar a la asignatura: {{ strtoupper($asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                        class="btn_icon-danger" style       ="background-color: red; margin-left: 10px;">
+                                        <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                    </button>
                                 </form>
+                                @endif
                             </td>
                             <td>
                                 <div style="display:flex; align-items: center; justify-content: center;">
