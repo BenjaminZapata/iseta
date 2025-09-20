@@ -40,6 +40,10 @@ class Carrera extends Model
             -> withTimestamps();
     }
 
+    public function cursadas(): HasMany{
+        return $this->hasMany(Cursada::class, 'id_carrera', 'id');
+    }
+
 
     public function profesores(): BelongsToMany{
         return $this -> BelongsToMany(Profesor::class, "carrera_asignatura_profesor", "id_carrera", "id_profesor")
