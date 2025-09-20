@@ -37,6 +37,7 @@ class CarrerasCrudController extends BaseController
     {
         $this->setFilters($request);
 
+        $request->flash();
         $carreras = $this->carreraRepo->index($request);
 
         // Obtener años disponibles para cada carrera

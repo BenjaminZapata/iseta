@@ -28,18 +28,26 @@
                         'filter_vigente',
                         'Condición:',
                         'label-input-y-100',
-                        old('filter_vigente', $filters->filter_vigente ?? null), // 👈 valor seleccionado
+                        $filters, // 👈 valor seleccionado
                         [
-                            '' => '', // primera opción VACÍA
-                            1 => 'Vigentes',
-                            0 => 'No Vigentes',
+                            "" => "Todas",
+                            0 => 'Vigentes',
+                            1 => 'No Vigentes',
                         ],
                     ),
+                    $form->select(
+                        'filter_ciudad',
+                        'Ciudad:',
+                        'label-input-y-100',
+                        old('filter_ciudad', $filters->filter_ciudad ?? null), // 👈 valor seleccionado)
+                        ['' => 'Cualquiera'] + $alumnoM->ciudades(),
+                    ),
+
+
                 ],
                 'fields' => [
                     'nombre' => 'Nombre',
                     'resolucion' => 'Resolución',
-                    'asignatura' => 'Asignatura',
                 ],
             ]) ?>
 
