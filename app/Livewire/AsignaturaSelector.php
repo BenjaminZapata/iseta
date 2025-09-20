@@ -11,6 +11,7 @@ class AsignaturaSelector extends Component
     public $asignaturas;
     public $selectedId;
     public $tipo_modulo;
+    public $asignaturas_anio;
     public $carga_horaria;
     public $anio;
     public $carrera;
@@ -26,9 +27,16 @@ class AsignaturaSelector extends Component
         $this->updateAsignatura($value);
     }
 
+    public function filterForAnio($anio)
+    {
+        $this->asignaturas_anio = $this->asignaturas->where('anio', $anio);
+        Log::info('Asignaturas filtradas por año: ', ['asignaturas' => $this->asignaturas_anio]);
+    }
+
     public function updateAsignatura($id)
     {
-        $asignatura = Asignatura::find($id);
+        $asignatura = $this->asignaturas->find($id);
+
         if ($asignatura) {
             $this->selectedId = $asignatura->id;
             $this->tipo_modulo = $asignatura->tipo_modulo;
