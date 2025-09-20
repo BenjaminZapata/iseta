@@ -10,7 +10,6 @@
             <div class="perfil_dataname">
                 <label>Año:</label>
                 <select
-                    x-on:change="$wire.filterForAnio($event.target.value)"
                     name="anio"
                     class="campo_info rounded"
                     wire:model.change="anio"
@@ -33,12 +32,10 @@
                 <label for="selectedId">Asignatura:</label>
                 <select name="asignatura_id" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
                     form="add_asignatura">
-                    @foreach ($asignaturas as $selectedId)
-                        @if ($selectedId->anio == $anio)
+                    @foreach ($asignaturas->where('anio', $anio) as $selectedId)
                             <option value="{{ $selectedId->id }}">
                                 {{ $selectedId->nombre }}
                             </option>
-                        @endif
                     @endforeach
                 </select>
             </div>
@@ -46,8 +43,13 @@
             <div class="perfil_dataname">
                 <label>Tipo módulo:</label>
                 <select name="tipo_modulo" class="campo_info rounded" wire:model="$tipo_modulo">
-                    <option value="1">Módulos</option>
-                    <option value="2">Horas</option>
+                    @if ($tipo_modulo == 0)
+                        <option value="{{$tipo_modulo}}" selected="">Horas</option>
+                        <option value="1">Módulos</option>
+                    @else
+                        <option value="{{$tipo_modulo}}" selected="">Módulos</option>
+                        <option value="0">Horas</option>
+                    @endif
                 </select>
             </div>
 

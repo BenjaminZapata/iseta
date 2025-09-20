@@ -27,12 +27,6 @@ class AsignaturaSelector extends Component
         $this->updateAsignatura($value);
     }
 
-    public function filterForAnio($anio)
-    {
-        $this->asignaturas_anio = $this->asignaturas->where('anio', $anio);
-        Log::info('Asignaturas filtradas por año: ', ['asignaturas' => $this->asignaturas_anio]);
-    }
-
     public function updateAsignatura($id)
     {
         $asignatura = $this->asignaturas->find($id);
