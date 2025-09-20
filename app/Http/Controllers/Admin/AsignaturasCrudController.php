@@ -69,42 +69,30 @@ class AsignaturasCrudController extends BaseController
      * Store a newly created resource in storage.
      */
     public function store(CrearAsignaturaRequest $request)
-    {
-        $data = $request->validated();
+{
+    $data = $request->validated();
 
-        Asignatura::create($data);
+    // Verificar unicidad contextual
+    $existe = Asignatura::where('nombre', $data['nombre'])
+        ->where('modulos', $data['modulos'])
+        ->where('carrera_id', $data['carrera_id']) // si usás carrera_id
+        ->exists();
 
-        return redirect()->back()->with('mensaje', 'Se creo la asignatura');
+    if ($existe) {
+        return redirect()->back()
+            ->withErrors(['nombre' => 'Ya existe una asignatura con ese nombre y cantidad de módulos en esta carrera.'])
+            ->withInput();
     }
 
+    // Generar clave única
+    $data['clave_unica'] = \Str::uuid(); // o lógica propia
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Request $request, $asignatura)
-    {
-        Configuracion::todas();
+    Asignatura::create($data);
 
-        $asignatura = Asignatura::with('cursadas.alumno')->find($asignatura);
+    return redirect()->back()->with('mensaje', 'Se creó la asignatura correctamente.');
+}
 
-        return view('Admin.Asignaturas.edit', [
-            'asignatura' => $asignatura,
-        ]);
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(EditarAsignaturaRequest $request, Asignatura $asignatura)
-    {
-        $data = $request->validated();
-        $asignatura->update($data);
-
-        if ($request->has('redirect'))
-            return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la asignatura');
-        else
-            return redirect()->back()->with('mensaje', 'Se edito la asignatura');
-    }
 
     /**
      * Remove the specified resource from storage.
