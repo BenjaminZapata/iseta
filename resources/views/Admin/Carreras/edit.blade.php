@@ -22,9 +22,58 @@
                         <span class="slider"></span>
                     </label>
                 </div>
-                <?= $form->generate(route('admin.carreras.update', ['carrera' => $carrera->id]), 'put', [
-                    'Información' => [$form->text('nombre', 'Nombre:', 'label-input-y-75', $carrera), $form->text('resolucion', 'Resolucion:', 'label-input-y-75', $carrera), $form->text('anio_apertura', 'Año de apertura:', 'label-input-y-75', $carrera), $form->text('anio_fin', 'Año de cierre:', 'label-input-y-75', $carrera), $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $carrera), $form->texthidden(url()->previous())],
-                ]) ?>
+                <form method="POST" action="{{ route('admin.carreras.update', ['carrera' => $carrera->id]) }}">
+                    @method('PUT')
+                    @csrf
+                    <fieldset class="p-2" style="margin:10px;">
+                        <legend class="font-600 font-7">Información</legend>
+                        <div class="grid-2 gap-2 p-0">
+                            <label class="perfil_dataname">Nombre:
+                                <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
+                            </label>
+                            <label class="perfil_dataname">Resolucion:
+                                <p class="campo_info-noinput rounded"> {{ $carrera->resolucion }} </p>
+                            </label>
+                            <label class="perfil_dataname">Año de apertura:
+                                <p class="campo_info-noinput rounded"> {{ $carrera->anio_apertura }} </p>
+                            </label>
+                            <label class="label-input-y-75">Estado:
+                                <select name="vigente" class="campo_info rounded" value="{{ $carrera->vigente }}">
+                                    <option value="{{ $carrera->vigente }}" selected>{{ $carrera->vigente ? 'Vigente' : 'No vigente' }}</option>
+                                    @if ($carrera->vigente == 1)
+                                        <option value="0">No vigente</option>
+                                    @else
+                                        <option value="1">Vigente</option>
+                                    @endif
+                                </select>
+                            </label>
+                            <label class="label-input-y-75">Año de cierre:
+                                <input type="text" name="anio_fin" value="{{ $carrera->anio_fin }}">
+                            </label>
+                            <label class="label-input-y-75">Observaciones:
+                                <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
+                            </label>
+                            <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
+                        </div>
+                    </fieldset>
+                    <div class="botones-derecha">
+
+                        <x-botones-alumno />
+                        {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
+                        <x-btn-cancelar />
+                        <button type="submit" class="btn_blue">
+                            @if ($method == 'put')
+                                <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                Actualizar
+                            @elseif ($method == 'post')
+                                <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                Guardar
+                            @endif
+                            {{-- @endif --}}
+                        </button>
+
+                    </div>
+                </form>
                 <div class="boton-eliminar">
                     @if (!$config['modo_seguro'])
                         <div>
@@ -51,10 +100,6 @@
                 <a href="{{ route('admin.carreras.addAsignaturaView', ['carrera' => $carrera->id]) }}">
                     <button class="btn_blue"><i class="ti ti-circle-plus"
                             style="font-size: 1.3em; margin-right: 8px;"></i>Agregar asignatura</button>
-                </a>
-                <a href="{{ route('admin.carreras.createAsignaturaView', ['carrera' => $carrera->id]) }}">
-                    <button class="btn_blue"><i class="ti ti-circle-plus"
-                            style="font-size: 1.3em; margin-right: 8px;"></i>Crear asignatura</button>
                 </a>
 
                 {{-- BOTÓN GENERAL DE EXPORTACIÓN --}}
