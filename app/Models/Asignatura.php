@@ -22,7 +22,8 @@ class Asignatura extends Model
         'tipo_modulo',
         'carga_horaria',
         'anio',
-        'observaciones'
+        'observaciones',
+        'cantidad_modulo'
     ];
 
     public function cursadas(): HasMany{

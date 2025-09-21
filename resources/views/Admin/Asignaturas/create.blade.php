@@ -23,8 +23,8 @@
                 <div class="perfil_dataname">
                     <label>Cantidad de modulos:</label>
                     <input class="campo_info rounded" 
-                           name="carga_horaria" 
-                           value="{{ old('carga_horaria') }}">
+                           name="cantidad_modulo" 
+                           value="{{ old('cantidad_modulo') }}">
                    
                 </div>
 
