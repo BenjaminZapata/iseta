@@ -22,66 +22,69 @@ class CarreraRepository
         $this->config = Configuracion::todas();
     }
     public function index($request)
-    {
-        $filterVigente = $request->input('filter_vigente', null); // '', '0', '1'
-        $hasSearch     = $request->filled('filter_search_box') && $request->filled('filter_field');
-        $query         = Carrera::with('asignaturas');
+{
+    $filterVigente         = $request->input('filter_vigente', null); // '', '0', '1'
+    $resolucionNumero      = $request->input('filter_resolucion_numero');
+    $resolucionAnio        = $request->input('filter_resolucion_anio');
+    $hasSearch             = $request->filled('filter_search_box') && $request->filled('filter_field');
+    $query                 = Carrera::with('asignaturas');
 
-        if ($hasSearch) {
-            $word  = trim($request->input('filter_search_box'));
-            $field = $request->input('filter_field');
+    // 🔍 Filtro de búsqueda general
+    if ($hasSearch) {
+        $word  = trim($request->input('filter_search_box'));
+        $field = $request->input('filter_field');
 
-            switch ($field) {
-                case 'asignatura':
-                    $query->whereHas('asignaturas', function ($q) use ($word) {
-                        $tokens = array_filter(array_map('trim', preg_split('/[^\p{L}\p{N}]+/u', $word)));
-                        foreach ($tokens as $t) {
-                            if (mb_strlen($t) < 2) continue;
-                            $q->whereRaw(
-                                "asignaturas.nombre COLLATE utf8mb4_unicode_ci LIKE ?",
-                                ["%{$t}%"]
-                            );
-                        }
-                    });
-                    break;
-
-                case 'resolucion':
-                    $query->whereRaw(
-                        "CAST(carreras.resolucion AS CHAR) COLLATE utf8mb4_unicode_ci LIKE ?",
-                        ["%{$word}%"]
-                    );
-                    break;
-
-                case 'nombre':
-                default:
+        switch ($field) {
+            case 'asignatura':
+                $query->whereHas('asignaturas', function ($q) use ($word) {
                     $tokens = array_filter(array_map('trim', preg_split('/[^\p{L}\p{N}]+/u', $word)));
-                    $query->where(function ($sub) use ($tokens) {
-                        foreach ($tokens as $t) {
-                            if (mb_strlen($t) < 2) continue;
-                            $sub->whereRaw(
-                                "carreras.nombre COLLATE utf8mb4_unicode_ci LIKE ?",
-                                ["%{$t}%"]
-                            );
-                        }
-                    });
-                    break;
-            }
-        } else {
-            // 🔹 Caso sin búsqueda
-            if ($filterVigente === '0' || $filterVigente === '1') {
-                $query->where('carreras.vigente', (int)$filterVigente);
-            } else {
-                // Sin filtro y sin búsqueda → mostrar solo vigentes
-                $query->where('carreras.vigente', 1);
-            }
+                    foreach ($tokens as $t) {
+                        if (mb_strlen($t) < 2) continue;
+                        $q->whereRaw("asignaturas.nombre COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$t}%"]);
+                    }
+                });
+                break;
+
+            case 'resolucion':
+                $query->whereRaw("CAST(carreras.resolucion AS CHAR) COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$word}%"]);
+                break;
+
+            case 'nombre':
+            default:
+                $tokens = array_filter(array_map('trim', preg_split('/[^\p{L}\p{N}]+/u', $word)));
+                $query->where(function ($sub) use ($tokens) {
+                    foreach ($tokens as $t) {
+                        if (mb_strlen($t) < 2) continue;
+                        $sub->whereRaw("carreras.nombre COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$t}%"]);
+                    }
+                });
+                break;
         }
-
-        $query->orderByDesc('carreras.vigente')
-            ->orderByDesc('carreras.anio_apertura')
-            ->orderBy('carreras.nombre');
-
-        return $query->paginate($this->config['filas_por_tabla']);
     }
+
+    
+    if ($filterVigente === '0' || $filterVigente === '1') {
+        $query->where('carreras.vigente', (int)$filterVigente);
+    } else {
+        $query->where('carreras.vigente', 1); // Por defecto, solo vigentes
+    }
+
+    if (!empty($resolucionNumero)) {
+        $query->whereRaw("SUBSTRING_INDEX(carreras.resolucion, '/', 1) LIKE ?", ["%{$resolucionNumero}%"]);
+    }
+
+    if (!empty($resolucionAnio)) {
+        $query->whereRaw("SUBSTRING_INDEX(carreras.resolucion, '/', -1) LIKE ?", ["%{$resolucionAnio}%"]);
+    }
+
+    
+    $query->orderByDesc('carreras.vigente')
+          ->orderByDesc('carreras.anio_apertura')
+          ->orderBy('carreras.nombre');
+
+    return $query->paginate($this->config['filas_por_tabla']);
+}
+
 
 
 

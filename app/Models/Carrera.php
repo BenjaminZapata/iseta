@@ -125,4 +125,24 @@ class Carrera extends Model
         return $this->hasMany(Mesa::class, 'id_carrera', 'id');
     }
 
+    // En CarreraM
+public function listadoNombres() {
+    return Carrera::pluck('nombre', 'nombre')->toArray();
+}
+
+public function listadoResoluciones() {
+    return Carrera::pluck('resolucion', 'resolucion')->toArray();
+}
+
+public function numerosResolucion() {
+    return Carrera::selectRaw("SUBSTRING_INDEX(resolucion, '/', 1) as numero")
+                  ->distinct()->pluck('numero', 'numero')->toArray();
+}
+
+public function aniosResolucion() {
+    return Carrera::selectRaw("SUBSTRING_INDEX(resolucion, '/', -1) as anio")
+                  ->distinct()->pluck('anio', 'anio')->toArray();
+}
+
+
 }
