@@ -218,20 +218,21 @@
                             <td>{{ $asignatura->nombre }}</td>
                             <td class="center">{{ $asignatura->carga_horaria }} horas</td>
                             <td style="display:flex; align-items: center; justify-content: center;">
-                                    @if (!$config['modo_seguro'])
-                                <form id="form-eliminar-{{ $asignatura->id }}"
-                                    action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}" method="POST"
-                                    style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button"
-                                        onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
-                                    '¿Estás seguro de que querés eliminar a la asignatura: {{ strtoupper($asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                        class="btn_icon-danger" style       ="background-color: red; margin-left: 10px;">
-                                        <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                    </button>
-                                </form>
-                                @endif
+                                    
+                               <button type="button"
+    onclick="openGeneralModal(
+        'form-eliminar-{{ $asignatura->id }}',
+        `¿Estás seguro de que querés eliminar la asignatura?\n\n
+        Nombre: {{ strtoupper($asignatura->nombre) }}\n
+        {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
+         Año: {{ $asignatura->anio }}\n\n
+         ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
+    class="btn_icon-danger"
+    style="background-color: red; margin-left: 10px;">
+    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+</button>
+
+                               
                             </td>
                             <td>
                                 <div style="display:flex; align-items: center; justify-content: center;">
