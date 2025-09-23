@@ -213,16 +213,5 @@
                 </button>
             </div>
             </form>
-
-            {{-- ================== BACKUP Y RESTAURACIÓN ================== --}}
-            <div class="botones-derecha">
-                <a href="/admin/restaurar" class="btn_red"
-                    onclick="openGeneralModal('⚠️ ¿Estás seguro de restaurar la base de datos? Esta acción no se puede deshacer.')">
-                    <i class="ti ti-cloud-exclamation" style="font-size: 1.3em"></i> Restaurar
-                </a>
-                <a href="/admin/copia" class="btn_blue">
-                    <i class="ti ti-cloud-upload" style="font-size: 1.3em"></i> Copia de la base de datos
-                </a>
-            </div>
         </div>
     @endsection

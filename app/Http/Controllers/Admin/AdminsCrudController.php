@@ -47,22 +47,34 @@ class AdminsCrudController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $roles = [
-            'regente' => 0,
-            'preceptor' => 1,
-            'secretario' => 2
-        ];
+{
+    $roles = [
+        'regente' => 0,
+        'preceptor' => 1,
+        'secretario' => 2
+    ];
 
-        $data = $request->only('username', 'password', 'rol');
+    // Validación amigable
+    $validated = $request->validate([
+        'username' => 'required|string|max:255',
+        'password' => 'required|string|min:6',
+        'rol' => 'required|in:regente,preceptor,secretario',
+    ], [
+        'username.required' => 'El campo usuario es obligatorio.',
+        'password.required' => 'La contraseña es obligatoria.',
+        'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
+        'rol.required' => 'Debes seleccionar un rol.',
+        'rol.in' => 'El rol seleccionado no es válido.',
+    ]);
 
-        $data['password'] = bcrypt($data['password']);
-        $data['rol'] = $roles[$data['rol']] ?? 0; // Default a regente si no viene bien
+    $validated['password'] = bcrypt($validated['password']);
+    $validated['rol'] = $roles[$validated['rol']];
 
-        Admin::create($data);
+    Admin::create($validated);
 
-        return redirect()->back()->with('mensaje', 'Administrador creado correctamente');
-    }
+    return redirect()->back()->with('mensaje', 'Administrador creado correctamente');
+}
+
 
     /**
      * Display the specified resource.

@@ -2,88 +2,90 @@
 
 @section('content')
 
-    <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE USUARIOS ADMINISTRATIVOS'])
-        <div class="perfil__info">
-            <form class="flex-col gap-3" method="POST" action="{{route('admin.admins.store')}}">
-                @csrf
-                <div class="grid-2 gap-1">
+    @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE USUARIOS ADMINISTRATIVOS'])
 
-                    <div>
-                        <?= $form->text('username', 'Usuario:', 'label-input-y-75', null) ?>
-                    </div>
-                    <div>
-                        <?= $form->password('password', 'Contraseña:', 'label-input-y-75', null) ?>
-                    </div>
-                    <div>
-                        <?= $form->select('rol', 'Rol:', 'label-input-y-75', null, [
-        'regente' => 'Regente',
-        'preceptor' => 'Preceptor',
-        'secretario' => 'Secretario',
-    ]) ?>
+    {{-- FORMULARIO DE CREACIÓN --}}
+    <div class="perfil_one br p-5">
+        <form method="POST" action="{{ route('admin.admins.store') }}" class="grid grid-cols-2 gap-4">
+            @csrf
 
+            {{-- Campo Usuario --}}
+            {!! $form->text('username', 'Usuario:', 'label-input-y-100', old('username')) !!}
 
-                    </div>
-                    <div class="flex">
-                        <input type="submit" value="Crear" class="btn_borrar">
-                    </div>
-            </form>
-        </div>
+            {{-- Campo Contraseña --}}
+            {!! $form->password('password', 'Contraseña:', 'label-input-y-100', null) !!}
+
+            {{-- Campo Rol --}}
+            {!! $form->select('rol', 'Rol:', 'label-input-y-100', old('rol'), [
+                'regente' => 'Regente',
+                'preceptor' => 'Preceptor',
+                'secretario' => 'Secretario',
+            ]) !!}
+            
+            <div class="botones-derecha">
+        {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
+        <x-btn-cancelar />
+ {{-- Botón Crear --}}
+            <div class="col-span-2 flex justify-end pt-4">
+                <button type="submit" class="btn_blue">
+                    <i class="ti ti-circle-plus" style="font-size: 1.2em; margin-right: 8px;"></i>Crear usuario
+                </button>
+            </div>
+    </div>
+        </form>
     </div>
 
-    <div class="table br">
-    <table class="table__body">
-        <thead>
-            <tr>
-                <th class="center">Id</th>
-                <th>Usuario</th>
-                @if (!$config['modo_seguro'])
-                    <th class="center">Acción</th>
-                @endif
-            </tr>
-        </thead>
-        <tbody>
-            @php
-                $nombresRol = [
-                    0 => 'Regente',
-                    1 => 'Preceptor',
-                    2 => 'Secretario',
-                ];
-            @endphp
-
-            @foreach ($admins as $admin)
+    {{-- LISTADO DE USUARIOS --}}
+    <div class="table br mt-8">
+        <table class="table__body">
+            <thead>
                 <tr>
-                    <td class="center">{{ $admin->id }}</td>
-                    <td>{{ $admin->username }}</td>
+                    <th class="center">ID</th>
+                    <th class="center">Usuario</th>
+                    <th class="center">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $nombresRol = [
+                        0 => 'Regente',
+                        1 => 'Preceptor',
+                        2 => 'Secretario',
+                    ];
+                @endphp
 
-                    @if (!$config['modo_seguro'])
+                @foreach ($admins as $admin)
+                    <tr>
+                        <td class="center">{{ $admin->id }}</td>
+                        <td class="center">{{ $admin->username }}</td>
                         <td class="center">
+                            @if (!$config['modo_seguro'])
                             <form id="form-eliminar-{{ $admin->id }}"
                                 action="{{ route('admin.admins.destroy', ['admin' => $admin->id]) }}"
-                                method="POST" style="display: inline;">
+                                method="POST" class="inline-block">
                                 @csrf
                                 @method('DELETE')
                                 <button type="button"
-                                    onclick="openGeneralModal('form-eliminar-{{ $admin->id }}',
-                                        '¿Estás seguro de que querés eliminar al usuario: {{ strtoupper($admin->apellido) }} {{ strtoupper($admin->nombre) }}?\n\nRol asignado: {{ $nombresRol[$admin->rol] ?? 'Sin rol definido' }}\n\nESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                    onclick="openGeneralModal(
+                                        'form-eliminar-{{ $admin->id }}',
+                                        `¿Estás seguro de que querés eliminar al usuario: {{ strtoupper($admin->apellido ?? '') }} {{ strtoupper($admin->nombre ?? '') }}?\n\nRol asignado: {{ $nombresRol[$admin->rol] ?? 'Sin rol definido' }}\n\nESTA ACCIÓN NO SE PUEDE DESHACER.`
+                                    )"
                                     class="btn_icon-danger"
                                     style="background-color: red; margin-left: 10px;">
                                     <i class="ti ti-trash" style="font-size: 1.3em"></i>
                                 </button>
                             </form>
+                            @endif
                         </td>
-                    @endif
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
-
-
-    <div class="w-1/2 mx-auto p-5">
-        {{ $admins->appends(request()->query())->links() }}
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 
-
+    {{-- PAGINACIÓN --}}
+    <div class="w-full flex justify-center py-6">
+        {{ $admins->appends(request()->query())->links('Componentes.pagination') }}
+    </div>
 
 @endsection
