@@ -72,9 +72,10 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     ];
 
     public function egresado()
-    {
-        return $this->hasMany(Egresado::class, 'id_alumno');
-    }
+{
+    return $this->hasOne(Egresado::class, 'id_alumno', 'id');
+}
+    
     static function existeSinPassword($data)
     {
         return Alumno::where('email', $data['email'])
@@ -237,4 +238,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             default => 'Desconocido',
         };
     }
+    
+
+
 }

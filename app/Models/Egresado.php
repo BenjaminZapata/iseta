@@ -33,14 +33,11 @@ class Egresado extends Model
         return $existe;
     }
 
-    public function estado(){
-        $estado = ['Cursando','Egresado','Desertor'];
-        
-        if(isset($estado[$this->estado])){
-            return $estado[$this->estado];
-        }else{
-            return 'Otro';
-        }
-    }
+   public function getEstadoTextoAttribute()
+{
+    $estado = ['Cursando', 'Egresado', 'Desertor'];
+    return $estado[$this->attributes['estado']] ?? 'Otro';
+}
+
 
 }

@@ -92,7 +92,7 @@
                     <th>Alumno</th>
                     <th>Contacto</th>
                     <th>Dirección</th>
-                    <th class="center">Lugar de nacimiento</th>
+                    <th>Academico</th>
                     <th class="center">Acción</th>
                 </tr>
             </thead>
@@ -124,9 +124,19 @@
                             <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                         </td>
                         <td>
-                            <div style="display: flex; justify-content: center;">
-                                <p> {{ $alumno->lugar_nacimiento }} </p>
-                            </div>
+                            @php
+                            $titulo = [
+            'No entregado',
+            'Fotocopia del título original secundario',
+            'Certificado de constancia de título en trámite',
+            'Constancia de alumno del último año del nivel secundario'
+        ];
+                            @endphp
+                           <p class="bold" style="text-transform: uppercase;">titulo: {{ $titulo[$alumno->titulo_secundario] }}</p>
+                        <p>estado: {{ $alumno->egresado?->estado_texto ?? 'Sin inscripción' }}</p>
+
+
+
                         </td>
                         <td class="flex just-center">
                             <div style="display: flex; justify-content: center;">
