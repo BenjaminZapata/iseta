@@ -25,7 +25,7 @@ class CrearCarreraRequest extends FormRequest
     {
         return [
             'nombre' => ['required', 'string', 'max:151'],
-            'resolucion' => ['required', new Resolucion],
+            'resolucion' => ['required', new Resolucion,'unique:carreras,resolucion'],
             'anio_apertura' => [
                 'required',
                 'numeric',

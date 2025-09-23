@@ -4,9 +4,7 @@
 <div>
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'CREAR ASIGNATURA'])
-        <div class="perfil__header">
-            <h2>Crear asignatura</h2>
-        </div>
+        
         <div class="perfil__info">
             <form method="post" action="{{ route('admin.asignaturas.store') }}">
                 @csrf
@@ -17,44 +15,17 @@
                     <input class="campo_info rounded"
                            name="nombre"
                            value="{{ old('nombre') }}">
-                    @error('nombre')
-                        <small class="text-red-500">{{ $message }}</small>
-                    @enderror
+                    
                 </div>
 
-                {{-- Tipo módulo --}}
-                <div class="perfil_dataname">
-                    <label>Tipo módulo:</label>
-                    <select class="campo_info rounded" name="tipo_modulo">
-                        <option value="">-- Seleccione --</option>
-                        <option value="1" {{ old('tipo_modulo') == 1 ? 'selected' : '' }}>Módulos</option>
-                        <option value="2" {{ old('tipo_modulo') == 2 ? 'selected' : '' }}>Horas</option>
-                    </select>
-                    @error('tipo_modulo')
-                        <small class="text-red-500">{{ $message }}</small>
-                    @enderror
-                </div>
 
                 {{-- Carga horaria --}}
                 <div class="perfil_dataname">
-                    <label>Carga horaria:</label>
+                    <label>Cantidad de modulos:</label>
                     <input class="campo_info rounded" 
-                           name="carga_horaria" 
-                           value="{{ old('carga_horaria') }}">
-                    @error('carga_horaria')
-                        <small class="text-red-500">{{ $message }}</small>
-                    @enderror
-                </div>
-
-                {{-- Año --}}
-                <div class="perfil_dataname">
-                    <label>Año:</label>
-                    <input class="campo_info rounded" 
-                           name="anio" 
-                           value="{{ old('anio') }}">
-                    @error('anio')
-                        <small class="text-red-500">{{ $message }}</small>
-                    @enderror
+                           name="cantidad_modulo" 
+                           value="{{ old('cantidad_modulo') }}">
+                   
                 </div>
 
                 {{-- Observaciones --}}
