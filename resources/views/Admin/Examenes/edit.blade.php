@@ -157,6 +157,7 @@
                     Actualizar
                 </button>
             </div>
+        </form>
             <div class="boton-eliminar">
                 @if (!$config['modo_seguro'])
                     <div>

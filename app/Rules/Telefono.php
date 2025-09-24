@@ -18,14 +18,14 @@ class Telefono implements ValidationRule
 
         // Validar que el + esté solo al inicio si existe
         if (substr_count($value, '+') > 1 || (strpos($value, '+') > 0)) {
-            $fail("El campo $attribute solo puede contener un '+' al inicio.");
+            $fail("El campo telefono solo puede contener un '+' al inicio.");
             return;
         }
 
         // Contar guiones
         $dashCount = substr_count($value, '-');
         if ($dashCount < 1 || $dashCount > 2) {
-            $fail("El campo $attribute debe contener al menos 1 y como máximo 2 guiones (-).");
+            $fail("El campo telefono debe contener al menos 1 y como máximo 2 guiones (-).");
             return;
         }
 
@@ -45,7 +45,7 @@ class Telefono implements ValidationRule
 
         // Validar caracteres permitidos
         if (!preg_match('/^\+?[0-9a-zA-Z\-\(\) ]+$/', $value)) {
-            $fail("El campo $attribute solo puede contener números, letras, guiones (-), paréntesis () y espacios, con '+' solo al inicio.");
+            $fail("El campo telefono solo puede contener números, letras, guiones (-), paréntesis () y espacios, con '+' solo al inicio.");
         }
     }
 }

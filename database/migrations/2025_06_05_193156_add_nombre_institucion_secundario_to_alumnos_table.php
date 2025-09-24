@@ -9,7 +9,7 @@ class AddNombreInstitucionSecundarioToAlumnosTable extends Migration
     public function up()
     {
         Schema::table('alumnos', function (Blueprint $table) {
-            $table->string('nombre_institucion_secundario');
+            $table->string('nombre_institucion_secundario')->nullable();
         });
     }
 
