@@ -68,11 +68,6 @@
                             ]
                     ),
 
-                        $form->checkbox(
-                            'filter_vencido',
-                            'Solo títulos vencidos',
-                            'label-input-y-100',
-                            old('filter_vencido', $filters->filter_vencido ?? false)),
                     ],
                     'fields' => [
                         'alumno' => 'Alumno',
