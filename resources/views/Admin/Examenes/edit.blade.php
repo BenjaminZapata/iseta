@@ -63,7 +63,6 @@
                     <div class="perfil__info">
                         <div class=".h-auto">
                             <div id="border-none">
-
                                 @if (isset($examen->mesa))
                                     <div class="perfil_dataname">
                                         <label>Presidente:</label>
@@ -132,10 +131,8 @@
                     <select class="campo_info rounded" name="tipo_final">
                         <option value="1" {{ $examen->tipo_final == 1 ? 'selected' : '' }}>Escrito</option>
                         <option value="2" {{ $examen->tipo_final == 2 ? 'selected' : '' }}>Oral</option>
-                        <option value="3" {{ $examen->tipo_final == 3 ? 'selected' : '' }}>Promocionado
-                        </option>
-                        <option value="4" {{ $examen->tipo_final == 4 ? 'selected' : '' }}>Equivalencia
-                        </option>
+                        <option value="3" {{ $examen->tipo_final == 3 ? 'selected' : '' }}>Promocionado</option>
+                        <option value="4" {{ $examen->tipo_final == 4 ? 'selected' : '' }}>Equivalencia</option>
                     </select>
                 </div>
                 <div class="perfil_dataname">
