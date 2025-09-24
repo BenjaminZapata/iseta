@@ -63,6 +63,7 @@ class AlumnoForm extends Form
     public function messages()
     {
         return [
+            'dni.max_digits' => 'El DNI no puede tener más de 8 caracteres.',
             'dni.unique' => 'Ya hay un alumno con ese DNI.',
             'dni.min_digits' => 'El campo debe tener al menos 7 dígitos.',
             'dni.required' => 'El campo DNI es obligatorio.',
