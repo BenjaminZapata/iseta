@@ -37,6 +37,7 @@ class CarrerasCrudController extends BaseController
     {
         $this->setFilters($request);
 
+        $request->flash();
         $carreras = $this->carreraRepo->index($request);
 
         // Obtener años disponibles para cada carrera
@@ -93,20 +94,18 @@ class CarrerasCrudController extends BaseController
      */
     public function edit(Carrera $carrera)
     {
-        $carrera->load('asignaturas');
-
         // Obtener los años disponibles de cursadas para esta carrera
-        $anios = \DB::table('cursadas')
-            ->where('id_carrera', $carrera->id)
-            ->whereNotNull('anio_cursada')
-            ->distinct()
-            ->orderByDesc('anio_cursada')
-            ->pluck('anio_cursada')
-            ->toArray();
+        $anios = $carrera->cursadas()
+        ->whereNotNull('anio_cursada')
+        ->distinct()
+        ->orderByDesc('anio_cursada')
+        ->pluck('anio_cursada')
+        ->toArray();
 
         return view('Admin.Carreras.edit', [
             'carrera' => $carrera,
             'aniosPorCarrera' => [$carrera->id => $anios],
+            'method' => 'put',
         ]);
     }
 
@@ -117,24 +116,26 @@ class CarrerasCrudController extends BaseController
      */
     public function update(EditarCarreraRequest $request, Carrera $carrera)
     {
-        $datos = $request->validated();
+        try
+        {
+            $datos = $request->validated();
 
-        if ($request->has('resolucion_archivo')) {
-            $request->file('resolucion_archivo')->storeAs(str_replace(' ', '_', $datos['nombre']) . '.pdf');
-            $datos['resolucion_archivo'] = str_replace(' ', '_', $datos['nombre']) . '.pdf';
+            if ($request->has('resolucion_archivo')) {
+                $request->file('resolucion_archivo')->storeAs(str_replace(' ', '_', $datos['nombre']) . '.pdf');
+                $datos['resolucion_archivo'] = str_replace(' ', '_', $datos['nombre']) . '.pdf';
+            }
+
+            $carrera->update($datos);
+
+            if ($request->has('redirect')){
+                return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la carrera');
+            }else{
+                return redirect()->back()->with('mensaje', 'Se edito la carrera');
+            }
+        }catch(\Exception $e){
+            Log::error($e);
+            return redirect()->back()->with('error', 'No se pudo editar la carrera');
         }
-
-
-        $carrera->update($datos);
-
-        if (!$request->has('vigente')) {
-            $carrera->vigente = true;
-            $carrera->save();
-        }
-        if ($request->has('redirect'))
-            return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la carrera');
-        else
-            return redirect()->back()->with('mensaje', 'Se edito la carrera');
     }
 
     public function createAsignaturaView(Carrera $carrera)

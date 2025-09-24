@@ -20,32 +20,7 @@
                     <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>Agregar asignatura
                 </button>
             </a>
-            {{-- FILTROS --}}
-            <?= $filtergen->generate('admin.asignaturas.index', $filters, [
-                'dropdowns' => [
-                    $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', old('filter_carrera_id', $filters->filter_carrera_id ?? null), [
-                            'first_items' => ['Todas'],
-                            'id' => 'carrera_select',
-                        ]),
-                    $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', old('filter_asignatura_id', $filters->filter_asignatura_id ?? null), $asignaturasList->pluck('nombre', 'id')->prepend('Todas', 0)->toArray()),
-
-                    $form->select('filter_anio', 'Año:', 'label-input-y-100', $filters, ['Todos', '1er Año', '2do Año', '3er Año', '4to Año', '5to Año']),
-                    $form->select('filter_carga_horaria', 'Carga Horaria:', 'label-input-y-100', $filters, [
-                        'Cualquiera' => 'Cualquiera',
-                        'Menos de 10 hs' => 'Menos de 10 hs',
-                        '10 a 20 hs' => '10 a 20 hs',
-                        'Más de 20 hs' => 'Más de 20 hs',
-                    ]),
-                ],
-                'fields' => [
-                    'nombre' => 'Nombre',
-                    'carrera' => 'Carrera',
-                    'anio' => 'Año',
-                    'carga_horaria' => 'Carga Horaria',
-                ],
-            ]) ?>
         </div>
-
 
         {{-- TABLA DE ASIGNATURAS --}}
         <table class="table__body">
@@ -79,12 +54,7 @@
                         </td>
                         <td>
                             <div style="display: flex; justify-content: center;">
-                                <a href="{{ route('admin.asignaturas.edit', $asignatura->id) }}">
-                                    <button class="btn_blue">
-                                        <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                        Modificar
-                                    </button>
-                                </a>
+                            
                                 @if (!$config['modo_seguro'])
                                 <form id="form-eliminar-{{ $asignatura->id }}"
                                     action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}" method="POST"

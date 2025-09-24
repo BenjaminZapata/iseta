@@ -40,6 +40,10 @@ class Carrera extends Model
             -> withTimestamps();
     }
 
+    public function cursadas(): HasMany{
+        return $this->hasMany(Cursada::class, 'id_carrera', 'id');
+    }
+
 
     public function profesores(): BelongsToMany{
         return $this -> BelongsToMany(Profesor::class, "carrera_asignatura_profesor", "id_carrera", "id_profesor")
@@ -120,5 +124,25 @@ class Carrera extends Model
     public function mesas(){
         return $this->hasMany(Mesa::class, 'id_carrera', 'id');
     }
+
+    // En CarreraM
+public function listadoNombres() {
+    return Carrera::pluck('nombre', 'nombre')->toArray();
+}
+
+public function listadoResoluciones() {
+    return Carrera::pluck('resolucion', 'resolucion')->toArray();
+}
+
+public function numerosResolucion() {
+    return Carrera::selectRaw("SUBSTRING_INDEX(resolucion, '/', 1) as numero")
+                  ->distinct()->pluck('numero', 'numero')->toArray();
+}
+
+public function aniosResolucion() {
+    return Carrera::selectRaw("SUBSTRING_INDEX(resolucion, '/', -1) as anio")
+                  ->distinct()->pluck('anio', 'anio')->toArray();
+}
+
 
 }

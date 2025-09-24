@@ -69,42 +69,29 @@ class AsignaturasCrudController extends BaseController
      * Store a newly created resource in storage.
      */
     public function store(CrearAsignaturaRequest $request)
-    {
-        $data = $request->validated();
+{
+    $data = $request->validated();
 
-        Asignatura::create($data);
+    // Verificar unicidad contextual
+    $existe = Asignatura::where('nombre', $data['nombre'])
+        ->where('cantidad_modulo', $data['cantidad_modulo'])            
+        ->exists();
 
-        return redirect()->back()->with('mensaje', 'Se creo la asignatura');
+    if ($existe) {
+        return redirect()->back()
+            ->withErrors(['nombre' => 'Ya existe una asignatura con ese nombre y cantidad de módulos en esta carrera.'])
+            ->withInput();
     }
 
+    // Generar clave única
+    $data['clave_unica'] = \Str::uuid(); // o lógica propia
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Request $request, $asignatura)
-    {
-        Configuracion::todas();
+    Asignatura::create($data);
 
-        $asignatura = Asignatura::with('cursadas.alumno')->find($asignatura);
+    return redirect()->back()->with('mensaje', 'Se creó la asignatura correctamente.');
+}
 
-        return view('Admin.Asignaturas.edit', [
-            'asignatura' => $asignatura,
-        ]);
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(EditarAsignaturaRequest $request, Asignatura $asignatura)
-    {
-        $data = $request->validated();
-        $asignatura->update($data);
-
-        if ($request->has('redirect'))
-            return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la asignatura');
-        else
-            return redirect()->back()->with('mensaje', 'Se edito la asignatura');
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -113,13 +100,10 @@ class AsignaturasCrudController extends BaseController
     public function destroy(Asignatura $asignatura)
     {
         try {
-            // Verificar si la asignatura está vinculada a alguna carrera
+            // Verificar si la asignatura está vinculada a alguna carrera vigente
             if ($asignatura->carrera()->exists()) {
-                // Si tiene carreras vinculadas, las desvinculamos primero
-                $asignatura->carrera()->detach();
-
                 return redirect()->route('admin.asignaturas.index')
-                    ->with('mensaje', 'La asignatura fue desvinculada de sus carreras.');
+                    ->with('mensaje', 'La asignatura tiene relacion con una carrera vigente.');
             }
 
             // Verificar si la asignatura tiene relaciones con cursadas
@@ -128,16 +112,16 @@ class AsignaturasCrudController extends BaseController
                     ->with('error', 'No se pudo eliminar la asignatura porque tiene cursadas asociadas.');
             }
 
+            // Verificar si la asignatura tiene relaciones con materias correlativas
+            if ($asignatura->correlativas()->exists()) {
+                return redirect()->route('admin.asignaturas.index')
+                    ->with('error', 'No se pudo eliminar la asignatura porque tiene materias correlativas asociadas.');
+            }
+
             //verificar si la asignatura tiene relaciones con mesas
             if ($asignatura->mesas()->exists()) {
                 return redirect()->route('admin.asignaturas.index')
                     ->with('error', 'No se pudo eliminar la asignatura porque tiene mesas asociadas.');
-            }
-
-            //verificar si la asignatura tiene relaciones con examenes
-            if ($asignatura->examenes()->exists()) {
-                return redirect()->route('admin.asignaturas.index')
-                    ->with('error', 'No se pudo eliminar la asignatura porque tiene examenes asociados.');
             }
 
             // Si no tiene relaciones, procedemos a eliminarla

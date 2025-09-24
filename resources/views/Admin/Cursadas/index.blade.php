@@ -80,7 +80,7 @@
                                     <button class="btn_blue"><i class="ti ti-file-info"
                                             style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
                                 </a>
-                                @if (!$config['modo_seguro'])
+                               @if (!$config['modo_seguro'])
                                     <div>
                                         <form id="form-eliminar-{{ $cursada->id }}"
                                             action="{{ route('admin.cursadas.destroy', $cursada->id) }}" method="POST"
@@ -89,7 +89,7 @@
                                             @method('DELETE')
                                             <button type="button"
                                                 onclick="openGeneralModal('form-eliminar-{{ $cursada->id }}',
-                                    '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre) }} de la carrera {{ strtoupper($cursada->carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                    '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre ?? 'sin asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'sin carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                                                 class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
                                                 <i class="ti ti-trash" style="font-size: 1.3em"></i>
                                             </button>
