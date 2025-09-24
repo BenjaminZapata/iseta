@@ -34,9 +34,9 @@
             ]) ?>
 
         <div class="boton-eliminar">
-            @if (!$config['modo_seguro'])
+          
                 <div>
-                    @if (!$config['modo_seguro'])
+                    
                         <form id="form-eliminar-{{ $alumno->id }}"
                             action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST" style="display: inline;">
                             @csrf
@@ -48,9 +48,9 @@
                                 <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar alumno
                             </button>
                         </form>
-                    @endif
+                  
                 </div>
-            @endif
+         
         </div>
 
         {{-- HEADER PARA VERIFICAR ALUMNO --}}

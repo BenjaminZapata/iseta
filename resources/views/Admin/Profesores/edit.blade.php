@@ -54,6 +54,7 @@
 
                 <div>
                    <!-- Formulario de eliminación -->
+                    @if (!$config['modo_seguro'])
                     <form method="POST" id="form-eliminar-{{ $profesor->id }}"
                     action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
                      @csrf
@@ -67,6 +68,7 @@
                     <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar profesor/a
                     </button>
                     </form>
+                    @endif
                 </div>
             </div>
 
