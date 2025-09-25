@@ -38,7 +38,6 @@ class CrearProfesorRequest extends FormRequest
                     }
                 },
             ],
-
             'ciudad' => ['nullable', 'string', 'max:30'],
             'calle' => ['nullable', 'string', 'max:30'],
             'casa_numero' => ['nullable', 'numeric', 'max_digits:4'],
@@ -51,7 +50,6 @@ class CrearProfesorRequest extends FormRequest
             'observaciones' => ['nullable', 'string', 'max:150'],
             'telefono_1' => ['required', new Telefono, 'max:30'],
             'telefono_2' => ['nullable', new Telefono, 'max:30'],
-            'telefono_3' => ['nullable', new Telefono, 'max:30'],
             'codigo_postal' => ['nullable', 'alpha_num', 'max:10'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
             'anio_ingreso' => ['required', 'date_format:Y', 'before_or_equal:now', 'after:1980'],
@@ -71,7 +69,14 @@ class CrearProfesorRequest extends FormRequest
             'dni.max_digits' => 'El DNI no puede tener más de 10 caracteres.',
             'fecha_nacimiento.before_or_equal' => 'El profesor debe tener al menos 18 años.',
             'email.email' => 'El email ingresado no es válido.',
-            'email.max' => 'El email no puede tener más de 100 caracteres.',
+            'email.max' => 'El email no puede tener más de 50 caracteres.',
         ];
     }
+
+    public function attributes()
+{
+    return [
+        'anio_ingreso' => 'año de ingreso'
+    ];
+}
 }
