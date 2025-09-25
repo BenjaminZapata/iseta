@@ -27,20 +27,6 @@
             {{-- FILTROS --}}
             <?= $filtergen->generate('admin.alumnos.index', $filters, [
                     'dropdowns' => [
-                        $carreraM->dropdown(
-                            'filter_carrera_id',
-                            'Carrera:',
-                            'label-input-y-100',
-                            old('filter_carrera_id', $filters->filter_carrera_id ?? null),
-                            ['first_items' => ['Todas']]
-                        ),
-
-                        $form->select(
-                            'filter_ciudad',
-                            'Ciudad:',
-                            'label-input-y-100',
-                            old('filter_ciudad', $filters->filter_ciudad ?? null),
-                            ['' => 'Cualquiera'] + $alumnoM->ciudades()),
 
                         $form->select(
                             'filter_titulo',
@@ -67,18 +53,11 @@
                                 0 => 'No vencido',
                             ]
                     ),
-
-                        $form->checkbox(
-                            'filter_vencido',
-                            'Solo títulos vencidos',
-                            'label-input-y-100',
-                            old('filter_vencido', $filters->filter_vencido ?? false)),
                     ],
                     'fields' => [
-                        'alumno' => 'Alumno',
+                        'nombre' => 'Nombre',
+                        'apellido' => 'Apellido',
                         'dni' => 'Dni',
-                        'telefono1' => 'Telefono',
-                        'titulo_secundario' => 'Titulo',
                     ],
                 ]) ?>
         </div>
