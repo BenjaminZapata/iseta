@@ -12,13 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table("examenes", function (Blueprint $table) {
-            $table->integer("id_carrera");
+            $table->integer("id_carrera")->nullable();
             $table->foreign("id_carrera")->references("id")->on("carreras");
         });
-        DB::table('examenes')
-        ->join('asignaturas', 'examenes.id_asignatura', '=', 'asignaturas.id')
-        ->update(['examenes.id_carrera' => 'asignaturas.id_carrera']);
-
+        DB::statement("
+            UPDATE examenes e
+            JOIN asignaturas a ON e.id_asignatura = a.id
+            SET e.id_carrera = a.id_carrera
+        ");
     }
 
     /**
