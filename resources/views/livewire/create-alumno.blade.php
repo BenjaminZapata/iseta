@@ -222,9 +222,10 @@
                 </form>
             </div>
         </div>
-
-        <button type="button" x-on:click="step=1" class="btn_blue">Volver</button>
-        <button type="button" x-on:click="step=3" class="btn_blue">Siguiente: Confirmar</button>
+        <div class="botones-create">
+            <button type="button" x-on:click="step=1" class="btn_blue">Volver</button>
+            <button type="button" x-on:click="step=3" class="btn_blue">Siguiente: Confirmar</button>
+        </div>
     </div>
 
     <!-- Step 3: Confirmación -->

@@ -124,3 +124,15 @@ ul.carreras-list button {
 ul.carreras-list button:hover {
  text-decoration: underline;
 }
+
+.botones-create {
+ display: flex;
+ justify-content: space-between;
+ margin-top: 1rem;
+ /* Espaciado superior opcional */
+}
+
+.botones-create button {
+ min-width: 120px;
+ /* Opcional: asegura que no se achiquen demasiado */
+}
