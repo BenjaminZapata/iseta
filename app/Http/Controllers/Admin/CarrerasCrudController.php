@@ -232,7 +232,7 @@ class CarrerasCrudController extends BaseController
                 ->with('success', 'Carrera eliminada correctamente');
         } catch (\Throwable $e) {
             return redirect()->route('admin.carreras.index')
-                ->with('error', 'No se pudo eliminar la carrera. Verifique que no tenga relaciones asociadas.'. $e->getMessage());
+                ->with('error', 'No se pudo eliminar la carrera. Verifique que no tenga relaciones asociadas.');
         }
     }
 
