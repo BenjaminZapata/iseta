@@ -30,8 +30,8 @@ class EditarAlumnoRequest extends FormRequest
                 'min_digits:7',
                 'max_digits:10'
             ],
-            'nombre' => ['required'],
-            'apellido' => ['required'],
+            'nombre' => ['required', 'string', 'max:30'],
+            'apellido' => ['required', 'string', 'max:30'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
             'ciudad' => ['nullable'],
             'calle' => ['nullable'],
@@ -46,7 +46,6 @@ class EditarAlumnoRequest extends FormRequest
             'observaciones' => ['nullable'],
             'telefono1' => ['nullable', 'numeric'],
             'telefono2' => ['nullable', 'numeric'],
-            'telefono3' => ['nullable', 'numeric'],
             'codigo_postal' => ['nullable', 'alpha_num'],
             'estado' => ['nullable'],
             'titulo_secundario' => ['nullable'],

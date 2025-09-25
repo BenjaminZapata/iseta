@@ -23,7 +23,7 @@ class CrearAlumnoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => ['required', 'numeric', 'max_digits:8', 'unique:alumnos,dni'],
+            'dni' => ['required', 'numeric', 'max_digits:10', 'unique:alumnos,dni'],
             'nombre' => ['required', 'string', 'max:30'],
             'apellido' => ['required', 'string', 'max:30'],
             'fecha_nacimiento' => ['required', 'date', 'before:now'],
