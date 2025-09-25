@@ -70,9 +70,6 @@ legend {
  border-color: #e3342f !important;
 }
 
-.is-valid {
- border-color: #38c172 !important;
-}
 
 /* --- Mensajes de error --- */
 .campo-alert {
