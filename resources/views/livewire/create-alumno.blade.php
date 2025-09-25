@@ -298,7 +298,7 @@
                             <div class="campo-alert">{{ $message }}</div>
                         @enderror
                     </label>
-
+                    <input type="hidden" wire:model="iForm.estado">
                     <div class="mt-3 flex gap-2">
                         <button type="button" wire:click="$set('show', false)"
                             class="btn_cancelar">Cancelar</button>

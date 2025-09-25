@@ -11,7 +11,7 @@ class InscripcionForm extends Form
     public $anio_inscripcion;
     public $indice_libro_matriz;
     public $anio_finalizacion;
-    public $estado;
+    public $estado = 0;
 
     public function rules(): array
     {
@@ -19,7 +19,6 @@ class InscripcionForm extends Form
             'anio_inscripcion' => 'required|integer|min:1900|max_digits:4|max:' . date('Y'),
             'indice_libro_matriz' => 'required|string|max:255',
             'anio_finalizacion' => 'nullable|integer|min:1900|max_digits:4|max:' . (date('Y') + 10),
-            'estado' => 'required|integer|between:0,2',
         ];
     }
 
