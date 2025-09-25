@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 class AlumnoRepository
 {
     public $config;
-    public $availableFiels = ['alumno', 'dni', 'email', 'ciudad', 'telefono1', 'titulo_secundario'];
+    public $availableFiels = ['nombre', 'dni', 'apellido' ];
 
     public function __construct()
     {
@@ -40,12 +40,18 @@ class AlumnoRepository
             $search = trim($request->input('filter_search_box'));
 
             if ($field === 'alumno') {
-                $word = str_replace(' ', '%', $search);
-                $query->where(function ($q) use ($word) {
-                    $q->whereRaw("CONCAT(alumnos.nombre,' ',alumnos.apellido) LIKE ?", ["%$word%"])
-                        ->orWhereRaw("CONCAT(alumnos.apellido,' ',alumnos.nombre) LIKE ?", ["%$word%"]);
-                });
-            } elseif ($field === 'titulo_secundario') {
+    $words = preg_split('/\s+/', trim($search));
+
+    $query->where(function ($q) use ($words) {
+        foreach ($words as $word) {
+            $q->where(function ($sub) use ($word) {
+                $sub->where('alumnos.nombre', 'LIKE', "%$word%")
+                    ->orWhere('alumnos.apellido', 'LIKE', "%$word%");
+            });
+        }
+    });
+}
+ elseif ($field === 'titulo_secundario') {
                 $map = [
                     0 => 'No entregado',
                     1 => 'Certificado de constancia de título en trámite',
