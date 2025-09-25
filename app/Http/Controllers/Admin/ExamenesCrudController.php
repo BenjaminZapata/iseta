@@ -69,9 +69,12 @@ class ExamenesCrudController extends Controller
      */
     public function update(Request $request, Examen $examen)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'nota' => 'nullable|numeric|min:0|max:10',
-            'ausente' => 'nullable'
+            'libro' => 'nullable|integer|max:100|min:0',
+            'acta'=> 'nullable|integer|max:100|min:0',
+            'ausente' => 'nullable',
+            'tipo_final' => 'nullable | integer | between:0,4'
         ]);
 
         if ($request->ausente) {
@@ -84,6 +87,9 @@ class ExamenesCrudController extends Controller
             $examen->nota = $request->nota;
             $examen->aprobado = 2;
         }
+        $examen->tipo_final = $request->tipo_final;
+        $examen->libro = $request->libro;
+        $examen->acta = $request->acta;
         $examen->save();
 
 

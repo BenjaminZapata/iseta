@@ -11,9 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('alumnos', function (Blueprint $table) {
-            $table->tinyInteger('estado')->default(0);
+        Schema::table("examenes", function (Blueprint $table) {
+            $table->integer("id_carrera")->nullable();
+            $table->foreign("id_carrera")->references("id")->on("carreras");
         });
+        DB::statement("
+            UPDATE examenes e
+            JOIN asignaturas a ON e.id_asignatura = a.id
+            SET e.id_carrera = a.id_carrera
+        ");
     }
 
     /**
