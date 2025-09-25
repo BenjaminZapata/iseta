@@ -71,8 +71,8 @@ class ExamenesCrudController extends Controller
     {
         $request->validate([
             'nota' => 'nullable|numeric|min:0|max:10',
-            'libro' => 'nullable',
-            'acta'=> 'nullable|integer',
+            'libro' => 'nullable|integer|max:100|min:0',
+            'acta'=> 'nullable|integer|max:100|min:0',
             'ausente' => 'nullable',
             'tipo_final' => 'nullable | integer | between:0,4'
         ]);
