@@ -40,7 +40,7 @@ class EditarAlumnoRequest extends FormRequest
             'piso' => ['nullable'],
             'estado_civil' => ['required'],
             'email' => ['nullable', 'email', 'max:255'],
-            'nombre_institucion_secundario' => ['required', 'string', 'max:255'],
+            'nombre_institucion_secundario' => ['nullable', 'string', 'max:255'],
             'titulo_anterior' => ['nullable'],
             'becas' => ['nullable', 'integer', 'gte:0'],
             'observaciones' => ['nullable'],
@@ -49,7 +49,7 @@ class EditarAlumnoRequest extends FormRequest
             'telefono3' => ['nullable', 'numeric'],
             'codigo_postal' => ['nullable', 'alpha_num'],
             'estado' => ['nullable'],
-            'titulo_secundario' => ['required'],
+            'titulo_secundario' => ['nullable'],
             'genero' => ['required'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
         ];
