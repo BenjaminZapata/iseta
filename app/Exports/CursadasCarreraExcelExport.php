@@ -18,7 +18,7 @@ class CursadasCarreraExcelExport implements FromCollection, WithHeadings, WithTi
         $this->filtros = $filtros;
     }
 
-    public function collection(): \Illuminate\Support\Collection
+    public function collection(): Collection
     {
         $anio = isset($this->filtros['anio']) && $this->filtros['anio'] !== '' ? (int) $this->filtros['anio'] : null;
         $genero = $this->mapGenero($this->filtros['genero'] ?? null);

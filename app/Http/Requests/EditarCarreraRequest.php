@@ -23,34 +23,23 @@ class EditarCarreraRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
-{
-    return [
-        'anio_fin' => ['nullable', 'integer', 'max_digits:4'],
-        'observaciones' => ['nullable', 'string', 'max:255'],
-        'vigente' => ['nullable', 'integer', 'between:0,1'],
-        'resolucion_archivo' => ['nullable', 'string', 'max:255'],
-    ];
-}
-
-public function withValidator($validator)
-{
-    $validator->after(function ($validator) {
-        $anioApertura = $this->input('anio_apertura');
-        $anioFin = $this->input('anio_fin');
-
-        if ($anioFin && $anioApertura && $anioFin <= $anioApertura) {
-            $validator->errors()->add('anio_fin', 'El año de cierre debe ser posterior al año de apertura.');
-        }
-    });
-}
-
+    {
+        return [
+            "anio_apertura" => [
+                'required',
+                'numeric',
+            ],
+            'anio_fin' => ['nullable', 'integer', 'gt:anio_apertura', 'max_digits:4'],
+            'observaciones' => ['nullable', 'string', 'max:255'],
+            "vigente" => ['nullable', 'integer', 'between:0,1'],
+            "resolucion_archivo" => ['nullable', 'string', 'max:255'],
+        ];
+    }
 
     public function messages()
     {
         return [
             'anio_fin.gt' => 'El año de cierre debe ser posterior al año de apertura.',
-            'anio_apertura.between' => 'El año de apertura debe estar entre ' . (now()->year - 1) . ' y ' . (now()->year + 1) . '.',
-            'anio_apertura.numeric' => 'El año de apertura debe ser un número válido.',
             'anio_fin.max_digits' => 'El año de cierre no debe tener más de 4 dígitos.',
         ];
     }
