@@ -25,6 +25,10 @@ class EditarCarreraRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "anio_apertura" => [
+                'required',
+                'numeric',
+            ],
             'anio_fin' => ['nullable', 'integer', 'gt:anio_apertura', 'max_digits:4'],
             'observaciones' => ['nullable', 'string', 'max:255'],
             "vigente" => ['nullable', 'integer', 'between:0,1'],
@@ -35,10 +39,16 @@ class EditarCarreraRequest extends FormRequest
     public function messages()
     {
         return [
-            'anio_fin.gte' => 'El año de cierre debe ser posterior al año de apertura.',
-            'anio_apertura.between' => 'El año de apertura debe estar entre ' . (now()->year - 1) . ' y ' . (now()->year + 1) . '.',
-            'anio_apertura.numeric' => 'El año de apertura debe ser un número válido.',
+            'anio_fin.gt' => 'El año de cierre debe ser posterior al año de apertura.',
             'anio_fin.max_digits' => 'El año de cierre no debe tener más de 4 dígitos.',
         ];
     }
+
+    public function attributes()
+{
+    return [
+        'anio_fin' => 'año de cierre',
+        'anio_apertura' => 'año de apertura',
+    ];
+}
 }

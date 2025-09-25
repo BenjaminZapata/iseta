@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('alumnos', function (Blueprint $table) {
-            $table->string('lugar_nacimiento')->nullable();
+        Schema::table('asignaturas', function (Blueprint $table) {
+            $table->integer('cantidad_modulo')->default(0);
+            $table->integer('carga_horaria')->nullable()->change();
+            $table->integer('anio')->nullable()->change();
+            $table->dropColumn('id_carrera');
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('alumnos', function (Blueprint $table) {
-            $table->dropColumn('lugar_nacimiento');
-        });
+        //
     }
 };

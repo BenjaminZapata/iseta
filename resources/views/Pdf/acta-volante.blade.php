@@ -96,13 +96,13 @@
                 <th rowspan="2">N°</th>
                 <th rowspan="2">Nombre y Apellido</th>
                 <th colspan="4">Calificación</th>
-                <th rowspan="2">DNI</th>
+                <th id="dni" rowspan="2">DNI</th>
             </tr>
             <tr>
-                <th>Oral</th>
-                <th>Escrito</th>
-                <th>Prom.</th>
-                <th>Equi.</th>
+                <th id="oral">Oral</th>
+                <th id="escrito">Escrito</th>
+                <th id="promedio">Prom.</th>
+                <th id="equivalencia">Equi.</th>
             </tr>
         </thead>
         <tbody>
@@ -111,11 +111,11 @@
                 <tr>
                     <td>{{ $actual }}</td>
                     <td class="name-cell">{{ $examen->alumno->apellido }}, {{ $examen->alumno->nombre }}</td>
-                    <td>@if($examen->tipo_final == 2) X @endif</td>
-                    <td>@if($examen->tipo_final == 1) X @endif</td>
-                    <td>@if($examen->tipo_final == 3) X @endif</td>
-                    <td>@if($examen->tipo_final == 4) X @endif</td>
-                    <td>{{ $examen->alumno->dni }}</td>
+                    <td headers="oral">@if($examen->tipo_final == 2) {{$examen->nota}} @endif</td>
+                    <td headers="escrito">@if($examen->tipo_final == 1) {{$examen->nota}} @endif</td>
+                    <td headers="promedio">@if($examen->tipo_final == 3) {{$examen->nota}} @endif</td>
+                    <td headers="equivalencia">@if($examen->tipo_final == 4) {{$examen->nota}} @endif</td>
+                    <td headers="dni">{{ $examen->alumno->dni }}</td>
                 </tr>
                 @php $actual++; @endphp
             @endforeach

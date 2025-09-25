@@ -120,7 +120,7 @@ class ProfesoresCrudController extends BaseController
                     ->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');
             }
 
-
+            $profesor->delete();
             return redirect()->route('admin.profesores.index')
                 ->with('mensaje', 'Se ha eliminado el Profesor.');
         } catch (\Exception $e) {
