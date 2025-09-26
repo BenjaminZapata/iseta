@@ -4,7 +4,7 @@
 <div>
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'CREAR ASIGNATURA'])
-        
+
         <div class="perfil__info">
             <form method="post" action="{{ route('admin.asignaturas.store') }}">
                 @csrf
@@ -13,29 +13,29 @@
                 <div class="perfil_dataname">
                     <label>Asignatura:</label>
                     <input class="campo_info rounded"
-                           name="nombre"
-                           value="{{ old('nombre') }}">
-                    
+                        name="nombre"
+                        value="{{ old('nombre') }}">
+
                 </div>
 
 
                 {{-- Carga horaria --}}
                 <div class="perfil_dataname">
                     <label>Cantidad de modulos:</label>
-                    <input class="campo_info rounded" 
-                           name="cantidad_modulo" 
-                           value="{{ old('cantidad_modulo') }}">
-                   
+                    <input class="campo_info rounded"
+                        name="cantidad_modulo"
+                        value="{{ old('tipo_modulo') }}">
+
                 </div>
 
                 {{-- Observaciones --}}
                 <div class="perfil_dataname">
                     <label>Observaciones:</label>
-                    <input class="campo_info rounded" 
-                           name="observaciones" 
-                           value="{{ old('observaciones') }}">
+                    <input class="campo_info rounded"
+                        name="observaciones"
+                        value="{{ old('observaciones') }}">
                     @error('observaciones')
-                        <small class="text-red-500">{{ $message }}</small>
+                    <small class="text-red-500">{{ $message }}</small>
                     @enderror
                 </div>
 

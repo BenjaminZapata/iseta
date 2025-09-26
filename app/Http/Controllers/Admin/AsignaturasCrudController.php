@@ -69,27 +69,27 @@ class AsignaturasCrudController extends BaseController
      * Store a newly created resource in storage.
      */
     public function store(CrearAsignaturaRequest $request)
-{
-    $data = $request->validated();
+    {
+        $data = $request->validated();
 
-    // Verificar unicidad contextual
-    $existe = Asignatura::where('nombre', $data['nombre'])
-        ->where('cantidad_modulo', $data['cantidad_modulo'])            
-        ->exists();
+        // Verificar unicidad contextual
+        $existe = Asignatura::where('nombre', $data['nombre'])
+            ->where('tipo_modulo', $data['cantidad_modulo'])
+            ->exists();
 
-    if ($existe) {
-        return redirect()->back()
-            ->withErrors(['nombre' => 'Ya existe una asignatura con ese nombre y cantidad de módulos en esta carrera.'])
-            ->withInput();
+        if ($existe) {
+            return redirect()->back()
+                ->withErrors(['nombre' => 'Ya existe una asignatura con ese nombre y cantidad de módulos en esta carrera.'])
+                ->withInput();
+        }
+
+        // Generar clave única
+        $data['clave_unica'] = \Str::uuid(); // o lógica propia
+
+        Asignatura::create($data);
+
+        return redirect()->back()->with('mensaje', 'Se creó la asignatura correctamente.');
     }
-
-    // Generar clave única
-    $data['clave_unica'] = \Str::uuid(); // o lógica propia
-
-    Asignatura::create($data);
-
-    return redirect()->back()->with('mensaje', 'Se creó la asignatura correctamente.');
-}
 
 
 
