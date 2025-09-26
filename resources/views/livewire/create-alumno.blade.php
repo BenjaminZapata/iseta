@@ -231,6 +231,7 @@
             </fieldset>
         </div>
         <div class="botones-derecha">
+            <x-btn-cancelar />
             <button type="submit" class="btn_blue">
                 Siguiente: Carreras<i class="ti ti-chevron-right"
                     style="font-size: 1.3em; margin-left: 8px;"></i></button>
@@ -263,7 +264,9 @@
                     <li>
                         {{ $c['carrera_nombre'] }}
                         <button class="btn_red_outline" type="button"
-                            wire:click="eliminarCarrera({{ $c['id_carrera'] }})">Eliminar</button>
+                            wire:click="eliminarCarrera({{ $c['id_carrera'] }})">
+                            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
+                        </button>
                     </li>
                     @endforeach
                 </ul>

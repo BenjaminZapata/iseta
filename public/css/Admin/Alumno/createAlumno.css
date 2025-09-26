@@ -70,10 +70,6 @@ legend {
  border-color: #e3342f !important;
 }
 
-.is-valid {
- border-color: #38c172 !important;
-}
-
 /* --- Mensajes de error --- */
 .campo-alert {
  font-size: 0.8rem;
@@ -119,10 +115,6 @@ ul.carreras-list button {
  background: none;
  border: none;
  cursor: pointer;
-}
-
-ul.carreras-list button:hover {
- text-decoration: underline;
 }
 
 .botones-create {
