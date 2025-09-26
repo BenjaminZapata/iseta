@@ -55,6 +55,10 @@
                             <label class="label-input-y-75">Observaciones:
                                 <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
                             </label>
+
+                         <label class="label-input-y-75">Archivo de Resolucion:
+                                <input type="text" name="resolucion_archivo" value="{{ $carrera->resolucion_archivo }}">
+                            </label>
                             <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
                         </div>
                     </fieldset>

@@ -12,7 +12,8 @@
             $form->text('resolucion', 'Resolucion:', 'label-input-y-75'),
             $form->text('anio_apertura', 'Año de apertura:', 'label-input-y-75'),
             $form->text('anio_fin', 'Año de cierre:', 'label-input-y-75'),
-            $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75')
+            $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75'),
+            $form->text('resolucion_archivo', 'archivo de la resolucion:','label-input-y-75')
         ]
     ]) ?>
             </div>
