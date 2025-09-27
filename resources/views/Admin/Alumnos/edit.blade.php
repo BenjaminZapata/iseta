@@ -29,7 +29,7 @@
                         'Fotocopia del título original secundario',
                     ]),
                 ],
-                'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno), $form->select('estado', 'Estado:', 'label-input-y-75', $alumno, ['Activo', 'Inactivo'])],
+                'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)],
             ]) ?>
 
         <div class="boton-eliminar">

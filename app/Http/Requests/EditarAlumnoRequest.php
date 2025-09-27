@@ -50,7 +50,6 @@ class EditarAlumnoRequest extends FormRequest
             'telefono1' => ['required', new Telefono],
             'telefono2' => ['nullable', new Telefono],
             'codigo_postal' => ['nullable', 'string', 'max:10'],
-            'estado' => ['required', 'integer', 'between:0,2'],
             'titulo_secundario' => ['required', 'integer', 'between:0,3'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
         ];
