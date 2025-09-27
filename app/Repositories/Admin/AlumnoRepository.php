@@ -61,7 +61,7 @@ class AlumnoRepository
                 break;
             case '0':
                 $query->where('alumnos.titulo_secundario', 0)
-                    ->whereDate('alumnos.fecha_titulo_secundario', '=>', now()->subDays(60));
+                    ->whereDate('alumnos.fecha_titulo_secundario', '>=', now()->subDays(60));
                 break;
             default:
                 break;
