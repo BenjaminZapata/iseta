@@ -26,6 +26,8 @@ class CarreraRepository
    $filterVigente = $request->input('filter_vigente', '');
     $resolucionNumero      = $request->input('filter_resolucion_numero');
     $resolucionAnio        = $request->input('filter_resolucion_anio');
+    $filterNombre = $request->input('filter_nombre');
+    $filterResolucion = $request->input('filter_resolucion');
     $hasSearch             = $request->filled('filter_search_box') && $request->filled('filter_field');
     $query                 = Carrera::with('asignaturas');
 
@@ -59,6 +61,13 @@ class CarreraRepository
     $query->where('carreras.vigente', 1); // Por defecto, solo vigentes
 }
 
+if (!empty($filterNombre)) {
+    $query->where('carreras.nombre', $filterNombre);
+}
+
+if (!empty($filterResolucion)) {
+    $query->where('carreras.resolucion', $filterResolucion);
+}
     if (!empty($resolucionNumero)) {
         $query->whereRaw("SUBSTRING_INDEX(carreras.resolucion, '/', 1) LIKE ?", ["%{$resolucionNumero}%"]);
     }
@@ -74,10 +83,6 @@ class CarreraRepository
 
     return $query->paginate($this->config['filas_por_tabla']);
 }
-
-
-
-
     public function setAsignatura($asignatura, $carrera)
     {
         // Implement logic to associate asignatura with carrera if needed
