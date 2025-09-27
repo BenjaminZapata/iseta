@@ -28,39 +28,52 @@
                     <fieldset class="p-2" style="margin:10px;">
                         <legend class="font-600 font-7">Información</legend>
                         <div class="grid-2 gap-2 p-0">
-                            <label class="perfil_dataname">Nombre:
-                                <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
-                            </label>
-                            <label class="perfil_dataname">Resolucion:
-                                <p class="campo_info-noinput rounded"> {{ $carrera->resolucion }} </p>
-                            </label>
-                            <label class="perfil_dataname">Año de apertura:
-                                <p class="campo_info-noinput rounded"> {{ $carrera->anio_apertura }} </p>
-                                <input type="hidden" name="anio_apertura" value="{{ $carrera->anio_apertura }}">
-                            </label>
-                            <label class="label-input-y-75">Estado:
-                                <select name="vigente" class="campo_info rounded" value="{{ $carrera->vigente }}">
-                                    <option value="{{ $carrera->vigente }}" selected>
-                                        {{ $carrera->vigente ? 'Vigente' : 'No vigente' }}</option>
-                                    @if ($carrera->vigente == 1)
-                                        <option value="0">No vigente</option>
-                                    @else
-                                        <option value="1">Vigente</option>
-                                    @endif
-                                </select>
-                            </label>
-                            <label class="label-input-y-75">Año de cierre:
-                                <input type="text" name="anio_fin" value="{{ $carrera->anio_fin }}">
-                            </label>
-                            <label class="label-input-y-75">Observaciones:
-                                <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
-                            </label>
+    <label class="perfil_dataname">Nombre:
+        <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
+    </label>
 
-                         <label class="label-input-y-75">Archivo de Resolucion:
-                                <input type="text" name="resolucion_archivo" value="{{ $carrera->resolucion_archivo }}">
-                            </label>
-                            <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
-                        </div>
+    <label class="perfil_dataname">Resolución:
+        <p class="campo_info-noinput rounded"> {{ $carrera->resolucion }} </p>
+    </label>
+
+    <label class="perfil_dataname">Año de apertura:
+        <p class="campo_info-noinput rounded"> {{ $carrera->anio_apertura }} </p>
+        <input type="hidden" name="anio_apertura" value="{{ $carrera->anio_apertura }}">
+    </label>
+
+    <label class="label-input-y-75">Estado:
+        <select name="vigente" class="campo_info rounded" value="{{ $carrera->vigente }}">
+            <option value="{{ $carrera->vigente }}" selected>
+                {{ $carrera->vigente ? 'Vigente' : 'No vigente' }}</option>
+            @if ($carrera->vigente == 1)
+                <option value="0">No vigente</option>
+            @else
+                <option value="1">Vigente</option>
+            @endif
+        </select>
+    </label>
+
+    <label class="label-input-y-75">Año de cierre:
+        <input type="text" name="anio_fin" value="{{ $carrera->anio_fin }}">
+    </label>
+
+    <label class="label-input-y-75">Observaciones:
+        <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
+    </label>
+
+    <label class="label-input-y-75">Archivo de la resolución:
+        @if($carrera->resolucion_archivo)
+            <p class="campo_info-noinput rounded">
+                <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank">Ver PDF</a>
+            </p>
+        @else
+            <p class="campo_info-noinput rounded text-muted">No se ha cargado ningún archivo</p>
+        @endif
+    </label>
+</div>
+
+                        
+
                     </fieldset>
                     <div class="botones-derecha">
 
@@ -77,7 +90,6 @@
                             @endif
                             {{-- @endif --}}
                         </button>
-
                     </div>
                 </form>
                 <div class="boton-eliminar">

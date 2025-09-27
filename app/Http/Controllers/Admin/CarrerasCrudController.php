@@ -74,14 +74,26 @@ class CarrerasCrudController extends BaseController
      * Store a newly created resource in storage.
      */
     public function store(CrearCarreraRequest $request)
-    {
-        $data = $request->validated();
+{
+    $data = $request->validated();
 
-        $data['vigente'] = 1;
+    $request->validate([
+        'resolucion_archivo' => 'nullable|file|mimes:pdf|max:20480',
+    ]);
 
-        Carrera::create($data);
-        return redirect()->route('admin.carreras.index');
+    $data['vigente'] = 1;
+
+    if ($request->hasFile('resolucion_archivo')) {
+        $nombre = str_replace(' ', '_', $request->input('nombre')) . '.pdf';
+        $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
+        $data['resolucion_archivo'] = 'storage/' . $ruta;
     }
+
+    Carrera::create($data);
+
+    return redirect()->route('admin.carreras.index');
+}
+
 
     public function show(Carrera $carrera)
     {
@@ -119,11 +131,6 @@ class CarrerasCrudController extends BaseController
         try
         {
             $datos = $request->validated();
-
-            if ($request->has('resolucion_archivo')) {
-                $request->file('resolucion_archivo')->storeAs(str_replace(' ', '_', $datos['nombre']) . '.pdf');
-                $datos['resolucion_archivo'] = str_replace(' ', '_', $datos['nombre']) . '.pdf';
-            }
 
             $carrera->update($datos);
 
