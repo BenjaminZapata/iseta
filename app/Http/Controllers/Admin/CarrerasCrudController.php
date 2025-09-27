@@ -200,6 +200,7 @@ class CarrerasCrudController extends BaseController
             $data = $request->validated();
             log::debug($data);
             if (CarreraAsignaturaProfesor::where('id_asignatura', $data['id_asignatura'])->where('id_carrera', $carrera->id)->exists()) {
+                Log::error('La asignatura ya está asignada a la carrera');
                 return redirect()->back()->with('error', 'La asignatura ya está asignada a la carrera')->withInput();
             }
             $carrera->asignaturas()->attach(["asignatura" => $data]);
