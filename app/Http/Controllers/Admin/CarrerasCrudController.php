@@ -85,11 +85,13 @@ class CarrerasCrudController extends BaseController
 
     $data['vigente'] = 1;
 
-    if ($request->hasFile('resolucion_archivo')) {
-        $nombre = str_replace(' ', '_', $request->input('nombre')) . '.pdf';
-        $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
-        $data['resolucion_archivo'] = 'storage/' . $ruta;
-    }
+  if ($request->hasFile('resolucion_archivo')) {
+    $nombre = str_replace(' ', '_', $request->input('nombre')) . '.pdf';
+    $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
+    $data['resolucion_archivo'] = 'storage/' . $ruta;
+
+}
+
 
     Carrera::create($data);
 
@@ -133,6 +135,8 @@ class CarrerasCrudController extends BaseController
         try
         {
             $datos = $request->validated();
+           
+
 
             $carrera->update($datos);
 
@@ -145,6 +149,7 @@ class CarrerasCrudController extends BaseController
             Log::error($e);
             return redirect()->back()->with('error', 'No se pudo editar la carrera');
         }
+        
     }
 
     public function createAsignaturaView(Carrera $carrera)
