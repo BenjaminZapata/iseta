@@ -16,22 +16,31 @@ class Telefono implements ValidationRule
     {
         $value = (string) $value;
 
+        if (strlen($value) > 30) {
+            $fail('El campo telefono no puede superar los 30 caracteres.');
+
+            return;
+        }
+
         // Validar que el + esté solo al inicio si existe
         if (substr_count($value, '+') > 1 || (strpos($value, '+') > 0)) {
             $fail("El campo telefono solo puede contener un '+' al inicio.");
+
             return;
         }
 
         // Contar guiones
         $dashCount = substr_count($value, '-');
         if ($dashCount < 1 || $dashCount > 2) {
-            $fail("El campo telefono debe contener al menos 1 y como máximo 2 guiones (-).");
+            $fail('El campo telefono debe contener al menos 1 y como máximo 2 guiones (-).');
+
             return;
         }
 
         // Verificar que no haya guiones consecutivos ni al inicio/final
         if (preg_match('/(^-|--|-$)/', $value)) {
-            $fail("Los guiones no pueden estar al inicio, al final ni consecutivos.");
+            $fail('Los guiones no pueden estar al inicio, al final ni consecutivos.');
+
             return;
         }
 
@@ -39,12 +48,13 @@ class Telefono implements ValidationRule
         $open = substr_count($value, '(');
         $close = substr_count($value, ')');
         if ($open !== $close) {
-            $fail("Los paréntesis deben estar balanceados.");
+            $fail('Los paréntesis deben estar balanceados.');
+
             return;
         }
 
         // Validar caracteres permitidos
-        if (!preg_match('/^\+?[0-9a-zA-Z\-\(\) ]+$/', $value)) {
+        if (! preg_match('/^\+?[0-9a-zA-Z\-\(\) ]+$/', $value)) {
             $fail("El campo telefono solo puede contener números, letras, guiones (-), paréntesis () y espacios, con '+' solo al inicio.");
         }
     }
