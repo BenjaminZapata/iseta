@@ -42,8 +42,8 @@ class Asignatura extends Model
     return $this->belongsToMany(
         Carrera::class,
         'carrera_asignatura_profesor',
-        'id_asignatura',              
-        'id_carrera'                   
+        'id_asignatura',
+        'id_carrera'
     )
     ->withPivot('id_profesor','tipo_modulo','carga_horaria','anio')
     ->using(CarreraAsignaturaProfesor::class)
@@ -147,4 +147,3 @@ class Asignatura extends Model
 
 
 }
-

@@ -187,6 +187,7 @@ class CarrerasCrudController extends BaseController
     {
         log::debug($request->all());
         $carrera = Carrera::find($request->carrera);
+        Log::debug($carrera);
         $asignaturas = Asignatura::orderBy('nombre')->get();
         $id_asignatura = $request->id_asignatura ?? null;
         return view('Admin.Carreras.add_asignatura', [
@@ -197,14 +198,17 @@ class CarrerasCrudController extends BaseController
     }
     public function addAsignatura(AddAsignaturaRequest $request, Carrera $carrera)
     {
-            $data = $request->validated();
-            log::debug($data);
-            if (CarreraAsignaturaProfesor::where('id_asignatura', $data['id_asignatura'])->where('id_carrera', $carrera->id)->exists()) {
-                Log::error('La asignatura ya está asignada a la carrera');
-                return redirect()->back()->with('error', 'La asignatura ya está asignada a la carrera')->withInput();
-            }
-            $carrera->asignaturas()->attach(["asignatura" => $data]);
-            return redirect()->back()->with('mensaje', 'Se agrego la asignatura a la carrera');
+        $data = $request->validated();
+        $carreraT = Carrera::with('asignaturas')->find(20);
+        log::debug($data);
+        log::debug($carrera);
+     
+    
+        
+            
+        
+        $carrera->asignaturas()->attach(["asignatura" => $data]);
+        return redirect()->back()->with('mensaje', 'Se agrego la asignatura a la carrera');
     }
 
     public function destroy(Carrera $carrera)

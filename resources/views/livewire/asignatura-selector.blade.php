@@ -1,4 +1,4 @@
-<form method="post" action="{{ route('admin.carreras.addAsignatura') }}" id="add_asignatura">
+<form method="post" action="{{ route('admin.carreras.addAsignatura', ['carrera' => $carrera]) }}" id="add_asignatura">
     @csrf
     <div x-data="{ anio: $wire.entangle('anio').live }">
         <div class="perfil__info">
@@ -9,13 +9,9 @@
             </div>
             <div class="perfil_dataname">
                 <label>Año:</label>
-                <select
-                    name="anio"
-                    class="campo_info rounded"
-                    wire:model.change="anio"
-                >
+                <select name="anio" class="campo_info rounded" wire:model.change="anio">
                     <option value="{{ $anio }}">
-                        @if ($anio  == null )
+                        @if ($anio == null)
                             ingrese el año de asignatura a buscar
                         @else
                             {{ $anio }}º año
@@ -33,23 +29,21 @@
                 <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
                     form="add_asignatura">
                     @foreach ($asignaturas->where('anio', $anio) as $selectedId)
-                            <option value="{{ $selectedId->id }}">
-                                {{ $selectedId->nombre }}
-                            </option>
+                        <option value="{{ $selectedId->id }}">
+                            {{ $selectedId->nombre }}
+                        </option>
                     @endforeach
                 </select>
             </div>
 
 
             {{-- Carga horaria --}}
-                <div class="perfil_dataname">
-                    <label>Cantidad de modulos:</label>
-                    <input class="campo_info rounded"
-                           name="carga_horaria"
-                           wire:model="carga_horaria"
-                           value="{{ old('carga_horaria') }}">
+            <div class="perfil_dataname">
+                <label>Cantidad de modulos:</label>
+                <input class="campo_info rounded" name="carga_horaria" wire:model="carga_horaria"
+                    value="{{ old('carga_horaria') }}">
 
-                </div>
+            </div>
         </div>
     </div>
     <div class="botones-derecha"
