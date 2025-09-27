@@ -8,15 +8,14 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Str;
 
 class Alumno extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, ModelTrait;
+    use HasApiTokens, HasFactory, ModelTrait, Notifiable;
 
     protected $table = 'alumnos';
+
     public $timestamps = false;
 
     /**
@@ -48,6 +47,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'titulo_secundario',
         'genero',
         'lugar_nacimiento',
+        'estado',
     ];
 
     /**
@@ -72,11 +72,11 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     ];
 
     public function egresado()
-{
-    return $this->hasOne(Egresado::class, 'id_alumno', 'id');
-}
-    
-    static function existeSinPassword($data)
+    {
+        return $this->hasOne(Egresado::class, 'id_alumno', 'id');
+    }
+
+    public static function existeSinPassword($data)
     {
         return Alumno::where('email', $data['email'])
             ->where('password', '0')
@@ -127,12 +127,12 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Examen::class, 'id_alumno');
     }
 
-    function textForSelect()
+    public function textForSelect()
     {
         return $this->apellidoNombre();
     }
 
-    function elementsForDropdown($filter)
+    public function elementsForDropdown($filter)
     {
         if ($filter == 'orderByApellidoNombre') {
             return Alumno::select()->orderBy('apellido')->orderBy('nombre')->get();
@@ -141,12 +141,12 @@ class Alumno extends Authenticatable implements MustVerifyEmail
 
     public function nombreApellido()
     {
-        return $this->nombre . ' ' . $this->apellido;
+        return $this->nombre.' '.$this->apellido;
     }
 
     public function apellidoNombre()
     {
-        return $this->apellido . ' ' . $this->nombre;
+        return $this->apellido.' '.$this->nombre;
     }
 
     public function dniPuntos()
@@ -194,15 +194,16 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         $this->attributes['calle'] = TextFormatService::ucfirst($value);
     }
 
-    function ciudades()
+    public function ciudades()
     {
         $result = Alumno::select('ciudad')->distinct('ciudad')->get()->pluck('ciudad');
         $ciudades = ['Cualquiera'];
         foreach ($result as $ciudad) {
-            if (!in_array(trim($ciudad), $ciudades)) {
+            if (! in_array(trim($ciudad), $ciudades)) {
                 $ciudades[trim($ciudad)] = trim($ciudad);
             }
         }
+
         return $ciudades;
     }
 
@@ -212,11 +213,11 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             'No entregado',
             'Fotocopia del título original secundario',
             'Certificado de constancia de título en trámite',
-            'Constancia de alumno del último año del nivel secundario'
+            'Constancia de alumno del último año del nivel secundario',
         ];
+
         return $titulo[$this->titulo];
     }
-
 
     public function genero()
     {
@@ -238,7 +239,4 @@ class Alumno extends Authenticatable implements MustVerifyEmail
             default => 'Desconocido',
         };
     }
-    
-
-
 }
