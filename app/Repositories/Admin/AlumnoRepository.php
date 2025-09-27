@@ -49,35 +49,9 @@ class AlumnoRepository
                         });
                     }
                 });
-            } elseif ($field === 'titulo_secundario') {
-                $map = [
-                    0 => 'No entregado',
-                    1 => 'Certificado de constancia de título en trámite',
-                    2 => 'Constancia de alumno del último año del nivel secundario',
-                    3 => 'Fotocopia del título original secundario',
-                ];
-
-                $normalize = fn ($string) => strtolower(iconv('UTF-8', 'ASCII//TRANSLIT', $string));
-                $searchNormalized = $normalize($search);
-
-                $matchedKeys = collect($map)
-                    ->filter(fn ($texto) => stripos($normalize($texto), $searchNormalized) !== false)
-                    ->keys()
-                    ->all();
-
-                if (! empty($matchedKeys)) {
-                    $query->whereIn('alumnos.titulo_secundario', $matchedKeys);
-                    if ($request->filter_vencido == 1) {
-                        $query->where('alumnos.titulo_secundario', 0)
-                            ->whereDate('alumnos.fecha_titulo_secundario', '<=', now()->subDays(60));
-
-                    }
-                } elseif ($request->filter_vencido == 0) {
-                    $query->where('alumnos.titulo_secundario', 0)
-                        ->whereDate('alumnos.fecha_titulo_secundario', '=>', now()->subDays(60));
-                }
-            } else {
-                $query->where("alumnos.$field", 'LIKE', "%$search%");
+            }
+            if ($field === 'titulo_secundario') {
+                $query->where('alumnos.titulo_secundario', '=', $request->titulo_secundario);
             }
         }
         switch ($request->filter_vencido) {
@@ -91,10 +65,6 @@ class AlumnoRepository
                 break;
             default:
                 break;
-        }
-        // Filtro directo por título
-        if (! is_null($request->input('filter_titulo'))) {
-            $query->where('alumnos.titulo_secundario', $request->input('filter_titulo'));
         }
 
         // Orden y paginación
