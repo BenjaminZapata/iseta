@@ -27,32 +27,19 @@
             {{-- FILTROS --}}
             <?= $filtergen->generate('admin.alumnos.index', $filters, [
                     'dropdowns' => [
+                        $form->select('filter_titulo', 'Estado del título:', 'label-input-y-100', old('filter_titulo', $filters->filter_titulo ?? null), [
+                            null => 'Todos',
+                            0 => 'No entregado',
+                            1 => 'Certificado de constancia de título en trámite',
+                            2 => 'Constancia de alumno del último año del nivel secundario',
+                            3 => 'Fotocopia del título original secundario',
+                        ]),
 
-                        $form->select(
-                            'filter_titulo',
-                            'Estado del título:',
-                            'label-input-y-100',
-                            old('filter_titulo', $filters->filter_titulo ?? null),
-                            [
-                                null => 'Todos',
-                                0 => 'No entregado',
-                                1 => 'Certificado de constancia de título en trámite',
-                                2 => 'Constancia de alumno del último año del nivel secundario',
-                                3 => 'Fotocopia del título original secundario',
-                            ]
-                        ),
-
-                        $form->select(
-                            'filter_vencido',
-                            'Plazo de entrega del título:',
-                            'label-input-y-100',
-                            old('filter_vencido', $filters->filter_vencido ?? 'null'),
-                            [
-                                null => 'Todos',
-                                1 => 'Vencido',
-                                0 => 'No vencido',
-                            ]
-                    ),
+                        $form->select('filter_vencido', 'Plazo de entrega del título:', 'label-input-y-100', old('filter_vencido', $filters->filter_vencido ?? 'null'), [
+                            null => 'Todos',
+                            1 => 'Vencido',
+                            0 => 'No vencido',
+                        ]),
                     ],
                     'fields' => [
                         'nombre' => 'Nombre',
@@ -104,15 +91,16 @@
                         </td>
                         <td>
                             @php
-                            $titulo = [
-            'No entregado',
-            'Fotocopia del título original secundario',
-            'Certificado de constancia de título en trámite',
-            'Constancia de alumno del último año del nivel secundario'
-        ];
+                                $titulo = [
+                                    'No entregado',
+                                    'Fotocopia del título original secundario',
+                                    'Certificado de constancia de título en trámite',
+                                    'Constancia de alumno del último año del nivel secundario',
+                                ];
                             @endphp
-                           <p class="bold" style="text-transform: uppercase;">titulo: {{ $titulo[$alumno->titulo_secundario] }}</p>
-                        <p>estado: {{ $alumno->egresado?->estado_texto ?? 'Sin inscripción' }}</p>
+                            <p class="bold" style="text-transform: uppercase;">titulo:
+                                {{ $titulo[$alumno->titulo_secundario] }}</p>
+                            <p>estado: {{ $alumno->egresado?->estado_texto ?? 'Sin inscripción' }}</p>
 
 
 
