@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\AddAsignaturaRequest;
+use App\Http\Requests\CrearAsignaturaRequest;
 use App\Http\Requests\CrearCarreraRequest;
 use App\Http\Requests\EditarCarreraRequest;
-use App\Http\Requests\CrearAsignaturaRequest;
-use App\Models\Carrera;
 use App\Models\Asignatura;
+use App\Models\Carrera;
 use App\Repositories\Admin\CarreraRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\View\View;
-use App\Models\Alumno;
 
 class CarrerasCrudController extends BaseController
 {
-
     public $defaultFilters = [
         'filter_vigente' => 0,
     ];
@@ -37,6 +35,7 @@ class CarrerasCrudController extends BaseController
     {
         $this->setFilters($request);
 
+        $request->flash();
         $carreras = $this->carreraRepo->index($request);
 
         // Obtener años disponibles para cada carrera
@@ -56,10 +55,12 @@ class CarrerasCrudController extends BaseController
 
         $this->data['carreras'] = $carreras;
         $this->data['aniosPorCarrera'] = $aniosPorCarrera;
+      $filterVigente = $request->input('filter_vigente', '');
+
+
 
         return view('Admin.Carreras.index', $this->data);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -76,15 +77,28 @@ class CarrerasCrudController extends BaseController
     {
         $data = $request->validated();
 
+        $request->validate([
+            'resolucion_archivo' => 'nullable|file|mimes:pdf|max:20480',
+        ]);
+
         $data['vigente'] = 1;
 
+        if ($request->hasFile('resolucion_archivo')) {
+            $nombre = str_replace(' ', '_', $request->input('nombre')).'.pdf';
+            $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
+            $data['resolucion_archivo'] = 'storage/'.$ruta;
+
+        }
+
         Carrera::create($data);
+
         return redirect()->route('admin.carreras.index');
     }
 
     public function show(Carrera $carrera)
     {
         $carrera->load('asignaturas');
+
         return view('Admin.Carreras.show', ['carrera' => $carrera]);
     }
 
@@ -93,11 +107,8 @@ class CarrerasCrudController extends BaseController
      */
     public function edit(Carrera $carrera)
     {
-        $carrera->load('asignaturas');
-
         // Obtener los años disponibles de cursadas para esta carrera
-        $anios = \DB::table('cursadas')
-            ->where('id_carrera', $carrera->id)
+        $anios = $carrera->cursadas()
             ->whereNotNull('anio_cursada')
             ->distinct()
             ->orderByDesc('anio_cursada')
@@ -107,34 +118,31 @@ class CarrerasCrudController extends BaseController
         return view('Admin.Carreras.edit', [
             'carrera' => $carrera,
             'aniosPorCarrera' => [$carrera->id => $anios],
+            'method' => 'put',
         ]);
     }
-
-
 
     /**
      * Update the specified resource in storage.
      */
     public function update(EditarCarreraRequest $request, Carrera $carrera)
     {
-        $datos = $request->validated();
+        try {
+            $datos = $request->validated();
 
-        if ($request->has('resolucion_archivo')) {
-            $request->file('resolucion_archivo')->storeAs(str_replace(' ', '_', $datos['nombre']) . '.pdf');
-            $datos['resolucion_archivo'] = str_replace(' ', '_', $datos['nombre']) . '.pdf';
+            $carrera->update($datos);
+
+            if ($request->has('redirect')) {
+                return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la carrera');
+            } else {
+                return redirect()->back()->with('mensaje', 'Se edito la carrera');
+            }
+        } catch (\Exception $e) {
+            Log::error($e);
+
+            return redirect()->back()->with('error', 'No se pudo editar la carrera');
         }
 
-
-        $carrera->update($datos);
-
-        if (!$request->has('vigente')) {
-            $carrera->vigente = true;
-            $carrera->save();
-        }
-        if ($request->has('redirect'))
-            return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la carrera');
-        else
-            return redirect()->back()->with('mensaje', 'Se edito la carrera');
     }
 
     public function createAsignaturaView(Carrera $carrera)
@@ -164,9 +172,10 @@ class CarrerasCrudController extends BaseController
                 'anio' => $asignatura['anio'],
             ];
             log::debug($data);
-            $carrera->asignaturas()->attach(["asignatura" => $data]);
+            $carrera->asignaturas()->attach(['asignatura' => $data]);
         } catch (\Exception $e) {
             Log::error($e);
+
             return redirect()->back()->with('error', 'No se pudo agregar la asignatura');
         }
 
@@ -177,30 +186,22 @@ class CarrerasCrudController extends BaseController
     {
         log::debug($request->all());
         $carrera = Carrera::find($request->carrera);
+        Log::debug($carrera);
         $asignaturas = Asignatura::orderBy('nombre')->get();
-        $id_asignatura = $request->id_asignatura ?? null;
+
         return view('Admin.Carreras.add_asignatura', [
             'carrera' => $carrera,
             'asignaturas' => $asignaturas,
-            'id_asignatura' => $id_asignatura,
         ]);
     }
-    public function addAsignatura(Request $request, Carrera $carrera)
+
+    public function addAsignatura(AddAsignaturaRequest $request, Carrera $carrera)
     {
-        try {
-            $data = [
-                'id_carrera' => $request->carrera_id,
-                'id_asignatura' => $request->asignatura_id,
-                'anio' => $request->anio,
-                'tipo_modulo' => $request->tipo_modulo,
-                'carga_horaria' => $request->carga_horaria,
-            ];
-            log::debug($data);
-            $carrera->asignaturas()->attach(["asignatura" => $data]);
-        } catch (\Exception $e) {
-            Log::error($e);
-            return redirect()->back()->with('error', 'No se pudo agregar la asignatura');
+        $data = $request->validated();
+        if ($carrera->asignaturas()->where('id_asignatura', $data['id_asignatura'])->exists()) {
+            return redirect()->back()->with('error', 'La asignatura ya está en la carrera')->withInput();
         }
+        $carrera->asignaturas()->attach(['asignatura' => $data]);
 
         return redirect()->back()->with('mensaje', 'Se agrego la asignatura a la carrera');
     }
@@ -208,22 +209,22 @@ class CarrerasCrudController extends BaseController
     public function destroy(Carrera $carrera)
     {
         try {
-            //verificar si contiene inscriptos
+            // verificar si contiene inscriptos
             if ($carrera->inscriptos()->exists()) {
                 return redirect()->route('admin.carreras.index')
                     ->with('error', 'No se pudo eliminar la carrera. Tiene alumnos asociados.');
             }
-            //verificar si contiene alumnos en mesas futuras
+            // verificar si contiene alumnos en mesas futuras
             if ($carrera->mesas()->where('fecha', '>=', now())->exists()) {
                 return redirect()->route('admin.carreras.index')
                     ->with('error', 'No se pudo eliminar la carrera. Tiene mesas futuras asociadas.');
             }
-             // Verificar si la carrera no contiene el año de finalización
-            if (!$carrera->anio_fin) {
-             return redirect()->route('admin.carreras.index')
-            ->with('error', 'No se pudo Desactivar la carrera. No tiene un año de finalización.');
+            // Verificar si la carrera no contiene el año de finalización
+            if (! $carrera->anio_fin) {
+                return redirect()->route('admin.carreras.index')
+                    ->with('error', 'No se pudo Desactivar la carrera. No tiene un año de finalización.');
             }
-    
+
             // Ahora eliminar la carrera
             $carrera->delete();
 
@@ -231,29 +232,28 @@ class CarrerasCrudController extends BaseController
                 ->with('success', 'Carrera eliminada correctamente');
         } catch (\Throwable $e) {
             return redirect()->route('admin.carreras.index')
-                ->with('error', 'No se pudo eliminar la carrera. Verifique que no tenga relaciones asociadas.'. $e->getMessage());
+                ->with('error', 'No se pudo eliminar la carrera. Verifique que no tenga relaciones asociadas.');
         }
     }
 
-
     public function desactivar(Carrera $carrera)
     {
-            //verificar si contiene inscriptos
-            if ($carrera->inscriptos()->exists()) {
-                return redirect()->route('admin.carreras.index')
-                    ->with('error', 'No se pudo Desactivar la carrera. Tiene alumnos asociados.');
-            }
-            //verificar si contiene alumnos en mesas futuras
-            if ($carrera->mesas()->where('fecha', '>=', now())->exists()) {
-                return redirect()->route('admin.carreras.index')
-                    ->with('error', 'No se pudo Desactivar la carrera. Tiene mesas futuras asociadas.');
-            }
+        // verificar si contiene inscriptos
+        if ($carrera->inscriptos()->exists()) {
+            return redirect()->route('admin.carreras.index')
+                ->with('error', 'No se pudo Desactivar la carrera. Tiene alumnos asociados.');
+        }
+        // verificar si contiene alumnos en mesas futuras
+        if ($carrera->mesas()->where('fecha', '>=', now())->exists()) {
+            return redirect()->route('admin.carreras.index')
+                ->with('error', 'No se pudo Desactivar la carrera. Tiene mesas futuras asociadas.');
+        }
 
-             // Verificar si la carrera no contiene el año de finalización
-            if (!$carrera->anio_fin) {
-                return redirect()->route('admin.carreras.index')
+        // Verificar si la carrera no contiene el año de finalización
+        if (! $carrera->anio_fin) {
+            return redirect()->route('admin.carreras.index')
                 ->with('error', 'No se pudo Desactivar la carrera. No tiene un año de finalización.');
-            }
+        }
 
         $carrera->vigente = false;
         $carrera->anio_fin = now()->year;
@@ -273,11 +273,10 @@ class CarrerasCrudController extends BaseController
             ->with('success', 'Carrera reactivada correctamente');
     }
 
-
-
     public function deleteAsignatura(Request $request, Carrera $carrera, Asignatura $asignatura)
     {
         $carrera->asignaturas()->detach($asignatura);
+
         return redirect()->back()->with('mensaje', 'Se elimino la asignatura');
     }
 }

@@ -14,10 +14,9 @@
                     ]),
                     $form->text('lugar_nacimiento', 'Lugar de nacimiento:', 'label-input-y-75', $alumno),
                     $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, ['Vacio', 'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro']),
-                    $form->select('genero', 'Género:', 'label-input-y-75', $alumno, ['Vacio', 'Masculino', 'Femenino', 'Otro']),
                 ],
                 'Dirección' => [$form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno), $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', $alumno), $form->text('calle', 'Calle:', 'label-input-y-75', $alumno), $form->text('casa_numero', 'Altura:', 'label-input-y-75', $alumno), $form->text('dpto', 'Departamento:', 'label-input-y-75', $alumno), $form->text('piso', 'Piso:', 'label-input-y-75', $alumno)],
-                'Contacto' => [$form->text('email', 'Email:', 'label-input-y-75', $alumno), $form->text('telefono1', 'Telefono 1:', 'label-input-y-75', $alumno), $form->text('telefono2', 'Telefono 2:', 'label-input-y-75', $alumno), $form->text('telefono3', 'Telefono 3:', 'label-input-y-75', $alumno)],
+                'Contacto' => [$form->text('email', 'Email:', 'label-input-y-75', $alumno), $form->text('telefono1', 'Telefono 1:', 'label-input-y-75', $alumno), $form->text('telefono2', 'Telefono 2:', 'label-input-y-75', $alumno)],
                 'Academico' => [
                     $form->text('titulo_anterior', 'Titulo anterior:', 'label-input-y-75', $alumno),
                     $form->text('becas', 'Becas:', 'label-input-y-75', $alumno),

@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('asignaturas', function (Blueprint $table) {
-            $table->dropColumn('id_carrera');
+        Schema::table("egresadoinscripto", function (Blueprint $table) {
+            $table->tinyInteger("estado")->default(0);
         });
     }
 
@@ -21,8 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('asignaturas', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

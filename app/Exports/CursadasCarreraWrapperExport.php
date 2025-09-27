@@ -19,7 +19,6 @@ class CursadasCarreraWrapperExport implements WithMultipleSheets
  public function sheets(): array
  {
   $sheets = [];
-
   // Si se especifica asignatura_id, solo generamos una hoja
   if (!empty($this->filtros['asignatura_id'])) {
    $sheets[] = new CursadasCarreraExcelExport($this->carrera, $this->filtros);

@@ -63,7 +63,7 @@ class AdminPdfController extends Controller
                     ->where('condicion', 2);
             }])
             ->get();
-
+            Log::info($examenes);
         return pdf()
             ->view('Pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'PROMOCION'])
             ->name('acta-volante-promocion.pdf');

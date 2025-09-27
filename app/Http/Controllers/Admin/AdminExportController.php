@@ -36,8 +36,10 @@ class AdminExportController extends Controller
             'condicion' => strtolower($request->input('condicion', '')),
             'asignatura_id' => $request->input('asignatura_id')
         ];
-
-        return Excel::download(new CursadasCarreraWrapperExport($carrera, $filtros), $archivo . '.xlsx');
+        if ($carrera->cursadas->IsNotEmpty()) {
+            return Excel::download(new CursadasCarreraWrapperExport($carrera, $filtros), $archivo . '.xlsx');
+        }
+        return redirect()->back()->with('error', 'La carrera no tiene cursadas.');
     }
 
 

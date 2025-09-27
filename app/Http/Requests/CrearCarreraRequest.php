@@ -25,7 +25,7 @@ class CrearCarreraRequest extends FormRequest
     {
         return [
             'nombre' => ['required', 'string', 'max:151'],
-            'resolucion' => ['required', new Resolucion],
+            'resolucion' => ['required', new Resolucion,'unique:carreras,resolucion'],
             'anio_apertura' => [
                 'required',
                 'numeric',
@@ -45,4 +45,12 @@ class CrearCarreraRequest extends FormRequest
             'anio_fin.max_digits' => 'El año de cierre no debe tener más de 4 dígitos.',
         ];
     }
+    public function attributes()
+{
+    return [
+        'anio_fin' => 'año de cierre',
+        'anio_apertura' => 'año de apertura',
+    ];
+}
+
 }

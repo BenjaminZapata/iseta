@@ -27,10 +27,6 @@
             {{-- FILTROS --}}
             <?= $filtergen->generate('admin.alumnos.index', $filters, [
                     'dropdowns' => [
-                        $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', old('filter_carrera_id', $filters->filter_carrera_id ?? null), ['first_items' => ['Todas']]),
-
-                        $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', old('filter_ciudad', $filters->filter_ciudad ?? null), ['' => 'Cualquiera'] + $alumnoM->ciudades()),
-
                         $form->select('filter_titulo', 'Estado del título:', 'label-input-y-100', old('filter_titulo', $filters->filter_titulo ?? null), [
                             null => 'Todos',
                             0 => 'No entregado',
@@ -44,19 +40,13 @@
                             1 => 'Vencido',
                             0 => 'No vencido',
                         ]),
-
-                        $form->checkbox('filter_vencido', 'Solo títulos vencidos', 'label-input-y-100', old('filter_vencido', $filters->filter_vencido ?? false)),
                     ],
                     'fields' => [
-                        'alumno' => 'Alumno',
+                        'nombre' => 'Nombre',
+                        'apellido' => 'Apellido',
                         'dni' => 'Dni',
-                        'telefono1' => 'Telefono',
-                        'titulo_secundario' => 'Titulo',
                     ],
                 ]) ?>
-
-
-
         </div>
 
         {{-- TABLA --}}
@@ -68,7 +58,7 @@
                     <th>Alumno</th>
                     <th>Contacto</th>
                     <th>Dirección</th>
-                    <th class="center">Lugar de nacimiento</th>
+                    <th>Academico</th>
                     <th class="center">Acción</th>
                 </tr>
             </thead>
@@ -100,9 +90,20 @@
                             <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                         </td>
                         <td>
-                            <div style="display: flex; justify-content: center;">
-                                <p> {{ $alumno->lugar_nacimiento }} </p>
-                            </div>
+                            @php
+                                $titulo = [
+                                    'No entregado',
+                                    'Fotocopia del título original secundario',
+                                    'Certificado de constancia de título en trámite',
+                                    'Constancia de alumno del último año del nivel secundario',
+                                ];
+                            @endphp
+                            <p class="bold" style="text-transform: uppercase;">titulo:
+                                {{ $titulo[$alumno->titulo_secundario] }}</p>
+                            <p>estado: {{ $alumno->egresado?->estado_texto ?? 'Sin inscripción' }}</p>
+
+
+
                         </td>
                         <td class="flex just-center">
                             <div style="display: flex; justify-content: center;">

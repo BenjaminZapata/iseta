@@ -15,7 +15,7 @@ class BaseController extends Controller
         $this->config = (object) Configuracion::todas();
     }
 
-    function setFilters($request){
+    public function setFilters($request){
 
         $defaults = $this->defaultFilters;
         $defaults['filter_field'] = 0;
@@ -23,7 +23,7 @@ class BaseController extends Controller
 
         foreach($defaults as $key => $value){
             $filters[$key] = $request->has($key)?$request->input($key):$value;
-        } 
+        }
         
         $this->data['filters'] = (object) $filters;
     }

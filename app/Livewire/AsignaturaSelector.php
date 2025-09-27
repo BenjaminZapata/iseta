@@ -3,16 +3,17 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Asignatura;
-use Illuminate\Support\Facades\Log;
 
 class AsignaturaSelector extends Component
 {
     public $asignaturas;
+
     public $selectedId;
-    public $tipo_modulo;
+
     public $carga_horaria;
+
     public $anio;
+
     public $carrera;
 
     public function mount($asignaturas, $carrera)
@@ -28,10 +29,10 @@ class AsignaturaSelector extends Component
 
     public function updateAsignatura($id)
     {
-        $asignatura = Asignatura::find($id);
+        $asignatura = $this->asignaturas->find($id);
+
         if ($asignatura) {
             $this->selectedId = $asignatura->id;
-            $this->tipo_modulo = $asignatura->tipo_modulo;
             $this->carga_horaria = $asignatura->carga_horaria;
             $this->anio = $asignatura->anio;
         }

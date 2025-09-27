@@ -1,41 +1,45 @@
-<form method="post" action="{{ route('admin.carreras.addAsignatura') }}" id="add_asignatura">
+<form method="post" action="{{ route('admin.carreras.addAsignatura', ['carrera' => $carrera]) }}" id="add_asignatura">
     @csrf
-    <div class="perfil__info">
-        <div class="perfil_dataname">
-            <label for="selectedId">Asignatura:</label>
-            <select name="asignatura_id" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
-                form="add_asignatura">
-                @foreach ($asignaturas as $selectedId)
-                    <option value="{{ $selectedId->id }}">
-                        {{ $selectedId->nombre }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+    <div x-data="{ anio: $wire.entangle('anio').live }">
+        <div class="perfil__info">
+            <div class="perfil_dataname">
+                <label>Carrera:</label>
+                <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
+                <input type="hidden" name="id_carrera" value="{{ $carrera->id }}">
+            </div>
+            <div class="perfil_dataname">
+                <label>Año:</label>
+                <select name="anio" class="campo_info rounded" wire:model.change="anio">
+                    @if ($anio == null)
+                        <option value="">elija el año de la asignatura</option>
+                    @endif
+                    <option value="1" {{ $anio == 1 ? 'selected' : '' }}>1º año</option>
+                    <option value="2" {{ $anio == 2 ? 'selected' : '' }}>2º año</option>
+                    <option value="3" {{ $anio == 3 ? 'selected' : '' }}>3º año</option>
+                    <option value="4" {{ $anio == 4 ? 'selected' : '' }}>4º año</option>
+                    <option value="5" {{ $anio == 5 ? 'selected' : '' }}>5º año</option>
+                </select>
+            </div>
+            <div class="perfil_dataname">
+                <label for="selectedId">Asignatura:</label>
+                <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
+                    form="add_asignatura">
+                    @foreach ($asignaturas->where('anio', $anio)->where('id', '!=', $carrera->asignaturas->first()->id) as $selectedId)
+                        <option value="{{ $selectedId->id }}">
+                            {{ $selectedId->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
-        <div class="perfil_dataname">
-            <label>Tipo módulo:</label>
-            <select name="tipo_modulo" class="campo_info rounded" wire:model="$tipo_modulo">
-                <option value="1">Módulos</option>
-                <option value="2">Horas</option>
-            </select>
-        </div>
 
-        <div class="perfil_dataname">
-            <label>Carga horaria:</label>
-            <input name="carga_horaria" class="campo_info rounded" value="{{ $carga_horaria }}" type="number"
-                wire:model="$carga_horaria">
-        </div>
+            {{-- Carga horaria --}}
+            <div class="perfil_dataname">
+                <label>Cantidad de modulos:</label>
+                <input class="campo_info rounded" name="carga_horaria" wire:model.fill="carga_horaria"
+                    value="{{ old('carga_horaria') }}">
 
-        <div class="perfil_dataname">
-            <label>Año:</label>
-            <p class="campo_info-noinput rounded">{{ $anio }}</p>
-            <input type="hidden" name="anio" value="{{ $anio }}">
-        </div>
-        <div class="perfil_dataname">
-            <label>Carrera:</label>
-            <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
-            <input type="hidden" name="carrera_id" value="{{ $carrera->id }}">
+            </div>
         </div>
     </div>
     <div class="botones-derecha"

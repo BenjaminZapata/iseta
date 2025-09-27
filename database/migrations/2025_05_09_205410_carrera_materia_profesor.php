@@ -12,23 +12,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('carrera_asignatura_profesor', function (Blueprint $table) {
-            $table->integer('id_carrera');
-            $table->integer('id_asignatura');
-            $table->integer('id_profesor')->nullable(true);
-            $table->integer('carga_horaria');
-            $table->tinyInteger('tipo_modulo');
-            $table->integer('anio');
+        if (! Schema::hasTable('carrera_asignatura_profesor')) {
+            Schema::create('carrera_asignatura_profesor', function (Blueprint $table) {
+                $table->integer('id_carrera');
+                $table->integer('id_asignatura');
+                $table->integer('id_profesor')->nullable(true);
+                $table->integer('carga_horaria');
+                $table->tinyInteger('tipo_modulo')->nullable();
+                $table->integer('anio');
 
-            $table->primary(['id_carrera', 'id_asignatura']);
+                $table->primary(['id_carrera', 'id_asignatura']);
 
-            $table->foreign('id_carrera')->references('id')->on('carreras')->onDelete('cascade');
-            $table->foreign('id_asignatura')->references('id')->on('asignaturas')->onDelete('cascade');
-            $table->foreign('id_profesor')->references('id')->on('profesores')->onDelete('cascade');
+                $table->foreign('id_carrera')->references('id')->on('carreras')->onDelete('cascade');
+                $table->foreign('id_asignatura')->references('id')->on('asignaturas')->onDelete('cascade');
+                $table->foreign('id_profesor')->references('id')->on('profesores')->onDelete('cascade');
 
-            $table->timestamps();
-        });
-
+                $table->timestamps();
+            });
+        } else {
+            Schema::table('carrera_asignatura_profesor', function (Blueprint $table) {
+                $table->tinyInteger('tipo_modulo')->nullable();
+            });
+        }
         // Migrar los datos existentes de asignaturas.id_carrera a la tabla pivote
         DB::table('asignaturas')
             ->whereNotNull('id_carrera')

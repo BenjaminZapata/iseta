@@ -6,6 +6,7 @@ use App\Services\TextFormatService;
 use App\Traits\ModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Profesor extends Authenticatable
@@ -37,7 +38,7 @@ class Profesor extends Authenticatable
         'codigo_postal',
         'password',
         'lugar_nacimiento',
-        
+
     ];
 
     protected $casts = [
@@ -56,20 +57,22 @@ class Profesor extends Authenticatable
     ->withPivot('id_carrera')                   // Campos adicionales en la pivote
     ->withTimestamps();
 }
-    public function profesor_mesa(): BelongsToMany
+    public function profesor_mesa(): HasMany
     {
-        return $this->belongsToMany(Mesa::class, 'id', 'prof_presidente');
+        return $this->hasMany(Mesa::class, 'prof_presidente', 'id');
     }
 
-    public function profesor_mesa_vocal(): BelongsToMany
+    public function profesor_mesa_vocal(): HasMany
     {
-        return $this->belongsToMany(Mesa::class, 'id', 'prof_vocal_1');
+        return $this->hasMany(Mesa::class, 'prof_vocal_1', 'id');
     }
-    public function profesor_mesa_vocal2(): BelongsToMany
+
+    public function profesor_mesa_vocal2(): HasMany
     {
-        return $this->belongsToMany(Mesa::class, 'id', 'prof_vocal_2');
+        return $this->hasMany(Mesa::class, 'prof_vocal_2', 'id');
     }
-    function firstItemsForSelect()
+
+    public function firstItemsForSelect()
     {
         return ['0' => 'Vacio/A confirmar'];
     }

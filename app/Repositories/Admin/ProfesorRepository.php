@@ -7,10 +7,9 @@ use App\Models\Profesor;
 
 class ProfesorRepository
 {
-
     public $config;
-    public $availableFiels = ['profesor', 'dni', 'email', 'ciudad', 'telefono1'];
 
+    public $availableFiels = ['profesor', 'dni'];
 
     public function __construct()
     {
@@ -21,7 +20,6 @@ class ProfesorRepository
     {
         // Query base para obtener IDs de profesores según filtros
         $idsQuery = Profesor::select('profesores.id');
-
 
         // Filtro de búsqueda
         if ($request->has('filter_search_box') && $request->input('filter_search_box') != '') {

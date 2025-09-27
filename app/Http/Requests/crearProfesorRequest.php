@@ -38,7 +38,6 @@ class CrearProfesorRequest extends FormRequest
                     }
                 },
             ],
-
             'ciudad' => ['nullable', 'string', 'max:30'],
             'calle' => ['nullable', 'string', 'max:30'],
             'casa_numero' => ['nullable', 'numeric', 'max_digits:4'],
@@ -53,7 +52,7 @@ class CrearProfesorRequest extends FormRequest
             'telefono_2' => ['nullable', new Telefono, 'max:30'],
             'codigo_postal' => ['nullable', 'alpha_num', 'max:10'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
-            'año_ingreso' => ['required', 'date_format:Y', 'before_or_equal:now', 'after:1980'],
+            'anio_ingreso' => ['required', 'date_format:Y', 'before_or_equal:now', 'after:1980'],
         ];
     }
 
@@ -80,4 +79,11 @@ class CrearProfesorRequest extends FormRequest
             'año_ingreso.required' => 'El año de ingreso es obligatorio.',
         ];
     }
+
+    public function attributes()
+{
+    return [
+        'anio_ingreso' => 'año de ingreso'
+    ];
+}
 }
