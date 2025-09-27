@@ -23,7 +23,7 @@ class CarreraRepository
     }
     public function index($request)
 {
-    $filterVigente         = $request->input('filter_vigente', null); // '', '0', '1'
+   $filterVigente = $request->input('filter_vigente', '');
     $resolucionNumero      = $request->input('filter_resolucion_numero');
     $resolucionAnio        = $request->input('filter_resolucion_anio');
     $hasSearch             = $request->filled('filter_search_box') && $request->filled('filter_field');
@@ -35,16 +35,6 @@ class CarreraRepository
         $field = $request->input('filter_field');
 
         switch ($field) {
-            case 'asignatura':
-                $query->whereHas('asignaturas', function ($q) use ($word) {
-                    $tokens = array_filter(array_map('trim', preg_split('/[^\p{L}\p{N}]+/u', $word)));
-                    foreach ($tokens as $t) {
-                        if (mb_strlen($t) < 2) continue;
-                        $q->whereRaw("asignaturas.nombre COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$t}%"]);
-                    }
-                });
-                break;
-
             case 'resolucion':
                 $query->whereRaw("CAST(carreras.resolucion AS CHAR) COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$word}%"]);
                 break;
@@ -63,11 +53,11 @@ class CarreraRepository
     }
 
     
-    if ($filterVigente === '0' || $filterVigente === '1') {
-        $query->where('carreras.vigente', (int)$filterVigente);
-    } else {
-        $query->where('carreras.vigente', 1); // Por defecto, solo vigentes
-    }
+   if ($filterVigente === '0' || $filterVigente === '1') {
+    $query->where('carreras.vigente', (int)$filterVigente);
+} elseif ($filterVigente === '') {
+    $query->where('carreras.vigente', 1); // Por defecto, solo vigentes
+}
 
     if (!empty($resolucionNumero)) {
         $query->whereRaw("SUBSTRING_INDEX(carreras.resolucion, '/', 1) LIKE ?", ["%{$resolucionNumero}%"]);

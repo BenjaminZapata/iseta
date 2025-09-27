@@ -55,6 +55,9 @@ class CarrerasCrudController extends BaseController
 
         $this->data['carreras'] = $carreras;
         $this->data['aniosPorCarrera'] = $aniosPorCarrera;
+      $filterVigente = $request->input('filter_vigente', '');
+
+
 
         return view('Admin.Carreras.index', $this->data);
     }

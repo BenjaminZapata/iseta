@@ -25,17 +25,20 @@
             {{-- FILTROS --}}
             <?= $filtergen->generate('admin.carreras.index', $filters, [
                 'dropdowns' => [
-                    $form->select(
-                        'filter_vigente',
-                        'Condición:',
-                        'label-input-y-100',
-                        $filters,
-                        [
-                            "" => "Todas",
-                            0 => 'Vigentes',
-                            1 => 'No Vigentes',
-                        ],
-                    ),
+                   $form->select(
+    'filter_vigente',            
+    'Condición:',                
+    'label-input-y-100',            
+    $filters->filter_vigente ?? '', 
+    [
+        '' => 'Seleccione una opción',
+        '1' => 'Vigentes',
+        '0' => 'No vigentes',
+    ]                               
+   
+    ),
+
+
     
                     $form->select(
                         'filter_resolucion_numero',
