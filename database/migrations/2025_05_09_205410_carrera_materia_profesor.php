@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('id_asignatura');
             $table->integer('id_profesor')->nullable(true);
             $table->integer('carga_horaria');
-            $table->tinyInteger('tipo_modulo');
+            $table->tinyInteger('tipo_modulo')->nullable();
             $table->integer('anio');
 
             $table->primary(['id_carrera', 'id_asignatura']);

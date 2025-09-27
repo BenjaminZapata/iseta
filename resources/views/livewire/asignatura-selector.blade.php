@@ -5,7 +5,7 @@
             <div class="perfil_dataname">
                 <label>Carrera:</label>
                 <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
-                <input type="hidden" name="carrera_id" value="{{ $carrera->id }}">
+                <input type="hidden" name="id_carrera" value="{{ $carrera->id }}">
             </div>
             <div class="perfil_dataname">
                 <label>Año:</label>
@@ -30,7 +30,7 @@
             </div>
             <div class="perfil_dataname">
                 <label for="selectedId">Asignatura:</label>
-                <select name="asignatura_id" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
+                <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
                     form="add_asignatura">
                     @foreach ($asignaturas->where('anio', $anio) as $selectedId)
                             <option value="{{ $selectedId->id }}">
@@ -40,14 +40,15 @@
                 </select>
             </div>
 
-    
+
             {{-- Carga horaria --}}
                 <div class="perfil_dataname">
                     <label>Cantidad de modulos:</label>
-                    <input class="campo_info rounded" 
-                           name="cantidad_modulo" 
-                           value="{{ old('cantidad_modulo') }}">
-                   
+                    <input class="campo_info rounded"
+                           name="carga_horaria"
+                           wire:model="carga_horaria"
+                           value="{{ old('carga_horaria') }}">
+
                 </div>
         </div>
     </div>

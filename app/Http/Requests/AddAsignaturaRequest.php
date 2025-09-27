@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CrearAsignaturaRequest extends FormRequest
+class AddAsignaturaRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,13 +17,15 @@ class CrearAsignaturaRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
         return [
-            'nombre' => ['required','regex:/^[a-zA-Z0-9\s]+$/u','max:50',],
+            'id_carrera' => ['required', 'exists:carreras,id', 'integer'],
+            'id_asignatura' => ['required', 'exists:asignaturas,id', 'integer'],
             'observaciones' => ['nullable', 'max: 150'],
+            'anio' => ['required', 'integer', 'between:1,5'],
             'carga_horaria' => ['required', 'integer','between:1,12'],
         ];
     }

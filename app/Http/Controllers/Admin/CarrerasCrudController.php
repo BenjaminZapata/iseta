@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\AddAsignaturaRequest;
 use App\Http\Requests\CrearCarreraRequest;
 use App\Http\Requests\EditarCarreraRequest;
 use App\Http\Requests\CrearAsignaturaRequest;
@@ -11,6 +12,7 @@ use App\Models\Asignatura;
 use App\Repositories\Admin\CarreraRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Models\CarreraAsignaturaProfesor;
 use Illuminate\View\View;
 use App\Models\Alumno;
 
@@ -186,24 +188,15 @@ class CarrerasCrudController extends BaseController
             'id_asignatura' => $id_asignatura,
         ]);
     }
-    public function addAsignatura(Request $request, Carrera $carrera)
+    public function addAsignatura(AddAsignaturaRequest $request, Carrera $carrera)
     {
-        try {
-            $data = [
-                'id_carrera' => $request->carrera_id,
-                'id_asignatura' => $request->asignatura_id,
-                'anio' => $request->anio,
-                'tipo_modulo' => $request->tipo_modulo,
-                'carga_horaria' => $request->carga_horaria,
-            ];
+            $data = $request->validated();
             log::debug($data);
+            if (CarreraAsignaturaProfesor::where('id_asignatura', $data['id_asignatura'])->where('id_carrera', $carrera->id)->exists()) {
+                return redirect()->back()->with('error', 'La asignatura ya está asignada a la carrera')->withInput();
+            }
             $carrera->asignaturas()->attach(["asignatura" => $data]);
-        } catch (\Exception $e) {
-            Log::error($e);
-            return redirect()->back()->with('error', 'No se pudo agregar la asignatura');
-        }
-
-        return redirect()->back()->with('mensaje', 'Se agrego la asignatura a la carrera');
+            return redirect()->back()->with('mensaje', 'Se agrego la asignatura a la carrera');
     }
 
     public function destroy(Carrera $carrera)
@@ -224,7 +217,7 @@ class CarrerasCrudController extends BaseController
              return redirect()->route('admin.carreras.index')
             ->with('error', 'No se pudo Desactivar la carrera. No tiene un año de finalización.');
             }
-    
+
             // Ahora eliminar la carrera
             $carrera->delete();
 

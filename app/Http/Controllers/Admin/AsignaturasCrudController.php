@@ -79,7 +79,7 @@ class AsignaturasCrudController extends BaseController
 
         if ($existe) {
             return redirect()->back()
-                ->withErrors(['nombre' => 'Ya existe una asignatura con ese nombre y cantidad de módulos en esta carrera.'])
+                ->withErrors(['nombre' => 'Ya existe una asignatura con ese nombre y cantidad de módulos'])
                 ->withInput();
         }
 
