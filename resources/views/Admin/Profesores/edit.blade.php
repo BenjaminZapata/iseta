@@ -81,12 +81,12 @@
                                 'placeholder' => 'ejemplo@dominio.com',
                                 'maxlength' => 50,
                             ]),
-                            $form->text('telefono_1', 'Teléfono 1:*', 'label-input-y-75', old('telefono_1') ?? $profesor, [
+                            $form->text('telefono1', 'Teléfono 1:*', 'label-input-y-75', old('telefono1') ?? $profesor, [
                                 'placeholder' => 'Ej: 2317-876544',
                                 'maxlength' => 30,
                             ]),
                             '<div class="input-group">' .
-                            $form->text('telefono_2', 'Teléfono 2:', 'label-input-y-75', old('telefono_2') ?? $profesor, [
+                            $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2') ?? $profesor, [
                                 'placeholder' => 'Ej: 2317-876543',
                                 'maxlength' => 30,
                             ]) .
