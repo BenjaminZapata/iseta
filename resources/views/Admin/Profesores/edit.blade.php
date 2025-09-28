@@ -31,7 +31,7 @@
                                 'default' => $profesor->fecha_nacimiento?->format('Y-m-d') ?? old('fecha_nacimiento'),
                             ]),
                             $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', old('estado_civil') ?? $profesor, [
-                                'vacio' => 'Seleccione...',
+                                '' => 'Seleccione...',
                                 '0' => 'Soltero',
                                 '1' => 'Casado',
                                 '2' => 'Divorciado',
