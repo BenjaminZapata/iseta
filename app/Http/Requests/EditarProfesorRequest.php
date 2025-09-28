@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Telefono;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
-use App\Rules\Telefono;
 use Illuminate\Validation\Rule;
 
 class EditarProfesorRequest extends FormRequest
@@ -14,11 +14,13 @@ class EditarProfesorRequest extends FormRequest
         return true;
     }
 
-
-   public function rules(): array
+    public function rules(): array
     {
         return [
-            'dni' => ['required', 'integer', 'gte:0', 'unique:profesores,dni', 'max_digits:10'],
+            'dni' => ['required', 'integer', 'gte:0',
+                Rule::unique('profesores', 'dni')->ignore($this->route('alumno')->id), ,
+                'max_digits:10',
+            ],
             'nombre' => ['required', 'string', 'max:30'],
             'apellido' => ['required', 'string', 'max:30'],
             'fecha_nacimiento' => [
@@ -48,7 +50,6 @@ class EditarProfesorRequest extends FormRequest
         ];
     }
 
-
     public function messages()
     {
         return [
@@ -74,9 +75,9 @@ class EditarProfesorRequest extends FormRequest
     }
 
     public function attributes()
-{
-    return [
-        'anio_ingreso' => 'año de ingreso'
-    ];
-}
+    {
+        return [
+            'anio_ingreso' => 'año de ingreso',
+        ];
+    }
 }
