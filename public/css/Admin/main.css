@@ -1134,3 +1134,7 @@ input:checked+.slider:before {
 input:checked+.slider::after {
   transform: translateX(24px);
 }
+
+.input-error {
+  border-color: #e3342f !important;
+}

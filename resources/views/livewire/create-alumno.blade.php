@@ -165,7 +165,7 @@
                 <div class="grid-2 gap-2 p-0">
                     <label class="label-input-y-75">Email:
                         <input type="email" wire:model="form.email"
-                            class="@error('form.email') is-invalid @else is-valid @enderror">
+                            class="@error('form.email') border-red-500 @enderror">
                         <div class="campo-alert">
                             @error('form.email')
                                 {{ $message }}
