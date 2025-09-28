@@ -112,11 +112,7 @@
 
                     <div class="botones-derecha"
                         style="margin-right: 27px; padding-top: 10px; display: flex; gap: 12px; justify-content: flex-end;">
-                        <a href="{{ route('admin.mesas.index') }}" style="display: flex; align-items: center;">
-                            <button class="btn_cancelar" type="button">
-                                <i class="ti ti-ban" style="font-size: 1.3em; margin-right: 8px;"></i> Cancelar
-                            </button>
-                        </a>
+                        <x-btn-cancelar />
                         <button type="submit" class="btn_blue">
                             <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
                             Actualizar
