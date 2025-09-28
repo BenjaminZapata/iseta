@@ -82,15 +82,15 @@
                                 'maxlength' => 50,
                             ]),
                             $form->text('telefono_1', 'Teléfono 1:*', 'label-input-y-75', old('telefono_1') ?? $profesor, [
-                                'placeholder' => 'Ej: +54 9 2317-876544',
+                                'placeholder' => 'Ej: 2317-876544',
                                 'maxlength' => 30,
                             ]),
                             '<div class="input-group">' .
                             $form->text('telefono_2', 'Teléfono 2:', 'label-input-y-75', old('telefono_2') ?? $profesor, [
-                                'placeholder' => 'Ej: +54 9 2317-876543',
+                                'placeholder' => 'Ej: 2317-876543',
                                 'maxlength' => 30,
                             ]) .
-                            '<small class="text-muted">Ejemplo: +54 9 2317-876543</small>' .
+                            '<small class="text-muted">Ejemplo: 2317-876543</small>' .
                             '</div>',
                         ],
                         'Otros' => [
