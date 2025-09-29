@@ -127,6 +127,19 @@ class CarrerasCrudController extends BaseController
      */
     public function update(EditarCarreraRequest $request, Carrera $carrera)
     {
+        if ($request->has('eliminar_resolucion_archivo')) {
+    if ($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo))) {
+        unlink(public_path($carrera->resolucion_archivo));
+    }
+    $datos['resolucion_archivo'] = null;
+}
+
+if ($request->hasFile('resolucion_archivo_nuevo')) {
+    $nombreArchivo = str_replace(' ', '_', $datos['nombre']) . '.pdf';
+    $ruta = $request->file('resolucion_archivo_nuevo')->storeAs('resoluciones', $nombreArchivo, 'public');
+    $datos['resolucion_archivo'] = 'storage/' . $ruta;
+}
+
         try {
             $datos = $request->validated();
 

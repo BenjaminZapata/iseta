@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\Telefono;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Carbon;
-use App\Rules\Telefono;
 use Illuminate\Validation\Rule;
 
 class EditarProfesorRequest extends FormRequest
@@ -14,11 +14,13 @@ class EditarProfesorRequest extends FormRequest
         return true;
     }
 
-
-   public function rules(): array
+    public function rules(): array
     {
         return [
-            'dni' => ['required', 'integer', 'gte:0', 'unique:profesores,dni', 'max_digits:10'],
+            'dni' => ['required', 'integer', 'gte:0',
+                Rule::unique('profesores', 'dni')->ignore($this->route('profesor')->id),
+                'max_digits:10',
+            ],
             'nombre' => ['required', 'string', 'max:30'],
             'apellido' => ['required', 'string', 'max:30'],
             'fecha_nacimiento' => [
@@ -40,14 +42,13 @@ class EditarProfesorRequest extends FormRequest
             'formacion_academica' => ['required', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u', 'max:150'],
             'titulo' => ['nullable', 'numeric'],
             'observaciones' => ['nullable', 'string', 'max:150'],
-            'telefono_1' => ['required', new Telefono, 'max:30'],
-            'telefono_2' => ['nullable', new Telefono, 'max:30'],
+            'telefono1' => ['required', new Telefono, 'max:30'],
+            'telefono2' => ['nullable', new Telefono, 'max:30'],
             'codigo_postal' => ['nullable', 'alpha_num', 'max:10'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
             'anio_ingreso' => ['required', 'date_format:Y', 'before_or_equal:now', 'after:1980'],
         ];
     }
-
 
     public function messages()
     {
@@ -74,9 +75,9 @@ class EditarProfesorRequest extends FormRequest
     }
 
     public function attributes()
-{
-    return [
-        'anio_ingreso' => 'año de ingreso'
-    ];
-}
+    {
+        return [
+            'anio_ingreso' => 'año de ingreso',
+        ];
+    }
 }

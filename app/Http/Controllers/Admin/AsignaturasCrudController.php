@@ -103,7 +103,7 @@ class AsignaturasCrudController extends BaseController
             // Verificar si la asignatura está vinculada a alguna carrera vigente
             if ($asignatura->carrera()->exists()) {
                 return redirect()->route('admin.asignaturas.index')
-                    ->with('mensaje', 'La asignatura tiene relacion con una carrera vigente.');
+                    ->with('error', 'La asignatura tiene relacion con una carrera vigente.');
             }
 
             // Verificar si la asignatura tiene relaciones con cursadas

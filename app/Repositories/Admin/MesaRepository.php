@@ -12,6 +12,7 @@ use App\Models\Profesor;
 class MesaRepository
 {
     public $config;
+
     public $availableFiels = ['alumno', 'carrera', 'asignatura', 'profesor'];
 
     public function __construct()
@@ -107,7 +108,7 @@ class MesaRepository
     public function inscribibles($mesaId)
     {
         $mesa = Mesa::find($mesaId)->first();
-        if (!$mesa) {
+        if (! $mesa) {
             abort(404, 'Mesa no encontrada');
         }
 
@@ -135,10 +136,11 @@ class MesaRepository
                 ->where('id_asignatura', $mesa->id_asignatura)
                 ->first();
 
-            if (!$examen) {
+            if (! $examen) {
                 $inscribibles[] = $alumno;
             }
         }
+
         return $inscribibles;
     }
 

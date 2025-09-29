@@ -12,9 +12,9 @@
     <link rel="stylesheet" href="{{ asset('css/Admin/main.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/aside.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/header-avatar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css\Admin\mensaje.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/mensaje.css') }}">
     <link rel="stylesheet" href="{{ asset('css/global.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/form.css') }}">
 
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>

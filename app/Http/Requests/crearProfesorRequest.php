@@ -81,9 +81,9 @@ class CrearProfesorRequest extends FormRequest
     }
 
     public function attributes()
-{
-    return [
-        'anio_ingreso' => 'año de ingreso'
-    ];
-}
+    {
+        return [
+            'anio_ingreso' => 'año de ingreso'
+        ];
+    }
 }
