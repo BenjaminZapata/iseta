@@ -76,11 +76,11 @@
                             'placeholder' => 'ejemplo@dominio.com',
                             'maxlength' => 50,
                         ]),
-                        $form->text('telefono_1', 'Teléfono 1:*', 'label-input-y-75', old('telefono_1'), [
+                        $form->text('telefono1', 'Teléfono 1:*', 'label-input-y-75', old('telefono1'), [
                             'placeholder' => 'Ej: 2317-876544',
                             'maxlength' => 30,
                         ]),
-                        $form->text('telefono_2', 'Teléfono 2:', 'label-input-y-75', old('telefono_2'), [
+                        $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2'), [
                             'placeholder' => 'Ej: 2317-876543',
                             'maxlength' => 30,
                         ]),
