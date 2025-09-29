@@ -82,7 +82,7 @@
     @else
         <p class="campo_info-noinput rounded text-muted mb-2">No se ha cargado ningún archivo</p>
         <div>
-            <label for="resolucion_archivo_nuevo" class="form-label">📤 Subir archivo:</label>
+            <label for="resolucion_archivo_nuevo" class="form-label">Subir archivo:</label>
             <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
         </div>
     @endif
