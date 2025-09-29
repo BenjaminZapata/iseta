@@ -42,17 +42,21 @@
     </label>
 
     <label class="label-input-y-75">Estado:
-        <select name="vigente" class="campo_info rounded" value="{{ $carrera->vigente }}">
-            <option value="{{ $carrera->vigente }}" selected>
-                {{ $carrera->vigente ? 'Vigente' : 'No vigente' }}
-            </option>
-            @if ($carrera->vigente == 1)
+    <select name="vigente" class="campo_info rounded">
+        <option value="{{ $carrera->vigente }}" selected>
+            {{ $carrera->vigente ? 'Vigente' : 'No vigente' }}
+        </option>
+
+        @if ($carrera->vigente == 1)
+            @if (!empty($carrera->anio_fin))
                 <option value="0">No vigente</option>
-            @else
-                <option value="1">Vigente</option>
             @endif
-        </select>
-    </label>
+        @else
+            <option value="1">Vigente</option>
+        @endif
+    </select>
+</label>
+
 
     <label class="label-input-y-75">Año de cierre:
         <input type="text" name="anio_fin" value="{{ $carrera->anio_fin }}">
@@ -62,15 +66,28 @@
         <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
     </label>
 
-    <label class="label-input-y-75">Archivo de la resolución:
-        @if($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo)))
-            <p class="campo_info-noinput rounded">
-                <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank">📄 Ver PDF</a>
-            </p>
-        @else
-            <p class="campo_info-noinput rounded text-muted">No se ha cargado ningún archivo</p>
-        @endif
-    </label>
+  <label class="label-input-y-75">Archivo de la resolución:
+    @if($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo)))
+        <p class="campo_info-noinput rounded mb-2">
+            <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank"> Ver PDF actual</a>
+        </p>
+        <div class="mb-2">
+            <label for="resolucion_archivo_nuevo" class="form-label">📤 Reemplazar archivo:</label>
+            <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
+        </div>
+        <div class="form-check mt-2">
+            <input type="checkbox" name="eliminar_resolucion_archivo" value="1" class="form-check-input" id="eliminarArchivo">
+            <label class="form-check-label" for="eliminarArchivo">Eliminar archivo actual</label>
+        </div>
+    @else
+        <p class="campo_info-noinput rounded text-muted mb-2">No se ha cargado ningún archivo</p>
+        <div>
+            <label for="resolucion_archivo_nuevo" class="form-label">📤 Subir archivo:</label>
+            <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
+        </div>
+    @endif
+</label>
+
 
     <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
 </div>
