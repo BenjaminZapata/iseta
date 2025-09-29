@@ -43,7 +43,7 @@ class CrearProfesorRequest extends FormRequest
             'casa_numero' => ['nullable', 'numeric', 'max_digits:4'],
             'dpto' => ['nullable', 'string', 'max:5'],
             'piso' => ['nullable', 'numeric', 'max_digits:15'],
-            'estado_civil' => ['nullable', 'integer', 'between:0,5'],
+            'estado_civil' => ['nullable'],
             'email' => ['required', 'email', 'max:50'],
             'formacion_academica' => ['required', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u', 'max:150'],
             'titulo' => ['nullable', 'numeric'],
