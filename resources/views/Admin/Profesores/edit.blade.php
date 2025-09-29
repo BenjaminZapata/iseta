@@ -53,13 +53,13 @@
                         'placeholder' => 'Ej: 742',
                         'maxlength' => 4,
                     ]),
-                    $form->text('dpto', 'Dpto:', 'label-input-y-75', old('dpto') ?? $profesor, [
-                        'placeholder' => 'Ej: A',
-                        'maxlength' => 5,
-                    ]),
                     $form->text('piso', 'Piso:', 'label-input-y-75', old('piso') ?? $profesor, [
                         'placeholder' => 'Ej: 3',
                         'maxlength' => 15,
+                    ]),
+                    $form->text('dpto', 'Dpto:', 'label-input-y-75', old('dpto') ?? $profesor, [
+                        'placeholder' => 'Ej: A',
+                        'maxlength' => 5,
                     ]),
                 ],
                 'Académico' => [
