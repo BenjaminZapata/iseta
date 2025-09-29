@@ -78,9 +78,7 @@ class AsignaturasCrudController extends BaseController
                 ->withErrors(['nombre' => 'Ya existe una asignatura con ese nombre y cantidad de módulos'])
                 ->withInput();
         }
-        $data['anio'] = 0;
-        // Generar clave única
-        $data['clave_unica'] = \Str::uuid(); // o lógica propia
+        $data['anio'] = 1;
 
         Asignatura::create($data);
 
