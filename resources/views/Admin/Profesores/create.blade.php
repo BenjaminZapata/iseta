@@ -6,10 +6,6 @@
             @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVO PROFESOR/A'])
             <div class="perfil__info">
 
-                <p class="info-obligatorios">
-                    Los campos marcados con <span style="color:red">*</span> son obligatorios.
-                </p>
-
                 <form action="{{ route('admin.profesores.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <?= $form->generate(null, 'post', [

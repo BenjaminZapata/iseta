@@ -5,6 +5,10 @@
         @method('put')
     @endif
 
+    <p class="info-obligatorios">
+        Los campos marcados con <span style="color:red">*</span> son obligatorios.
+    </p>
+
     @foreach ($fieldsets as $legend => $inputs)
         <fieldset class="p-2" style="margin: 10px;">
             <legend class="font-600 font-7">{{ $legend }}</legend>
@@ -36,18 +40,19 @@
 </form>
 
 <script>
-    function toggleExportar() {
-        const opciones = document.getElementById('exportar-opciones');
-        opciones.style.display = opciones.style.display === 'none' ? 'block' : 'none';
-    }
-
-    // Opcional: cerrar si clickean fuera
-    document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('exportar-opciones');
-        const button = event.target.closest('.dropdown');
-
-        if (!button) {
-            dropdown.style.display = 'none';
+    function probarScroll() {
+        const campo = document.querySelector('.border-red-500');
+        if (campo) {
+            campo.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            campo.focus({
+                preventScroll: true
+            });
+            console.log('✅ Scroll ejecutado correctamente');
+        } else {
+            console.log('❌ No se encontró el campo con border-red-500');
         }
-    });
+    }
 </script>
