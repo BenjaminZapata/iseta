@@ -5,11 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearProfesorRequest;
 use App\Http\Requests\EditarProfesorRequest;
+use App\Mail\ProfesorCreado;
 use App\Models\Configuracion;
 use App\Models\Mesa;
 use App\Models\Profesor;
 use App\Repositories\Admin\ProfesorRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -49,10 +53,16 @@ class ProfesoresCrudController extends BaseController
     public function store(crearProfesorRequest $request)
     {
         $data = $request->validated();
+        $data['password'] = Str::password();
 
-        Profesor::create($data);
+        if ($_ENV['MAIL_USERNAME'] != null) {
+            Mail::to($data['email'])->queue(new ProfesorCreado($data));
+        }
+        $data['password'] = Hash::make($data['password']);
+        // Profesor::create($data);
 
-        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
+        return redirect()->back()->withInput();
+        // return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
     }
 
     /**
