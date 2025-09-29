@@ -5,12 +5,15 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login Administradores</title>
+    <title>Portal IM Administradores</title>
 </head>
 
 <body>
     <div class="login-box">
-        <h2>Ingreso Administradores</h2>
+        <div class="logo-container">
+            <img src="{{ asset('img/logo-sf.png') }}">
+        </div>
+        <h2>Administradores</h2>
 
         <!-- Mensaje de error desde backend -->
         {{-- @include('Componentes.mensaje') --}}
