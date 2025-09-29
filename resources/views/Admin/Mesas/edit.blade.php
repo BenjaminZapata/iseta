@@ -10,38 +10,6 @@
                 <div class="perfil__header">
                     <h2>{{ $mesa->asignatura?->nombre }}</h2>
                 </div>
-<<<<<<< Updated upstream
-                <div class="perfil__info">
-                    <div class="perfil_dataname">
-                        <label>Carrera:</label>
-                        <p class="px-2">{{ $mesa->asignatura->carrera->first()?->nombre }} -
-                            {{ $mesa->asignatura->anioStr() }}
-                        </p>
-                    </div>
-                    <div class="perfil_dataname">
-                        <label>Fecha:</label>
-                        <input type="datetime-local" class="campo_info rounded" value="{{ $mesa->fecha }}" name="fecha">
-                    </div>
-                    <div class="perfil_dataname">
-                        <label>Llamado:</label>
-                        <select class="campo_info rounded" name="llamado">
-                            <option @selected($mesa->llamado == 1) value="1">Primero</option>
-                            <option @selected($mesa->llamado == 2) value="2">Segundo</option>
-                        </select>
-                    </div>
-
-                    <div class="perfil_dataname">
-                        <label>Prof. presidente:</label>
-                        <select class="campo_info rounded" name="prof_presidente">
-                            <option value="0" @selected($mesa->prof_presidente == 0)>Vacio/A confirmar</option>
-                            @foreach ($profesores as $profesor)
-                                <option value="{{ $profesor->id }}" @selected($mesa->prof_presidente != 0 && $mesa->profesor?->id == $profesor->id)>
-                                    {{ $profesor->apellidoNombre() }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-=======
                 <div class="perfil_dataname">
                     <label>Llamado:</label>
                     <select class="campo_info rounded" name="llamado">
@@ -84,7 +52,6 @@
                         @endforeach
                     </select>
                 </div>
->>>>>>> Stashed changes
 
                 <div class="perfil_dataname">
                     <label>Prof. vocal 1:</label>
