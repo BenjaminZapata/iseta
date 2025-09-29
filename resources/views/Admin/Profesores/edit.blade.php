@@ -8,10 +8,6 @@
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR PROFESOR/A'])
         <div class="perfil__info">
 
-            <p class="info-obligatorios">
-                Los campos marcados con <span style="color:red">*</span> son obligatorios.
-            </p>
-
             <?= $form->generate(route('admin.profesores.update', ['profesor' => $profesor->id]), 'put', [
                 'Profesor' => [
                     $form->text('nombre', 'Nombre:*', 'label-input-y-75', old('nombre') ?? $profesor, [
