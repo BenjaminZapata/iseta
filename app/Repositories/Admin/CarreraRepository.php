@@ -36,22 +36,28 @@ class CarreraRepository
         $word  = trim($request->input('filter_search_box'));
         $field = $request->input('filter_field');
 
-        switch ($field) {
-            case 'resolucion':
-                $query->whereRaw("CAST(carreras.resolucion AS CHAR) COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$word}%"]);
-                break;
+       switch ($field) {
 
-            case 'nombre':
-            default:
-                $tokens = array_filter(array_map('trim', preg_split('/[^\p{L}\p{N}]+/u', $word)));
-                $query->where(function ($sub) use ($tokens) {
-                    foreach ($tokens as $t) {
-                        if (mb_strlen($t) < 2) continue;
-                        $sub->whereRaw("carreras.nombre COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$t}%"]);
-                    }
-                });
-                break;
-        }
+    case 'resolucion_numero':
+        $query->whereRaw("SUBSTRING_INDEX(carreras.resolucion, '/', 1) LIKE ?", ["%{$word}%"]);
+        break;
+
+    case 'resolucion_anio':
+        $query->whereRaw("SUBSTRING_INDEX(carreras.resolucion, '/', -1) LIKE ?", ["%{$word}%"]);
+        break;
+
+    case 'nombre':
+    default:
+        $tokens = array_filter(array_map('trim', preg_split('/[^\p{L}\p{N}]+/u', $word)));
+        $query->where(function ($sub) use ($tokens) {
+            foreach ($tokens as $t) {
+                if (mb_strlen($t) < 2) continue;
+                $sub->whereRaw("carreras.nombre COLLATE utf8mb4_unicode_ci LIKE ?", ["%{$t}%"]);
+            }
+        });
+        break;
+}
+
     }
 
     
