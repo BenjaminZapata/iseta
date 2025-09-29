@@ -72,7 +72,7 @@
             <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank"> Ver PDF actual</a>
         </p>
         <div class="mb-2">
-            <label for="resolucion_archivo_nuevo" class="form-label">📤 Reemplazar archivo:</label>
+            <label for="resolucion_archivo_nuevo" class="form-label"> Reemplazar archivo:</label>
             <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
         </div>
         <div class="form-check mt-2">
