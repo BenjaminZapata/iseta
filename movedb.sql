@@ -1869,7 +1869,7 @@ INSERT INTO `carreras_default` (`id`, `id_alumno`, `id_carrera`, `created_at`, `
 CREATE TABLE `carrera_asignatura_profesor` (
   `id_carrera` int NOT NULL,
   `id_asignatura` int NOT NULL,
-  `id_profesor` int DEFAULT NULL,
+  `id_profesor` int NOT NULL,
   `carga_horaria` int NOT NULL,
   `tipo_modulo` tinyint NOT NULL,
   `anio` int NOT NULL,

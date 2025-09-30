@@ -1,4 +1,5 @@
 @extends('Admin.template')
+@php use Illuminate\Support\HtmlString; @endphp
 
 @section('content')
     <div>
@@ -91,6 +92,16 @@
                                     'maxlength' => 150,
                                 ]),
                             ],
+                        
+                            'Vinculación' => [
+    new \Illuminate\Support\HtmlString(
+        view('components.vinculacion-profesor', [
+            'carreras' => $carreras,
+            'profesor' => null
+        ])->render()
+    )
+],
+
                         ]) ?>
                 </form>
             </div>
