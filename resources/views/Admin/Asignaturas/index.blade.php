@@ -45,7 +45,7 @@
                         <td>
                             @foreach ($asignatura->carrera as $carrera)
                                 <div style="display: flex; justify-content: center;">
-                                    {{ $carrera->pivot->anio }}<br>
+                                    {{ $carrera->pivot->anioStr() }}<br>
                                 </div>
                             @endforeach
                         </td>

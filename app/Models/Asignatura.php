@@ -129,16 +129,6 @@ class Asignatura extends Model
             ->first();
     }
 
-    public function anioStr(): string
-    {
-        foreach ($this->carrera as $carrera) {
-
-        }
-        $strings = ['Primer año', 'Segundo año', 'Tercer año', 'Cuarto año', 'Quinto año', 'Sexto año'];
-
-        return $strings[$this->carrera()->pivot->anio];
-    }
-
     public function setNombreAttribute($value): void
     {
         $this->attributes['nombre'] = TextFormatService::ucwords($value);

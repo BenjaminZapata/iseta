@@ -24,11 +24,11 @@
                     @if ($anio == null)
                         <option value="">elija el año que tendra la asignatura</option>
                     @endif
-                    <option value="1" {{ $anio == 1 ? 'selected' : '' }}>1º año</option>
-                    <option value="2" {{ $anio == 2 ? 'selected' : '' }}>2º año</option>
-                    <option value="3" {{ $anio == 3 ? 'selected' : '' }}>3º año</option>
-                    <option value="4" {{ $anio == 4 ? 'selected' : '' }}>4º año</option>
-                    <option value="5" {{ $anio == 5 ? 'selected' : '' }}>5º año</option>
+                    <option value="0" {{ $anio == 0 ? 'selected' : '' }}>1º año</option>
+                    <option value="1" {{ $anio == 1 ? 'selected' : '' }}>2º año</option>
+                    <option value="2" {{ $anio == 2 ? 'selected' : '' }}>3º año</option>
+                    <option value="3" {{ $anio == 3 ? 'selected' : '' }}>4º año</option>
+                    <option value="4" {{ $anio == 4 ? 'selected' : '' }}>5º año</option>
                 </select>
             </div>
             {{-- Carga horaria --}}
