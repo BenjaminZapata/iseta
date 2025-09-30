@@ -13,7 +13,7 @@
     <link rel="icon" type="image/png" href="img/icono-iseta.png">
 
     <!-- Estilos base -->
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/auth-alumnos.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/mensaje.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/form.css') }}">
 </head>

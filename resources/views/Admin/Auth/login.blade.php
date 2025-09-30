@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
     <!-- Estilos base unificados -->
-    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/auth-admin.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/form.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/mensaje.css') }}">
 </head>
