@@ -8,10 +8,21 @@
                 <input type="hidden" name="id_carrera" value="{{ $carrera->id }}">
             </div>
             <div class="perfil_dataname">
+                <label for="selectedId">Asignatura:</label>
+                <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
+                    form="add_asignatura">
+                    @foreach ($asignaturas->where('id', '!=', $carrera->asignaturas->first()->id) as $selectedId)
+                        <option value="{{ $selectedId->id }}">
+                            {{ $selectedId->nombre }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="perfil_dataname">
                 <label>Año:</label>
                 <select name="anio" class="campo_info rounded" wire:model.change="anio">
                     @if ($anio == null)
-                        <option value="">elija el año de la asignatura</option>
+                        <option value="">elija el año que tendra la asignatura</option>
                     @endif
                     <option value="1" {{ $anio == 1 ? 'selected' : '' }}>1º año</option>
                     <option value="2" {{ $anio == 2 ? 'selected' : '' }}>2º año</option>
@@ -20,19 +31,6 @@
                     <option value="5" {{ $anio == 5 ? 'selected' : '' }}>5º año</option>
                 </select>
             </div>
-            <div class="perfil_dataname">
-                <label for="selectedId">Asignatura:</label>
-                <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
-                    form="add_asignatura">
-                    @foreach ($asignaturas->where('anio', $anio)->where('id', '!=', $carrera->asignaturas->first()->id) as $selectedId)
-                        <option value="{{ $selectedId->id }}">
-                            {{ $selectedId->nombre }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-
             {{-- Carga horaria --}}
             <div class="perfil_dataname">
                 <label>Cantidad de modulos:</label>

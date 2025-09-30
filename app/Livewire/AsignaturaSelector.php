@@ -34,7 +34,6 @@ class AsignaturaSelector extends Component
         if ($asignatura) {
             $this->selectedId = $asignatura->id;
             $this->carga_horaria = $asignatura->carga_horaria;
-            $this->anio = $asignatura->anio;
         }
     }
 
