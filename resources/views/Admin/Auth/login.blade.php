@@ -1,62 +1,96 @@
 <!DOCTYPE html>
 <html lang="es">
-<link rel="stylesheet" href="{{ asset('css/Admin/auth.css') }}">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Portal IM Administradores</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/icono-iseta.png') }}">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <!-- Estilos base unificados -->
+    <link rel="stylesheet" href="{{ asset('css/auth.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/mensaje.css') }}">
 </head>
 
-<body>
-    <div class="login-box">
-        <div class="logo-container">
-            <img src="{{ asset('img/logo-sf.png') }}">
+<body id="logeo-admins" class="admin">
+    @include('Componentes.mensaje')
+
+    <section class="login-admin">
+        <!-- Selector de rol -->
+        <div class="who">
+            <a class="tag-alumno" href="{{ route('alumno.login') }}">Alumno</a>
+            <a class="tag-profesor" href="{{ route('profesor.login') }}">Profesor</a>
+            <a class="tag-admin act" href="{{ route('admin.login') }}">Admin</a>
         </div>
-        <h2>Administradores</h2>
 
-        <!-- Mensaje de error desde backend -->
-        {{-- @include('Componentes.mensaje') --}}
-
-        <form method="POST" action="{{ route('admin.login.post') }}" novalidate>
+        <form method="POST" action="{{ route('admin.login.post') }}">
             @csrf
 
-            {{-- Campo Rol --}}
-            <label for="rol">Rol</label>
-            <select name="rol" id="rol" required aria-required="true" aria-label="Seleccione su rol">
-                <option value="" disabled {{ old('rol') ? '' : 'selected' }}>Seleccione rol</option>
-                <option value="regente" {{ old('rol') === 'regente' ? 'selected' : '' }}>Regente</option>
-                <option value="preceptor" {{ old('rol') === 'preceptor' ? 'selected' : '' }}>Preceptor</option>
-                <option value="secretario" {{ old('rol') === 'secretario' ? 'selected' : '' }}>Secretario</option>
-            </select>
-            @error('rol')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
+            <div class="logo-container">
+                <img src="{{ asset('img/logo-sf.png') }}" class="logo-full" alt="Logo Admin">
+            </div>
 
-            {{-- Campo Usuario --}}
-            <label for="username">Usuario</label>
-            <input id="username" name="username" type="text" required autocomplete="username" aria-required="true"
-                aria-label="Nombre de usuario" placeholder="Ingrese su usuario" value="{{ old('username') }}" />
-            @error('username')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
+            <div class="titulo-login">
+                <h1>Inicio de sesión</h1>
+                <p>Solo personal administrativo autorizado</p>
+            </div>
 
-            {{-- Campo Contraseña --}}
-            <label for="password">Contraseña</label>
-            <input id="password" name="password" type="password" required autocomplete="current-password"
-                aria-required="true" aria-label="Contraseña" placeholder="Ingrese su contraseña" />
-            @error('password')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
+            <!-- Campo de selección de rol -->
+            <div class="input-box">
+                <div class="input-wrapper">
+                    <select name="rol" id="rol" required>
+                        <option value="" disabled {{ old('rol') ? '' : 'selected' }}>Seleccione rol</option>
+                        <option value="regente" {{ old('rol') === 'regente' ? 'selected' : '' }}>Regente</option>
+                        <option value="preceptor" {{ old('rol') === 'preceptor' ? 'selected' : '' }}>Preceptor</option>
+                        <option value="secretario" {{ old('rol') === 'secretario' ? 'selected' : '' }}>Secretario
+                        </option>
+                    </select>
+                </div>
+                @error('rol')
+                    <div class="campo-alert">{{ $message }}</div>
+                @enderror
+            </div>
 
-            {{-- Botón --}}
-            <button type="submit" class="btn-login">Ingresar</button>
+            <!-- Campo de usuario -->
+            <div class="input-box">
+                <div class="input-wrapper">
+                    <input type="text" id="username" name="username" required placeholder="Ingrese su usuario"
+                        value="{{ old('username') }}">
+                </div>
+                @error('username')
+                    <div class="campo-alert">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Campo de contraseña -->
+            <div class="input-box">
+                <div class="password-wrapper">
+                    <input type="password" name="password" id="password" required placeholder="Ingrese su contraseña">
+                    <button type="button" class="toggle-password" aria-label="Mostrar u ocultar contraseña">
+                        <i class="ti ti-eye"></i>
+                    </button>
+                </div>
+                @error('password')
+                    <div class="campo-alert">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Botón de ingreso -->
+            <div class="input-box button">
+                <input type="submit" value="Ingresar">
+            </div>
+
+            <div class="etiquetas">
+                <a href="#">¿Olvidaste tu contraseña?</a>
+            </div>
         </form>
+    </section>
 
-        <p class="forgot-password">
-            <a href="">¿Olvidaste tu contraseña?</a>
-        </p>
-    </div>
+    <!-- Scripts -->
+    <script src="{{ asset('js/mostrar-contrasenia.js') }}"></script>
 </body>
 
 </html>
