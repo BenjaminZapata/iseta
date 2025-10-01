@@ -1,5 +1,6 @@
 <div x-data="{ step: $wire.entangle('step').live }" x-cloak>
 
+
     <!-- Step 1: Crear alumno -->
     <form wire:submit="siguientePaso" x-show="step === 1" id="form-paso-1">
         @csrf
@@ -135,14 +136,6 @@
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Departamento:
-                    <input type="text" wire:model="form.dpto" class="@error('form.dpto') border-red-500 @enderror">
-                    <div class="campo-alert">
-                        @error('form.dpto')
-                        {{ $message }}
-                        @enderror
-                    </div>
-                </label>
             </div>
         </fieldset>
 
@@ -160,19 +153,19 @@
                     </div>
                 </label>
                 <label class="label-input-y-75">Teléfono 1:
-                    <input type="text" wire:model="form.telefono_1"
-                        class="@error('form.telefono_1') border-red-500 @enderror">
+                    <input type="text" wire:model="form.telefono1"
+                        class="@error('form.telefono1') border-red-500 @enderror">
                     <div class="campo-alert">
-                        @error('form.telefono_1')
+                        @error('form.telefono1')
                         {{ $message }}
                         @enderror
                     </div>
                 </label>
                 <label class="label-input-y-75">Teléfono 2:
-                    <input type="text" wire:model="form.telefono_2"
-                        class="@error('form.telefono_2') border-red-500 @enderror">
+                    <input type="text" wire:model="form.telefono2"
+                        class="@error('form.telefono2') border-red-500 @enderror">
                     <div class="campo-alert">
-                        @error('form.telefono_2')
+                        @error('form.telefono2')
                         {{ $message }}
                         @enderror
                     </div>
@@ -275,28 +268,14 @@
             <div x-show="show">
                 <form wire:submit="guardarInscripcion" class="p-3 border rounded bg-gray-50">
                     <h3 class="font-bold mb-2">Datos de inscripción</h3>
-
                     <label class="block mb-2">
                         Año de inscripción:
-                        <input type="number" wire:model.fill="iForm.anio_inscripcion" class="input"
-                            value="{{ now()->year }}">
-                        @error('iForm.anio_inscripcion')
-                        <div class="campo-alert">{{ $message }}</div>
-                        @enderror
+                        <input type="number" class="input" value="{{ now()->year }}" disabled>
                     </label>
-
                     <label class="block mb-2">
                         Índice libro matriz:
                         <input type="text" wire:model="iForm.indice_libro_matriz" class="input">
                         @error('iForm.indice_libro_matriz')
-                        <div class="campo-alert">{{ $message }}</div>
-                        @enderror
-                    </label>
-
-                    <label class="block mb-2">
-                        Año de finalización:
-                        <input type="number" wire:model="iForm.anio_finalizacion" class="input">
-                        @error('iForm.anio_finalizacion')
                         <div class="campo-alert">{{ $message }}</div>
                         @enderror
                     </label>
@@ -310,8 +289,8 @@
             </div>
         </div>
         <div class="botones-create">
-            <button type="button" x-on:click="step=1" class="btn_blue">Volver</button>
-            <button type="button" x-on:click="step=3" class="btn_blue">Siguiente: Confirmar</button>
+            <button type="button" wire:click="pasoAnterior" class="btn_blue">Volver</button>
+            <button type="button" wire:click="siguientePaso" class="btn_blue">Siguiente: Confirmar</button>
         </div>
     </div>
 
