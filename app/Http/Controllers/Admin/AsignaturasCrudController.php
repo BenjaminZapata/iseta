@@ -78,7 +78,6 @@ class AsignaturasCrudController extends BaseController
                 ->withErrors(['nombre' => 'Ya existe una asignatura con ese nombre y cantidad de módulos'])
                 ->withInput();
         }
-        $data['anio'] = 1;
 
         Asignatura::create($data);
 
