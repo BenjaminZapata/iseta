@@ -49,8 +49,7 @@
                             <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
                         </label>
 
-
-                        <label class="label-input-y-75 "> <span class="bold">Archivo de la resolución:</span>
+                        <label class="label-input-y-75">Archivo de la resolución:
                             @if($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo)))
                             <p class="campo_info-noinput rounded mb-2">
                                 <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank"> Ver PDF actual</a>
@@ -71,8 +70,6 @@
                             </div>
                             @endif
                         </label>
-                        <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
-
                 </fieldset>
         </div>
 
