@@ -61,18 +61,13 @@
                         old('filter_nombre', $filters->filter_nombre ?? null),
                         ['' => 'Cualquiera'] + $carreraM->listadoNombres(),
                     ),
-                    $form->select(
-                        'filter_resolucion',
-                        'Resolución completa:',
-                        'label-input-y-100',
-                        old('filter_resolucion', $filters->filter_resolucion ?? null),
-                        ['' => 'Cualquiera'] + $carreraM->listadoResoluciones(),
-                    ),
                 ],
                 'fields' => [
-                    'nombre' => 'Nombre',
-                    'resolucion' => 'Resolución',
-                ],
+    'nombre' => 'Nombre',
+    'resolucion_numero' => 'N° de Resolución',
+    'resolucion_anio' => 'Año de la Resolución',
+],
+
             ]) ?>
         </div>
 

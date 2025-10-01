@@ -3,69 +3,112 @@
 @section('content')
 <div class="edit-form-container">
     <div class="perfil_one br">
+
+
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR PROFESOR/A'])
         <div class="perfil__info">
+
             <?= $form->generate(route('admin.profesores.update', ['profesor' => $profesor->id]), 'put', [
                 'Profesor' => [
-                    $form->text('dni', 'DNI:', 'label-input-y-75', old('dni') ?? $profesor),
-                    $form->text('nombre', 'Nombre:', 'label-input-y-75', old('nombre') ?? $profesor),
-                    $form->text('apellido', 'Apellido:', 'label-input-y-75', old('apellido') ?? $profesor),
-                    $form->text('lugar_nacimiento', 'Lugar de nacimiento:', 'label-input-y-75', old('lugar_nacimiento') ?? $profesor),
+                    $form->text('nombre', 'Nombre:*', 'label-input-y-75', old('nombre') ?? $profesor, [
+                        'placeholder' => 'Ej: Juan',
+                        'maxlength' => 50,
+                    ]),
+                    $form->text('apellido', 'Apellido:*', 'label-input-y-75', old('apellido') ?? $profesor, [
+                        'placeholder' => 'Ej: Pérez',
+                        'maxlength' => 30,
+                    ]),
+                    $form->text('dni', 'DNI:*', 'label-input-y-75', old('dni') ?? $profesor, [
+                        'placeholder' => 'Ej: 12345678',
+                        'maxlength' => 10,
+                    ]),
                     $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', old('fecha_nacimiento') ?? $profesor, [
-                        'default' => $profesor->fecha_nacimiento?->format('Y-m-d') ?? old('fecha_nacimiento')
+                        'placeholder' => 'dd/mm/aaaa',
+                        'default' => $profesor->fecha_nacimiento?->format('Y-m-d') ?? old('fecha_nacimiento'),
                     ]),
                     $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', old('estado_civil') ?? $profesor, [
-                        'Soltero', 'Casado', 'Divorciado', 'Viudo', 'Conyuge', 'Otro'
-                    ])
+                        '' => 'Seleccione...',
+                        '0' => 'Soltero',
+                        '1' => 'Casado',
+                        '2' => 'Divorciado',
+                        '3' => 'Viudo',
+                        '4' => 'Cónyuge',
+                        '5' => 'Otro',
+                    ]),
                 ],
                 'Dirección' => [
-                    $form->text('ciudad', 'Ciudad:', 'label-input-y-75', old('ciudad') ?? $profesor),
-                    $form->text('codigo_postal', 'Codigo postal:', 'label-input-y-75', old('codigo_postal') ?? $profesor),
-                    $form->text('calle', 'Calle:', 'label-input-y-75', old('calle') ?? $profesor),
-                    $form->text('casa_numero', 'Altura:', 'label-input-y-75', old('casa_numero') ?? $profesor),
-                    $form->text('dpto', 'Departamento:', 'label-input-y-75', old('dpto') ?? $profesor),
-                    $form->text('piso', 'Piso:', 'label-input-y-75', old('piso') ?? $profesor)
+                    $form->text('ciudad', 'Ciudad:', 'label-input-y-75', old('ciudad') ?? $profesor, [
+                        'placeholder' => 'Ej: 9 de julio',
+                        'maxlength' => 30,
+                    ]),
+                    $form->text('codigo_postal', 'Código postal:', 'label-input-y-75', old('codigo_postal') ?? $profesor, [
+                        'placeholder' => 'Ej: 6500',
+                        'maxlength' => 10,
+                    ]),
+                    $form->text('calle', 'Calle:', 'label-input-y-75', old('calle') ?? $profesor, [
+                        'placeholder' => 'Ej: Av. Eva Perón',
+                        'maxlength' => 30,
+                    ]),
+                    $form->text('casa_numero', 'Número de casa:', 'label-input-y-75', old('casa_numero') ?? $profesor, [
+                        'placeholder' => 'Ej: 742',
+                        'maxlength' => 4,
+                    ]),
+                    $form->text('piso', 'Piso:', 'label-input-y-75', old('piso') ?? $profesor, [
+                        'placeholder' => 'Ej: 3',
+                        'maxlength' => 15,
+                    ]),
+                    $form->text('dpto', 'Dpto:', 'label-input-y-75', old('dpto') ?? $profesor, [
+                        'placeholder' => 'Ej: A',
+                        'maxlength' => 5,
+                    ]),
                 ],
-                'Academico' => [
-                    $form->text('formacion_academica', 'Formacion academica:', 'label-input-y-75', old('formacion_academica') ?? $profesor),
-                    $form->text('anio_ingreso', 'Año de ingreso:', 'label-input-y-75', old('anio_ingreso') ?? $profesor)
+                'Académico' => [
+                    $form->text('formacion_academica', 'Formación académica:*', 'label-input-y-75', old('formacion_academica') ?? $profesor, [
+                        'placeholder' => 'Ej: Profesorado en Matemática',
+                        'maxlength' => 150,
+                    ]),
+                    $form->text('anio_ingreso', 'Año de ingreso:*', 'label-input-y-75', old('anio_ingreso') ?? $profesor, [
+                        'placeholder' => 'Ej: 2020',
+                        'maxlength' => 4,
+                    ]),
                 ],
                 'Contacto' => [
-                    $form->text('email', 'Email:', 'label-input-y-75', old('email') ?? $profesor),
-                    $form->text('telefono_1', 'Telefono 1:', 'label-input-y-75', old('telefono_1') ?? $profesor),
-                    '<div class="input-group">' .
-                        $form->text('telefono_2', 'Telefono 2:', 'label-input-y-75', old('telefono_2') ?? $profesor, [
-                            'placeholder' => '+54-11-12345678'
-                        ]) .
-                        '<small class="text-muted">Ejemplo: +54-11-12345678</small>' .
-                    '</div>',
-                    '<div class="input-group">' .
-                        $form->text('telefono_3', 'Telefono 3:', 'label-input-y-75', old('telefono_3') ?? $profesor, [
-                            'placeholder' => '+54-11-87654321'
-                        ]) .
-                        '<small class="text-muted">Ejemplo: +54-11-87654321</small>' .
-                    '</div>'
+                    $form->text('email', 'Email:*', 'label-input-y-75', old('email') ?? $profesor, [
+                        'placeholder' => 'ejemplo@dominio.com',
+                        'maxlength' => 50,
+                    ]),
+                    $form->text('telefono1', 'Teléfono 1:*', 'label-input-y-75', old('telefono1') ?? $profesor, [
+                        'placeholder' => 'Ej: 2317-876544',
+                        'maxlength' => 30,
+                    ]),
+                    $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono_2') ?? $profesor, [
+                        'placeholder' => 'Ej: 2317-876543',
+                        'maxlength' => 30,
+                    ]),
                 ],
                 'Otros' => [
-                    $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones') ?? $profesor)
+                    $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones') ?? $profesor, [
+                        'placeholder' => 'Notas adicionales sobre el profesor/a',
+                        'maxlength' => 150,
+                    ]),
                 ],
             ]) ?>
+
             <div class="boton-eliminar">
 
                 <div>
-                   <!-- Formulario de eliminación -->
+                    <!-- Formulario de eliminación -->
                     <form method="POST" id="form-eliminar-{{ $profesor->id }}"
-                    action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
-                     @csrf
-                     @method('delete')
-                    <button type="button"
-                    class="btn_red_outline"
-                    onclick="openGeneralModal(
+                        action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
+                        @csrf
+                        @method('delete')
+                        <button type="button" class="btn_red_outline"
+                            onclick="openGeneralModal(
                     'form-eliminar-{{ $profesor->id }}',
                     '¿Estás seguro de que querés eliminar al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'
                     )">
-                    <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar profesor/a
-                    </button>
+                            <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar profesor/a
+                        </button>
                     </form>
                 </div>
             </div>
@@ -110,4 +153,4 @@
             </div>
 
         </div>
-@endsection
+        @endsection
