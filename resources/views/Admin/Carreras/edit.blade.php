@@ -5,133 +5,116 @@
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
         <div class="perfil__info">
-            {{-- BOTÓN SWITCH DE ESTADO --}}
-            {{--<div
-                    style="margin: 10px 5px; display: flex; align-items: center; gap: 12px; justify-content: flex-end; padding-right: 25px;">
-                    <span style="font-weight: 600;">
-                        Estado de la carrera:
-                        <span id="estado-texto" style="color: {{ $carrera->vigente ? '#16a34a' : '#dc2626' }};">
-            {{ $carrera->vigente ? 'Activa' : 'Inactiva' }}
-            </span>
-            </span>
-
-            <label class="switch" title="{{ $carrera->vigente ? 'Desactivar carrera' : 'Activar carrera' }}">
-                <input type="checkbox" id="toggle-carrera-{{ $carrera->id }}"
-                    @if ($carrera->vigente) checked @endif
-                onchange="onToggleCarrera(this, {{ $carrera->id }})">
-                <span class="slider"></span>
-            </label>
-        </div>--}}
-        <form method="POST" action="{{ route('admin.carreras.update', ['carrera' => $carrera->id]) }}" enctype="multipart/form-data">
-            @method('PUT')
-            @csrf
-            <fieldset class="p-2" style="margin:10px;">
-                <legend class="font-600 font-7">Información</legend>
-                <div class="grid-2 gap-2 p-0">
-                    <label class="perfil_dataname">Nombre:
-                        <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
-                    </label>
-
-                    <label class="perfil_dataname">Resolución:
-                        <p class="campo_info-noinput rounded"> {{ $carrera->resolucion }} </p>
-                    </label>
-
-                    <label class="perfil_dataname">Año de apertura:
-                        <p class="campo_info-noinput rounded"> {{ $carrera->anio_apertura }} </p>
-                        <input type="hidden" name="anio_apertura" value="{{ $carrera->anio_apertura }}">
-                    </label>
-
-                    <label class="label-input-y-75">Estado:
-                        <select name="vigente" class="campo_info rounded">
-                            <option value="{{ $carrera->vigente }}" selected>
-                                {{ $carrera->vigente ? 'Vigente' : 'No vigente' }}
-                            </option>
-
-                            @if ($carrera->vigente == 1)
-                            @if (!empty($carrera->anio_fin))
-                            <option value="0">No vigente</option>
-                            @endif
-                            @else
-                            <option value="1">Vigente</option>
-                            @endif
-                        </select>
-                    </label>
-
-
-                    <label class="label-input-y-75">Año de cierre:
-                        <input type="text" name="anio_fin" value="{{ $carrera->anio_fin }}">
-                    </label>
-
-                    <label class="label-input-y-75">Observaciones:
-                        <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
-                    </label>
-
-                    <fieldset class="p-2" style="margin:10px;">
-                        <legend class="font-600 font-7">CARGAR ARCHIVO</legend>
-                        <div>
-                            <label class="label-input-y-75 "> <span class="bold">Archivo de la resolución:</span>
-                                @if($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo)))
-                                <p class="campo_info-noinput rounded mb-2">
-                                    <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank"> Ver PDF actual</a>
-                                </p>
-                                <div class="mb-2">
-                                    <label for="resolucion_archivo_nuevo" class="form-label"> Reemplazar archivo:</label>
-                                    <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
-                                </div>
-                                <div class="form-check mt-2">
-                                    <input type="checkbox" name="eliminar_resolucion_archivo" value="1" class="form-check-input" id="eliminarArchivo">
-                                    <label class="form-check-label" for="eliminarArchivo">Eliminar archivo actual</label>
-                                </div>
-                                @else
-                                <p class="campo_info-noinput rounded text-muted mb-2">No se ha cargado ningún archivo</p>
-                                <div>
-                                    <label for="resolucion_archivo_nuevo" class="form-label">Subir archivo:</label>
-                                    <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
-                                </div>
-                                @endif
-                            </label>
-                            <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
-                        </div>
-                    </fieldset>
-            </fieldset>
-    </div>
-
-
-    <div class="botones-derecha">
-
-        <x-botones-alumno />
-        {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
-        <x-btn-cancelar />
-        <button type="submit" class="btn_blue">
-            @if ($method == 'put')
-            <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-            Actualizar
-            @elseif ($method == 'post')
-            <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-            Guardar
-            @endif
-            {{-- @endif --}}
-        </button>
-
-    </div>
-    </form>
-    <div class="boton-eliminar">
-        @if (!$config['modo_seguro'])
-        <div>
-            <form method="POST" id="form-eliminar-{{ $carrera->id }}"
-                action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}">
+            <form method="POST" action="{{ route('admin.carreras.update', ['carrera' => $carrera->id]) }}" enctype="multipart/form-data">
+                @method('PUT')
                 @csrf
-                @method('delete')
-                <button class="btn_red_outline" type="button"
-                    onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->apellido) }} {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                    class="btn_icon-danger" style="margin-left: 10px;">
-                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar carrera
-                </button>
-            </form>
+                <fieldset class="p-2" style="margin:10px;">
+                    <legend class="font-600 font-7">Información</legend>
+                    <div class="grid-2 gap-2 p-0">
+                        <label class="perfil_dataname">Nombre:
+                            <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
+                        </label>
+
+                        <label class="perfil_dataname">Resolución:
+                            <p class="campo_info-noinput rounded"> {{ $carrera->resolucion }} </p>
+                        </label>
+
+                        <label class="perfil_dataname">Año de apertura:
+                            <p class="campo_info-noinput rounded"> {{ $carrera->anio_apertura }} </p>
+                            <input type="hidden" name="anio_apertura" value="{{ $carrera->anio_apertura }}">
+                        </label>
+
+                        <label class="label-input-y-75">Estado:
+                            <select name="vigente" class="campo_info rounded">
+                                <option value="{{ $carrera->vigente }}" selected>
+                                    {{ $carrera->vigente ? 'Vigente' : 'No vigente' }}
+                                </option>
+
+                                @if ($carrera->vigente == 1)
+                                @if (!empty($carrera->anio_fin))
+                                <option value="0">No vigente</option>
+                                @endif
+                                @else
+                                <option value="1">Vigente</option>
+                                @endif
+                            </select>
+                        </label>
+
+
+                        <label class="label-input-y-75">Año de cierre:
+                            <input type="text" name="anio_fin" value="{{ $carrera->anio_fin }}">
+                        </label>
+
+                        <label class="label-input-y-75">Observaciones:
+                            <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
+                        </label>
+
+                        <fieldset class="p-2" style="margin:10px;">
+                            <legend class="font-600 font-7">CARGAR ARCHIVO</legend>
+                            <div>
+                                <label class="label-input-y-75 "> <span class="bold">Archivo de la resolución:</span>
+                                    @if($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo)))
+                                    <p class="campo_info-noinput rounded mb-2">
+                                        <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank"> Ver PDF actual</a>
+                                    </p>
+                                    <div class="mb-2">
+                                        <label for="resolucion_archivo_nuevo" class="form-label"> Reemplazar archivo:</label>
+                                        <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
+                                    </div>
+                                    <div class="form-check mt-2">
+                                        <input type="checkbox" name="eliminar_resolucion_archivo" value="1" class="form-check-input" id="eliminarArchivo">
+                                        <label class="form-check-label" for="eliminarArchivo">Eliminar archivo actual</label>
+                                    </div>
+                                    @else
+                                    <p class="campo_info-noinput rounded text-muted mb-2">No se ha cargado ningún archivo</p>
+                                    <div>
+                                        <label for="resolucion_archivo_nuevo" class="form-label">Subir archivo:</label>
+                                        <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
+                                    </div>
+                                    @endif
+                                </label>
+                                <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
+                            </div>
+                        </fieldset>
+                </fieldset>
         </div>
-        @endif
+
+
+        <div class="botones-derecha">
+
+            <x-botones-alumno />
+            {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
+            <x-btn-cancelar />
+            <button type="submit" class="btn_blue">
+                @if ($method == 'put')
+                <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
+                Actualizar
+                @elseif ($method == 'post')
+                <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+                Guardar
+                @endif
+                {{-- @endif --}}
+            </button>
+
+        </div>
+        </form>
+        <div class="boton-eliminar">
+            @if (!$config['modo_seguro'])
+            <div>
+                <form method="POST" id="form-eliminar-{{ $carrera->id }}"
+                    action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}">
+                    @csrf
+                    @method('delete')
+                    <button class="btn_red_outline" type="button"
+                        onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->apellido) }} {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                        class="btn_icon-danger" style="margin-left: 10px;">
+                        <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar carrera
+                    </button>
+                </form>
+            </div>
+            @endif
+        </div>
     </div>
-</div>
 </div>
 
 
