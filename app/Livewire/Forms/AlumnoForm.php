@@ -37,11 +37,11 @@ class AlumnoForm extends Form
 
     public $observaciones;
 
-    public $telefono1;
+    public $telefono_1;
 
-    public $telefono2;
+    public $telefono_2;
 
-    public $casa_numero;
+    public $altura;
 
     public $codigo_postal;
 
@@ -60,7 +60,7 @@ class AlumnoForm extends Form
             'calle' => ['nullable', 'string', 'max:30'],
             'ciudad_nacimiento' => ['nullable', 'string', 'max:30'],
             'dpto' => ['nullable', 'string', 'max:5'],
-            'casa_numero' => ['nullable', 'integer', 'max_digits:4'],
+            'altura' => ['nullable', 'integer', 'max_digits:4'],
             'piso' => ['nullable', 'integer', 'max_digits:2'],
             'estado_civil' => ['nullable', 'integer', 'between:0,5'],
             'email' => ['required', 'email', 'max:50'],
@@ -68,8 +68,8 @@ class AlumnoForm extends Form
             'titulo_anterior' => ['nullable', 'string', 'max:255'],
             'becas' => ['nullable', 'integer', 'between:0,9'],
             'observaciones' => ['nullable'],
-            'telefono1' => ['required', new Telefono],
-            'telefono2' => ['nullable', new Telefono],
+            'telefono_1' => ['required', new Telefono],
+            'telefono_2' => ['nullable', new Telefono],
             'codigo_postal' => ['nullable', 'alpha_num', 'max:10'],
             'titulo_secundario' => ['required', 'integer', 'between:0,4'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:30'],

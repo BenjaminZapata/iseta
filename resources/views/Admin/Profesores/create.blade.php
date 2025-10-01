@@ -1,5 +1,4 @@
 @extends('Admin.template')
-@php use Illuminate\Support\HtmlString; @endphp
 
 @section('content')
 <div>
@@ -77,11 +76,11 @@
                             'placeholder' => 'ejemplo@dominio.com',
                             'maxlength' => 50,
                         ]),
-                        $form->text('telefono1', 'Teléfono 1:*', 'label-input-y-75', old('telefono1'), [
+                        $form->text('telefono_1', 'Teléfono 1:*', 'label-input-y-75', old('telefono_1'), [
                             'placeholder' => 'Ej: 2317-876544',
                             'maxlength' => 30,
                         ]),
-                        $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2'), [
+                        $form->text('telefono_2', 'Teléfono 2:', 'label-input-y-75', old('telefono_2'), [
                             'placeholder' => 'Ej: 2317-876543',
                             'maxlength' => 30,
                         ]),
@@ -92,20 +91,9 @@
                             'maxlength' => 150,
                         ]),
                     ],
-
-                    'Vinculación' => [
-                        new \Illuminate\Support\HtmlString(
-                            view('components.vinculacion-profesor', [
-                                'carreras' => $carreras,
-                                'profesor' => null
-                            ])->render()
-                        )
-                    ],
-
                 ]) ?>
             </form>
         </div>
     </div>
-</div>
 </div>
 @endsection
