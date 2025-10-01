@@ -73,9 +73,9 @@ class CrearProfesorRequest extends FormRequest
             'formacion_academica.required' => 'La formación académica es obligatoria.',
             'formacion_academica.regex' => 'La formación académica solo puede contener letras y espacios.',
             'formacion_academica.max' => 'La formación académica no puede tener más de 150 caracteres.',
-            'telefono_1.required' => 'El teléfono 1 es obligatorio.',
-            'telefono_1.max' => 'El teléfono 1 no puede tener más de 30 caracteres.',
-            'telefono_2.max' => 'El teléfono 2 no puede tener más de 30 caracteres.',
+            'telefono1.required' => 'El teléfono 1 es obligatorio.',
+            'telefono1.max' => 'El teléfono 1 no puede tener más de 30 caracteres.',
+            'telefono2.max' => 'El teléfono 2 no puede tener más de 30 caracteres.',
             'año_ingreso.required' => 'El año de ingreso es obligatorio.',
         ];
     }

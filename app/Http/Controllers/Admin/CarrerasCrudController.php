@@ -125,38 +125,47 @@ class CarrerasCrudController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditarCarreraRequest $request, Carrera $carrera)
-    {
+   public function update(Request $request, Carrera $carrera)
+{
+    try {
+        // Validar todos los campos relevantes
+        $validated = $request->validate([
+            'resolucion_archivo_nuevo' => 'nullable|file|mimes:pdf|max:20480',
+            'eliminar_resolucion_archivo' => 'nullable|boolean',
+            // Agregá aquí cualquier otro campo que uses, por ejemplo:
+            'nombre' => 'sometimes|string|max:255',
+            // ...
+        ]);
+
+        // Eliminar archivo si se solicita
         if ($request->has('eliminar_resolucion_archivo')) {
-    if ($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo))) {
-        unlink(public_path($carrera->resolucion_archivo));
-    }
-    $datos['resolucion_archivo'] = null;
-}
-
-if ($request->hasFile('resolucion_archivo_nuevo')) {
-    $nombreArchivo = str_replace(' ', '_', $datos['nombre']) . '.pdf';
-    $ruta = $request->file('resolucion_archivo_nuevo')->storeAs('resoluciones', $nombreArchivo, 'public');
-    $datos['resolucion_archivo'] = 'storage/' . $ruta;
-}
-
-        try {
-            $datos = $request->validated();
-
-            $carrera->update($datos);
-
-            if ($request->has('redirect')) {
-                return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la carrera');
-            } else {
-                return redirect()->back()->with('mensaje', 'Se edito la carrera');
+            if ($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo))) {
+                unlink(public_path($carrera->resolucion_archivo));
             }
-        } catch (\Exception $e) {
-            Log::error($e);
-
-            return redirect()->back()->with('error', 'No se pudo editar la carrera');
+            $validated['resolucion_archivo'] = null;
         }
 
+        // Subir nuevo archivo si se proporciona
+        if ($request->hasFile('resolucion_archivo_nuevo')) {
+            $archivo = $request->file('resolucion_archivo_nuevo');
+            $nombreArchivo = 'resolucion_' . uniqid() . '.pdf';
+            $ruta = $archivo->storeAs('resoluciones', $nombreArchivo, 'public');
+            $validated['resolucion_archivo'] = 'storage/' . $ruta;
+        }
+
+        // Actualizar carrera
+        $carrera->update($validated);
+
+        return $request->has('redirect')
+            ? redirect()->to($request->input('redirect'))->with('mensaje', 'Se editó la carrera')
+            : redirect()->back()->with('mensaje', 'Se editó la carrera');
+
+    } catch (\Exception $e) {
+        Log::error($e);
+        return redirect()->back()->with('error', 'No se pudo editar la carrera'. $e->getMessage())->withInput();
     }
+}
+
 
     public function createAsignaturaView(Carrera $carrera)
     {
@@ -214,7 +223,12 @@ if ($request->hasFile('resolucion_archivo_nuevo')) {
         if ($carrera->asignaturas()->where('id_asignatura', $data['id_asignatura'])->exists()) {
             return redirect()->back()->with('error', 'La asignatura ya está en la carrera')->withInput();
         }
-        $carrera->asignaturas()->attach(['asignatura' => $data]);
+        $carrera->asignaturas()->attach($data['id_asignatura'], [
+    'id_profesor' => $data['id_profesor'] ?? 0,
+    'anio' => $data['anio'],
+    'carga_horaria' => $data['carga_horaria'],
+    'tipo_modulo' => $data['tipo_modulo'] ?? 0
+]);
 
         return redirect()->back()->with('mensaje', 'Se agrego la asignatura a la carrera');
     }

@@ -22,7 +22,7 @@
                 <span class="slider"></span>
             </label>
         </div>--}}
-        <form method="POST" action="{{ route('admin.carreras.update', ['carrera' => $carrera->id]) }}">
+        <form method="POST" action="{{ route('admin.carreras.update', ['carrera' => $carrera->id]) }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <fieldset class="p-2" style="margin:10px;">

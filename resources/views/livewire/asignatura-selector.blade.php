@@ -11,7 +11,8 @@
                 <label for="selectedId">Asignatura:</label>
                 <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
                     form="add_asignatura">
-                    @foreach ($asignaturas->where('id', '!=', $carrera->asignaturas->first()->id) as $selectedId)
+                    @foreach ($asignaturas->where('id', '!=', $carrera->asignaturas->first()?->id) as $selectedId)
+
                         <option value="{{ $selectedId->id }}">
                             {{ $selectedId->nombre }}
                         </option>
