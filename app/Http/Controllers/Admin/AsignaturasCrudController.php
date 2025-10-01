@@ -4,14 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\CrearAsignaturaRequest;
-use App\Http\Requests\EditarAsignaturaRequest;
 use App\Models\Asignatura;
 use App\Models\Carrera;
 use App\Repositories\Admin\AsignaturaRepository;
-use App\Repositories\Admin\CarreraRepository;
-use App\Models\Configuracion;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class AsignaturasCrudController extends BaseController
 {
@@ -19,7 +15,7 @@ class AsignaturasCrudController extends BaseController
 
     public $mensajes = ['mensaje' => [], 'error' => [], 'aviso' => []];
 
-    function __construct(AsignaturaRepository $asignaturasRepo)
+    public function __construct(AsignaturaRepository $asignaturasRepo)
     {
         $this->middleware('auth:admin');
         $this->asignaturasRepo = $asignaturasRepo;
@@ -47,6 +43,7 @@ class AsignaturasCrudController extends BaseController
         // Aplicar filtros al repositorio
         $asignaturas = $this->asignaturasRepo->filter($filters);
         $request->flash();
+
         return view('Admin.Asignaturas.index', [
             'filters' => $filters,
             'asignaturas' => $asignaturas,
@@ -64,7 +61,6 @@ class AsignaturasCrudController extends BaseController
         ]);
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
@@ -74,7 +70,7 @@ class AsignaturasCrudController extends BaseController
 
         // Verificar unicidad contextual
         $existe = Asignatura::where('nombre', $data['nombre'])
-            ->where('tipo_modulo', $data['cantidad_modulo'])
+            ->where('carga_horaria', $data['carga_horaria'])
             ->exists();
 
         if ($existe) {
@@ -83,20 +79,14 @@ class AsignaturasCrudController extends BaseController
                 ->withInput();
         }
 
-        // Generar clave única
-        $data['clave_unica'] = \Str::uuid(); // o lógica propia
-
         Asignatura::create($data);
 
         return redirect()->back()->with('mensaje', 'Se creó la asignatura correctamente.');
     }
 
-
-
     /**
      * Remove the specified resource from storage.
      */
-
     public function destroy(Asignatura $asignatura)
     {
         try {
@@ -118,7 +108,7 @@ class AsignaturasCrudController extends BaseController
                     ->with('error', 'No se pudo eliminar la asignatura porque tiene materias correlativas asociadas.');
             }
 
-            //verificar si la asignatura tiene relaciones con mesas
+            // verificar si la asignatura tiene relaciones con mesas
             if ($asignatura->mesas()->exists()) {
                 return redirect()->route('admin.asignaturas.index')
                     ->with('error', 'No se pudo eliminar la asignatura porque tiene mesas asociadas.');
@@ -127,13 +117,11 @@ class AsignaturasCrudController extends BaseController
             // Si no tiene relaciones, procedemos a eliminarla
             $asignatura->delete();
 
-
-
             return redirect()->route('admin.asignaturas.index')
                 ->with('mensaje', 'Se ha eliminado la asignatura');
         } catch (\Exception $e) {
             return redirect()->route('admin.asignaturas.index')
-                ->with('error', 'No se pudo eliminar la asignatura' . $e->getMessage());
+                ->with('error', 'No se pudo eliminar la asignatura'.$e->getMessage());
         }
     }
 }

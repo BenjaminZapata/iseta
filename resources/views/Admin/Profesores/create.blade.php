@@ -1,4 +1,5 @@
 @extends('Admin.template')
+@php use Illuminate\Support\HtmlString; @endphp
 
 @section('content')
 <div>
@@ -26,7 +27,7 @@
                             'placeholder' => 'dd/mm/aaaa',
                         ]),
                         $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', old('estado_civil'), [
-                            '' => 'Seleccione...',
+                            'vacio' => 'Seleccione...',
                             '0' => 'Soltero',
                             '1' => 'Casado',
                             '2' => 'Divorciado',
@@ -52,13 +53,13 @@
                             'placeholder' => 'Ej: 742',
                             'maxlength' => 4,
                         ]),
-                        $form->text('piso', 'Piso:', 'label-input-y-75', old('piso'), [
-                            'placeholder' => 'Ej: 3',
-                            'maxlength' => 15,
-                        ]),
                         $form->text('dpto', 'Dpto:', 'label-input-y-75', old('dpto'), [
                             'placeholder' => 'Ej: A',
                             'maxlength' => 5,
+                        ]),
+                        $form->text('piso', 'Piso:', 'label-input-y-75', old('piso'), [
+                            'placeholder' => 'Ej: 3',
+                            'maxlength' => 15,
                         ]),
                     ],
                     'Académico' => [
@@ -76,11 +77,11 @@
                             'placeholder' => 'ejemplo@dominio.com',
                             'maxlength' => 50,
                         ]),
-                        $form->text('telefono1', 'Teléfono 1:*', 'label-input-y-75', old('telefono1'), [
+                        $form->text('telefono_1', 'Teléfono 1:*', 'label-input-y-75', old('telefono_1'), [
                             'placeholder' => 'Ej: 2317-876544',
                             'maxlength' => 30,
                         ]),
-                        $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2'), [
+                        $form->text('telefono_2', 'Teléfono 2:', 'label-input-y-75', old('telefono_2'), [
                             'placeholder' => 'Ej: 2317-876543',
                             'maxlength' => 30,
                         ]),
@@ -91,9 +92,12 @@
                             'maxlength' => 150,
                         ]),
                     ],
+
+
                 ]) ?>
             </form>
         </div>
     </div>
+</div>
 </div>
 @endsection
