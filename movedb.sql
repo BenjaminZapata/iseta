@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db-iseta
--- Tiempo de generación: 01-10-2025 a las 20:42:06
+-- Tiempo de generación: 01-10-2025 a las 20:46:39
 -- Versión del servidor: 8.0.42
 -- Versión de PHP: 8.2.27
 
@@ -288,8 +288,7 @@ INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fech
 (194, NULL, 35146383, 'Juan Francisco', 'Merlo', '1990-03-10 00:00:00', 'Nueve de julio', 'La rioja ', 930, '', 0, 0, 'jfmerlo_11@hotmail.com', 'técnico en arte', 0, '', '0', '428588', '2317473769', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (195, NULL, 38603201, 'Yesica Fernanda', 'Navarro', '1995-11-22 00:00:00', 'Nueve de julio', 'Barrio mercantil', 24, '', 0, 0, 'carozon.bailando.al.viento@gmail.com', 'bachiller gestión y administración', 0, '', '2317538503', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (196, NULL, 27848896, 'Carlos Alberto', 'Prenollio', '1980-03-19 00:00:00', 'Nueve d e julio', 'Bº fonavi', 6, '', 0, 0, 'carlospronollio@hotmail.com', 'bachiller administración contable', 0, '', '2317527924', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
-(197, NULL, 32317412, 'Romina Gisela', 'Rizzo', '1986-02-25 00:00:00', 'Nueve de julio', 'Bº fonavi ll', 52, '', 0, 0, '', 'bachiller humanidades y ciencias sociales', 0, '', '2317539483', '523393', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0);
-INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fecha_nacimiento`, `ciudad`, `calle`, `casa_numero`, `dpto`, `piso`, `estado_civil`, `email`, `titulo_anterior`, `becas`, `observaciones`, `telefono1`, `telefono2`, `telefono3`, `codigo_postal`, `password`, `verificado`, `token_verificacion`, `remember_token`, `nombre_institucion_secundario`, `genero`, `titulo_secundario`, `fecha_titulo_secundario`, `lugar_nacimiento`, `estado`) VALUES
+(197, NULL, 32317412, 'Romina Gisela', 'Rizzo', '1986-02-25 00:00:00', 'Nueve de julio', 'Bº fonavi ll', 52, '', 0, 0, '', 'bachiller humanidades y ciencias sociales', 0, '', '2317539483', '523393', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (198, NULL, 39291804, 'Franco Enrique', 'Sanchez Ortiz', '1996-07-02 00:00:00', 'Nueve de julio', 'Cavallari', 2130, '', 0, 0, 'apm.sfr@gmail.com', 'BACHILLER CIENCIAS SOCIALES', 0, '', '2317534253', '432071', '0', '', '$2y$10$V3TZ1hj3ODT9fjiVMUUis.BNbM3X9cB77SEk8x3A7vMowqxDBJF8G', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (199, NULL, 37436201, 'Gonzalo Andres', 'Sanz', '1993-05-23 00:00:00', 'Nueve de ulio', 'Azcuenaga', 903, '', 0, 0, 'sanzgonzaloa@hotmail.com', 'bachiller ciencias naturales', 0, '', '2317485024', '427367', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (200, NULL, 36537527, 'Daiana Giselle', 'Savinel', '1991-09-17 00:00:00', 'Nueve de julio', 'Heredia', 679, '', 0, 0, 'daianasavinel@hotmail.com', 'bachiller humanidades y ciencias sociales', 0, '', '2317534703', '0', '2317427340', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
@@ -488,8 +487,7 @@ INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fech
 (393, NULL, 42429734, 'Juan Ignacio', 'Atia', '2000-03-14 00:00:00', 'Nueve de julio', 'Bº 3 lagunas', 3, '', 0, 1, 'juaniatia29@hotmail.com', 'Bachiller Economía y Administración', 0, '', '0', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (394, NULL, 41426039, 'Julia', 'Bancora', '1998-10-19 00:00:00', 'Nueve de julio', 'Av. mitre', 4102, '', 0, 0, 'bancoraj20@gmail.com', 'BACHILLER ECONOMÍA Y ADMINISTRACIÓN', 0, '', '2317528005', '0', '0', '', '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (395, NULL, 35094780, 'Ana Claudia', 'Barthes', '1992-07-30 00:00:00', 'La niña', '', 0, '', 0, 0, '', 'Bachiller Economía y Gestión', 0, '', '15519772', '0', '15465939', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
-(396, NULL, 38608729, 'Eliana Ines', 'Battistella', '1997-02-03 00:00:00', 'La niña', '', 0, '', 0, 0, 'battistellaeliana@gmail.com', 'Bachiller Agrario', 0, '', '2317572226', '0', '2317417758', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0);
-INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fecha_nacimiento`, `ciudad`, `calle`, `casa_numero`, `dpto`, `piso`, `estado_civil`, `email`, `titulo_anterior`, `becas`, `observaciones`, `telefono1`, `telefono2`, `telefono3`, `codigo_postal`, `password`, `verificado`, `token_verificacion`, `remember_token`, `nombre_institucion_secundario`, `genero`, `titulo_secundario`, `fecha_titulo_secundario`, `lugar_nacimiento`, `estado`) VALUES
+(396, NULL, 38608729, 'Eliana Ines', 'Battistella', '1997-02-03 00:00:00', 'La niña', '', 0, '', 0, 0, 'battistellaeliana@gmail.com', 'Bachiller Agrario', 0, '', '2317572226', '0', '2317417758', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (397, NULL, 41426038, 'Celina Alejandra', 'Fanlo', '1998-10-22 00:00:00', 'Nueve de julio', 'Garmendia', 1968, '', 0, 0, 'celinafanlo17@gmail.com', 'Bachiller Economía y Administración', 0, '', '522531', '0', '2317409191', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (398, NULL, 38589863, 'Manuel', 'Fernandez', '1994-12-20 00:00:00', 'Nueve de julio', 'Tomas garbiso ', 494, '', 0, 0, '', 'Bachiller Economía y Gestión', 0, '', '2345654510', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (399, NULL, 36189288, 'Sebastian Andres', 'Gorosito', '1991-08-27 00:00:00', 'Nueve de julio', 'Cardenal pironio', 1135, '', 0, 0, 'sebas.osg@hotmail.com', 'BACHILLER EN ECONIMIA Y GESTION', 0, '', '2317528807', '0', '2317930212', '', '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
@@ -711,8 +709,7 @@ INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fech
 (618, NULL, 42294170, 'Kevin', 'Rojas', '2000-02-29 00:00:00', '', '', 0, '', 0, 1, 'kevin1976@outlook.com.ar', '', 0, '', '2317455778', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (619, NULL, 44243358, 'Martin Daniel', 'Albano', '2000-02-29 00:00:00', '', '', 0, '', 0, 1, 'xtfx@outlook.com', '', 0, '', '2317513495', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (620, NULL, 35408198, 'Juan Sebastian', 'Herrera', '2000-02-29 00:00:00', '', '', 0, '', 0, 1, 'juansebastianherrera17@hotmail.com', '', 0, '', '2317462051', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
-(621, NULL, 42656389, 'Rodrigo Agustin', 'Melgaejo', '2000-02-29 00:00:00', '', '', 0, '', 0, 1, 'rodrielgamer1@gmail.com', '', 0, '', '2317542053', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0);
-INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fecha_nacimiento`, `ciudad`, `calle`, `casa_numero`, `dpto`, `piso`, `estado_civil`, `email`, `titulo_anterior`, `becas`, `observaciones`, `telefono1`, `telefono2`, `telefono3`, `codigo_postal`, `password`, `verificado`, `token_verificacion`, `remember_token`, `nombre_institucion_secundario`, `genero`, `titulo_secundario`, `fecha_titulo_secundario`, `lugar_nacimiento`, `estado`) VALUES
+(621, NULL, 42656389, 'Rodrigo Agustin', 'Melgaejo', '2000-02-29 00:00:00', '', '', 0, '', 0, 1, 'rodrielgamer1@gmail.com', '', 0, '', '2317542053', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (622, NULL, 38933094, 'Eliseo', 'Rubione', '2000-02-29 00:00:00', '', '', 0, '', 0, 1, 'eliseo09r@gmail.com', '', 0, '', '2317465593', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (623, NULL, 42177441, 'Lautaro Sebastian', 'Sanchez', '2000-02-29 00:00:00', '', '', 0, '', 0, 1, 'lau.sanchez.17e@gmail.com', '', 0, '', '2317417306', '0', '0', NULL, '$2y$10$nRex6/mRbxJlAvaRqXhwne0lMlgUSSL6enr9Qe13BIjAy8qO10dB6', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (624, NULL, 34717596, 'Nery Eva Edith', 'Ortiz', '2000-02-29 00:00:00', '', '', 0, '', 0, 1, 'neryortiz.no@gmail.com', '', 0, '', '2317487453', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
@@ -918,8 +915,7 @@ INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fech
 (834, NULL, 44599294, 'Brian Thomas', 'Olszewski', '2002-11-25 00:00:00', 'San juan', '', 1486, '', 0, 0, 'brianols025@gmail.com', '', 0, '', '1130839138', '0', '0', '', '$2y$10$Fzv6HnFOiJo5/Y1o5vpJHuXvlo/IyQPAcd2Qgyb1zORxvS8DMtqcm', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (835, NULL, 43799734, 'Luisina Annahel', 'Rongvaux', '2001-10-14 00:00:00', '9 de julio', 'Alborada 1', 32, '', 0, 0, 'rongvauxluisina@gmail.com', '', 0, '', '2317532578', '522657', '0', NULL, '$2y$10$HtOz0B1SiPnJq8P/uneMOOkyD6aQvDZN5WdEBiuXNBZ8lx9AqNjza', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (836, NULL, 29405873, 'Mariela', 'Rongvaux', '1982-04-22 00:00:00', '9 de julio', 'Heredia', 1032, '', 0, 0, 'marirongvaux@gmail.com', '', 0, '', '2317532862', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
-(837, NULL, 46006649, 'Tizziano', 'Rios Moro', '2000-02-29 00:00:00', '', '', 0, '', 0, 0, 'tizzirm@gmail.com', '', 0, '', '0', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0);
-INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fecha_nacimiento`, `ciudad`, `calle`, `casa_numero`, `dpto`, `piso`, `estado_civil`, `email`, `titulo_anterior`, `becas`, `observaciones`, `telefono1`, `telefono2`, `telefono3`, `codigo_postal`, `password`, `verificado`, `token_verificacion`, `remember_token`, `nombre_institucion_secundario`, `genero`, `titulo_secundario`, `fecha_titulo_secundario`, `lugar_nacimiento`, `estado`) VALUES
+(837, NULL, 46006649, 'Tizziano', 'Rios Moro', '2000-02-29 00:00:00', '', '', 0, '', 0, 0, 'tizzirm@gmail.com', '', 0, '', '0', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (838, NULL, 46264476, 'Luciana', 'Guiotto', '2000-02-29 00:00:00', '', '', 0, '', 0, 0, 'lucianaguiotto326@gmail.com', '', 0, '', '0', '0', '0', NULL, '$2y$10$rG3zThPoSFYR2qfup9sVnujxbqW6mY1cuHanedoW9b/81JMoNmJmi', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (839, NULL, 39291938, 'Nicolas', 'Bossio', '2000-02-29 00:00:00', '', '', 0, '', 0, 1, 'bossionicolas7@gmail.com', '', 0, '', '0', '0', '0', NULL, '0', 0, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (840, NULL, 41740733, 'Pedro Agustin', 'Filoni', '2000-02-29 00:00:00', '', '', 0, NULL, 0, 0, 'pedrofiloni@gmail.com', NULL, 0, '', '2317534452', '0', '0', NULL, '$2y$10$1WxF3fysCkXBqstdiFpTvubFEcQH2lIAC43kgxf6c33asNxTw1iJy', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
@@ -1097,8 +1093,7 @@ INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fech
 (1012, NULL, 40978655, 'Damian', 'Silva Kierbel', '1998-03-16 00:00:00', '9 de julio', 'San juan', 758, NULL, NULL, 0, 'damiansil98@hotmail.com', NULL, NULL, '', '2317415480', NULL, NULL, NULL, '$2y$10$ZJwWf9dvQ22pQvvCLPOAK.HOPS8pXS/GJwctMK/2HoX4/.KcToZ3i', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (1013, NULL, 27850650, 'Bernabe Ignacio', 'Arrighi', '1980-02-07 00:00:00', '9 de julio', 'Chacabuco', 1287, NULL, NULL, 0, 'bernabearrighi@gmail.com', NULL, NULL, '', '2944234203', NULL, NULL, NULL, '$2y$10$abm6CTK3fdNhSydvRlyA.OvGZ4KB.yNp3tmXcKQBIRuP9MtPvDTvO', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (1014, NULL, 46006645, 'Ciro', 'Balbuena', '2004-10-30 00:00:00', '9 de julio', 'Leopoldo lugones', 1679, NULL, NULL, 0, 'cirobalbuena68@gmail.com', NULL, NULL, '', '2317534309', '2317508787', NULL, NULL, '$2y$10$ZfDfCEPqo5TFF2LWdsYVpOtzlf7QjEpU/cYSlmSM7Dle5G2txJaxy', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
-(1015, NULL, 43106163, 'Oriana', 'Falcinelli', '2000-12-23 00:00:00', '', '', NULL, NULL, NULL, 0, 'falcinellioriana@gmail.com', NULL, NULL, '', '2317555687', NULL, NULL, NULL, '$2y$10$aPRSqZbrOX.FBk2CkEIWqOdYbvVR0v/DEUKGxEOytzTlruPL2NPD6', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0);
-INSERT INTO `alumnos` (`id`, `id_provisorio`, `dni`, `nombre`, `apellido`, `fecha_nacimiento`, `ciudad`, `calle`, `casa_numero`, `dpto`, `piso`, `estado_civil`, `email`, `titulo_anterior`, `becas`, `observaciones`, `telefono1`, `telefono2`, `telefono3`, `codigo_postal`, `password`, `verificado`, `token_verificacion`, `remember_token`, `nombre_institucion_secundario`, `genero`, `titulo_secundario`, `fecha_titulo_secundario`, `lugar_nacimiento`, `estado`) VALUES
+(1015, NULL, 43106163, 'Oriana', 'Falcinelli', '2000-12-23 00:00:00', '', '', NULL, NULL, NULL, 0, 'falcinellioriana@gmail.com', NULL, NULL, '', '2317555687', NULL, NULL, NULL, '$2y$10$aPRSqZbrOX.FBk2CkEIWqOdYbvVR0v/DEUKGxEOytzTlruPL2NPD6', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (1016, NULL, 36772686, 'Nicanor', 'Fage', '1992-04-20 00:00:00', '', '', NULL, NULL, NULL, 0, 'nicanorfage@gmail.com', NULL, NULL, '', '2317514802', NULL, NULL, NULL, '$2y$10$Hm7L.R/J.rboouU6gDWGBuI5wgfAv.zdi8CSrwJCR.9uIB2SKDNRe', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (1017, NULL, 46341287, 'Giselle Jaqueline', 'Rosales', '2006-06-18 00:00:00', '', '', NULL, NULL, NULL, 0, 'rosalesgisellee@gmail.com', NULL, NULL, '', NULL, NULL, NULL, NULL, '$2y$10$0OvQuawKdeZFPtr1y6WDxeRxLCfzLlFxIqCkdvIIS9eh0KXQ/XUCG', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
 (1018, NULL, 47011376, 'Maria Jaqueline', 'Tapia', '2005-11-16 00:00:00', '', '', NULL, NULL, NULL, 0, 'jaquetapia205@icloud.com', NULL, NULL, '', NULL, NULL, NULL, NULL, '$2y$10$VO09JHdqibAe/PqCj/XmU.gXyo1oOjAVJFQklCFfxk2OBC7tH94ou', 1, '0', NULL, '', NULL, 0, '2025-08-20', NULL, 0),
@@ -4234,8 +4229,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (1222, 98, 111, 2015, 1, 1, NULL, NULL, 4),
 (1223, 99, 111, 2015, 1, 1, NULL, NULL, 4),
 (1224, 101, 111, 2015, 1, 1, NULL, NULL, 4),
-(1225, 43, 123, 2016, 1, 1, NULL, NULL, 2);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(1225, 43, 123, 2016, 1, 1, NULL, NULL, 2),
 (1226, 43, 129, 2016, 1, 1, NULL, NULL, 2),
 (1227, 43, 125, 2016, 1, 1, NULL, NULL, 2),
 (1228, 43, 119, 2016, 1, 1, NULL, NULL, 2),
@@ -5419,8 +5413,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (2406, 21, 44, 2016, 1, 1, NULL, NULL, 1),
 (2407, 22, 44, 2016, 1, 1, NULL, NULL, 1),
 (2408, 26, 44, 2016, 1, 1, NULL, NULL, 1),
-(2409, 27, 44, 2016, 1, 1, NULL, NULL, 1);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(2409, 27, 44, 2016, 1, 1, NULL, NULL, 1),
 (2410, 28, 44, 2016, 1, 1, NULL, NULL, 1),
 (2411, 19, 45, 2016, 1, 1, NULL, NULL, 1),
 (2412, 22, 45, 2016, 1, 1, NULL, NULL, 1),
@@ -6602,8 +6595,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (3588, 53, 126, 2017, 1, 1, NULL, NULL, 2),
 (3589, 258, 126, 2017, 1, 1, NULL, NULL, 2),
 (3590, 46, 129, 2017, 1, 1, NULL, NULL, 2),
-(3591, 47, 129, 2017, 1, 1, NULL, NULL, 2);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(3591, 47, 129, 2017, 1, 1, NULL, NULL, 2),
 (3592, 48, 129, 2017, 1, 1, NULL, NULL, 2),
 (3593, 49, 129, 2017, 1, 1, NULL, NULL, 2),
 (3594, 50, 129, 2017, 1, 1, NULL, NULL, 2),
@@ -7785,8 +7777,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (4770, 50, 149, 2018, 1, 1, NULL, NULL, 2),
 (4771, 51, 149, 2018, 1, 1, NULL, NULL, 2),
 (4772, 52, 149, 2018, 1, 1, NULL, NULL, 2),
-(4773, 258, 149, 2018, 1, 1, NULL, NULL, 2);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(4773, 258, 149, 2018, 1, 1, NULL, NULL, 2),
 (4774, 51, 150, 2018, 1, 1, NULL, NULL, 2),
 (4775, 52, 150, 2018, 1, 1, NULL, NULL, 2),
 (4776, 50, 151, 2018, 1, 1, NULL, NULL, 2),
@@ -8953,8 +8944,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (5937, 89, 302, 2019, 1, 1, NULL, NULL, 4),
 (5938, 87, 302, 2019, 1, 1, NULL, NULL, 4),
 (5939, 79, 447, 2019, 1, 1, NULL, NULL, 4),
-(5940, 85, 447, 2019, 1, 1, NULL, NULL, 4);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(5940, 85, 447, 2019, 1, 1, NULL, NULL, 4),
 (5941, 78, 447, 2019, 1, 1, NULL, NULL, 4),
 (5942, 81, 447, 2019, 1, 1, NULL, NULL, 4),
 (5943, 89, 447, 2019, 1, 1, NULL, NULL, 4),
@@ -10126,8 +10116,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (7109, 111, 395, 2020, 1, 1, NULL, NULL, 4),
 (7110, 113, 395, 2020, 1, 1, NULL, NULL, 4),
 (7111, 114, 395, 2020, 1, 1, NULL, NULL, 4),
-(7112, 260, 395, 2020, 1, 1, NULL, NULL, 4);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(7112, 260, 395, 2020, 1, 1, NULL, NULL, 4),
 (7113, 405, 91, 2020, 1, 1, NULL, NULL, 16),
 (7114, 407, 91, 2020, 1, 1, NULL, NULL, 16),
 (7115, 408, 91, 2020, 1, 1, NULL, NULL, 16),
@@ -11276,8 +11265,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (8259, 360, 427, 2021, 1, 2, NULL, NULL, 14),
 (8260, 354, 429, 2020, 1, 1, NULL, NULL, 14),
 (8261, 355, 429, 2020, 1, 1, NULL, NULL, 14),
-(8262, 356, 429, 2020, 1, 1, NULL, NULL, 14);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(8262, 356, 429, 2020, 1, 1, NULL, NULL, 14),
 (8263, 357, 429, 2020, 1, 1, NULL, NULL, 14),
 (8264, 358, 429, 2020, 1, 1, NULL, NULL, 14),
 (8265, 359, 429, 2020, 1, 1, NULL, NULL, 14),
@@ -12420,8 +12408,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (9409, 431, 443, 2021, 3, 1, NULL, NULL, 17),
 (9410, 425, 443, 2021, 3, 1, NULL, NULL, 17),
 (9411, 428, 443, 2021, 3, 1, NULL, NULL, 17),
-(9412, 433, 443, 2021, 3, 1, NULL, NULL, 17);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(9412, 433, 443, 2021, 3, 1, NULL, NULL, 17),
 (9413, 426, 443, 2021, 3, 1, NULL, NULL, 17),
 (9414, 430, 443, 2021, 3, 1, NULL, NULL, 17),
 (9415, 429, 443, 2021, 3, 1, NULL, NULL, 17),
@@ -13546,8 +13533,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (10548, 424, 722, 2021, 2, 1, NULL, NULL, 17),
 (10549, 425, 722, 2021, 1, 1, NULL, NULL, 17),
 (10550, 426, 722, 2021, 1, 1, NULL, NULL, 17),
-(10551, 427, 722, 2021, 1, 1, NULL, NULL, 17);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(10551, 427, 722, 2021, 1, 1, NULL, NULL, 17),
 (10552, 428, 722, 2021, 1, 1, NULL, NULL, 17),
 (10553, 429, 722, 2021, 1, 1, NULL, NULL, 17),
 (10554, 430, 722, 2021, 1, 1, NULL, NULL, 17),
@@ -14659,8 +14645,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (11671, 429, 748, 2022, 1, 1, NULL, NULL, 17),
 (11672, 428, 748, 2022, 1, 1, NULL, NULL, 17),
 (11673, 427, 748, 2022, 1, 1, NULL, NULL, 17),
-(11674, 426, 748, 2022, 1, 1, NULL, NULL, 17);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(11674, 426, 748, 2022, 1, 1, NULL, NULL, 17),
 (11675, 425, 748, 2022, 1, 1, NULL, NULL, 17),
 (11676, 424, 748, 2022, 2, 1, NULL, NULL, 17),
 (11677, 423, 748, 2022, 1, 1, NULL, NULL, 17),
@@ -14695,7 +14680,8 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (11706, 426, 783, 2022, 1, 1, NULL, '2024-02-15 21:29:48', 17),
 (11707, 425, 783, 2022, 2, 1, NULL, NULL, 17),
 (11708, 424, 783, 2022, 2, 1, NULL, NULL, 17),
-(11709, 423, 783, 2022, 1, 1, NULL, NULL, 17),
+(11709, 423, 783, 2022, 1, 1, NULL, NULL, 17);
+INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
 (11710, 430, 782, 2022, 1, 1, NULL, NULL, 17),
 (11711, 429, 782, 2022, 1, 1, NULL, NULL, 17),
 (11712, 428, 782, 2022, 1, 2, NULL, NULL, 17),
@@ -15618,8 +15604,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (12633, 68, 798, 2023, 1, 1, NULL, '2023-11-15 12:44:43', 3),
 (12634, 69, 798, 2023, 1, 1, NULL, '2023-11-16 12:18:53', 3),
 (12635, 70, 798, 2023, 1, 1, NULL, '2023-11-15 12:45:12', 3),
-(12636, 71, 798, 2023, 1, 2, NULL, '2023-12-15 12:44:07', 3);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(12636, 71, 798, 2023, 1, 2, NULL, '2023-12-15 12:44:07', 3),
 (12637, 444, 722, 2023, 1, 1, NULL, '2023-11-17 11:50:06', 17),
 (12638, 445, 722, 2023, 2, 1, NULL, '2023-11-14 13:13:49', 17),
 (12639, 446, 722, 2023, 1, 1, NULL, '2023-11-16 12:06:27', 17),
@@ -16467,8 +16452,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (13482, 3, 834, 2023, 1, 1, NULL, NULL, 1),
 (13483, 2, 834, 2023, 2, 1, NULL, NULL, 1),
 (13484, 466, 525, 2023, 1, 1, '2023-11-15 12:33:10', '2023-11-15 13:01:54', 18),
-(13485, 468, 525, 2023, 1, 1, '2023-11-15 12:57:59', '2023-11-15 13:00:04', 18);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(13485, 468, 525, 2023, 1, 1, '2023-11-15 12:57:59', '2023-11-15 13:00:04', 18),
 (13487, 435, 778, 2023, 2, 1, '2023-11-16 12:41:04', '2023-11-22 12:49:07', 17),
 (13488, 438, 778, 2023, 2, 1, '2023-11-16 12:57:06', '2023-11-16 12:58:12', 17),
 (13489, 470, 525, 2023, 1, 1, '2023-11-21 12:54:51', '2023-11-21 12:55:28', 18),
@@ -17102,8 +17086,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (14126, 483, 974, 2024, 1, 3, '2024-03-13 19:04:34', '2024-03-13 19:04:34', 19),
 (14127, 484, 974, 2024, 1, 1, '2024-03-13 19:04:34', '2024-07-05 14:02:54', 19),
 (14128, 485, 974, 2024, 1, 3, '2024-03-13 19:04:34', '2024-03-13 19:04:34', 19),
-(14129, 486, 974, 2024, 1, 1, '2024-03-13 19:04:34', '2024-07-10 11:58:53', 19);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(14129, 486, 974, 2024, 1, 1, '2024-03-13 19:04:34', '2024-07-10 11:58:53', 19),
 (14130, 487, 974, 2024, 1, 3, '2024-03-13 19:04:34', '2024-03-13 19:04:34', 19),
 (14131, 488, 974, 2024, 1, 1, '2024-03-13 19:04:34', '2024-07-05 14:08:12', 19),
 (14132, 489, 974, 2024, 1, 3, '2024-03-13 19:04:34', '2024-03-13 19:04:34', 19),
@@ -17736,8 +17719,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (14759, 58, 967, 2024, 1, 3, '2024-03-16 00:27:25', '2024-03-16 00:27:25', 3),
 (14760, 59, 967, 2024, 1, 3, '2024-03-16 00:27:25', '2024-03-16 00:27:25', 3),
 (14761, 60, 967, 2024, 1, 3, '2024-03-16 00:27:25', '2024-03-16 00:27:25', 3),
-(14762, 61, 967, 2024, 1, 3, '2024-03-16 00:27:25', '2024-03-16 00:27:25', 3);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(14762, 61, 967, 2024, 1, 3, '2024-03-16 00:27:25', '2024-03-16 00:27:25', 3),
 (14763, 62, 967, 2024, 1, 3, '2024-03-16 00:27:25', '2024-03-16 00:27:25', 3),
 (14764, 444, 777, 2024, 1, 3, '2024-03-16 00:35:23', '2024-03-16 00:35:23', 17),
 (14765, 445, 777, 2024, 1, 3, '2024-03-16 00:35:23', '2024-03-16 00:35:23', 17),
@@ -18373,8 +18355,7 @@ INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `con
 (15395, 506, 902, 2024, 1, 3, '2024-03-27 17:14:34', '2024-03-27 17:14:34', 20),
 (15396, 507, 902, 2024, 3, 1, '2024-03-27 17:14:34', '2024-04-15 17:51:37', 20),
 (15397, 508, 902, 2024, 3, 1, '2024-03-27 17:14:34', '2024-04-15 17:52:11', 20),
-(15398, 509, 902, 2024, 1, 1, '2024-03-27 17:14:34', '2024-07-10 13:26:10', 20);
-INSERT INTO `cursadas` (`id`, `id_asignatura`, `id_alumno`, `anio_cursada`, `condicion`, `aprobada`, `created_at`, `updated_at`, `id_carrera`) VALUES
+(15398, 509, 902, 2024, 1, 1, '2024-03-27 17:14:34', '2024-07-10 13:26:10', 20),
 (15399, 510, 902, 2024, 1, 3, '2024-03-27 17:14:34', '2024-03-27 17:14:34', 20),
 (15400, 511, 902, 2024, 1, 3, '2024-03-27 17:14:34', '2024-03-27 17:14:34', 20),
 (15401, 423, 1017, 2024, 1, 3, '2024-03-27 23:19:29', '2024-03-27 23:19:29', 17),
@@ -20705,8 +20686,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (551, NULL, 46, 128, NULL, 4.00, NULL, NULL, NULL, NULL, '2015-12-11 00:00:00', NULL, NULL),
 (552, NULL, 46, 129, NULL, 7.00, NULL, NULL, NULL, NULL, '2015-12-16 00:00:00', NULL, NULL),
 (553, NULL, 46, 130, NULL, 8.00, NULL, NULL, NULL, NULL, '2015-12-01 00:00:00', NULL, NULL),
-(554, NULL, 46, 131, NULL, 7.00, NULL, NULL, NULL, NULL, '2015-12-21 00:00:00', NULL, NULL);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(554, NULL, 46, 131, NULL, 7.00, NULL, NULL, NULL, NULL, '2015-12-21 00:00:00', NULL, NULL),
 (555, NULL, 46, 136, NULL, 8.00, NULL, NULL, NULL, NULL, '2016-08-18 00:00:00', NULL, NULL),
 (556, NULL, 52, 116, NULL, 5.00, NULL, NULL, NULL, NULL, '2014-12-15 00:00:00', NULL, NULL),
 (557, NULL, 52, 117, NULL, 9.00, NULL, NULL, NULL, NULL, '2014-12-18 00:00:00', NULL, NULL),
@@ -21296,8 +21276,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (1239, 200, 119, 42, 1, 9.00, 1, NULL, 7, 110, '2016-12-06 00:00:00', NULL, 2),
 (1240, 200, 126, 42, 1, 8.00, 1, NULL, 7, 110, '2016-12-06 00:00:00', NULL, 2),
 (1241, 200, 131, 42, 1, 6.00, 1, NULL, 7, 110, '2016-12-06 00:00:00', NULL, 2),
-(1242, 200, 118, 42, 1, 7.00, 1, NULL, 7, 110, '2016-12-06 00:00:00', NULL, 2);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(1242, 200, 118, 42, 1, 7.00, 1, NULL, 7, 110, '2016-12-06 00:00:00', NULL, 2),
 (1243, 200, 122, 42, 1, 7.00, 0, NULL, 7, 110, '2016-12-06 00:00:00', NULL, 2),
 (1244, 200, 121, 42, 1, 6.00, 1, NULL, 7, 110, '2016-12-06 00:00:00', NULL, 2),
 (1245, 200, 124, 42, 1, 7.00, 1, NULL, 7, 110, '2016-12-06 00:00:00', NULL, 2),
@@ -21845,8 +21824,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (1792, NULL, 249, 106, NULL, 8.00, NULL, NULL, NULL, NULL, '2011-12-21 00:00:00', NULL, NULL),
 (1793, NULL, 249, 107, NULL, 8.00, NULL, NULL, NULL, NULL, '2011-12-22 00:00:00', NULL, NULL),
 (1794, NULL, 249, 108, NULL, 7.00, NULL, NULL, NULL, NULL, '2011-12-15 00:00:00', NULL, NULL),
-(1795, NULL, 249, 109, NULL, 7.00, NULL, NULL, NULL, NULL, '2011-12-05 00:00:00', NULL, NULL);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(1795, NULL, 249, 109, NULL, 7.00, NULL, NULL, NULL, NULL, '2011-12-05 00:00:00', NULL, NULL),
 (1796, NULL, 249, 110, NULL, 7.00, NULL, NULL, NULL, NULL, '2011-12-12 00:00:00', NULL, NULL),
 (1797, NULL, 249, 111, NULL, 9.00, NULL, NULL, NULL, NULL, '2011-12-16 00:00:00', NULL, NULL),
 (1798, NULL, 249, 113, NULL, 7.00, NULL, NULL, NULL, NULL, '2011-12-13 00:00:00', NULL, NULL),
@@ -22428,8 +22406,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (2628, NULL, 95, 147, NULL, 6.00, NULL, NULL, NULL, NULL, '2017-03-08 00:00:00', NULL, NULL),
 (2629, 226, 210, 29, 1, 6.00, 0, NULL, 8, 83, '2017-03-15 00:00:00', NULL, 2),
 (2630, NULL, 142, 29, NULL, 4.00, NULL, NULL, NULL, NULL, '2017-03-15 00:00:00', NULL, NULL),
-(2631, NULL, 150, 29, NULL, 4.00, NULL, NULL, NULL, NULL, '2017-03-15 00:00:00', NULL, NULL);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(2631, NULL, 150, 29, NULL, 4.00, NULL, NULL, NULL, NULL, '2017-03-15 00:00:00', NULL, NULL),
 (2632, NULL, 153, 29, NULL, 5.00, NULL, NULL, NULL, NULL, '2017-03-15 00:00:00', NULL, NULL),
 (2633, NULL, 157, 29, NULL, 5.00, NULL, NULL, NULL, NULL, '2017-03-15 00:00:00', NULL, NULL),
 (2634, NULL, 210, 29, NULL, 6.00, NULL, NULL, NULL, NULL, '2017-03-15 00:00:00', NULL, NULL),
@@ -23081,8 +23058,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (3414, 783, 136, 42, 1, 6.00, 0, NULL, 10, 23, '2017-12-11 00:00:00', NULL, 2),
 (3415, 783, 137, 42, 1, 4.00, 0, NULL, 10, 23, '2017-12-11 00:00:00', NULL, 2),
 (3416, 783, 212, 42, 1, 7.00, 0, NULL, 23, 10, '2017-12-11 00:00:00', NULL, 2),
-(3417, 778, 136, 39, 1, 8.00, 0, NULL, 10, 24, '2017-12-12 00:00:00', NULL, 2);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(3417, 778, 136, 39, 1, 8.00, 0, NULL, 10, 24, '2017-12-12 00:00:00', NULL, 2),
 (3419, 785, 212, 43, 1, 7.00, 0, NULL, 10, 29, '2017-12-13 00:00:00', NULL, 2),
 (3420, 787, 136, 45, 1, 9.00, 0, NULL, 10, 30, '2017-12-13 00:00:00', NULL, 2),
 (3421, 787, 137, 45, 1, 9.00, 0, NULL, 10, 30, '2017-12-13 00:00:00', NULL, 2),
@@ -23732,8 +23708,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (4113, NULL, 244, 55, NULL, 9.00, NULL, NULL, NULL, NULL, '2017-12-07 00:00:00', NULL, NULL),
 (4114, NULL, 325, 55, NULL, 9.00, NULL, NULL, NULL, NULL, '2017-12-07 00:00:00', NULL, NULL),
 (4115, NULL, 340, 55, NULL, 9.00, NULL, NULL, NULL, NULL, '2017-12-07 00:00:00', NULL, NULL),
-(4116, 690, 112, 84, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(4116, 690, 112, 84, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4),
 (4117, NULL, 323, 172, NULL, 7.00, NULL, NULL, NULL, NULL, '2017-12-12 00:00:00', NULL, NULL),
 (4118, NULL, 84, 140, NULL, 6.00, NULL, NULL, NULL, NULL, '2017-12-12 00:00:00', NULL, NULL),
 (4119, NULL, 88, 140, NULL, 9.00, NULL, NULL, NULL, NULL, '2017-12-12 00:00:00', NULL, NULL),
@@ -24372,8 +24347,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (4832, 1344, 29, 136, 1, 7.00, 2, NULL, 12, 32, '2018-08-09 00:00:00', NULL, 5),
 (4833, 1344, 30, 136, 1, 7.00, 2, NULL, 12, 32, '2018-08-09 00:00:00', NULL, 5),
 (4834, 1413, 334, 87, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4),
-(4835, NULL, 30, 128, NULL, 5.00, NULL, NULL, NULL, NULL, '2018-08-06 00:00:00', NULL, NULL);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(4835, NULL, 30, 128, NULL, 5.00, NULL, NULL, NULL, NULL, '2018-08-06 00:00:00', NULL, NULL),
 (4836, NULL, 29, 128, NULL, 4.00, NULL, NULL, NULL, NULL, '2018-08-06 00:00:00', NULL, NULL),
 (4837, NULL, 324, 59, NULL, 6.00, NULL, NULL, NULL, NULL, '2018-08-06 00:00:00', NULL, NULL),
 (4838, 1460, 73, 148, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 6),
@@ -25056,8 +25030,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (5605, NULL, 15, 137, NULL, 8.00, NULL, NULL, NULL, NULL, '2018-11-30 00:00:00', NULL, NULL),
 (5606, NULL, 23, 137, NULL, 8.00, NULL, NULL, NULL, NULL, '2018-11-30 00:00:00', NULL, NULL),
 (5607, NULL, 24, 137, NULL, 8.00, NULL, NULL, NULL, NULL, '2018-11-30 00:00:00', NULL, NULL),
-(5608, NULL, 25, 137, NULL, 8.00, NULL, NULL, NULL, NULL, '2018-11-30 00:00:00', NULL, NULL);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(5608, NULL, 25, 137, NULL, 8.00, NULL, NULL, NULL, NULL, '2018-11-30 00:00:00', NULL, NULL),
 (5609, NULL, 26, 137, NULL, 8.00, NULL, NULL, NULL, NULL, '2018-11-30 00:00:00', NULL, NULL),
 (5610, NULL, 30, 137, NULL, 8.00, NULL, NULL, NULL, NULL, '2018-11-30 00:00:00', NULL, NULL),
 (5611, NULL, 29, 137, NULL, 8.00, NULL, NULL, NULL, NULL, '2018-11-30 00:00:00', NULL, NULL),
@@ -25673,8 +25646,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (6298, NULL, 112, 93, NULL, 7.00, NULL, NULL, NULL, NULL, '2018-12-20 00:00:00', NULL, NULL),
 (6299, NULL, 54, 113, NULL, 9.00, NULL, NULL, NULL, NULL, '2018-12-20 00:00:00', NULL, NULL),
 (6300, NULL, 55, 113, NULL, 7.00, NULL, NULL, NULL, NULL, '2018-12-20 00:00:00', NULL, NULL),
-(6301, NULL, 58, 113, NULL, 7.00, NULL, NULL, NULL, NULL, '2018-12-20 00:00:00', NULL, NULL);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(6301, NULL, 58, 113, NULL, 7.00, NULL, NULL, NULL, NULL, '2018-12-20 00:00:00', NULL, NULL),
 (6302, NULL, 61, 113, NULL, 7.00, NULL, NULL, NULL, NULL, '2018-12-20 00:00:00', NULL, NULL),
 (6303, NULL, 33, 133, NULL, 9.00, NULL, NULL, NULL, NULL, '2018-12-19 00:00:00', NULL, NULL),
 (6304, NULL, 136, 50, NULL, 7.00, NULL, NULL, NULL, NULL, '2018-12-21 00:00:00', NULL, NULL),
@@ -26298,8 +26270,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (7016, 2288, 354, 44, 1, 9.00, 0, NULL, 10, 179, '2019-12-06 00:00:00', NULL, 2),
 (7017, 2492, 393, 90, 1, 9.00, 4, NULL, 11, 170, '2019-11-25 00:00:00', NULL, 4),
 (7018, 2490, 393, 91, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4),
-(7019, 2488, 393, 101, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(7019, 2488, 393, 101, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4),
 (7020, 2495, 393, 99, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4),
 (7021, 2499, 393, 98, 1, 9.00, 2, NULL, 12, 3, '2019-12-10 00:00:00', NULL, 4),
 (7022, 2481, 393, 82, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4),
@@ -26325,7 +26296,8 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (7044, 2468, 443, 81, 1, 6.00, 1, NULL, 11, 180, '2019-12-02 00:00:00', NULL, 4),
 (7045, 2468, 451, 81, 2, 6.00, 1, NULL, 11, 180, '2020-03-13 00:00:00', NULL, 4),
 (7046, 2466, 443, 84, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4),
-(7047, 2472, 443, 83, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4),
+(7047, 2472, 443, 83, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4);
+INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
 (7048, 2472, 451, 83, 0, 0.00, 0, NULL, 0, 0, NULL, NULL, 4),
 (7049, 2470, 451, 85, 1, 7.00, 1, NULL, 11, 169, '2019-11-25 00:00:00', NULL, 4),
 (7050, 2470, 443, 85, 1, 7.00, 1, NULL, 11, 169, '2019-11-25 00:00:00', NULL, 4),
@@ -26942,8 +26914,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (7727, NULL, 83, 112, NULL, 7.00, NULL, NULL, NULL, NULL, '2019-11-28 00:00:00', NULL, NULL),
 (7728, NULL, 87, 112, NULL, 8.00, NULL, NULL, NULL, NULL, '2019-11-28 00:00:00', NULL, NULL),
 (7729, NULL, 335, 112, NULL, 7.00, NULL, NULL, NULL, NULL, '2019-11-28 00:00:00', NULL, NULL),
-(7730, NULL, 393, 101, NULL, 9.00, NULL, NULL, NULL, NULL, '2019-11-27 00:00:00', NULL, NULL);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(7730, NULL, 393, 101, NULL, 9.00, NULL, NULL, NULL, NULL, '2019-11-27 00:00:00', NULL, NULL),
 (7731, NULL, 394, 101, NULL, 4.00, NULL, NULL, NULL, NULL, '2019-11-27 00:00:00', NULL, NULL),
 (7732, NULL, 395, 101, NULL, 9.00, NULL, NULL, NULL, NULL, '2019-11-27 00:00:00', NULL, NULL),
 (7733, NULL, 396, 101, NULL, 10.00, NULL, NULL, NULL, NULL, '2019-11-27 00:00:00', NULL, NULL),
@@ -27585,8 +27556,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (8436, 3203, 436, 355, 1, 5.00, 2, NULL, 1, 1, '2020-11-24 00:00:00', NULL, 14),
 (8437, 3214, 436, 357, 1, 9.00, 0, NULL, 11, 66, '2020-12-09 00:00:00', NULL, 14),
 (8438, 3421, 468, 66, 1, 9.00, 0, NULL, 1, 1, '2020-11-20 00:00:00', NULL, 3),
-(8439, 3421, 473, 66, 1, 8.00, 0, NULL, 1, 1, '2020-11-20 00:00:00', NULL, 3);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(8439, 3421, 473, 66, 1, 8.00, 0, NULL, 1, 1, '2020-11-20 00:00:00', NULL, 3),
 (8440, 3327, 505, 144, 1, 9.00, 0, NULL, 1, 1, '2020-11-20 00:00:00', NULL, 6),
 (8441, 3304, 505, 146, 1, 9.00, 1, NULL, 1, 1, '2020-12-16 00:00:00', NULL, 6),
 (8442, 3296, 505, 143, 2, 2.00, 0, NULL, 21, 200, '2020-12-01 00:00:00', NULL, 6),
@@ -28216,8 +28186,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (9162, 3541, 272, 160, 1, 5.00, 0, NULL, 1, 1, '2021-03-25 00:00:00', NULL, 6),
 (9163, 3542, 272, 164, 1, 8.00, 0, NULL, 1, 1, '2021-03-15 00:00:00', NULL, 6),
 (9164, 3501, 584, 349, 1, 4.00, 0, NULL, 1, 1, '2021-03-03 00:00:00', NULL, 14),
-(9165, 3536, 405, 68, 1, 7.00, 1, NULL, 1, 1, '2021-03-05 00:00:00', NULL, 3);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(9165, 3536, 405, 68, 1, 7.00, 1, NULL, 1, 1, '2021-03-05 00:00:00', NULL, 3),
 (9166, 3543, 405, 70, 1, 5.00, 1, NULL, 1, 1, '2021-03-02 00:00:00', NULL, 3),
 (9167, 3544, 405, 77, 2, 2.00, 1, NULL, 1, 1, '2021-03-08 00:00:00', NULL, 3),
 (9168, 3514, 409, 59, 1, 4.00, 0, NULL, 1, 1, '2021-03-01 00:00:00', NULL, 3),
@@ -28846,8 +28815,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (9852, 3880, 670, 351, 1, 10.00, 3, NULL, 11, 168, '2021-12-09 00:00:00', NULL, 14),
 (9853, 3870, 422, 348, 1, 6.00, 1, NULL, 11, 158, '2021-12-06 00:00:00', NULL, 14),
 (9854, 3881, 422, 347, 1, 2.00, 0, NULL, 11, 167, '2021-12-10 00:00:00', NULL, 14),
-(9855, 3869, 669, 348, 1, 7.00, 1, NULL, 11, 145, '2021-11-29 00:00:00', NULL, 14);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(9855, 3869, 669, 348, 1, 7.00, 1, NULL, 11, 145, '2021-11-29 00:00:00', NULL, 14),
 (9856, 3876, 669, 352, 1, 5.00, 0, NULL, 11, 148, '2021-11-30 00:00:00', NULL, 14),
 (9857, 4013, 468, 77, 1, 10.00, 0, NULL, 10, 28, '2021-11-25 00:00:00', NULL, 3),
 (9858, 4013, 473, 77, 1, 8.00, 0, NULL, 10, 28, '2021-11-25 00:00:00', NULL, 3),
@@ -29458,8 +29426,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (10543, 4879, 549, 72, 1, 10.00, 2, NULL, 10, 89, '2022-11-29 00:00:00', NULL, 3),
 (10544, 4875, 549, 75, 1, 9.00, 0, NULL, 10, 93, '2022-11-30 00:00:00', NULL, 3),
 (10545, 4881, 549, 76, 1, 8.00, 0, NULL, 10, 96, '2022-12-02 00:00:00', NULL, 3),
-(10546, 4837, 549, 61, 1, 4.00, 0, NULL, 10, 99, '2022-12-05 00:00:00', NULL, 3);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(10546, 4837, 549, 61, 1, 4.00, 0, NULL, 10, 99, '2022-12-05 00:00:00', NULL, 3),
 (10547, 4871, 549, 77, 1, 10.00, 0, NULL, 10, 103, '2022-12-01 00:00:00', NULL, 3),
 (10548, 4877, 549, 73, 1, 9.00, 0, NULL, 10, 106, '2022-12-07 00:00:00', NULL, 3),
 (10549, 4731, 423, 361, 1, 9.00, 3, NULL, 12, 32, '2022-11-28 00:00:00', NULL, 14),
@@ -30066,8 +30033,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (11231, 5332, 110, 99, 1, 5.00, 0, NULL, 13, 96, '2023-03-23 00:00:00', NULL, 4),
 (11232, 5128, 483, 382, 1, 8.00, 0, NULL, 14, 90, '2023-03-10 00:00:00', NULL, 15),
 (11233, 5128, 477, 382, 1, 4.00, 0, NULL, 14, 90, '2023-03-10 00:00:00', NULL, 15),
-(11234, 5128, 481, 382, 1, 4.00, 0, NULL, 14, 90, '2023-03-10 00:00:00', NULL, 15);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(11234, 5128, 481, 382, 1, 4.00, 0, NULL, 14, 90, '2023-03-10 00:00:00', NULL, 15),
 (11235, 5174, 505, 156, 1, 2.00, 0, NULL, 22, 134, '2023-03-15 00:00:00', NULL, 6),
 (11237, 5236, 409, 69, 1, 7.00, 0, NULL, 10, 139, '2023-03-21 00:00:00', NULL, 3),
 (11238, 5114, 611, 375, 1, 4.00, 0, NULL, 14, 92, '2023-03-14 00:00:00', NULL, 15),
@@ -30656,8 +30622,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (11894, 5467, 882, 430, 1, 8.00, NULL, NULL, NULL, NULL, '2023-11-30 18:30:00', NULL, 17),
 (11895, 5465, 882, 426, 1, 9.00, NULL, NULL, NULL, NULL, '2023-11-28 18:30:00', NULL, 17),
 (11896, 5467, 638, 430, 1, 9.00, NULL, NULL, NULL, NULL, '2023-11-30 18:30:00', NULL, 17),
-(11898, 5464, 882, 428, 3, 0.00, NULL, NULL, NULL, NULL, '2023-12-04 18:30:00', NULL, 17);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(11898, 5464, 882, 428, 3, 0.00, NULL, NULL, NULL, NULL, '2023-12-04 18:30:00', NULL, 17),
 (11899, 5477, 882, 427, 1, 6.00, NULL, NULL, NULL, NULL, '2023-12-14 18:30:00', NULL, 17),
 (11901, 5473, 894, 424, 1, 9.00, NULL, NULL, NULL, NULL, '2023-12-06 18:30:00', NULL, 17),
 (11902, 5469, 894, 425, 1, 7.00, NULL, NULL, NULL, NULL, '2023-11-29 18:30:00', NULL, 17),
@@ -31237,8 +31202,7 @@ INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado
 (12573, 4618, 783, 426, 1, 10.00, NULL, NULL, NULL, NULL, '2024-02-22 08:23:01', NULL, 17),
 (12574, 5856, 827, 2, 1, 7.00, NULL, NULL, NULL, NULL, '2024-02-22 08:25:04', NULL, 1),
 (12575, 5841, 578, 354, 1, 4.00, NULL, NULL, NULL, NULL, '2024-02-22 08:39:15', NULL, 14),
-(12576, 5852, 578, 365, 1, 6.00, NULL, NULL, NULL, NULL, '2024-02-22 08:39:41', NULL, 14);
-INSERT INTO `examenes` (`id`, `id_mesa`, `id_alumno`, `id_asignatura`, `aprobado`, `nota`, `tipo_final`, `llamado`, `libro`, `acta`, `fecha`, `equivalencias`, `id_carrera`) VALUES
+(12576, 5852, 578, 365, 1, 6.00, NULL, NULL, NULL, NULL, '2024-02-22 08:39:41', NULL, 14),
 (12577, 6078, 878, 428, 0, 0.00, NULL, NULL, NULL, NULL, '2024-02-22 08:41:55', NULL, 17),
 (12578, 6093, 878, 427, 2, 4.00, NULL, NULL, NULL, NULL, '2024-02-22 08:45:55', NULL, 17),
 (12579, 6102, 783, 440, 3, 0.00, NULL, NULL, NULL, NULL, '2024-02-22 18:37:53', NULL, 17),
@@ -32758,8 +32722,7 @@ INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `pr
 (944, 143, 6, 75, 34, NULL, 2, '2017-12-12 00:00:00', 28),
 (945, 146, 6, 43, 68, NULL, 1, '2017-12-01 00:00:00', 28),
 (946, 146, 6, 43, 68, NULL, 2, '2017-12-15 00:00:00', 28),
-(947, 171, 8, 17, 36, NULL, 1, '2017-12-11 00:00:00', 46);
-INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `prof_vocal_1`, `prof_vocal_2`, `llamado`, `fecha`, `hora`) VALUES
+(947, 171, 8, 17, 36, NULL, 1, '2017-12-11 00:00:00', 46),
 (948, 171, 8, 17, 36, NULL, 2, '2017-12-22 00:00:00', 46),
 (949, 167, 8, 32, 69, NULL, 1, '2017-12-04 00:00:00', 46),
 (950, 167, 8, 32, 69, NULL, 2, '2017-12-18 00:00:00', 46),
@@ -33629,8 +33592,7 @@ INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `pr
 (1829, 52, 2, 73, 6, NULL, 1, '2019-02-28 00:00:00', 4),
 (1830, 52, 2, 73, 6, NULL, 2, '2019-03-07 00:00:00', 4),
 (1831, 49, 2, 108, 81, NULL, 1, '2019-03-12 00:00:00', 4),
-(1832, 49, 2, 108, 81, NULL, 2, '2019-03-26 00:00:00', 4);
-INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `prof_vocal_1`, `prof_vocal_2`, `llamado`, `fecha`, `hora`) VALUES
+(1832, 49, 2, 108, 81, NULL, 2, '2019-03-26 00:00:00', 4),
 (1833, 258, 2, 36, 48, NULL, 1, '2019-03-11 00:00:00', 4),
 (1834, 258, 2, 36, 48, NULL, 2, '2019-03-25 00:00:00', 4),
 (1835, 46, 2, 78, 107, NULL, 1, '2019-03-13 00:00:00', 4),
@@ -34490,8 +34452,7 @@ INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `pr
 (2689, 153, 6, 65, 47, NULL, 1, '2020-03-13 00:00:00', 28),
 (2690, 153, 6, 65, 47, NULL, 2, '2020-03-20 00:00:00', 28),
 (2691, 157, 6, 47, 65, NULL, 1, '2020-03-05 00:00:00', 28),
-(2692, 157, 6, 47, 65, NULL, 2, '2020-03-19 00:00:00', 28);
-INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `prof_vocal_1`, `prof_vocal_2`, `llamado`, `fecha`, `hora`) VALUES
+(2692, 157, 6, 47, 65, NULL, 2, '2020-03-19 00:00:00', 28),
 (2693, 147, 6, 32, 78, NULL, 1, '2020-03-02 00:00:00', 28),
 (2694, 147, 6, 32, 78, NULL, 2, '2020-03-09 00:00:00', 28),
 (2695, 144, 6, 48, 70, NULL, 1, '2020-03-02 00:00:00', 28),
@@ -35345,8 +35306,7 @@ INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `pr
 (3543, 70, 3, 98, 135, NULL, 0, '2021-03-02 00:00:00', 46),
 (3544, 77, 3, 99, 127, NULL, 0, '2021-03-08 00:00:00', 46),
 (3545, 61, 3, 72, 98, NULL, 0, '2021-03-08 00:00:00', 46),
-(3546, 67, 3, 139, 132, NULL, 0, '2021-03-10 00:00:00', 46);
-INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `prof_vocal_1`, `prof_vocal_2`, `llamado`, `fecha`, `hora`) VALUES
+(3546, 67, 3, 139, 132, NULL, 0, '2021-03-10 00:00:00', 46),
 (3547, 378, 15, 17, 71, NULL, 0, '2021-03-17 00:00:00', 46),
 (3548, 383, 15, 153, 147, NULL, 0, '2021-03-03 00:00:00', 46),
 (3549, 353, 14, 11, 107, NULL, 0, '2021-03-08 00:00:00', 4),
@@ -36191,8 +36151,7 @@ INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `pr
 (4388, 441, 17, 22, 148, NULL, 1, '2022-03-02 00:00:00', 46),
 (4389, 441, 17, 22, 148, NULL, 2, '2022-03-17 00:00:00', 46),
 (4390, 100, 4, 90, 100, NULL, 1, '2022-03-04 00:00:00', 46),
-(4391, 100, 4, 90, 100, NULL, 2, '2022-03-11 00:00:00', 46);
-INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `prof_vocal_1`, `prof_vocal_2`, `llamado`, `fecha`, `hora`) VALUES
+(4391, 100, 4, 90, 100, NULL, 2, '2022-03-11 00:00:00', 46),
 (4392, 434, 17, 22, 50, NULL, 1, '2022-03-11 00:00:00', 46),
 (4393, 434, 17, 22, 50, NULL, 2, '2022-03-18 00:00:00', 46),
 (4394, 431, 17, 143, 90, NULL, 1, '2022-02-22 00:00:00', 46),
@@ -37035,8 +36994,7 @@ INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `pr
 (5236, 69, 3, 135, 98, NULL, 2, '2023-03-21 00:00:00', 46),
 (5237, 63, 3, 132, 87, NULL, 1, '2023-02-15 00:00:00', 46),
 (5238, 63, 3, 132, 87, NULL, 2, '2023-02-22 00:00:00', 46),
-(5239, 67, 3, 87, 132, NULL, 1, '2023-03-01 00:00:00', 46);
-INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `prof_vocal_1`, `prof_vocal_2`, `llamado`, `fecha`, `hora`) VALUES
+(5239, 67, 3, 87, 132, NULL, 1, '2023-03-01 00:00:00', 46),
 (5240, 67, 3, 87, 132, NULL, 2, '2023-03-08 00:00:00', 46),
 (5241, 71, 3, 99, 150, NULL, 1, '2023-03-03 00:00:00', 46),
 (5242, 71, 3, 99, 150, NULL, 2, '2023-03-10 00:00:00', 46),
@@ -37885,8 +37843,7 @@ INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `pr
 (6088, 424, 17, 50, 181, 0, 1, '2024-02-29 18:30:00', NULL),
 (6089, 424, 17, 50, 181, 0, 2, '2024-03-04 18:30:00', NULL),
 (6090, 423, 17, 148, 93, 0, 1, '2024-02-16 18:30:00', NULL),
-(6091, 423, 17, 148, 93, 0, 2, '2024-02-23 18:30:00', NULL);
-INSERT INTO `mesas` (`id`, `id_asignatura`, `id_carrera`, `prof_presidente`, `prof_vocal_1`, `prof_vocal_2`, `llamado`, `fecha`, `hora`) VALUES
+(6091, 423, 17, 148, 93, 0, 2, '2024-02-23 18:30:00', NULL),
 (6092, 427, 17, 181, 148, 0, 1, '2024-03-01 18:30:00', NULL),
 (6093, 427, 17, 181, 148, 0, 2, '2024-03-08 18:30:00', NULL),
 (6094, 433, 17, 22, 90, 0, 1, '2024-02-23 18:30:00', NULL),
