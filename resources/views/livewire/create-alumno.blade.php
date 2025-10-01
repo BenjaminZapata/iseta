@@ -1,6 +1,5 @@
 <div x-data="{ step: $wire.entangle('step').live }" x-cloak>
 
-
     <!-- Step 1: Crear alumno -->
     <form wire:submit="siguientePaso" x-show="step === 1" id="form-paso-1">
         @csrf
@@ -18,7 +17,7 @@
                         class="@error('form.nombre') input-error border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.nombre')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -27,7 +26,7 @@
                         class="@error('form.apellido') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.apellido')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -35,7 +34,7 @@
                     <input type="text" wire:model="form.dni" class="@error('form.dni') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.dni')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -44,7 +43,7 @@
                         class="p-1 w-75p @error('form.fecha_nacimiento') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.fecha_nacimiento')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -53,7 +52,7 @@
                         class="@error('form.lugar_nacimiento') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.lugar_nacimiento')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -69,7 +68,7 @@
                     </select>
                     <div class="campo-alert">
                         @error('form.estado_civil')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -82,7 +81,7 @@
                     </select>
                     <div class="campo-alert">
                         @error('form.genero')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -98,7 +97,7 @@
                         class="@error('form.ciudad') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.ciudad')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -107,7 +106,7 @@
                         class="@error('form.codigo_postal') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.codigo_postal')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -115,7 +114,7 @@
                     <input type="text" wire:model="form.calle" class="@error('form.calle') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.calle')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -124,7 +123,15 @@
                         class="@error('form.casa_numero') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.casa_numero')
-                        {{ $message }}
+                            {{ $message }}
+                        @enderror
+                    </div>
+                </label>
+                <label class="label-input-y-75">Departamento:
+                    <input type="text" wire:model="form.dpto" class="@error('form.dpto') border-red-500 @enderror">
+                    <div class="campo-alert">
+                        @error('form.dpto')
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -132,7 +139,16 @@
                     <input type="text" wire:model="form.piso" class="@error('form.piso') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.piso')
-                        {{ $message }}
+                            {{ $message }}
+                        @enderror
+                    </div>
+                </label>
+                <label class="label-input-y-75">Piso:
+                    <input type="text" wire:model="form.altura"
+                        class="@error('form.altura') border-red-500 @enderror">
+                    <div class="campo-alert">
+                        @error('form.altura')
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -148,25 +164,25 @@
                         class="@error('form.email') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.email')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
                 <label class="label-input-y-75">Teléfono 1:
-                    <input type="text" wire:model="form.telefono1"
-                        class="@error('form.telefono1') border-red-500 @enderror">
+                    <input type="text" wire:model="form.telefono_1"
+                        class="@error('form.telefono_1') border-red-500 @enderror">
                     <div class="campo-alert">
-                        @error('form.telefono1')
-                        {{ $message }}
+                        @error('form.telefono_1')
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
                 <label class="label-input-y-75">Teléfono 2:
-                    <input type="text" wire:model="form.telefono2"
-                        class="@error('form.telefono2') border-red-500 @enderror">
+                    <input type="text" wire:model="form.telefono_2"
+                        class="@error('form.telefono_2') border-red-500 @enderror">
                     <div class="campo-alert">
-                        @error('form.telefono2')
-                        {{ $message }}
+                        @error('form.telefono_2')
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -182,7 +198,7 @@
                         class="@error('form.titulo_anterior') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.titulo_anterior')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -191,7 +207,7 @@
                         class="@error('form.becas') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.becas')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -200,7 +216,7 @@
                         class="@error('form.nombre_institucion_secundario') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.nombre_institucion_secundario')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -215,7 +231,7 @@
                     </select>
                     <div class="campo-alert">
                         @error('form.titulo_secundario')
-                        {{ $message }}
+                            {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -243,9 +259,9 @@
                         <select x-on:change="$wire.agregarInscripcion($event.target.value)" class="input">
                             <option value="">Seleccione...</option>
                             @foreach ($todasCarreras as $carrera)
-                            @if (!in_array($carrera->id, $idCarreras))
-                            <option value="{{ $carrera }}">{{ $carrera->nombre }}</option>
-                            @endif
+                                @if (!in_array($carrera->id, $idCarreras))
+                                    <option value="{{ $carrera }}">{{ $carrera->nombre }}</option>
+                                @endif
                             @endforeach
                         </select>
                     </label>
@@ -253,13 +269,13 @@
 
                 <ul class="carreras-list">
                     @foreach ($carrerasSeleccionadas as $c)
-                    <li>
-                        {{ $c['carrera_nombre'] }}
-                        <button class="btn_red_outline" type="button"
-                            wire:click="eliminarCarrera({{ $c['id_carrera'] }})">
-                            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
-                        </button>
-                    </li>
+                        <li>
+                            {{ $c['carrera_nombre'] }}
+                            <button class="btn_red_outline" type="button"
+                                wire:click="eliminarCarrera({{ $c['id_carrera'] }})">
+                                <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
+                            </button>
+                        </li>
                     @endforeach
                 </ul>
             </fieldset>
@@ -268,15 +284,29 @@
             <div x-show="show">
                 <form wire:submit="guardarInscripcion" class="p-3 border rounded bg-gray-50">
                     <h3 class="font-bold mb-2">Datos de inscripción</h3>
+
                     <label class="block mb-2">
                         Año de inscripción:
-                        <input type="number" class="input" value="{{ now()->year }}" disabled>
+                        <input type="number" wire:model.fill="iForm.anio_inscripcion" class="input"
+                            value="{{ now()->year }}">
+                        @error('iForm.anio_inscripcion')
+                            <div class="campo-alert">{{ $message }}</div>
+                        @enderror
                     </label>
+
                     <label class="block mb-2">
                         Índice libro matriz:
                         <input type="text" wire:model="iForm.indice_libro_matriz" class="input">
                         @error('iForm.indice_libro_matriz')
-                        <div class="campo-alert">{{ $message }}</div>
+                            <div class="campo-alert">{{ $message }}</div>
+                        @enderror
+                    </label>
+
+                    <label class="block mb-2">
+                        Año de finalización:
+                        <input type="number" wire:model="iForm.anio_finalizacion" class="input">
+                        @error('iForm.anio_finalizacion')
+                            <div class="campo-alert">{{ $message }}</div>
                         @enderror
                     </label>
                     <input type="hidden" wire:model="iForm.estado">
@@ -289,8 +319,8 @@
             </div>
         </div>
         <div class="botones-create">
-            <button type="button" wire:click="pasoAnterior" class="btn_blue">Volver</button>
-            <button type="button" wire:click="siguientePaso" class="btn_blue">Siguiente: Confirmar</button>
+            <button type="button" x-on:click="step=1" class="btn_blue">Volver</button>
+            <button type="button" x-on:click="step=3" class="btn_blue">Siguiente: Confirmar</button>
         </div>
     </div>
 
@@ -302,7 +332,7 @@
             <p><strong>Carreras seleccionadas:</strong></p>
             <ul class="carreras-list">
                 @foreach ($carrerasSeleccionadas as $c)
-                <li>{{ $c['carrera_nombre'] }}</li>
+                    <li>{{ $c['carrera_nombre'] }}</li>
                 @endforeach
             </ul>
         </fieldset>
