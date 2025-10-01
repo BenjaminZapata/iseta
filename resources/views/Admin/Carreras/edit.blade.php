@@ -49,33 +49,30 @@
                             <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
                         </label>
 
-                        <fieldset class="p-2" style="margin:10px;">
-                            <legend class="font-600 font-7">CARGAR ARCHIVO</legend>
-                            <div>
-                                <label class="label-input-y-75 "> <span class="bold">Archivo de la resolución:</span>
-                                    @if($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo)))
-                                    <p class="campo_info-noinput rounded mb-2">
-                                        <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank"> Ver PDF actual</a>
-                                    </p>
-                                    <div class="mb-2">
-                                        <label for="resolucion_archivo_nuevo" class="form-label"> Reemplazar archivo:</label>
-                                        <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
-                                    </div>
-                                    <div class="form-check mt-2">
-                                        <input type="checkbox" name="eliminar_resolucion_archivo" value="1" class="form-check-input" id="eliminarArchivo">
-                                        <label class="form-check-label" for="eliminarArchivo">Eliminar archivo actual</label>
-                                    </div>
-                                    @else
-                                    <p class="campo_info-noinput rounded text-muted mb-2">No se ha cargado ningún archivo</p>
-                                    <div>
-                                        <label for="resolucion_archivo_nuevo" class="form-label">Subir archivo:</label>
-                                        <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
-                                    </div>
-                                    @endif
-                                </label>
-                                <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
+
+                        <label class="label-input-y-75 "> <span class="bold">Archivo de la resolución:</span>
+                            @if($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo)))
+                            <p class="campo_info-noinput rounded mb-2">
+                                <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank"> Ver PDF actual</a>
+                            </p>
+                            <div class="mb-2">
+                                <label for="resolucion_archivo_nuevo" class="form-label"> Reemplazar archivo:</label>
+                                <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
                             </div>
-                        </fieldset>
+                            <div class="form-check mt-2">
+                                <input type="checkbox" name="eliminar_resolucion_archivo" value="1" class="form-check-input" id="eliminarArchivo">
+                                <label class="form-check-label" for="eliminarArchivo">Eliminar archivo actual</label>
+                            </div>
+                            @else
+                            <p class="campo_info-noinput rounded text-muted mb-2">No se ha cargado ningún archivo</p>
+                            <div>
+                                <label for="resolucion_archivo_nuevo" class="form-label">Subir archivo:</label>
+                                <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
+                            </div>
+                            @endif
+                        </label>
+                        <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
+
                 </fieldset>
         </div>
 
