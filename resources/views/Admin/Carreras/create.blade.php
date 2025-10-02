@@ -15,11 +15,11 @@
                         'placeholder' => 'Ej: Res. 123/2020'
                     ]),
                     $form->text('anio_apertura', 'Año de apertura:*', 'label-input-y-75', null, [
-                        'placeholder' => 'Ej: 2021',
+                        'placeholder' => 'Ej: 2024',
                         'inputmode'   => 'numeric'
                     ]),
                     $form->text('anio_fin', 'Año de cierre:', 'label-input-y-75', null, [
-                        'placeholder' => 'Ej: 2025 (si aplica)',
+                        'placeholder' => 'Ej: 2028 (si aplica)',
                         'inputmode'   => 'numeric'
                     ]),
                     $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', null, [

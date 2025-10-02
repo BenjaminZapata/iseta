@@ -57,11 +57,11 @@ $fileUrl = $existsStorage ? Storage::url($path) : ($existsPublic ? asset($path) 
 
 
                         <label class="label-input-y-75">Año de cierre:
-                            <input type="text" name="anio_fin" value="{{ $carrera->anio_fin }}">
+                            <input type="text" placeholder='Ej: 2028 (si aplica)' name="anio_fin" value="{{ $carrera->anio_fin }}">
                         </label>
 
                         <label class="label-input-y-75">Observaciones:
-                            <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
+                            <textarea placeholder='Notas adicionales sobre la carrera' name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
                         </label>
                         <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
                     </div>
