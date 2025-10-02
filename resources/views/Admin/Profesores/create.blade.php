@@ -1,5 +1,4 @@
 @extends('Admin.template')
-@php use Illuminate\Support\HtmlString; @endphp
 
 @section('content')
 <div>

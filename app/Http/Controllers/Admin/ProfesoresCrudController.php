@@ -201,4 +201,3 @@ public function store(crearProfesorRequest $request)
         }
     }
 }
-

@@ -41,7 +41,6 @@
                                 '5' => 'Otro',
                             ]),
                         ],
-
                         'Dirección' => [
                             $form->text('ciudad', 'Ciudad:', 'label-input-y-75', old('ciudad') ?? $profesor, [
                                 'placeholder' => 'Ej: 9 de julio',
@@ -68,7 +67,6 @@
                                 'maxlength' => 15,
                             ]),
                         ],
-
                         'Académico' => [
                             $form->text('formacion_academica', 'Formación académica:*', 'label-input-y-75', old('formacion_academica') ?? $profesor, [
                                 'placeholder' => 'Ej: Profesorado en Matemática',
@@ -79,7 +77,6 @@
                                 'maxlength' => 4,
                             ]),
                         ],
-
                         'Contacto' => [
                             $form->text('email', 'Email:*', 'label-input-y-75', old('email') ?? $profesor, [
                                 'placeholder' => 'ejemplo@dominio.com',

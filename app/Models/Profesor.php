@@ -45,19 +45,18 @@ class Profesor extends Authenticatable
         'fecha_nacimiento' => 'datetime',
     ];
 
-  public function asignaturas()
+  public function asignaturas(): BelongsToMany
 {
-    return $this->belongsToMany(Asignatura::class, 'carrera_asignatura_profesor', 'id_profesor', 'id_asignatura')
-        ->withPivot('id_carrera', 'anio', 'tipo_modulo', 'carga_horaria')
-        ->withTimestamps();
+    return $this->belongsToMany(
+        Asignatura::class,                 // Modelo relacionado
+        'carrera_asignatura_profesor',     // Nombre de la tabla pivote
+        'id_profesor',                     // FK hacia este modelo en la pivote
+        'id_asignatura'                    // FK hacia el modelo relacionado
+    )
+    ->using(CarreraAsignaturaProfesor::class) // Modelo de pivote
+    ->withPivot('id_carrera')                   // Campos adicionales en la pivote
+    ->withTimestamps();
 }
-
-  public function carreras()
-    {
-        return $this->belongsToMany(Carrera::class, 'carrera_asignatura_profesor')
-                    ->withPivot('asignatura_id')
-                    ->distinct();
-    }
     public function profesor_mesa(): HasMany
     {
         return $this->hasMany(Mesa::class, 'prof_presidente', 'id');
