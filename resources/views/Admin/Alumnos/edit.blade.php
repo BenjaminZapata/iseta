@@ -29,7 +29,7 @@
                         'Fotocopia del título original secundario',
                     ]),
                 ],
-                'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno)],
+                'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno), $form->select('estado', 'Estado:', 'label-input-y-75', $alumno, ['Activo', 'Inactivo'])],
             ]) ?>
 
         <div class="boton-eliminar">
@@ -46,6 +46,7 @@
                                 class="btn_red_outline">
                                 <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar alumno
                             </button>
+                            
                         </form>
                     @endif
                 </div>
