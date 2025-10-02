@@ -26,7 +26,7 @@
                             'placeholder' => 'dd/mm/aaaa',
                         ]),
                         $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', old('estado_civil'), [
-                            'vacio' => 'Seleccione...',
+                            '' => 'Seleccione...',
                             '0' => 'Soltero',
                             '1' => 'Casado',
                             '2' => 'Divorciado',
@@ -60,7 +60,6 @@
                             'placeholder' => 'Ej: A',
                             'maxlength' => 5,
                         ]),
-
                     ],
                     'Académico' => [
                         $form->text('formacion_academica', 'Formación académica:*', 'label-input-y-75', old('formacion_academica'), [

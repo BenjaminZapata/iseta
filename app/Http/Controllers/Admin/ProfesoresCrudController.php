@@ -6,17 +6,18 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearProfesorRequest;
 use App\Http\Requests\EditarProfesorRequest;
 use App\Mail\ProfesorCreado;
+use App\Models\Asignatura;
 use App\Models\Carrera;
 use App\Models\Configuracion;
 use App\Models\Mesa;
 use App\Models\Profesor;
 use App\Repositories\Admin\ProfesorRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use App\Models\Asignatura;
-use Illuminate\Support\Facades\DB;
+use Log;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -48,6 +49,7 @@ class ProfesoresCrudController extends BaseController
     public function create()
     {
         $carreras = Carrera::with('asignaturas')->get();
+
         return view('Admin.Profesores.create', compact('carreras'));
     }
 
@@ -57,6 +59,14 @@ class ProfesoresCrudController extends BaseController
     public function store(crearProfesorRequest $request)
     {
         $data = $request->validated();
+        $data['password'] = Str::password();
+
+        try {
+            Mail::to($data['email'])->queue(new ProfesorCreado($data));
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+        $data['password'] = Hash::make($data['password']);
         $profesor = Profesor::create($data);
 
         $seleccionadas = $request->input('asignaturas_seleccionadas', []);
@@ -82,7 +92,6 @@ class ProfesoresCrudController extends BaseController
         return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');
     }
 
-
     /**
      * Show the form for editing the specified resource.
      */
@@ -96,13 +105,13 @@ class ProfesoresCrudController extends BaseController
             ->whereRaw('fecha > NOW()')
             ->get();
         $carreras = Carrera::with('asignaturas')->get();
+
         return view('Admin.Profesores.edit', [
             'profesor' => $profesor,
             'mesas' => $mesas,
             'carreras' => $carreras,
         ]);
     }
-
 
     /**
      * Update the specified resource in storage.
