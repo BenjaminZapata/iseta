@@ -140,6 +140,7 @@ class CarrerasCrudController extends BaseController
     }
 
 
+
     public function createAsignaturaView(Carrera $carrera)
     {
         return view('Admin.Carreras.create_asignatura', [
