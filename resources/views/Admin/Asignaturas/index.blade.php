@@ -63,8 +63,12 @@
                                     @method('DELETE')
                                     <button type="button"
                                         onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
-                                    '¿Estás seguro de que querés eliminar a la asignatura: {{ strtoupper($asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                        class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                                `¿Estás seguro de que querés eliminar la asignatura?\n\n
+        Nombre: {{ strtoupper($asignatura->nombre) }}\n
+        {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
+         Año: {{ $asignatura->anio }}\n\n
+         ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
+                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
                                         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                                     </button>
                                 </form>

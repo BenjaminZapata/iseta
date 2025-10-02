@@ -70,7 +70,8 @@ class AsignaturasCrudController extends BaseController
 
         // Verificar unicidad contextual
         $existe = Asignatura::where('nombre', $data['nombre'])
-            ->where('carga_horaria', $data['carga_horaria']) // dejar carga_horaria en estos datos aunque se usen "cantidad de modulos" ya que se usa "carga_horaria" en la base de datos
+            ->where('carga_horaria', $data['carga_horaria'])
+            ->where('anio', 0)// dejar carga_horaria en estos datos aunque se usen "cantidad de modulos" ya que se usa "carga_horaria" en la base de datos
             ->exists();
 
         if ($existe) {
