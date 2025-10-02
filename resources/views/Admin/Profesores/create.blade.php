@@ -1,10 +1,10 @@
 @extends('Admin.template')
 
 @section('content')
-<div>
-    <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVO PROFESOR/A'])
-        <div class="perfil__info">
+    <div>
+        <div class="perfil_one br">
+            @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVO PROFESOR/A'])
+            <div class="perfil__info">
 
                 <form action="{{ route('admin.profesores.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -26,7 +26,7 @@
                                     'placeholder' => 'dd/mm/aaaa',
                                 ]),
                                 $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', old('estado_civil'), [
-                                    'vacio' => 'Seleccione...',
+                                    '' => 'Seleccione...',
                                     '0' => 'Soltero',
                                     '1' => 'Casado',
                                     '2' => 'Divorciado',
@@ -49,7 +49,7 @@
                                     'maxlength' => 30,
                                 ]),
                                 $form->text('casa_numero', 'Número de casa:', 'label-input-y-75', old('casa_numero'), [
-                                    'placeholder' => 'Ej: 742',  
+                                    'placeholder' => 'Ej: 742',
                                     'maxlength' => 4,
                                 ]),
                                 $form->text('piso', 'Piso:', 'label-input-y-75', old('piso'), [
@@ -60,7 +60,6 @@
                                     'placeholder' => 'Ej: A',
                                     'maxlength' => 5,
                                 ]),
-                                
                             ],
                             'Académico' => [
                                 $form->text('formacion_academica', 'Formación académica:*', 'label-input-y-75', old('formacion_academica'), [
@@ -97,5 +96,5 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 @endsection

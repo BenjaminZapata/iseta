@@ -32,10 +32,10 @@ class CrearProfesorRequest extends FormRequest
             ],
             'ciudad' => ['nullable', 'string', 'max:30'],
             'calle' => ['nullable', 'string', 'max:30'],
-            'casa_numero' => ['nullable', 'numeric', 'max_digits:4', 'min_digits:1'],
+            'casa_numero' => ['nullable', 'numeric', 'regex:/^-?\d{1,4}$/'],
             'dpto' => ['nullable', 'string', 'max:5'],
-            'piso' => ['nullable', 'numeric', 'max_digits:15'],
-            'estado_civil' => ['nullable'],
+            'piso' => ['nullable', 'numeric', 'regex:/^-?\d{1,15}$/'],
+            'estado_civil' => ['nullable', 'integer', 'between:0,5'],
             'email' => ['required', 'email', 'max:50'],
             'formacion_academica' => ['required', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u', 'max:150'],
             'titulo' => ['nullable', 'numeric'],
@@ -44,7 +44,7 @@ class CrearProfesorRequest extends FormRequest
             'telefono2' => ['nullable', new Telefono, 'max:30'],
             'codigo_postal' => ['nullable', 'alpha_num', 'max:10'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
-            'anio_ingreso' => ['required', 'date_format:Y', 'before_or_equal:now', 'after:1980'],
+            'anio_ingreso' => ['required', 'numeric', 'regex:/^-?\d{1,4}$/'],
         ];
     }
 

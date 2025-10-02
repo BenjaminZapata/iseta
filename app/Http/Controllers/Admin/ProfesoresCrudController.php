@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Log;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -56,14 +57,15 @@ class ProfesoresCrudController extends BaseController
         $data = $request->validated();
         $data['password'] = Str::password();
 
-        if ($_ENV['MAIL_USERNAME'] != null) {
+        try {
             Mail::to($data['email'])->queue(new ProfesorCreado($data));
+        } catch (\Throwable $th) {
+            Log::error($th);
         }
         $data['password'] = Hash::make($data['password']);
-        // Profesor::create($data);
+        Profesor::create($data);
 
-        return redirect()->back()->withInput();
-        // return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
+        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
     }
 
     /**
