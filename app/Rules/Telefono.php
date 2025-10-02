@@ -38,14 +38,14 @@ class Telefono implements ValidationRule
         }
 
         // El guion debe estar después de al menos 2 números
-        if (! preg_match('/^[0-9]{2,}-[0-9A-Za-z]+$/', $value)) {
+        if (! preg_match('/^[0-9]{2,}-[0-9]+$/', $value)) {
             $fail('El guion debe estar después de al menos 2 números.');
 
             return;
         }
 
         // Validar caracteres permitidos: solo números, letras y un guion
-        if (! preg_match('/^[0-9A-Za-z\-]+$/', $value)) {
+        if (! preg_match('/^[0-9\-]+$/', $value)) {
             $fail('El campo telefono solo puede contener números, letras y un guion (-).');
         }
 
