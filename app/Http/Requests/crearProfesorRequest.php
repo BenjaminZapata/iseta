@@ -4,9 +4,6 @@ namespace App\Http\Requests;
 
 use App\Rules\Telefono;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Carbon;
-
-
 
 class CrearProfesorRequest extends FormRequest
 {
@@ -26,21 +23,16 @@ class CrearProfesorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => ['required', 'integer', 'gte:0', 'unique:profesores,dni', 'max_digits:10'],
+            'dni' => ['required', 'integer', 'unique:profesores,dni', 'max_digits:10'],
             'nombre' => ['required', 'string', 'max:30'],
             'apellido' => ['required', 'string', 'max:30'],
             'fecha_nacimiento' => [
                 'nullable',
                 'date',
-                function ($attribute, $value, $fail) {
-                    if (Carbon::parse($value)->age < 18) {
-                        $fail('El profesor debe tener al menos 18 años.');
-                    }
-                },
             ],
             'ciudad' => ['nullable', 'string', 'max:30'],
             'calle' => ['nullable', 'string', 'max:30'],
-            'casa_numero' => ['nullable', 'numeric', 'max_digits:4'],
+            'casa_numero' => ['nullable', 'numeric', 'max_digits:4', 'min_digits:1'],
             'dpto' => ['nullable', 'string', 'max:5'],
             'piso' => ['nullable', 'numeric', 'max_digits:15'],
             'estado_civil' => ['nullable'],
@@ -83,7 +75,7 @@ class CrearProfesorRequest extends FormRequest
     public function attributes()
     {
         return [
-            'anio_ingreso' => 'año de ingreso'
+            'anio_ingreso' => 'año de ingreso',
         ];
     }
 }
