@@ -46,6 +46,9 @@
                                 class="btn_red_outline">
                                 <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar alumno
                             </button>
+                            <button type="button"
+                                onclick="closeGeneralModal('form-eliminar-{{ $alumno->id }},
+                                'el alumno no se elimino: {{ strtoupper($alumno->apellido) }}{{ strtoupper($alumno->nombre)')">"
                         </form>
                     @endif
                 </div>
