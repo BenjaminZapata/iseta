@@ -78,22 +78,25 @@ class AlumnoCrudController extends BaseController
             'cursadas.anio_cursada',
             'cursadas.id',
             'carreras.nombre as carrera',
+            'asignaturas.anio as anio_asig'
         )
             ->join('asignaturas', 'cursadas.id_asignatura', 'asignaturas.id')
             ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', 'cap.id_asignatura')
             ->join('carreras', 'cap.id_carrera', 'carreras.id')
             ->where('cursadas.id_alumno', $alumno->id)
             ->orderBy('carreras.id')
+            ->orderBy('asignaturas.anio')
             ->orderBy('asignaturas.id')
             ->orderBy('cursadas.anio_cursada')
             ->get();
 
-        $examenes = Examen::select('examenes.fecha', 'asignaturas.nombre as asignatura', 'examenes.nota', 'examenes.id', 'carreras.nombre as carrera')
+        $examenes = Examen::select('examenes.fecha', 'asignaturas.nombre as asignatura', 'examenes.nota', 'examenes.id', 'carreras.nombre as carrera', 'asignaturas.anio as anio_asig')
             ->join('asignaturas', 'examenes.id_asignatura', 'asignaturas.id')
             ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', 'cap.id_asignatura')
             ->join('carreras', 'cap.id_carrera', 'carreras.id')
             ->where('examenes.id_alumno', $alumno->id)
             ->orderBy('carreras.id')
+            ->orderBy('asignaturas.anio')
             ->orderBy('examenes.fecha', 'desc')
             ->get();
 
