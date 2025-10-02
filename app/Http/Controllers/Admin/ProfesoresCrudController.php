@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearProfesorRequest;
 use App\Http\Requests\EditarProfesorRequest;
 use App\Mail\ProfesorCreado;
+use App\Models\Carrera;
 use App\Models\Configuracion;
 use App\Models\Mesa;
 use App\Models\Profesor;
@@ -14,7 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use App\Models\Carrera;
 use App\Models\Asignatura;
 use Illuminate\Support\Facades\DB;
 
@@ -47,7 +47,8 @@ class ProfesoresCrudController extends BaseController
      */
     public function create()
     {
-        return view('Admin.Profesores.create');
+        $carreras = Carrera::with('asignaturas')->get();
+        return view('Admin.Profesores.create', compact('carreras'));
     }
 
     /**
@@ -56,16 +57,29 @@ class ProfesoresCrudController extends BaseController
     public function store(crearProfesorRequest $request)
     {
         $data = $request->validated();
-        $data['password'] = Str::password();
+        $profesor = Profesor::create($data);
 
-        if ($_ENV['MAIL_USERNAME'] != null) {
-            Mail::to($data['email'])->queue(new ProfesorCreado($data));
+        $seleccionadas = $request->input('asignaturas_seleccionadas', []);
+
+        foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
+            foreach ($idAsignaturas as $idAsignatura) {
+                $asignatura = Asignatura::find($idAsignatura);
+                if ($asignatura) {
+                    DB::table('carrera_asignatura_profesor')->insert([
+                        'id_asignatura' => $idAsignatura,
+                        'id_carrera' => $idCarrera,
+                        'id_profesor' => $profesor->id,
+                        'anio' => $asignatura->anio,
+                        'tipo_modulo' => $asignatura->tipo_modulo,
+                        'carga_horaria' => $asignatura->carga_horaria,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
         }
-        $data['password'] = Hash::make($data['password']);
-        // Profesor::create($data);
 
-        return redirect()->back()->withInput();
-        // return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
+        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');
     }
 
 
@@ -81,12 +95,14 @@ class ProfesoresCrudController extends BaseController
         })
             ->whereRaw('fecha > NOW()')
             ->get();
-
+        $carreras = Carrera::with('asignaturas')->get();
         return view('Admin.Profesores.edit', [
             'profesor' => $profesor,
             'mesas' => $mesas,
+            'carreras' => $carreras,
         ]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -96,10 +112,17 @@ class ProfesoresCrudController extends BaseController
         try {
             $profesor->update($request->validated());
 
+            $asignaciones = [];
+            foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $asignaturas) {
+                foreach ($asignaturas as $idAsignatura) {
+                    $asignaciones[$idAsignatura] = ['id_carrera' => $idCarrera];
+                }
+            }
+            $profesor->asignaturas()->sync($asignaciones);
+
             return redirect()->route('admin.profesores.index')
                 ->with('mensaje', 'Se editó el profesor correctamente.');
         } catch (\Illuminate\Database\QueryException $e) {
-            // Extraer el campo que dio error del mensaje
             preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
             $campo = $matches[1] ?? 'desconocido';
 
@@ -115,19 +138,12 @@ class ProfesoresCrudController extends BaseController
     public function destroy(Profesor $profesor)
     {
         try {
-            if (! empty($profesor->profesor_mesa()->first())) {
-                return redirect()->route('admin.profesores.index')
-                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
-            } elseif (! empty($profesor->profesor_mesa_vocal()->first())) {
-                return redirect()->route('admin.profesores.index')
-                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
-            } elseif (! empty($profesor->profesor_mesa_vocal2()->first())) {
+            if ($profesor->profesor_mesa()->exists() || $profesor->profesor_mesa_vocal()->exists() || $profesor->profesor_mesa_vocal2()->exists()) {
                 return redirect()->route('admin.profesores.index')
                     ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
             }
-
             // verificar si el profesor tiene asignaturas asignadas en la tabla pivote
-            if (! empty($profesor->asignaturas()->where('id_profesor', $profesor->id)->first())) {
+            if ($profesor->asignaturas()->where('id_profesor', $profesor->id)->exists()) {
                 return redirect()->route('admin.profesores.index')
                     ->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');
             }
