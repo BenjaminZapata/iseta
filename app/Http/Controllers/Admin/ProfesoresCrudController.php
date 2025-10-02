@@ -10,9 +10,9 @@ use App\Models\Mesa;
 use App\Models\Profesor;
 use App\Repositories\Admin\ProfesorRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\Carrera;
-use App\Models\Asignatura;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -78,14 +78,10 @@ public function store(crearProfesorRequest $request)
         }
     }
 
-    return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');
-}
 
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
+/**
+ * Show the form for editing the specified resource.
+ */
     public function edit(Profesor $profesor,Carrera $carreras)
     {
         $mesas = Mesa::where(function ($query) use ($profesor) {
