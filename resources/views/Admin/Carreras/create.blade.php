@@ -8,12 +8,26 @@
 
             <?= $form->generate(route('admin.carreras.store'), 'post', [
                 'Información' => [
-                    $form->text('nombre', 'Nombre:*', 'label-input-y-75', 'placeholder="Nombre de la carrera"'),
-                    $form->text('resolucion', 'Resolucion:*', 'label-input-y-75'),
-                    $form->text('anio_apertura', 'Año de apertura:*', 'label-input-y-75'),
-                    $form->text('anio_fin', 'Año de cierre:', 'label-input-y-75'),
-                    $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75'),
-                    $form->file('resolucion_archivo', 'Archivo de la resolución (PDF):', 'label-input-y-75')
+                    $form->text('nombre', 'Nombre:*', 'label-input-y-75', null, [
+                        'placeholder' => 'Ej: Ingeniería en Sistemas'
+                    ]),
+                    $form->text('resolucion', 'Resolución:*', 'label-input-y-75', null, [
+                        'placeholder' => 'Ej: Res. 123/2020'
+                    ]),
+                    $form->text('anio_apertura', 'Año de apertura:*', 'label-input-y-75', null, [
+                        'placeholder' => 'Ej: 2021',
+                        'inputmode'   => 'numeric'
+                    ]),
+                    $form->text('anio_fin', 'Año de cierre:', 'label-input-y-75', null, [
+                        'placeholder' => 'Ej: 2025 (si aplica)',
+                        'inputmode'   => 'numeric'
+                    ]),
+                    $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', null, [
+                        'placeholder' => 'Notas adicionales sobre la carrera'
+                    ]),
+                    $form->file('resolucion_archivo', 'Archivo de la resolución (PDF):', 'label-input-y-75', null, [
+                        'accept' => '.pdf'
+                    ])
                 ]
             ]) ?>
         </div>
