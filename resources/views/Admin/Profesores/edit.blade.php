@@ -1,18 +1,19 @@
 @extends('Admin.template')
 
 @section('content')
-    <div class="edit-form-container">
-        <div class="perfil_one br">
+<div class="edit-form-container">
+    <div class="perfil_one br">
 
+        {{-- HEADER --}}
+        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR PROFESOR/A'])
 
-            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR PROFESOR/A'])
-            <div class="perfil__info">
-
-                <p class="info-obligatorios">
-                    Los campos marcados con <span style="color:red">*</span> son obligatorios.
-                </p>
-
-                <?= $form->generate(route('admin.profesores.update', ['profesor' => $profesor->id]), 'put', [
+        {{-- FORMULARIO --}}
+        <div class="perfil__info">
+            {!! 
+                $form->generate(
+                    route('admin.profesores.update', ['profesor' => $profesor->id]),
+                    'put',
+                    [
                         'Profesor' => [
                             $form->text('nombre', 'Nombre:*', 'label-input-y-75', old('nombre') ?? $profesor, [
                                 'placeholder' => 'Ej: Juan',
@@ -86,11 +87,11 @@
                                 'maxlength' => 30,
                             ]),
                             '<div class="input-group">' .
-                            $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2') ?? $profesor, [
-                                'placeholder' => 'Ej: 2317-876543',
-                                'maxlength' => 30,
-                            ]) .
-                            '<small class="text-muted">Ejemplo: 2317-876543</small>' .
+                                $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2') ?? $profesor, [
+                                    'placeholder' => 'Ej: 2317-876543',
+                                    'maxlength' => 30,
+                                ]) .
+                                '<small class="text-muted">Ejemplo: 2317-876543</small>' .
                             '</div>',
                         ],
                         'Otros' => [
@@ -99,20 +100,20 @@
                                 'maxlength' => 150,
                             ]),
                         ],
-                    ]) ?>
+                    ]
+                )
+            !!}
+        </div>
 
-                <div class="boton-eliminar">
-
-                    <div>
-                        <!-- Formulario de eliminación -->
-                        <form method="POST" id="form-eliminar-{{ $profesor->id }}"
-                            action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
-                            @csrf
-                            @method('delete')
-                            <button type="button" class="btn_red_outline"
-                                onclick="openGeneralModal(
-                    'form-eliminar-{{ $profesor->id }}',
-                    '¿Estás seguro de que querés eliminar al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'
+        {{-- BOTÓN ELIMINAR --}}
+        <div class="boton-eliminar">
+            <form method="POST" id="form-eliminar-{{ $profesor->id }}" action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
+                @csrf
+                @method('delete')
+                <button type="button" class="btn_red_outline"
+                    onclick="openGeneralModal(
+                        'form-eliminar-{{ $profesor->id }}',
+                        '¿Estás seguro de que querés eliminar al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'
                     )">
                                 <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar profesor/a
                             </button>
@@ -159,5 +160,47 @@
 
                 </div>
 
+        {{-- TABLA MESAS --}}
+        <div class="table mt-4">
+            <div class="table__header">
+                <h2>Próximas mesas</h2>
             </div>
-        @endsection
+            <table class="table__body">
+                <thead>
+                    <tr>
+                        <th>Asignatura</th>
+                        <th>Fecha</th>
+                        <th>Rol</th>
+                        <th class="center">Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($mesas as $mesa)
+                        <tr>
+                            <td>{{ $mesa->asignatura->nombre }}</td>
+                            <td>{{ $formatoFecha->dmhm($mesa->fecha) }}</td>
+                            <td>
+                                @if ($mesa->prof_presidente == $profesor->id)
+                                    Presidente
+                                @elseif ($mesa->prof_vocal_1 == $profesor->id)
+                                    Vocal 1
+                                @elseif ($mesa->prof_vocal_2 == $profesor->id)
+                                    Vocal 2
+                                @endif
+                            </td>
+                            <td class="flex just-center">
+                                <a href="{{ route('admin.mesas.edit', ['mesa' => $mesa->id]) }}">
+                                    <button class="btn_blue">
+                                        <i class="ti ti-file-info"></i> Detalles
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+@endsection
