@@ -80,70 +80,51 @@
                             ]),
                         ],
 
-                        'Contacto' => [
-                            $form->text('email', 'Email:*', 'label-input-y-75', old('email') ?? $profesor, [
-                                'placeholder' => 'ejemplo@dominio.com',
-                                'maxlength' => 50,
-                            ]),
-                            $form->text('telefono1', 'Teléfono 1:*', 'label-input-y-75', old('telefono1') ?? $profesor, [
-                                'placeholder' => 'Ej: 2317-876544',
-                                'maxlength' => 30,
-                            ]),
-                            '<div class="input-group">' .
-                                $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2') ?? $profesor, [
-                                    'placeholder' => 'Ej: 2317-876543',
-                                    'maxlength' => 30,
-                                ]) .
-                                '<small class="text-muted">Ejemplo: 2317-876543</small>' .
-                            '</div>',
-                        ],
+                {{-- Académico --}}
+                <fieldset>
+                    <legend>Académico</legend>
+                    <div class="form-group">
+                        <label for="formacion_academica">Formación académica:* </label>
+                        <input type="text" name="formacion_academica" id="formacion_academica"
+                               class="label-input-y-75 form-control"
+                               value="{{ old('formacion_academica', $profesor->formacion_academica) }}"
+                               placeholder="Ej: Profesorado en Matemática" maxlength="150">
+                    </div>
+                    <div class="form-group">
+                        <label for="anio_ingreso">Año de ingreso:* </label>
+                        <input type="text" name="anio_ingreso" id="anio_ingreso"
+                               class="label-input-y-75 form-control"
+                               value="{{ old('anio_ingreso', $profesor->anio_ingreso) }}"
+                               placeholder="Ej: 2020" maxlength="4">
+                    </div>
+                </fieldset>
 
-                        'Vinculación' => [
-                            new \Illuminate\Support\HtmlString('
-                                <h3 class="mb-3">🧾 Vinculaciones actuales</h3>
-                                ' . (
-                                    $profesor->asignaturas->isEmpty()
-                                        ? '<p class="text-muted">Este profesor aún no tiene asignaturas vinculadas.</p>'
-                                        : '
-                                            <div class="table-responsive mb-4">
-                                                <table class="table table-bordered table-hover">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th>Carrera</th>
-                                                            <th>Asignatura</th>
-                                                            <th>Año</th>
-                                                            <th>Módulo</th>
-                                                            <th>Carga horaria</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>' .
-                                                        $profesor->asignaturas->map(function ($asignatura) {
-                                                            $pivot = $asignatura->pivot;
-                                                            $carrera = \App\Models\Carrera::find($pivot->id_carrera);
-                                                            return '
-                                                                <tr>
-                                                                    <td>' . ($carrera?->nombre ?? '—') . '</td>
-                                                                    <td>' . $asignatura->nombre . '</td>
-                                                                    <td>' . $pivot->anio . '</td>
-                                                                    <td>' . $pivot->tipo_modulo . '</td>
-                                                                    <td>' . $pivot->carga_horaria . ' hs</td>
-                                                                </tr>';
-                                                        })->implode('') .
-                                                    '</tbody>
-                                                </table>
-                                            </div>'
-                                ) . '
-                                <button type="button" class="btn btn-outline-primary mb-3" onclick="document.getElementById(\'bloqueVinculacionNueva\').style.display = \'block\'">
-                                    Agregar nueva vinculación
-                                </button>
-                                <div id="bloqueVinculacionNueva" style="display: none;">
-                                    ' . view('components.vinculacion-profesor', [
-                                        'carreras' => $carreras,
-                                        'profesor' => $profesor
-                                    ])->render() . '
-                                </div>
-                            ')
-                        ],
+                {{-- Contacto --}}
+                <fieldset>
+                    <legend>Contacto</legend>
+                    <div class="form-group">
+                        <label for="email">Email:* </label>
+                        <input type="email" name="email" id="email"
+                               class="label-input-y-75 form-control"
+                               value="{{ old('email', $profesor->email) }}"
+                               placeholder="ejemplo@dominio.com" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono1">Teléfono 1:* </label>
+                        <input type="text" name="telefono1" id="telefono1"
+                               class="label-input-y-75 form-control"
+                               value="{{ old('telefono1', $profesor->telefono1) }}"
+                               placeholder="Ej: 2317-876544" maxlength="30">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono2">Teléfono 2: </label>
+                        <input type="text" name="telefono2" id="telefono2"
+                               class="label-input-y-75 form-control"
+                               value="{{ old('telefono2', $profesor->telefono2) }}"
+                               placeholder="Ej: 2317-876543" maxlength="30">
+                        <small class="text-muted">Ejemplo: 2317-876543</small>
+                    </div>
+                </fieldset>
 
                         'Otros' => [
                             $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones') ?? $profesor, [
@@ -156,22 +137,22 @@
                 ?>
         </div>
 
-        {{-- BOTÓN ELIMINAR --}}
-        <div class="boton-eliminar">
+        {{-- Botón eliminar --}}
+        <div class="boton-eliminar mt-4">
             <form method="POST" id="form-eliminar-{{ $profesor->id }}" action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
                 @csrf
-                @method('delete')
+                @method('DELETE')
                 <button type="button" class="btn_red_outline"
                     onclick="openGeneralModal(
                         'form-eliminar-{{ $profesor->id }}',
-                        '¿Estás seguro de que querés eliminar al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'
+                        '¿Estás seguro de que querés eliminar al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}?\\n\\nESTA ACCIÓN NO SE PUEDE DESHACER.'
                     )">
                     <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar profesor/a
                 </button>
             </form>
         </div>
 
-        {{-- TABLA MESAS --}}
+        {{-- Tabla Mesas --}}
         <div class="table mt-4">
             <div class="table__header">
                 <h2>Próximas mesas</h2>
@@ -201,7 +182,7 @@
                             </td>
                             <td class="flex just-center">
                                 <a href="{{ route('admin.mesas.edit', ['mesa' => $mesa->id]) }}">
-                                    <button class="btn_blue">
+                                    <button class="btn_blue" type="button">
                                         <i class="ti ti-file-info"></i> Detalles
                                     </button>
                                 </a>
