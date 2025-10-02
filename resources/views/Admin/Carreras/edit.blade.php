@@ -82,7 +82,7 @@
                                     <button type="button" class="btn_sky"
                                         onclick="document.getElementById('resolucionInput').click()">
                                         <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                        Reemplazar
+                                        <span style="font-size: 0.9rem;">REEMPLAZAR</span>
                                     </button>
                                     <input type="file" id="resolucionInput" name="resolucion_archivo_nuevo"
                                         accept="application/pdf" hidden onchange="mostrarNombreArchivo(this)">
@@ -90,8 +90,9 @@
                                     <div class="form-check form-check-danger">
                                         <input type="checkbox" name="eliminar_resolucion_archivo" value="1"
                                             class="form-check-input" id="eliminarArchivo">
-                                        <label class="form-check-label" for="eliminarArchivo">
-                                            <i class="ti ti-trash"></i> Eliminar actual
+                                        <label class="form-check-label" for="eliminarArchivo" style="cursor: pointer;">
+                                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                            Eliminar actual
                                         </label>
                                     </div>
                                 </div>
