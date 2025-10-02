@@ -79,7 +79,7 @@ class ProfesoresCrudController extends BaseController
         }
     }
 
-    return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor'. compact());
+    return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');
 }
 
 
