@@ -14,107 +14,14 @@
 
 @section('content')
 
-            <label class="switch" title="{{ $carrera->vigente ? 'Desactivar carrera' : 'Activar carrera' }}">
-                <input type="checkbox" id="toggle-carrera-{{ $carrera->id }}"
-                    @if ($carrera->vigente) checked @endif
-                onchange="onToggleCarrera(this, {{ $carrera->id }})">
-                <span class="slider"></span>
-            </label>
-        </div>--}}
-        <form method="POST" action="{{ route('admin.carreras.update', ['carrera' => $carrera->id]) }}" enctype="multipart/form-data">
-            @method('PUT')
-            @csrf
-            <fieldset class="p-2" style="margin:10px;">
-                <legend class="font-600 font-7">Información</legend>
-             <div class="grid-2 gap-2 p-0">
-    <label class="perfil_dataname">Nombre:
-        <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
-    </label>
-
-    <label class="perfil_dataname">Resolución:
-        <p class="campo_info-noinput rounded"> {{ $carrera->resolucion }} </p>
-    </label>
-
-    <label class="perfil_dataname">Año de apertura:
-        <p class="campo_info-noinput rounded"> {{ $carrera->anio_apertura }} </p>
-        <input type="hidden" name="anio_apertura" value="{{ $carrera->anio_apertura }}">
-    </label>
-
-    <label class="label-input-y-75">Estado:
-    <select name="vigente" class="campo_info rounded">
-        <option value="{{ $carrera->vigente }}" selected>
-            {{ $carrera->vigente ? 'Vigente' : 'No vigente' }}
-        </option>
-
-        @if ($carrera->vigente == 1)
-            @if (!empty($carrera->anio_fin))
-                <option value="0">No vigente</option>
-            @endif
-        @else
-            <option value="1">Vigente</option>
-        @endif
-    </select>
-</label>
-
-
-    <label class="label-input-y-75">Año de cierre:
-        <input type="text" name="anio_fin" value="{{ $carrera->anio_fin }}">
-    </label>
-
-    <label class="label-input-y-75">Observaciones:
-        <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
-    </label>
-
-  <label class="label-input-y-75">Archivo de la resolución:
-    @if($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo)))
-        <p class="campo_info-noinput rounded mb-2">
-            <a href="{{ asset($carrera->resolucion_archivo) }}" target="_blank"> Ver PDF actual</a>
-        </p>
-        <div class="mb-2">
-            <label for="resolucion_archivo_nuevo" class="form-label"> Reemplazar archivo:</label>
-            <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
-        </div>
-        <div class="form-check mt-2">
-            <input type="checkbox" name="eliminar_resolucion_archivo" value="1" class="form-check-input" id="eliminarArchivo">
-            <label class="form-check-label" for="eliminarArchivo">Eliminar archivo actual</label>
-        </div>
-    @else
-        <p class="campo_info-noinput rounded text-muted mb-2">No se ha cargado ningún archivo</p>
-        <div>
-            <label for="resolucion_archivo_nuevo" class="form-label">Subir archivo:</label>
-            <input type="file" name="resolucion_archivo_nuevo" accept="application/pdf" class="form-control">
-        </div>
-    @endif
-</label>
-
-
-    <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
-</div>
-
-            </fieldset>
-            <div class="botones-derecha">
-
-                <x-botones-alumno />
-                {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
-                <x-btn-cancelar />
-                <button type="submit" class="btn_blue">
-                    @if ($method == 'put')
-                    <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                    Actualizar
-                    @elseif ($method == 'post')
-                    <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                    Guardar
-                    @endif
-                    {{-- @endif --}}
-                </button>
-
-            </div>
-        </form>
-        <div class="boton-eliminar">
-            @if (!$config['modo_seguro'])
-            <div>
-                <form method="POST" id="form-eliminar-{{ $carrera->id }}"
-                    action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/edit-carrera.css') }}">
+    <div class="edit-form-container">
+        <div class="perfil_one br">
+            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
+            <div class="perfil__info">
+                <form method="POST" action="{{ route('admin.carreras.update', ['carrera' => $carrera->id]) }}"
+                    enctype="multipart/form-data">
+                    @method('PUT')
                     @csrf
                     <fieldset class="p-2" style="margin:10px;">
                         <legend class="font-600 font-7">Información</legend>
