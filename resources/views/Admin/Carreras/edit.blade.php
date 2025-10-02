@@ -296,7 +296,7 @@ $anio_actual = $asignatura->anio;
                             </div>
                         </td>
                         <td>
-                            <div style="position: relative;">
+                            <div style="display:flex; align-items: center; justify-content: center;">
                                 <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
                                     <i class="ti ti-file-download"></i> Exportar materia
                                 </button>
