@@ -14,6 +14,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Models\Carrera;
+use App\Models\Asignatura;
+use Illuminate\Support\Facades\DB;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -44,8 +47,7 @@ class ProfesoresCrudController extends BaseController
      */
     public function create()
     {
-        $carreras = Carrera::with('asignaturas')->get();
-        return view('Admin.Profesores.create', compact('carreras'));
+        return view('Admin.Profesores.create');
     }
 
     /**
@@ -66,6 +68,7 @@ class ProfesoresCrudController extends BaseController
         // return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
     }
 
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -78,11 +81,10 @@ class ProfesoresCrudController extends BaseController
         })
             ->whereRaw('fecha > NOW()')
             ->get();
-        $carreras = Carrera::with('asignaturas')->get();
+
         return view('Admin.Profesores.edit', [
             'profesor' => $profesor,
             'mesas' => $mesas,
-            'carreras' => $carreras,
         ]);
     }
 
@@ -94,52 +96,10 @@ class ProfesoresCrudController extends BaseController
         try {
             $profesor->update($request->validated());
 
-            foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $idAsignaturas) {
-                foreach ($idAsignaturas as $idAsignatura) {
-                    $asignatura = Asignatura::find($idAsignatura);
-
-                    if (!$asignatura) continue;
-
-                    // Si existe con profesor = 0, actualizamos
-                    $actualizado = DB::table('carrera_asignatura_profesor')
-                        ->where('id_carrera', $idCarrera)
-                        ->where('id_asignatura', $idAsignatura)
-                        ->where('id_profesor', 0)
-                        ->update([
-                            'id_profesor' => $profesor->id,
-                            'anio' => $asignatura->anio,
-                            'tipo_modulo' => $asignatura->tipo_modulo,
-                            'carga_horaria' => $asignatura->carga_horaria,
-                            'updated_at' => now(),
-                        ]);
-
-                    // Si no se actualizó nada, insertamos si no existe
-                    if (!$actualizado) {
-                        $existe = DB::table('carrera_asignatura_profesor')
-                            ->where('id_carrera', $idCarrera)
-                            ->where('id_asignatura', $idAsignatura)
-                            ->where('id_profesor', $profesor->id)
-                            ->exists();
-
-                        if (!$existe) {
-                            DB::table('carrera_asignatura_profesor')->insert([
-                                'id_carrera' => $idCarrera,
-                                'id_asignatura' => $idAsignatura,
-                                'id_profesor' => $profesor->id,
-                                'anio' => $asignatura->anio,
-                                'tipo_modulo' => $asignatura->tipo_modulo,
-                                'carga_horaria' => $asignatura->carga_horaria,
-                                'created_at' => now(),
-                                'updated_at' => now(),
-                            ]);
-                        }
-                    }
-                }
-            }
-
             return redirect()->route('admin.profesores.index')
                 ->with('mensaje', 'Se editó el profesor correctamente.');
         } catch (\Illuminate\Database\QueryException $e) {
+            // Extraer el campo que dio error del mensaje
             preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
             $campo = $matches[1] ?? 'desconocido';
 
@@ -148,8 +108,6 @@ class ProfesoresCrudController extends BaseController
                 ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
         }
     }
-
-
 
     /**
      * Remove the specified resource from storage.

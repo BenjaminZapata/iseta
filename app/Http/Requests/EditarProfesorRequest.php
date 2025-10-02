@@ -17,7 +17,10 @@ class EditarProfesorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => ['required', 'integer', 'gte:0',
+            'dni' => [
+                'required',
+                'integer',
+                'gte:0',
                 Rule::unique('profesores', 'dni')->ignore($this->route('profesor')->id),
                 'max_digits:10',
             ],

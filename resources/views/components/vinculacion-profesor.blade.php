@@ -61,3 +61,5 @@
         });
     });
 </script>
+{{-- Componente para la selección de carreras y asignaturas al crear/editar un profesor --}}
+{{-- Incluido en las vistas create.blade.php y edit.blade.php de Profesores --}}
