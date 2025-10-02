@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Models\Carrera;
+use App\Models\Asignatura;
+use Illuminate\Support\Facades\DB;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -77,7 +80,7 @@ public function store(crearProfesorRequest $request)
             }
         }
     }
-
+}
 
 /**
  * Show the form for editing the specified resource.
@@ -198,3 +201,4 @@ public function store(crearProfesorRequest $request)
         }
     }
 }
+
