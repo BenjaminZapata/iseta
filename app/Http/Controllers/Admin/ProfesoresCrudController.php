@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearProfesorRequest;
 use App\Http\Requests\EditarProfesorRequest;
 use App\Mail\ProfesorCreado;
+use App\Models\Carrera;
 use App\Models\Configuracion;
 use App\Models\Mesa;
 use App\Models\Profesor;
@@ -14,9 +15,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use App\Models\Carrera;
-use App\Models\Asignatura;
-use Illuminate\Support\Facades\DB;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -68,11 +66,10 @@ class ProfesoresCrudController extends BaseController
         // return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
     }
 
-
-/**
- * Show the form for editing the specified resource.
- */
-    public function edit(Profesor $profesor,Carrera $carreras)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Profesor $profesor, Carrera $carreras)
     {
         $mesas = Mesa::where(function ($query) use ($profesor) {
             $query->where('prof_presidente', $profesor->id)
@@ -115,20 +112,12 @@ class ProfesoresCrudController extends BaseController
     public function destroy(Profesor $profesor)
     {
         try {
-            if (! empty($profesor->profesor_mesa()->first())) {
-                return redirect()->route('admin.profesores.index')
-                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
-            } elseif (! empty($profesor->profesor_mesa_vocal()->first())) {
-                return redirect()->route('admin.profesores.index')
-                    ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
-
-            } elseif (! empty($profesor->profesor_mesa_vocal2()->first())) {
+            if ($profesor->profesor_mesa()->exists() || $profesor->profesor_mesa_vocal()->exists() || $profesor->profesor_mesa_vocal2()->exists()) {
                 return redirect()->route('admin.profesores.index')
                     ->with('error', 'No se pudo eliminar el Profesor. Tiene mesas asignadas.');
             }
-
             // verificar si el profesor tiene asignaturas asignadas en la tabla pivote
-            if (! empty($profesor->asignaturas()->where('id_profesor', $profesor->id)->first())) {
+            if ($profesor->asignaturas()->where('id_profesor', $profesor->id)->exists()) {
                 return redirect()->route('admin.profesores.index')
                     ->with('error', 'No se pudo eliminar el Profesor. Tiene asignaturas asignadas.');
             }
@@ -143,4 +132,3 @@ class ProfesoresCrudController extends BaseController
         }
     }
 }
-
