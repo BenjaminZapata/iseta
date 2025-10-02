@@ -12,7 +12,7 @@
                             'Profesor' => [
                                 $form->text('nombre', 'Nombre:*', 'label-input-y-75', old('nombre'), [
                                     'placeholder' => 'Ej: Juan',
-                                    'maxlength' => 50,
+                                    'maxlength' => 30,
                                 ]),
                                 $form->text('apellido', 'Apellido:*', 'label-input-y-75', old('apellido'), [
                                     'placeholder' => 'Ej: Pérez',
@@ -49,17 +49,18 @@
                                     'maxlength' => 30,
                                 ]),
                                 $form->text('casa_numero', 'Número de casa:', 'label-input-y-75', old('casa_numero'), [
-                                    'placeholder' => 'Ej: 742',
+                                    'placeholder' => 'Ej: 742',  
                                     'maxlength' => 4,
-                                ]),
-                                $form->text('dpto', 'Dpto:', 'label-input-y-75', old('dpto'), [
-                                    'placeholder' => 'Ej: A',
-                                    'maxlength' => 5,
                                 ]),
                                 $form->text('piso', 'Piso:', 'label-input-y-75', old('piso'), [
                                     'placeholder' => 'Ej: 3',
                                     'maxlength' => 15,
                                 ]),
+                                $form->text('dpto', 'Dpto:', 'label-input-y-75', old('dpto'), [
+                                    'placeholder' => 'Ej: A',
+                                    'maxlength' => 5,
+                                ]),
+                                
                             ],
                             'Académico' => [
                                 $form->text('formacion_academica', 'Formación académica:*', 'label-input-y-75', old('formacion_academica'), [
