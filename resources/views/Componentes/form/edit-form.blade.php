@@ -38,3 +38,21 @@
 
     </div>
 </form>
+
+<script>
+    function probarScroll() {
+        const campo = document.querySelector('.border-red-500');
+        if (campo) {
+            campo.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+            campo.focus({
+                preventScroll: true
+            });
+            console.log('✅ Scroll ejecutado correctamente');
+        } else {
+            console.log('❌ No se encontró el campo con border-red-500');
+        }
+    }
+</script>
