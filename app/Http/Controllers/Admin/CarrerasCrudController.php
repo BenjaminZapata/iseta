@@ -55,7 +55,7 @@ class CarrerasCrudController extends BaseController
 
         $this->data['carreras'] = $carreras;
         $this->data['aniosPorCarrera'] = $aniosPorCarrera;
-      $filterVigente = $request->input('filter_vigente', '');
+        $filterVigente = $request->input('filter_vigente', '');
 
 
 
@@ -84,9 +84,9 @@ class CarrerasCrudController extends BaseController
         $data['vigente'] = 1;
 
         if ($request->hasFile('resolucion_archivo')) {
-            $nombre = str_replace(' ', '_', $request->input('nombre')).'.pdf';
+            $nombre = str_replace(' ', '_', $request->input('nombre')) . '.pdf';
             $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
-            $data['resolucion_archivo'] = 'storage/'.$ruta;
+            $data['resolucion_archivo'] = 'storage/' . $ruta;
 
         }
 
@@ -127,36 +127,46 @@ class CarrerasCrudController extends BaseController
      */
     public function update(EditarCarreraRequest $request, Carrera $carrera)
     {
-        if ($request->has('eliminar_resolucion_archivo')) {
-    if ($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo))) {
-        unlink(public_path($carrera->resolucion_archivo));
-    }
-    $datos['resolucion_archivo'] = null;
-}
-
-if ($request->hasFile('resolucion_archivo_nuevo')) {
-    $nombreArchivo = str_replace(' ', '_', $datos['nombre']) . '.pdf';
-    $ruta = $request->file('resolucion_archivo_nuevo')->storeAs('resoluciones', $nombreArchivo, 'public');
-    $datos['resolucion_archivo'] = 'storage/' . $ruta;
-}
-
         try {
+            // Primero validamos y armamos el array base
             $datos = $request->validated();
 
+            // Si marcaron eliminar archivo
+            if ($request->has('eliminar_resolucion_archivo')) {
+                if ($carrera->resolucion_archivo && file_exists(public_path($carrera->resolucion_archivo))) {
+                    unlink(public_path($carrera->resolucion_archivo));
+                }
+                $datos['resolucion_archivo'] = null;
+            }
+
+            // Si subieron un archivo nuevo
+            if ($request->hasFile('resolucion_archivo_nuevo')) {
+                // Usamos el nombre de la carrera validado
+                $nombreArchivo = str_replace(' ', '_', $carrera->nombre) . '.pdf';
+
+
+                $ruta = $request->file('resolucion_archivo_nuevo')
+                    ->storeAs('resoluciones', $nombreArchivo, 'public');
+
+                $datos['resolucion_archivo'] = 'storage/' . $ruta;
+            }
+
+            // Actualizamos el modelo
             $carrera->update($datos);
 
             if ($request->has('redirect')) {
-                return redirect()->to($request->input('redirect'))->with('mensaje', 'Se edito la carrera');
+                return redirect()->to($request->input('redirect'))
+                    ->with('mensaje', 'Se editó la carrera');
             } else {
-                return redirect()->back()->with('mensaje', 'Se edito la carrera');
+                return redirect()->back()->with('mensaje', 'Se editó la carrera');
             }
+
         } catch (\Exception $e) {
             Log::error($e);
-
             return redirect()->back()->with('error', 'No se pudo editar la carrera');
         }
-
     }
+
 
     public function createAsignaturaView(Carrera $carrera)
     {
@@ -233,7 +243,7 @@ if ($request->hasFile('resolucion_archivo_nuevo')) {
                     ->with('error', 'No se pudo eliminar la carrera. Tiene mesas futuras asociadas.');
             }
             // Verificar si la carrera no contiene el año de finalización
-            if (! $carrera->anio_fin) {
+            if (!$carrera->anio_fin) {
                 return redirect()->route('admin.carreras.index')
                     ->with('error', 'No se pudo Desactivar la carrera. No tiene un año de finalización.');
             }
@@ -263,7 +273,7 @@ if ($request->hasFile('resolucion_archivo_nuevo')) {
         }
 
         // Verificar si la carrera no contiene el año de finalización
-        if (! $carrera->anio_fin) {
+        if (!$carrera->anio_fin) {
             return redirect()->route('admin.carreras.index')
                 ->with('error', 'No se pudo Desactivar la carrera. No tiene un año de finalización.');
         }
