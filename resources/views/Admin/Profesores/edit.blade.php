@@ -97,7 +97,7 @@
 
                         'Vinculación' => [
                             new \Illuminate\Support\HtmlString('
-                                <h3 class="mb-3">🧾 Vinculaciones actuales</h3>
+                                <h3 class="mb-3"> Vinculaciones actuales</h3>
                                 ' . (
                                     $profesor->asignaturas->isEmpty()
                                         ? '<p class="text-muted">Este profesor aún no tiene asignaturas vinculadas.</p>'
