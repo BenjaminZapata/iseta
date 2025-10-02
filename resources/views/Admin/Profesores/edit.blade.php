@@ -106,58 +106,21 @@
         </div>
 
         {{-- BOTÓN ELIMINAR --}}
-        <div class="boton-eliminar">
-            <form method="POST" id="form-eliminar-{{ $profesor->id }}" action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
-                @csrf
-                @method('delete')
-                <button type="button" class="btn_red_outline"
-                    onclick="openGeneralModal(
+        <div class="botones-derecha">
+            <div class="boton-eliminar">
+                <form method="POST" id="form-eliminar-{{ $profesor->id }}" action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
+                    @csrf
+                    @method('delete')
+                    <button type="button" class="btn_red_outline"
+                        onclick="openGeneralModal(
                         'form-eliminar-{{ $profesor->id }}',
                         '¿Estás seguro de que querés eliminar al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.'
                     )">
-                    <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar profesor/a
-                </button>
-            </form>
+                        <i class="ti ti-trash" style="font-size: 1.3em;"></i> Eliminar profesor/a
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
-
-
-    <div class="table">
-        <div class="table__header">
-            <h2>Proximas mesas</h2>
-        </div>
-        <table class="table__body">
-            <thead>
-                <tr>
-                    <th>Asignatura</th>
-                    <th>Fecha</th>
-                    <th>Rol</th>
-                    <th class="center">Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($mesas as $mesa)
-                <tr>
-                    <td>{{ $mesa->asignatura->nombre }}</td>
-                    <td>{{ $formatoFecha->dmhm($mesa->fecha) }}</td>
-                    <td>
-                        @if ($mesa->prof_presidente == $profesor->id)
-                        Presidente
-                        @elseif ($mesa->prof_vocal_1 == $profesor->id)
-                        Vocal 1
-                        @elseif ($mesa->prof_vocal_2 == $profesor->id)
-                        Vocal 2
-                        @endif
-                    </td>
-                    <td class="flex just-center"><a
-                            href="{{ route('admin.mesas.edit', ['mesa' => $mesa->id]) }}"><button
-                                class="btn_blue"><i class="ti ti-file-info"></i>Detalles</button></a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-
     </div>
 
     {{-- TABLA MESAS --}}
