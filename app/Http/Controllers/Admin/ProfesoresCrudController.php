@@ -5,14 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearProfesorRequest;
 use App\Http\Requests\EditarProfesorRequest;
+use App\Mail\ProfesorCreado;
 use App\Models\Configuracion;
 use App\Models\Mesa;
 use App\Models\Profesor;
 use App\Repositories\Admin\ProfesorRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Models\Carrera;
-use App\Models\Asignatura;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -50,32 +51,19 @@ class ProfesoresCrudController extends BaseController
     /**
      * Store a newly created resource in storage.
      */
+    public function store(crearProfesorRequest $request)
+    {
+        $data = $request->validated();
+        $data['password'] = Str::password();
 
-    
-public function store(crearProfesorRequest $request)
-{
-    $data = $request->validated();
-    $profesor = Profesor::create($data);
-
-    $seleccionadas = $request->input('asignaturas_seleccionadas', []);
-
-    foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
-        foreach ($idAsignaturas as $idAsignatura) {
-            $asignatura = Asignatura::find($idAsignatura);
-            if ($asignatura) {
-                DB::table('carrera_asignatura_profesor')
-    ->where('id_carrera', $idCarrera)
-    ->where('id_asignatura', $idAsignatura)
-    ->where('id_profesor', 0) // solo si está en cero
-    ->update([
-        'id_profesor' => $profesor->id,
-        'anio' => $asignatura->anio,
-        'tipo_modulo' => $asignatura->tipo_modulo,
-        'carga_horaria' => $asignatura->carga_horaria,
-        'updated_at' => now(),
-    ]);
-            }
+        if ($_ENV['MAIL_USERNAME'] != null) {
+            Mail::to($data['email'])->queue(new ProfesorCreado($data));
         }
+        $data['password'] = Hash::make($data['password']);
+        // Profesor::create($data);
+
+        return redirect()->back()->withInput();
+        // return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
     }
 
     return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');

@@ -1,19 +1,18 @@
 @extends('Admin.template')
 
 @section('content')
-<div class="edit-form-container">
-    <div class="perfil_one br">
+    <div class="edit-form-container">
+        <div class="perfil_one br">
 
-        {{-- HEADER --}}
-        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR PROFESOR/A'])
 
-        {{-- FORMULARIO --}}
-        <div class="perfil__info">
-            {!! 
-                $form->generate(
-                    route('admin.profesores.update', ['profesor' => $profesor->id]),
-                    'put',
-                    [
+            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR PROFESOR/A'])
+            <div class="perfil__info">
+
+                <p class="info-obligatorios">
+                    Los campos marcados con <span style="color:red">*</span> son obligatorios.
+                </p>
+
+                <?= $form->generate(route('admin.profesores.update', ['profesor' => $profesor->id]), 'put', [
                         'Profesor' => [
                             $form->text('nombre', 'Nombre:*', 'label-input-y-75', old('nombre') ?? $profesor, [
                                 'placeholder' => 'Ej: Juan',
@@ -41,7 +40,6 @@
                                 '5' => 'Otro',
                             ]),
                         ],
-
                         'Dirección' => [
                             $form->text('ciudad', 'Ciudad:', 'label-input-y-75', old('ciudad') ?? $profesor, [
                                 'placeholder' => 'Ej: 9 de julio',
@@ -68,7 +66,6 @@
                                 'maxlength' => 15,
                             ]),
                         ],
-
                         'Académico' => [
                             $form->text('formacion_academica', 'Formación académica:*', 'label-input-y-75', old('formacion_academica') ?? $profesor, [
                                 'placeholder' => 'Ej: Profesorado en Matemática',
