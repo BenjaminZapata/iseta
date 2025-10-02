@@ -14,6 +14,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Models\Carrera;
+use App\Models\Asignatura;
+use Illuminate\Support\Facades\DB;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -65,10 +68,11 @@ class ProfesoresCrudController extends BaseController
         // return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Profesor $profesor)
+
+/**
+ * Show the form for editing the specified resource.
+ */
+    public function edit(Profesor $profesor,Carrera $carreras)
     {
         $mesas = Mesa::where(function ($query) use ($profesor) {
             $query->where('prof_presidente', $profesor->id)
@@ -139,3 +143,4 @@ class ProfesoresCrudController extends BaseController
         }
     }
 }
+
