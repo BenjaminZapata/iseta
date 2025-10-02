@@ -116,21 +116,12 @@ $fileUrl = $existsStorage ? Storage::url($path) : ($existsPublic ? asset($path) 
 
 
                 <div class="botones-derecha">
-
                     <x-botones-alumno />
-                    {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
                     <x-btn-cancelar />
                     <button type="submit" class="btn_blue">
-                        @if ($method == 'put')
                         <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
                         Actualizar
-                        @elseif ($method == 'post')
-                        <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                        Guardar
-                        @endif
-                        {{-- @endif --}}
                     </button>
-
                 </div>
             </form>
             <div class="boton-eliminar">
