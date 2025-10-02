@@ -67,7 +67,7 @@ class ProfesoresCrudController extends BaseController
         return redirect()->back()->withInput();
         // return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creo el profesor');
     }
-}
+
 
 /**
  * Show the form for editing the specified resource.

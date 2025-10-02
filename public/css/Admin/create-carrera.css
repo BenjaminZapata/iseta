@@ -1,0 +1,106 @@
+/* Ocultar el input file original */
+.custom-file-input {
+ display: none;
+}
+
+/* Estilo del botón personalizado */
+.custom-file-upload-button {
+
+ gap: 8px;
+ padding: 10px 12px;
+    /* Esto lo hace del mismo tamaño que los otros inputs */
+ background-color: #140b5c;
+ color: white;
+ width: 60%;
+ font-size: 14px;
+ border-radius: 5px;
+ cursor: pointer;
+ transition: background-color 0.2s ease;
+ border: none;
+ box-sizing: border-box;
+}
+
+.custom-file-upload-button:hover {
+ background-color: #352ca2;
+}
+
+/* Error debajo del campo */
+.error-message {
+ display: block;
+ margin-top: 6px;
+ color: #dc2626;
+ font-size: 13px;
+}
+
+.file-name-label {
+ font-weight: bold;
+ margin-bottom: 6px;
+ display: block;
+}
+
+.file-name-text {
+ font-size: 14px;
+ color: #374151;
+ background-color: #f3f4f6;
+ padding: 10px;
+ border-radius: 4px;
+ border: 1px solid #d1d5db;
+ word-break: break-word;
+}
+
+.label-input-y-75 {
+ display: flex;
+ flex-direction: column;
+ width: 100%;
+}
+
+.custom-file-upload-button {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ padding: 10px 16px;
+ background-color: #1e1b4b;
+ /* Azul oscuro */
+ color: white;
+ font-weight: 600;
+ font-size: 14px;
+ border-radius: 6px;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+ border: none;
+ width: 100%;
+ justify-content: center;
+}
+
+.custom-file-upload-button:hover {
+ background-color: #312e81;
+}
+
+.custom-file-input {
+ display: none;
+}
+
+.file-name-label {
+ font-weight: 600;
+ margin-bottom: 6px;
+ font-size: 14px;
+ color: #111827;
+}
+
+.file-name-display-box {
+ background-color: #f9fafb;
+ border: 1px solid #d1d5db;
+ border-radius: 5px;
+ padding: 10px;
+ font-size: 14px;
+ color: #374151;
+ height: 42px;
+ display: flex;
+ align-items: center;
+ overflow-x: auto;
+}
+
+/* Espacio entre bloques si están muy juntos */
+.align-file-row {
+ margin-bottom: 16px;
+}
