@@ -163,7 +163,7 @@ class ProfesoresCrudController extends BaseController
                 ->with('mensaje', 'Se ha eliminado el Profesor.');
         } catch (\Exception $e) {
             return redirect()->route('admin.profesores.index')
-                ->with('error', 'No se pudo eliminar el Profesor. '.$e->getMessage());
+                ->with('error', 'No se pudo eliminar el Profesor. ' . $e->getMessage());
         }
     }
 }
