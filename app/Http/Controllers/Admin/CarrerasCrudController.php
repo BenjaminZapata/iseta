@@ -80,7 +80,7 @@ class CarrerasCrudController extends BaseController
     $data = $request->validated();
 
     $request->validate([
-        'resolucion_archivo' => 'nullable|file|mimes:pdf|max:20480',
+        'resolucion_archivo' => 'nullable|file|mimes:pdf|max:300000',
     ]);
 
     $data['vigente'] = 1;
