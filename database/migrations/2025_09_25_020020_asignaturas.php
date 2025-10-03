@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('asignaturas', function (Blueprint $table) {
             $table->integer('cantidad_modulo')->default(0);
             $table->integer('carga_horaria')->nullable()->change();
-            $table->integer('anio')->nullable()->change();
+            $table->dropColumn('anio');
             $table->dropColumn('id_carrera');
            
         });
