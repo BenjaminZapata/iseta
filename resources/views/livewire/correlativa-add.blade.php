@@ -19,7 +19,7 @@
                     <label for="correlativas">Agregadas:</label>
                     @foreach ($correlativas as $cor)
                         <div>
-                            {{ $cor->nombre }}
+                            {{ $cor['nombre'] }}
                         </div>
                     @endforeach
                 </div>
