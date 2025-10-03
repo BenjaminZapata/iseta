@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Asignatura;
 use Livewire\Component;
 use Log;
 
@@ -9,7 +10,7 @@ class CorrelativaAdd extends Component
 {
     public $carrera;
 
-    public $singleAsignatura;
+    public Asignatura $singleAsignatura;
 
     public $correlativa;
 
@@ -27,7 +28,8 @@ class CorrelativaAdd extends Component
     public function addCorrelativa()
     {
         $this->correlativa = json_decode($this->correlativa);
-        Log::debug($this->singleAsignatura->carrera->where('id', $this->carrera->id)->pivot);
+        Log::debug(Asignatura($this->singleAsignatura));
+        Log::debug($this->singleAsignatura->carrera);
         if ($this->singleAsignatura->carrera->where('id', $this->carrera->id)->pivot->anio < $this->correlativa->carrera->where('id', $this->carrera->id)->pivot->anio) { // una asig del 2do año, no puede tener una correlativa de 1er año ni 2do
             return \redirect()->back()->with('error', 'El año de la correlativa debe ser menor al de la asignatura');
         }
