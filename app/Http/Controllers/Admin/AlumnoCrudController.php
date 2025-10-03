@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Validator;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearAlumnoRequest;
 use App\Http\Requests\EditarAlumnoRequest;
@@ -12,15 +11,15 @@ use App\Models\Examen;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\view\WithInput;
 
 class AlumnoCrudController extends BaseController
 {
     public $alumnosRepo;
+
     public $defaultFilters = [
         'filter_carrera_id' => 0,
         'filter_ciudad' => 0,
-        'filter_estado_civil' => 0
+        'filter_estado_civil' => 0,
     ];
 
     public $mensajes = ['mensaje' => [], 'error' => [], 'aviso' => []];
@@ -35,10 +34,8 @@ class AlumnoCrudController extends BaseController
     /**
      * Display a listing of the resource.
      */
-
     public function index(Request $request)
     {
-
 
         $this->setFilters($request);
         $request->flash();
@@ -81,25 +78,22 @@ class AlumnoCrudController extends BaseController
             'cursadas.anio_cursada',
             'cursadas.id',
             'carreras.nombre as carrera',
-            'asignaturas.anio as anio_asig'
         )
             ->join('asignaturas', 'cursadas.id_asignatura', 'asignaturas.id')
             ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', 'cap.id_asignatura')
             ->join('carreras', 'cap.id_carrera', 'carreras.id')
             ->where('cursadas.id_alumno', $alumno->id)
             ->orderBy('carreras.id')
-            ->orderBy('asignaturas.anio')
             ->orderBy('asignaturas.id')
             ->orderBy('cursadas.anio_cursada')
             ->get();
 
-        $examenes = Examen::select('examenes.fecha', 'asignaturas.nombre as asignatura', 'examenes.nota', 'examenes.id', 'carreras.nombre as carrera', 'asignaturas.anio as anio_asig')
+        $examenes = Examen::select('examenes.fecha', 'asignaturas.nombre as asignatura', 'examenes.nota', 'examenes.id', 'carreras.nombre as carrera')
             ->join('asignaturas', 'examenes.id_asignatura', 'asignaturas.id')
             ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', 'cap.id_asignatura')
             ->join('carreras', 'cap.id_carrera', 'carreras.id')
             ->where('examenes.id_alumno', $alumno->id)
             ->orderBy('carreras.id')
-            ->orderBy('asignaturas.anio')
             ->orderBy('examenes.fecha', 'desc')
             ->get();
 
@@ -132,7 +126,6 @@ class AlumnoCrudController extends BaseController
             $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
             $mensajes['error'][] = 'Error al actualizar los datos del alumno.';
 
-
             return redirect()->back()->with('mensajes', $mensajes)->withInput();
         } catch (\Exception $e) {
             $mensajes = ['aviso' => [], 'error' => [], 'mensaje' => []];
@@ -149,28 +142,27 @@ class AlumnoCrudController extends BaseController
     {
         try {
 
-            //verificar si tiene cursadas pero con el estado
+            // verificar si tiene cursadas pero con el estado
             if ($alumno->cursadas()->exists()) {
                 return redirect()->route('admin.alumnos.index')
                     ->with('error', 'No se pudo eliminar el alumno porque tiene cursadas asociadas.');
             }
 
-            //verificar si tiene mesas futuras
+            // verificar si tiene mesas futuras
             if ($alumno->examenes()->exists()) {
                 return redirect()->route('admin.alumnos.index')
                     ->with('error', 'No se pudo eliminar el alumno porque tiene mesas de examen futuras.');
             }
 
-
-            //verificar si esta inscripto en alguna carrera pero con el estado regular
+            // verificar si esta inscripto en alguna carrera pero con el estado regular
             if ($alumno->carreras()->exists()) {
                 return redirect()->route('admin.alumnos.index')
                     ->with('error', 'No se pudo eliminar el alumno porque está inscripto en una o más carreras');
             }
 
-
-            //eliminar alumno
+            // eliminar alumno
             $alumno->delete();
+
             return redirect()->route('admin.alumnos.index')
                 ->with('mensaje', 'Se ha eliminado el alumno');
         } catch (\Exception $e) {
@@ -182,8 +174,9 @@ class AlumnoCrudController extends BaseController
     public function softDelete(Alumno $alumno)
     {
         try {
-            $alumno->estado = 2;
+            $alumno->estado = 1;
             $alumno->save();
+
             return redirect()->route('admin.alumnos.index')
                 ->with('mensaje', 'Se ha inhabilitado el alumno');
         } catch (\Exception $e) {
@@ -192,11 +185,10 @@ class AlumnoCrudController extends BaseController
         }
     }
 
-
     public function verificar(Request $request, Alumno $alumno)
     {
 
-        if (1 != $alumno->verificado) {
+        if ($alumno->verificado != 1) {
             $alumno->verificar();
             $this->mensajes['mensaje'][] = 'Se ha verificado al alumno';
         }
@@ -206,6 +198,7 @@ class AlumnoCrudController extends BaseController
             $alumno->save();
             $this->mensajes['mensaje'][] = 'Se utilizará su dni como clave de acceso';
         }
+
         // dd($this->mensajes,['mensaje'=>['Se ha verificado al alumno','Se utilizará su dni como clave de acceso']]);
         return redirect()->route('admin.alumnos.index')->with('mensajes', $this->mensajes);
     }

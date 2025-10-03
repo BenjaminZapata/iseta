@@ -25,17 +25,20 @@
             {{-- FILTROS --}}
             <?= $filtergen->generate('admin.carreras.index', $filters, [
                 'dropdowns' => [
-                    $form->select(
-                        'filter_vigente',
-                        'Condición:',
-                        'label-input-y-100',
-                        $filters,
-                        [
-                            "" => "Todas",
-                            0 => 'Vigentes',
-                            1 => 'No Vigentes',
-                        ],
-                    ),
+                   $form->select(
+    'filter_vigente',            
+    'Condición:',                
+    'label-input-y-100',            
+    $filters->filter_vigente ?? '', 
+    [
+        '' => 'Seleccione una opción',
+        '1' => 'Vigentes',
+        '0' => 'No vigentes',
+    ]                               
+   
+    ),
+
+
     
                     $form->select(
                         'filter_resolucion_numero',
@@ -58,18 +61,13 @@
                         old('filter_nombre', $filters->filter_nombre ?? null),
                         ['' => 'Cualquiera'] + $carreraM->listadoNombres(),
                     ),
-                    $form->select(
-                        'filter_resolucion',
-                        'Resolución completa:',
-                        'label-input-y-100',
-                        old('filter_resolucion', $filters->filter_resolucion ?? null),
-                        ['' => 'Cualquiera'] + $carreraM->listadoResoluciones(),
-                    ),
                 ],
                 'fields' => [
-                    'nombre' => 'Nombre',
-                    'resolucion' => 'Resolución',
-                ],
+    'nombre' => 'Nombre',
+    'resolucion_numero' => 'N° de Resolución',
+    'resolucion_anio' => 'Año de la Resolución',
+],
+
             ]) ?>
         </div>
 

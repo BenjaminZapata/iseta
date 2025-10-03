@@ -116,7 +116,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             return redirect()->route('admin.carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
         })->except('show');
 
-    Route::post('carreras/add_asignatura', [CarrerasCrudController::class, 'addAsignatura'])
+    Route::post('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignatura'])
         ->name('admin.carreras.addAsignatura');
     Route::get('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
         ->name('admin.carreras.addAsignaturaView');

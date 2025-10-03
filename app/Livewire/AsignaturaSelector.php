@@ -3,16 +3,17 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Asignatura;
-use Illuminate\Support\Facades\Log;
 
 class AsignaturaSelector extends Component
 {
     public $asignaturas;
+
     public $selectedId;
-    public $asignaturas_anio;
+
     public $carga_horaria;
+
     public $anio;
+
     public $carrera;
 
     public function mount($asignaturas, $carrera)
