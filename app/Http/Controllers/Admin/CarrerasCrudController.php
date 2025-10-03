@@ -67,9 +67,9 @@ class CarrerasCrudController extends BaseController
     {
         $data = $request->validated();
 
-        $request->validate([
-            'resolucion_archivo' => 'nullable|file|mimes:pdf|max:20480',
-        ]);
+    $request->validate([
+        'resolucion_archivo' => 'nullable|file|mimes:pdf|max:300000',
+    ]);
 
         $data['vigente'] = 1;
 
@@ -198,19 +198,13 @@ class CarrerasCrudController extends BaseController
         }
 
         $carrera->asignaturas()->attach($data['id_asignatura'], [
-            'id_profesor' => $data['id_profesor'] ?? 0,
+            'id_profesor' => $data['id_profesor'] ?? null,
             'anio' => $data['anio'],
             'carga_horaria' => $data['carga_horaria'],
             'tipo_modulo' => $data['tipo_modulo'] ?? 0,
         ]);
 
         return redirect()->back()->with('mensaje', 'Se agregó la asignatura a la carrera');
-    }
-
-    public function deleteAsignatura(Request $request, Carrera $carrera, Asignatura $asignatura)
-    {
-        $carrera->asignaturas()->detach($asignatura);
-        return redirect()->back()->with('mensaje', 'Se eliminó la asignatura');
     }
 
     public function destroy(Carrera $carrera)
