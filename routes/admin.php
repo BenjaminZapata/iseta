@@ -107,6 +107,13 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         return redirect()->route('admin.profesores.index')->with('aviso', 'El profesor no existe o ha sido eliminado');
     });
 
+    Route::get('profesores/{profesor}/vincular', [ProfesoresCrudController::class, 'vincular'])
+        ->name('admin.profesores.vincular');
+
+    Route::post('profesores/{profesor}/vinculaciones', [ProfesoresCrudController::class, 'guardarVinculaciones'])
+        ->name('admin.profesores.vinculaciones');
+
+
     // -----------------------------
     // CARRERAS
     // -----------------------------

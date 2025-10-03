@@ -1,26 +1,31 @@
 @php
-    $asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
+$asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
 @endphp
 
-<div class="label-input-y-75 mt-5">
-    <h3 class="mb-3">🎓 Seleccionar carrera/s</h3>
-    <select id="selectorCarreras" multiple class="form-control">
+<link rel="stylesheet" href="{{ asset('css/Admin/vinculacion.css') }}">
+
+<div class="vinculacion-bloque">
+    <h3>🎓 Seleccionar carrera/s</h3>
+    <select id="selectorCarreras" multiple class="vinculacion-select">
         @foreach($carreras as $carrera)
-            <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
+        <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
         @endforeach
     </select>
-    <small class="form-text text-muted">Usá Ctrl (Windows) o Cmd (Mac) para seleccionar múltiples carreras.</small>
+
+    <div id="contenedorTablas"></div>
+
+    <div class="vinculacion-seleccionadas">
+        <h4>Asignaturas seleccionadas</h4>
+        <ul id="listaSeleccionadas"></ul>
+    </div>
 </div>
 
-<div id="contenedorTablas" class="mt-5">
-    <!-- Tablas de asignaturas aparecerán aquí -->
-</div>
 
 <script>
     const carreras = @json($carreras);
     const asignaturasActuales = @json($asignaturasActuales);
 
-    document.getElementById("selectorCarreras").addEventListener("change", function () {
+    document.getElementById("selectorCarreras").addEventListener("change", function() {
         const seleccionadas = Array.from(this.selectedOptions).map(opt => parseInt(opt.value));
         const contenedor = document.getElementById("contenedorTablas");
         contenedor.innerHTML = "";
@@ -35,13 +40,12 @@
             const filas = carrera.asignaturas.map(asig => {
                 const checked = asignaturasActuales.includes(asig.id) ? 'checked' : '';
                 return `
-                    <tr>
-                        <td class="align-middle">${asig.nombre}</td>
-                        <td class="text-center align-middle">
-                            <input type="checkbox" name="asignaturas_seleccionadas[${carrera.id}][]" value="${asig.id}" ${checked}>
-                        </td>
-                    </tr>
-                `;
+    <label class="vinculacion-item">
+        <input type="checkbox" name="asignaturas_seleccionadas[${carrera.id}][]" value="${asig.id}" ${checked}>
+        <span>${asig.nombre}</span>
+    </label>
+`;
+
             }).join("");
 
             bloque.innerHTML = `

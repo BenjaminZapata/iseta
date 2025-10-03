@@ -1,6 +1,9 @@
 @extends('Admin.template')
 
 @section('content')
+
+<link rel="stylesheet" href="css\Admin\vinculacion.css">
+
 <div class="edit-form-container">
     <div class="perfil_one br">
 
@@ -86,65 +89,18 @@
             'placeholder' => 'Ej: 2317-876544',
             'maxlength' => 30,
             ]),
-            '<div class="input-group">' .
-                $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2') ?? $profesor, [
-                'placeholder' => 'Ej: 2317-876543',
-                'maxlength' => 30,
-                ]) .
-                '<small class="text-muted">Ejemplo: 2317-876543</small>' .
-                '</div>',
+            $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2') ?? $profesor, [
+            'placeholder' => 'Ej: 2317-876543',
+            'maxlength' => 30,
+            ]),
             ],
             'Vinculación' => [
-            new \Illuminate\Support\HtmlString(
-            '
-            <h3 class="mb-3">🧾 Vinculaciones actuales</h3>
-            ' . (
-            $profesor->asignaturas->isEmpty()
-            ? '<p class="text-muted">Este profesor aún no tiene asignaturas vinculadas.</p>'
-            : '
-            <div class="table-responsive mb-4">
-                <table class="table table-bordered table-hover">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Carrera</th>
-                            <th>Asignatura</th>
-                            <th>Año</th>
-                            <th>Módulo</th>
-                            <th>Carga horaria</th>
-                        </tr>
-                    </thead>
-                    <tbody>' .
-                        $profesor->asignaturas->map(function ($asignatura) {
-                        $pivot = $asignatura->pivot;
-                        $carrera = \App\Models\Carrera::find($pivot->id_carrera);
-                        return '
-                        <tr>
-                            <td>' . ($carrera?->nombre ?? '—') . '</td>
-                            <td>' . $asignatura->nombre . '</td>
-                            <td>' . $pivot->anio . '</td>
-                            <td>' . $pivot->tipo_modulo . '</td>
-                            <td>' . $pivot->carga_horaria . ' hs</td>
-                        </tr>';
-                        })->implode('') .
-                        '
-                    </tbody>
-                </table>
-            </div>'
-            ) . '
-
-            <button type="button" class="btn btn-outline-primary mb-3" onclick="document.getElementById(\'bloqueVinculacionNueva\').style.display = \'block\'">
-                Agregar nueva vinculación
-            </button>
-
-            <div id="bloqueVinculacionNueva" style="display: none;">
-                ' . view('components.vinculacion-profesor', [
-                'carreras' => $carreras,
-                'profesor' => $profesor
-                ])->render() . '
-            </div>
-            '
-            )
+            view('admin.profesores.partials.vinculaciones-listado', [
+            'profesor' => $profesor,
+            'vinculaciones' => $vinculaciones,
+            ]),
             ],
+
             'Otros' => [
             $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones') ?? $profesor, [
             'placeholder' => 'Notas adicionales sobre el profesor/a',

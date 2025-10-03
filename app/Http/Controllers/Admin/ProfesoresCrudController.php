@@ -97,6 +97,7 @@ class ProfesoresCrudController extends BaseController
      */
     public function edit(Profesor $profesor, Carrera $carreras)
     {
+        // PROXIMAS MESAS
         $mesas = Mesa::where(function ($query) use ($profesor) {
             $query->where('prof_presidente', $profesor->id)
                 ->orWhere('prof_vocal_1', $profesor->id)
@@ -104,13 +105,73 @@ class ProfesoresCrudController extends BaseController
         })
             ->whereRaw('fecha > NOW()')
             ->get();
+        // CARRERAS CON ASIGNATURAS
         $carreras = Carrera::with('asignaturas')->get();
 
+        // Vinculaciones actuales
+        $asignaturas = $profesor->asignaturas;
+
+        $carreraIds = $asignaturas->pluck('pivot.id_carrera')
+            ->filter()
+            ->unique()
+            ->values();
+
+        $carrerasMap = Carrera::whereIn('id', $carreraIds)
+            ->pluck('nombre', 'id');
+
+        $vinculaciones = $asignaturas->map(function ($asignatura) use ($carrerasMap) {
+            $p = $asignatura->pivot;
+            return [
+                'carrera'       => $carrerasMap[$p->id_carrera] ?? '—',
+                'asignatura'    => $asignatura->nombre,
+                'anio'          => $p->anio,
+                'tipo_modulo'   => $p->tipo_modulo,
+                'carga_horaria' => $p->carga_horaria,
+            ];
+        });
+
         return view('Admin.Profesores.edit', [
+            'profesor'      => $profesor,
+            'mesas'         => $mesas,
+            'carreras'      => $carreras,
+            'vinculaciones' => $vinculaciones,
+        ]);;
+    }
+
+    //#################### PARA LA VISTA DE VINCULAR ASIGNATURAS AL PROFESOR ####################
+    public function vincular(Profesor $profesor)
+    {
+        $carreras = Carrera::with('asignaturas')->get();
+
+        return view('Admin.Profesores.vincular', [
             'profesor' => $profesor,
-            'mesas' => $mesas,
             'carreras' => $carreras,
         ]);
+    }
+
+    public function guardarVinculaciones(Request $request, Profesor $profesor)
+    {
+        $asignaciones = [];
+
+        foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $asignaturas) {
+            foreach ($asignaturas as $idAsignatura) {
+                $asignatura = \App\Models\Asignatura::find($idAsignatura);
+
+                if ($asignatura) {
+                    $asignaciones[$idAsignatura] = [
+                        'id_carrera'    => $idCarrera,
+                        'anio'          => $asignatura->anio,
+                        'tipo_modulo'   => $asignatura->tipo_modulo,
+                        'carga_horaria' => $asignatura->carga_horaria,
+                    ];
+                }
+            }
+        }
+
+        $profesor->asignaturas()->sync($asignaciones);
+
+        return redirect()->route('admin.profesores.edit', $profesor)
+            ->with('mensaje', 'Vinculaciones actualizadas correctamente.');
     }
 
     /**
