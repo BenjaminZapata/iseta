@@ -11,7 +11,7 @@
 
                     {{-- Nombre --}}
                     <div class="perfil_dataname">
-                        <label>Nombre:</label>
+                        <label>Asignatura:</label>
                         <input class="campo_info rounded" name="nombre" value="{{ old('nombre') }}">
 
                     </div>
@@ -19,7 +19,7 @@
 
                     {{-- Carga horaria --}}
                     <div class="perfil_dataname">
-                        <label>Cantidad de módulos:</label>
+                        <label>Cantidad de modulos:</label>
                         <input class="campo_info rounded" name="carga_horaria" value="{{ old('carga_horaria') }}">
 
                     </div>

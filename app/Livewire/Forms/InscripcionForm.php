@@ -13,16 +13,15 @@ class InscripcionForm extends Form
     public function rules(): array
     {
         return [
-            'indice_libro_matriz' => 'required|string|max:8',
+            'indice_libro_matriz' => 'required|string|max:255',
         ];
     }
 
     public function validateInscripcion(): array
     {
         $this->validate();
-        $data = $this->pull();
-        $this->anio_inscripcion = now()->year;
 
-        return $data;
+        return $this->pull();
+
     }
 }

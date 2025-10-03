@@ -44,18 +44,12 @@ class CreateAlumno extends Component
     /* ----------- Paso 1 ----------- */
     public function siguientePaso()
     {
-        /*         if ($this->step == 1) {
-                    $this->alumno = $this->form->validateAlumnos();
-                } */
-        Log::debug($this->step);
-        if ($this->step == 2) {
-            if (empty($this->carrerasSeleccionadas)) {
-                Log::debug('check2');
-
-                flash()
-                    ->option('position', 'top-center')
-                    ->error('Debe seleccionar al menos una carrera');
-            }
+        if ($this->step == 1) {
+            $this->alumno = $this->form->validateAlumnos();
+        } elseif ($this->step == 2 && empty($this->carrerasSeleccionadas)) {
+            flash()
+                ->option('position', 'top-center')
+                ->error('Debe seleccionar al menos una carrera');
         } else {
             $this->step += 1;
         }

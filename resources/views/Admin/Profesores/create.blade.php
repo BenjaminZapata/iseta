@@ -1,6 +1,5 @@
 @extends('Admin.template')
 @php use Illuminate\Support\HtmlString; @endphp
-
 @section('content')
 <div>
     <div class="perfil_one br">
@@ -13,7 +12,7 @@
                     'Profesor' => [
                         $form->text('nombre', 'Nombre:*', 'label-input-y-75', old('nombre'), [
                             'placeholder' => 'Ej: Juan',
-                            'maxlength' => 50,
+                            'maxlength' => 30,
                         ]),
                         $form->text('apellido', 'Apellido:*', 'label-input-y-75', old('apellido'), [
                             'placeholder' => 'Ej: Pérez',
@@ -27,7 +26,7 @@
                             'placeholder' => 'dd/mm/aaaa',
                         ]),
                         $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', old('estado_civil'), [
-                            'vacio' => 'Seleccione...',
+                            '' => 'Seleccione...',
                             '0' => 'Soltero',
                             '1' => 'Casado',
                             '2' => 'Divorciado',
@@ -53,13 +52,13 @@
                             'placeholder' => 'Ej: 742',
                             'maxlength' => 4,
                         ]),
-                        $form->text('dpto', 'Dpto:', 'label-input-y-75', old('dpto'), [
-                            'placeholder' => 'Ej: A',
-                            'maxlength' => 5,
-                        ]),
                         $form->text('piso', 'Piso:', 'label-input-y-75', old('piso'), [
                             'placeholder' => 'Ej: 3',
                             'maxlength' => 15,
+                        ]),
+                        $form->text('dpto', 'Dpto:', 'label-input-y-75', old('dpto'), [
+                            'placeholder' => 'Ej: A',
+                            'maxlength' => 5,
                         ]),
                     ],
                     'Académico' => [
@@ -77,14 +76,22 @@
                             'placeholder' => 'ejemplo@dominio.com',
                             'maxlength' => 50,
                         ]),
-                        $form->text('telefono_1', 'Teléfono 1:*', 'label-input-y-75', old('telefono_1'), [
+                        $form->text('telefono1', 'Teléfono 1:*', 'label-input-y-75', old('telefono1'), [
                             'placeholder' => 'Ej: 2317-876544',
                             'maxlength' => 30,
                         ]),
-                        $form->text('telefono_2', 'Teléfono 2:', 'label-input-y-75', old('telefono_2'), [
+                        $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2'), [
                             'placeholder' => 'Ej: 2317-876543',
                             'maxlength' => 30,
                         ]),
+                    ],
+                    'Vinculación' => [
+                        new \Illuminate\Support\HtmlString(
+                            view('components.vinculacion-profesor', [
+                                'carreras' => $carreras,
+                                'profesor' => null
+                            ])->render()
+                        )
                     ],
                     'Otros' => [
                         $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones'), [
@@ -92,8 +99,6 @@
                             'maxlength' => 150,
                         ]),
                     ],
-
-
                 ]) ?>
             </form>
         </div>
