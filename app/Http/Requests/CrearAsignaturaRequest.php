@@ -22,9 +22,9 @@ class CrearAsignaturaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => ['required','regex:/^[a-zA-Z0-9\s]+$/u','max:50',],
-            'observaciones' => ['nullable', 'max: 150'],
-            'carga_horaria' => ['required', 'integer','between:1,12'],
+            'nombre' => ['required', 'regex:/^[a-zA-Z0-9\s]+$/u', 'max:50'],
+            'observaciones' => ['nullable', 'max:150'],
+            'carga_horaria' => ['required', 'integer', 'between:1,12'],
         ];
     }
 

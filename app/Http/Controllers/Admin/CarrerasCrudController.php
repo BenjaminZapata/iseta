@@ -59,7 +59,8 @@ class CarrerasCrudController extends BaseController
 
     public function create()
     {
-        return view('Admin.Carreras.create');
+     return view('Admin.Carreras.create');
+
     }
 
     public function store(CrearCarreraRequest $request)
@@ -80,7 +81,7 @@ class CarrerasCrudController extends BaseController
 
         Carrera::create($data);
 
-        return redirect()->route('admin.carreras.index');
+        return redirect()->route('admin.carreras.index')->with('mensaje', 'Se creó la carrera correctamente');
     }
 
     public function show(Carrera $carrera)
@@ -137,6 +138,7 @@ class CarrerasCrudController extends BaseController
             return redirect()->back()->with('error', 'No se pudo editar la carrera');
         }
     }
+
 
 
     public function createAsignaturaView(Carrera $carrera)
