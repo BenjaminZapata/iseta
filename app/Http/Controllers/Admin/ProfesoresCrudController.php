@@ -5,17 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearProfesorRequest;
 use App\Http\Requests\EditarProfesorRequest;
-use App\Mail\ProfesorCreado;
+use App\Models\Asignatura;
 use App\Models\Carrera;
 use App\Models\Configuracion;
 use App\Models\Mesa;
 use App\Models\Profesor;
 use App\Repositories\Admin\ProfesorRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
-use App\Models\Asignatura;
 use Illuminate\Support\Facades\DB;
 
 class ProfesoresCrudController extends BaseController
@@ -45,52 +41,41 @@ class ProfesoresCrudController extends BaseController
     /**
      * Show the form for creating a new resource.
      */
-       public function create()
+    public function create()
     {
-        $carreras = Carrera::with('asignaturas')->get(); 
+        $carreras = Carrera::with('asignaturas')->get();
+
         return view('Admin.Profesores.create', compact('carreras'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
- public function store(crearProfesorRequest $request)
-{
-    $data = $request->validated();
-    $profesor = Profesor::create($data);
+    public function store(crearProfesorRequest $request)
+    {
+        $data = $request->validated();
+        $profesor = Profesor::create($data);
 
-    $seleccionadas = $request->input('asignaturas_seleccionadas', []);
+        $seleccionadas = $request->input('asignaturas_seleccionadas', []);
 
-    foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
-        foreach ($idAsignaturas as $idAsignatura) {
-            $asignatura = Asignatura::find($idAsignatura);
-            if ($asignatura) {
-                DB::table('carrera_asignatura_profesor')
-    ->where('id_carrera', $idCarrera)
-    ->where('id_asignatura', $idAsignatura)
-  ->where(function ($query) {
-        $query->where('id_profesor', 0)
-              ->orWhereNull('id_profesor');
-    })
-    ->update([
-        'id_profesor' => $profesor->id,
-        'anio' => $asignatura->anio,
-        'tipo_modulo' => $asignatura->tipo_modulo,
-        'carga_horaria' => $asignatura->carga_horaria,  
-        'updated_at' => now(),
-    ]);
+        foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
+            foreach ($idAsignaturas as $idAsignatura) {
+                $asignatura = Asignatura::find($idAsignatura);
+                if ($asignatura) {
+                    $asignatura->carrera()->updateExistingPivot($idCarrera, [
+                        'id_profesor' => $profesor->id,
+                    ]);
+                }
             }
         }
+
+        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');
     }
 
-    return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');
-}
-
-
-/**
- * Show the form for editing the specified resource.
- */
-      public function edit(Profesor $profesor,Carrera $carreras)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Profesor $profesor, Carrera $carreras)
     {
         $mesas = Mesa::where(function ($query) use ($profesor) {
             $query->where('prof_presidente', $profesor->id)
@@ -99,7 +84,8 @@ class ProfesoresCrudController extends BaseController
         })
             ->whereRaw('fecha > NOW()')
             ->get();
-    $carreras = Carrera::with('asignaturas')->get();
+        $carreras = Carrera::with('asignaturas')->get();
+
         return view('Admin.Profesores.edit', [
             'profesor' => $profesor,
             'mesas' => $mesas,
@@ -107,72 +93,73 @@ class ProfesoresCrudController extends BaseController
         ]);
     }
 
-
     /**
      * Update the specified resource in storage.
      */
-      public function update(EditarProfesorRequest $request, Profesor $profesor)
-{
-    try {
-        $profesor->update($request->validated());
+    public function update(EditarProfesorRequest $request, Profesor $profesor)
+    {
+        try {
+            $profesor->update($request->validated());
 
-        foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $idAsignaturas) {
-            foreach ($idAsignaturas as $idAsignatura) {
-                $asignatura = Asignatura::find($idAsignatura);
+            foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $idAsignaturas) {
+                foreach ($idAsignaturas as $idAsignatura) {
+                    $asignatura = Asignatura::find($idAsignatura);
 
-                if (!$asignatura) continue;
+                    if (! $asignatura) {
+                        continue;
+                    }
 
-                // Si existe con profesor = 0 o null, actualizamos
-                $actualizado = DB::table('carrera_asignatura_profesor')
-    ->where('id_carrera', $idCarrera)
-    ->where('id_asignatura', $idAsignatura)
-    ->where(function ($query) {
-        $query->where('id_profesor', 0)
-              ->orWhereNull('id_profesor');
-    })
-    ->update([
-        'id_profesor' => $profesor->id,
-        'anio' => $asignatura->anio,
-        'tipo_modulo' => $asignatura->tipo_modulo,
-        'carga_horaria' => $asignatura->carga_horaria,
-        'updated_at' => now(),
-    ]);
-
-                // Si no se actualizó nada, insertamos si no existe
-                if (!$actualizado) {
-                    $existe = DB::table('carrera_asignatura_profesor')
+                    // Si existe con profesor = 0 o null, actualizamos
+                    $actualizado = DB::table('carrera_asignatura_profesor')
                         ->where('id_carrera', $idCarrera)
                         ->where('id_asignatura', $idAsignatura)
-                        ->where('id_profesor', $profesor->id)
-                        ->exists();
-
-                    if (!$existe) {
-                        DB::table('carrera_asignatura_profesor')->insert([
-                            'id_carrera' => $idCarrera,
-                            'id_asignatura' => $idAsignatura,
+                        ->where(function ($query) {
+                            $query->where('id_profesor', 0)
+                                ->orWhereNull('id_profesor');
+                        })
+                        ->update([
                             'id_profesor' => $profesor->id,
                             'anio' => $asignatura->anio,
                             'tipo_modulo' => $asignatura->tipo_modulo,
                             'carga_horaria' => $asignatura->carga_horaria,
-                            'created_at' => now(),
                             'updated_at' => now(),
                         ]);
+
+                    // Si no se actualizó nada, insertamos si no existe
+                    if (! $actualizado) {
+                        $existe = DB::table('carrera_asignatura_profesor')
+                            ->where('id_carrera', $idCarrera)
+                            ->where('id_asignatura', $idAsignatura)
+                            ->where('id_profesor', $profesor->id)
+                            ->exists();
+
+                        if (! $existe) {
+                            DB::table('carrera_asignatura_profesor')->insert([
+                                'id_carrera' => $idCarrera,
+                                'id_asignatura' => $idAsignatura,
+                                'id_profesor' => $profesor->id,
+                                'anio' => $asignatura->anio,
+                                'tipo_modulo' => $asignatura->tipo_modulo,
+                                'carga_horaria' => $asignatura->carga_horaria,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        }
                     }
                 }
             }
+
+            return redirect()->route('admin.profesores.index')
+                ->with('mensaje', 'Se editó el profesor correctamente.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
+            $campo = $matches[1] ?? 'desconocido';
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
         }
-
-        return redirect()->route('admin.profesores.index')
-            ->with('mensaje', 'Se editó el profesor correctamente.');
-    } catch (\Illuminate\Database\QueryException $e) {
-        preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
-        $campo = $matches[1] ?? 'desconocido';
-
-        return redirect()->back()
-            ->withInput()
-            ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
     }
-}
 
     /**
      * Remove the specified resource from storage.
