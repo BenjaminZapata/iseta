@@ -85,7 +85,7 @@
         {{ $profesores->appends(request()->query())->links('Componentes.pagination') }}
     </div>
 
-    {{-- SOLO PARA ESTA VISTA-}}
+    {{-- SOLO PARA ESTA VISTA --}}
     <style>
         .perfil__header-alt select,
         .perfil__header-alt input[type="text"] {
