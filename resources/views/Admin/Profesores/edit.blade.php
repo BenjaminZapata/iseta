@@ -210,47 +210,6 @@
 
                 </div>
 
-        {{-- TABLA MESAS --}}
-        <div class="table mt-4">
-            <div class="table__header">
-                <h2>Próximas mesas</h2>
-            </div>
-            <table class="table__body">
-                <thead>
-                    <tr>
-                        <th>Asignatura</th>
-                        <th>Fecha</th>
-                        <th>Rol</th>
-                        <th class="center">Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($mesas as $mesa)
-                        <tr>
-                            <td>{{ $mesa->asignatura->nombre }}</td>
-                            <td>{{ $formatoFecha->dmhm($mesa->fecha) }}</td>
-                            <td>
-                                @if ($mesa->prof_presidente == $profesor->id)
-                                    Presidente
-                                @elseif ($mesa->prof_vocal_1 == $profesor->id)
-                                    Vocal 1
-                                @elseif ($mesa->prof_vocal_2 == $profesor->id)
-                                    Vocal 2
-                                @endif
-                            </td>
-                            <td class="flex just-center">
-                                <a href="{{ route('admin.mesas.edit', ['mesa' => $mesa->id]) }}">
-                                    <button class="btn_blue">
-                                        <i class="ti ti-file-info"></i> Detalles
-                                    </button>
-                                </a>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-
     </div>
 </div>
 @endsection
