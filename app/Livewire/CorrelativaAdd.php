@@ -30,16 +30,19 @@ class CorrelativaAdd extends Component
         $this->correlativa = json_decode($this->correlativa);
         $this->correlativa = (array) $this->correlativa;
         Log::debug('Asignatura a la que se quiere agregar correlativa', $this->correlativa);
-        $asignaturaOwn = $this->singleAsignatura->carrera()->where('id', $this->carrera->id)->first()->pivot->anio;
+        $asignaturaOwn = $this->singleAsignatura;
         $asignaturaCorr = new Asignatura($this->correlativa);
-        Log::debug('Asignatura a la que se quiere agregar correlativa'.$asignaturaCorr->load('carrera'));
-        if ($asignaturaOwn < $asignaturaCorr->carrera()->where('id', $this->carrera->id)->first()->pivot->anio) { // una asig del 2do año, no puede tener una correlativa de 1er año ni 2do
-            return \redirect()->back()->with('error', 'El año de la correlativa debe ser menor al de la asignatura');
+        if ($asignaturaOwn->carrera()->where('id', $this->carrera->id)->first()->pivot->anio < $asignaturaCorr->carrera()->where('id', $this->carrera->id)->first()->pivot->anio) { // una asig del 2do año, no puede tener una correlativa de 1er año ni 2do
+            return flash()
+                ->option('position', 'top-center')
+                ->error('El año de la correlativa debe ser menor al de la asignatura');
+        }
+        if ($asignaturaOwn->correlativas($this->carrera->id)->where('id_asignatura', $asignaturaCorr->id)->exists()) {
+            return flash()
+                ->option('position', 'top-center')
+                ->error('Esta asignatura ya tiene esta correlativa');
         }
 
-        /*         if ($asignatura->tieneLaCorrelativa($asigCorrelativa->id)) {  // Comprobar si ya tienes esa correlativa
-                    return \redirect()->back()->with('error', 'Esta asignatura ya tiene esta correlativa');
-                } */
         $this->correlativas[] = $this->correlativa;
     }
 

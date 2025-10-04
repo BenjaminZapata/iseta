@@ -12,7 +12,8 @@
                 <div class="form-group">
                     <label for="correlativa">Correlativa:</label>
                     <select name="correlativa" id="correlativa" wire:model="correlativa">
-                        @foreach ($carrera->asignaturas as $asignatura)
+                        @foreach ($carrera->asignaturas()->wherePivot('anio', '<=', $singleAsignatura->carrera->where('id', $carrera->id)->first()->pivot->anio)
+                            ->get() as $asignatura)
                             <option value="{{ $asignatura }}">{{ $asignatura->nombre }}</option>
                         @endforeach
                     </select>
@@ -28,6 +29,12 @@
                 <button class="btn_blue" wire:click="addCorrelativa">Agregar</button>
                 <button class="btn_blue" x-on:click="$wire.showModal = false">Cerrar</button>
             </div>
+            <form method="post"
+                action="{{ route('admin.correlativa.agregar', ['asignatura' => $singleAsignatura->id, 'carrera' => $carrera->id]) }}">
+                @csrf
+                <input type="hidden" name="correlativas" value="{{ json_encode($correlativas) }}">
+                <button type="submit" class="btn_blue">Guardar</button>
+            </form>
 
         </div>
     </div>

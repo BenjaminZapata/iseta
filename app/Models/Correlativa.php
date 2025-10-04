@@ -14,8 +14,7 @@ class Correlativa extends Model
 
     protected $fillable = [
         'id_asignatura',
-        'id_correlativa',
-        'id_carrera_correlativa',
+        'id_carrera',
         'id_asignatura_correlativa',
     ];
 
@@ -23,7 +22,7 @@ class Correlativa extends Model
 
     public function asignatura()
     {
-        return $this->BelongsTo(Asignatura::class, 'asignatura_correlativa', 'id');
+        return $this->BelongsTo(Asignatura::class, 'id_asignatura');
     }
 
     public static function debeExamenesCorrelativos($asignatura, $alumno)
