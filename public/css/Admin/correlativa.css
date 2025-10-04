@@ -1,0 +1,20 @@
+.correlativas-list-simple {
+ margin-top: 5px;
+ padding-left: 15px;
+ font-size: 0.9em;
+ color: #444;
+}
+
+.btn_text-small {
+ background: none;
+ border: none;
+ color: #007bff;
+ cursor: pointer;
+ font-size: 0.85em;
+ padding: 0;
+ text-decoration: underline;
+}
+
+.btn_text-small:hover {
+ color: #0056b3;
+}
