@@ -147,7 +147,7 @@
                 </div>
                 <div class="botones-derecha">
                     <button type="button" class="btn_blue"
-                        onclick="document.getElementById('bloqueVinculacionNueva').style.display = 'block'">
+                       onclick="document.getElementById(\'bloqueVinculacionNueva\').style.display = 'block'">
                         <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
                         Vincular
                     </button>
