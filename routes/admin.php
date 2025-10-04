@@ -118,7 +118,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
     Route::post('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignatura'])
         ->name('admin.carreras.addAsignatura');
-    Route::get('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
+    Route::get  ('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
         ->name('admin.carreras.addAsignaturaView');
 
     Route::get('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignaturaView'])
