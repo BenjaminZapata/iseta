@@ -1,20 +1,33 @@
-.correlativas-list-simple {
- margin-top: 5px;
- padding-left: 15px;
- font-size: 0.9em;
- color: #444;
-}
-
-.btn_text-small {
+.chevron-btn {
  background: none;
  border: none;
- color: #007bff;
+ font-size: 1.2em;
  cursor: pointer;
- font-size: 0.85em;
  padding: 0;
- text-decoration: underline;
+ margin-right: 6px;
 }
 
-.btn_text-small:hover {
- color: #0056b3;
+.icono-correlativa {
+ font-size: 1em;
+ margin-left: 6px;
+ color: #555;
+}
+
+.asignatura-con-correlativas {
+ background-color: #f3f6ff;
+}
+
+.correlativas-expandida {
+ background: #f9f9f9;
+ padding: 15px;
+ border-top: 1px solid #ccc;
+}
+
+.lista-correlativas {
+ margin: 10px 0;
+ padding-left: 18px;
+}
+
+.acciones-correlativas {
+ margin-top: 10px;
 }

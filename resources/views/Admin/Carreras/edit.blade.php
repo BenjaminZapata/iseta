@@ -13,7 +13,6 @@
 @extends('Admin.template')
 
 @section('content')
-
     <link rel="stylesheet" href="{{ asset('css/admin/edit-carrera.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/correlativa.css') }}">
     <div class="edit-form-container">
@@ -232,7 +231,9 @@
             </div>
 
         </div>
-        @endif
+        @endif {{-- <-- este es el cierre del if ($anio_actual != '') --}}
+        @endif {{-- <-- AGREGÁ ESTE para cerrar el if ($anio_actual != $asignatura->anio) --}}
+
 
         @php
             $anio_index++;
@@ -252,41 +253,50 @@
                 <div class="accordion-body p-0">
                     <table>
                         <thead>
-                            <tr>
-                                <th class="center">Año</th>
-                                <th>Materia</th>
-                                <th class="center">Carga anual/semanal</th>
-                                <th class="center">Correlativas</th>
-                                <th class="center">Crear</th>
-                                <th class="center">Exportar</th>
-                                <th class="center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @endif
+                            @php
+                                $hasCorrelativas = $asignatura->correlativas && $asignatura->correlativas->count();
+                            @endphp
 
-                            <tr>
-                                <td class="center">{{ $asignatura->anio }}</td>
-                                <td>{{ $asignatura->nombre }}</td>
+                            <tr x-data="{ open: false }"
+                                class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }}">
+                                <!-- Año + Chevron -->
+                                <td class="center">
+                                    <button @click="open = !open" class="chevron-btn">
+                                        <span x-show="!open">›</span>
+                                        <span x-show="open">⌄</span>
+                                    </button>
+                                    {{ $asignatura->anio }}
+                                </td>
+
+                                <!-- Materia -->
+                                <td>
+                                    {{ $asignatura->nombre }}
+                                    @if ($hasCorrelativas)
+                                        <span title="Tiene correlativas" class="icono-correlativa">📎</span>
+                                    @endif
+                                </td>
+
+                                <!-- Carga -->
                                 <td class="center">{{ $asignatura->carga_horaria }} horas</td>
-                                <td>
-                                    <div style="display:flex; align-items: center; justify-content: center;">
-                                        <livewire:correlativa-add :carrera="$carrera" :asignatura="$asignatura">
-                                    </div>
+
+                                <!-- Correlativas resumen -->
+                                <td class="center">
+                                    {{ $hasCorrelativas ? $asignatura->correlativas->count() . ' asignadas' : '—' }}
                                 </td>
-                                <td>
-                                    <div style="display:flex; align-items: center; justify-content: center;">
-                                        <a
-                                            href="{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
-                                            <button class="btn_blue">
-                                                <i class="ti ti-circle-plus"
-                                                    style="font-size: 1.3em; margin-right: 8px;"></i>
-                                                Crear Mesa
-                                            </button>
-                                        </a>
-                                    </div>
+
+                                <!-- Crear mesa -->
+                                <td class="center">
+                                    <a
+                                        href="{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
+                                        <button class="btn_blue">
+                                            <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                            Crear Mesa
+                                        </button>
+                                    </a>
                                 </td>
-                                <td>
+
+                                <!-- Exportar -->
+                                <td class="center">
                                     <div style="display:flex; align-items: center; justify-content: center;">
                                         <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
                                             <i class="ti ti-file-download"></i> Exportar asignatura
@@ -361,46 +371,59 @@
                                             </div>
                                         </form>
                                     </div>
-
                                 </td>
 
-                                <td>
-                                    <div style="display:flex; align-items: center; justify-content: center;">
-                                        <div style="display:flex; align-items: center; justify-content: center;">
-                                            @if (!$config['modo_seguro'])
-                                                <form id="form-eliminar-{{ $asignatura->id }}"
-                                                    action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="button"
-                                                        onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
-                                `¿Estás seguro de que querés eliminar la asignatura?\n\n
-                                    Nombre: {{ strtoupper($asignatura->nombre) }}\n
-                                    {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
-                                    Año: {{ $asignatura->anio }}\n\n
-                                    ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
-                                                        class="btn_icon-danger" style="background-color: red;">
-                                                        <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                                    </button>
-                                                </form>
-                                            @endif
-                                        </div>
+
+                                <!-- Acciones -->
+                                <td class="center">
+                                    @if (!$config['modo_seguro'])
+                                        <form id="form-eliminar-{{ $asignatura->id }}"
+                                            action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button"
+                                                onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
+                            `¿Estás seguro de que querés eliminar la asignatura?\n\nNombre: {{ strtoupper($asignatura->nombre) }}\n
+                            {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
+                            Año: {{ $asignatura->anio }}\n\n
+                            ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
+                                                class="btn_icon-danger" style="background-color: red;">
+                                                <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </td>
+                            </tr>
+
+                            <!-- Fila expandida -->
+                            <tr x-show="open" x-transition>
+                                <td colspan="7" class="correlativas-expandida">
+                                    <strong>Correlativas de "{{ $asignatura->nombre }}"</strong>
+
+                                    @if ($hasCorrelativas)
+                                        <ul class="lista-correlativas">
+                                            @foreach ($asignatura->correlativas as $corr)
+                                                <li>{{ $corr->nombre }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="text-muted">No hay correlativas asignadas.</p>
+                                    @endif
+
+                                    <div class="acciones-correlativas">
+                                        <livewire:correlativa-add :carrera="$carrera" :asignatura="$asignatura" />
                                     </div>
                                 </td>
-
                             </tr>
-                            @endforeach
 
-                            {{-- cierre último bloque --}}
-                        </tbody>
+                        </thead>
                     </table>
                 </div>
             </div>
         </div>
+        @endforeach
     </div> {{-- accordion --}}
-    </div>
-    </div>
 
     <script>
         function toggleFiltroExportar(button) {
@@ -447,6 +470,7 @@
             } else {
                 preview.textContent = "";
             }
+
         }
     </script>
 @endsection
