@@ -99,25 +99,6 @@
                                     </button>
                                 </a>
                             </div>
-
-                            <div>
-                                
-                                <form method="POST" id="form-eliminar-{{ $carrera->id }}"
-                                    action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}"
-                                    style="margin-left: 10px;">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="button" class="btn_icon-danger"
-                                        style="background-color: red;"
-                                        onclick="openGeneralModal(
-                                            'form-eliminar-{{ $carrera->id }}', 
-                                            '¿Estás seguro de que querés eliminar la carrera: {{ mb_strtoupper($carrera->nombre, 'UTF-8') }}?\n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
-                                        )">
-                                        <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                    </button>
-                                </form>
-                             
-                            </div>
                         </td>
                     </tr>
                 @endforeach
