@@ -12,7 +12,7 @@
                 </button>
             </a>
             {{-- FILTROS --}}
-            <?= $filtergen->generate('admin.profesores.index', $filters, [
+            <?= $filtergen->generate('admin.profesores.index', $filters,[
                     // 'dropdowns' => [
                     //     $carreraM->dropdown('filter_carrera_id','Carrera:', 'label-input-y-100',$filters, ['first_items' => ['Todas']])
                     // ],
@@ -22,6 +22,7 @@
                     ],
                 ]) ?>
         </div>
+
         <table class="table__body">
             <thead>
                 <tr>
@@ -73,16 +74,22 @@
                                 @endif
                             </div>
                         </td>
-
-
-
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
+
     {{-- PAGINACIÓN --}}
     <div class="w-full flex justify-center p-5 pagination">
         {{ $profesores->appends(request()->query())->links('Componentes.pagination') }}
     </div>
+
+    {{-- SOLO PARA ESTA VISTA-}}
+    <style>
+        .perfil__header-alt select,
+        .perfil__header-alt input[type="text"] {
+            height: 40px; /* misma altura para criterio y búsqueda */
+        }
+    </style>
 @endsection

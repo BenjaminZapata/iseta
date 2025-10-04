@@ -28,8 +28,8 @@ class CrearCarreraRequest extends FormRequest
             'resolucion' => ['required', new Resolucion,'unique:carreras,resolucion'],
             'anio_apertura' => [
                 'required',
+                'max_digits:4',
                 'numeric',
-                Rule::numeric()->between(now()->year - 1, now()->year + 1),
             ],
             'anio_fin' => ['nullable', 'integer', 'gt:anio_apertura', 'max_digits:4'],
             'observaciones' => ['nullable', 'string', 'max:255'],

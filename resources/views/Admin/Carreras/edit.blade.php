@@ -19,7 +19,8 @@ $fileUrl = $existsStorage ? Storage::url($path) : ($existsPublic ? asset($path) 
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
         <div class="perfil__info">
-            <form method="POST" action="{{ route('admin.carreras.update', ['carrera' => $carrera->id]) }}"
+<form method="post" action="{{ route('admin.carreras.addAsignatura', ['carrera' => $carrera->id]) }}">
+
                 enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
@@ -124,22 +125,7 @@ $fileUrl = $existsStorage ? Storage::url($path) : ($existsPublic ? asset($path) 
                     </button>
                 </div>
             </form>
-            <div class="boton-eliminar">
-                @if (!$config['modo_seguro'])
-                <div>
-                    <form method="POST" id="form-eliminar-{{ $carrera->id }}"
-                        action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}">
-                        @csrf
-                        @method('delete')
-                        <button class="btn_red_outline" type="button"
-                            onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->apellido) }} {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                            class="btn_icon-danger" style="margin-left: 10px;">
-                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar carrera
-                        </button>
-                    </form>
-                </div>
-                @endif
-            </div>
+    
         </div>
     </div>
 
