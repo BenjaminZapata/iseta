@@ -71,19 +71,13 @@ class ProfesoresCrudController extends BaseController
 
         $seleccionadas = $request->input('asignaturas_seleccionadas', []);
 
+       
         foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
             foreach ($idAsignaturas as $idAsignatura) {
                 $asignatura = Asignatura::find($idAsignatura);
                 if ($asignatura) {
-                    DB::table('carrera_asignatura_profesor')->insert([
-                        'id_asignatura' => $idAsignatura,
-                        'id_carrera' => $idCarrera,
+                    $asignatura->carrera()->updateExistingPivot($idCarrera, [
                         'id_profesor' => $profesor->id,
-                        'anio' => $asignatura->anio,
-                        'tipo_modulo' => $asignatura->tipo_modulo,
-                        'carga_horaria' => $asignatura->carga_horaria,
-                        'created_at' => now(),
-                        'updated_at' => now(),
                     ]);
                 }
             }
@@ -121,13 +115,53 @@ class ProfesoresCrudController extends BaseController
         try {
             $profesor->update($request->validated());
 
-            $asignaciones = [];
-            foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $asignaturas) {
-                foreach ($asignaturas as $idAsignatura) {
-                    $asignaciones[$idAsignatura] = ['id_carrera' => $idCarrera];
+            foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $idAsignaturas) {
+                foreach ($idAsignaturas as $idAsignatura) {
+                    $asignatura = Asignatura::find($idAsignatura);
+
+                    if (! $asignatura) {
+                        continue;
+                    }
+
+                    // Si existe con profesor = 0 o null, actualizamos
+                    $actualizado = DB::table('carrera_asignatura_profesor')
+                        ->where('id_carrera', $idCarrera)
+                        ->where('id_asignatura', $idAsignatura)
+                        ->where(function ($query) {
+                            $query->where('id_profesor', 0)
+                                ->orWhereNull('id_profesor');
+                        })
+                        ->update([
+                            'id_profesor' => $profesor->id,
+                            'anio' => $asignatura->anio,
+                            'tipo_modulo' => $asignatura->tipo_modulo,
+                            'carga_horaria' => $asignatura->carga_horaria,
+                            'updated_at' => now(),
+                        ]);
+
+                    // Si no se actualizó nada, insertamos si no existe
+                    if (! $actualizado) {
+                        $existe = DB::table('carrera_asignatura_profesor')
+                            ->where('id_carrera', $idCarrera)
+                            ->where('id_asignatura', $idAsignatura)
+                            ->where('id_profesor', $profesor->id)
+                            ->exists();
+
+                        if (! $existe) {
+                            DB::table('carrera_asignatura_profesor')->insert([
+                                'id_carrera' => $idCarrera,
+                                'id_asignatura' => $idAsignatura,
+                                'id_profesor' => $profesor->id,
+                                'anio' => $asignatura->anio,
+                                'tipo_modulo' => $asignatura->tipo_modulo,
+                                'carga_horaria' => $asignatura->carga_horaria,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        }
+                    }
                 }
             }
-            $profesor->asignaturas()->sync($asignaciones);
 
             return redirect()->route('admin.profesores.index')
                 ->with('mensaje', 'Se editó el profesor correctamente.');
