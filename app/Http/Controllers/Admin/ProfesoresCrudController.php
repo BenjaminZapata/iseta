@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearProfesorRequest;
 use App\Http\Requests\EditarProfesorRequest;
-use App\Mail\ProfesorCreado;
 use App\Models\Asignatura;
 use App\Models\Carrera;
 use App\Models\Configuracion;
@@ -14,10 +13,6 @@ use App\Models\Profesor;
 use App\Repositories\Admin\ProfesorRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
-use Log;
 
 class ProfesoresCrudController extends BaseController
 {
@@ -59,14 +54,6 @@ class ProfesoresCrudController extends BaseController
     public function store(crearProfesorRequest $request)
     {
         $data = $request->validated();
-        $data['password'] = Str::password();
-
-        try {
-            Mail::to($data['email'])->queue(new ProfesorCreado($data));
-        } catch (\Throwable $th) {
-            Log::error($th);
-        }
-        $data['password'] = Hash::make($data['password']);
         $profesor = Profesor::create($data);
 
         $seleccionadas = $request->input('asignaturas_seleccionadas', []);
@@ -75,15 +62,8 @@ class ProfesoresCrudController extends BaseController
             foreach ($idAsignaturas as $idAsignatura) {
                 $asignatura = Asignatura::find($idAsignatura);
                 if ($asignatura) {
-                    DB::table('carrera_asignatura_profesor')->insert([
-                        'id_asignatura' => $idAsignatura,
-                        'id_carrera' => $idCarrera,
+                    $asignatura->carrera()->updateExistingPivot($idCarrera, [
                         'id_profesor' => $profesor->id,
-                        'anio' => $asignatura->anio,
-                        'tipo_modulo' => $asignatura->tipo_modulo,
-                        'carga_horaria' => $asignatura->carga_horaria,
-                        'created_at' => now(),
-                        'updated_at' => now(),
                     ]);
                 }
             }
@@ -121,13 +101,53 @@ class ProfesoresCrudController extends BaseController
         try {
             $profesor->update($request->validated());
 
-            $asignaciones = [];
-            foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $asignaturas) {
-                foreach ($asignaturas as $idAsignatura) {
-                    $asignaciones[$idAsignatura] = ['id_carrera' => $idCarrera];
+            foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $idAsignaturas) {
+                foreach ($idAsignaturas as $idAsignatura) {
+                    $asignatura = Asignatura::find($idAsignatura);
+
+                    if (! $asignatura) {
+                        continue;
+                    }
+
+                    // Si existe con profesor = 0 o null, actualizamos
+                    $actualizado = DB::table('carrera_asignatura_profesor')
+                        ->where('id_carrera', $idCarrera)
+                        ->where('id_asignatura', $idAsignatura)
+                        ->where(function ($query) {
+                            $query->where('id_profesor', 0)
+                                ->orWhereNull('id_profesor');
+                        })
+                        ->update([
+                            'id_profesor' => $profesor->id,
+                            'anio' => $asignatura->anio,
+                            'tipo_modulo' => $asignatura->tipo_modulo,
+                            'carga_horaria' => $asignatura->carga_horaria,
+                            'updated_at' => now(),
+                        ]);
+
+                    // Si no se actualizó nada, insertamos si no existe
+                    if (! $actualizado) {
+                        $existe = DB::table('carrera_asignatura_profesor')
+                            ->where('id_carrera', $idCarrera)
+                            ->where('id_asignatura', $idAsignatura)
+                            ->where('id_profesor', $profesor->id)
+                            ->exists();
+
+                        if (! $existe) {
+                            DB::table('carrera_asignatura_profesor')->insert([
+                                'id_carrera' => $idCarrera,
+                                'id_asignatura' => $idAsignatura,
+                                'id_profesor' => $profesor->id,
+                                'anio' => $asignatura->anio,
+                                'tipo_modulo' => $asignatura->tipo_modulo,
+                                'carga_horaria' => $asignatura->carga_horaria,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ]);
+                        }
+                    }
                 }
             }
-            $profesor->asignaturas()->sync($asignaciones);
 
             return redirect()->route('admin.profesores.index')
                 ->with('mensaje', 'Se editó el profesor correctamente.');
