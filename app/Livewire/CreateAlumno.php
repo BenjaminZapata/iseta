@@ -47,12 +47,11 @@ class CreateAlumno extends Component
         if ($this->step == 1) {
             $this->alumno = $this->form->validateAlumnos();
         } elseif ($this->step == 2 && empty($this->carrerasSeleccionadas)) {
-            flash()
+            return flash()
                 ->option('position', 'top-center')
                 ->error('Debe seleccionar al menos una carrera');
-        } else {
-            $this->step += 1;
         }
+        $this->step += 1;
 
     }
 

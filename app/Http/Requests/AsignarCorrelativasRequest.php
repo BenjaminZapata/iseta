@@ -24,7 +24,6 @@ class AsignarCorrelativasRequest extends FormRequest
         return [
             'id_carrera' => ['required'],
             'id_asignatura' => ['required'],
-            'id_carrera_correlativa' => ['required'],
             'id_asignatura_correlativa' => ['required'],
         ];
     }
