@@ -64,7 +64,7 @@
 
             // Crear acordeón por año
             let acordeonHTML = `<div class="accordion" id="accordionCarrera${carrera.id}">`;
-            let anioIndex = 1;
+            let anioIndex = 0;
 
             Object.keys(asignaturasPorAnio).sort().forEach(anio => {
                 anioIndex++;

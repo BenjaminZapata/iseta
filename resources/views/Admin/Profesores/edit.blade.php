@@ -147,7 +147,7 @@
                 </div>
                 <div class="botones-derecha">
                     <button type="button" class="btn_blue"
-                       onclick="document.getElementById(\'bloqueVinculacionNueva\').style.display = 'block'">
+                        onclick="document.getElementById('bloqueVinculacionNueva').style.display = 'block'">
                         <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
                         Vincular
                     </button>
@@ -201,14 +201,38 @@
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th>Asignatura</th>
+                                                            <th>Módulo</th>
                                                             <th>Carga horaria</th>
+                                                            <th>Acciones</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($lista as $pivot)
+                                                        @foreach ($lista as $asignatura)
+                                                            @php
+                                                                $pivot = $asignatura->pivot;
+                                                            @endphp
                                                             <tr>
-                                                                <td>{{ $pivot->nombre }}</td>
+                                                                <td>
+                                                                    {{ $asignatura->nombre }}
+                                                                    @if ($asignatura->correlativas->isNotEmpty())
+                                                                        <span class="badge bg-info ms-2">📎</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td>{{ $pivot->tipo_modulo ?? '—' }}</td>
                                                                 <td>{{ $pivot->carga_horaria ?? '—' }} hs</td>
+                                                                <td style="white-space: nowrap;">
+                                                                    <button class="btn btn-sm btn-outline-secondary me-1"
+                                                                        onclick="vincularCorrelativa({{ $asignatura->id }})">
+                                                                        Vincular correlativa
+                                                                    </button>
+
+                                                                    @if ($asignatura->dependientes->isNotEmpty())
+                                                                        <button class="btn btn-sm btn-outline-info"
+                                                                            onclick="mostrarDependencias({{ $asignatura->id }})">
+                                                                            Ver dependencias
+                                                                        </button>
+                                                                    @endif
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>

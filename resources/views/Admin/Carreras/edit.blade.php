@@ -13,8 +13,8 @@
 @extends('Admin.template')
 
 @section('content')
-
     <link rel="stylesheet" href="{{ asset('css/admin/edit-carrera.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/correlativa.css') }}">
     <div class="edit-form-container">
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
@@ -117,7 +117,6 @@
 
 
                     <div class="botones-derecha">
-                        <x-botones-alumno />
                         <x-btn-cancelar />
                         <button type="submit" class="btn_blue">
                             <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
@@ -125,153 +124,168 @@
                         </button>
                     </div>
                 </form>
-                <div class="boton-eliminar">
-                    @if (!$config['modo_seguro'])
-                        <div>
-                            <form method="POST" id="form-eliminar-{{ $carrera->id }}"
-                                action="{{ route('admin.carreras.destroy', ['carrera' => $carrera->id]) }}">
-                                @csrf
-                                @method('delete')
-                                <button class="btn_red_outline" type="button"
-                                    onclick="openGeneralModal('form-eliminar-{{ $carrera->id }}', '¿Estás seguro de que querés eliminar la carrera: {{ strtoupper($carrera->apellido) }} {{ strtoupper($carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                    class="btn_icon-danger" style="margin-left: 10px;">
-                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar carrera
-                                </button>
-                            </form>
-                        </div>
-                    @endif
-                </div>
             </div>
         </div>
 
 
-        {{-- BOTONES SUPERIORES --}}
-        <div class="table">
-            <div class="perfil__header-alt">
-                <a href="{{ route('admin.carreras.addAsignaturaView', ['carrera' => $carrera->id]) }}">
-                    <button class="btn_blue"><i class="ti ti-circle-plus"
-                            style="font-size: 1.3em; margin-right: 8px;"></i>Agregar
-                        asignatura</button>
-                </a>
+        {{-- LISTA DE ASIGNATURAS DE LA CARRERA --}}
 
-                {{-- BOTÓN GENERAL DE EXPORTACIÓN --}}
-                <div style="position: relative;">
-                    <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
-                        <i class="ti ti-file-download"></i> Exportar cursadas
-                    </button>
-                    <form method="GET" action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
-                        class="filtro-exportar">
-                        <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                            <select name="genero">
-                                <option value="">-- Género --</option>
-                                <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>Femenino</option>
-                                <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>Masculino</option>
-                                <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>Otro</option>
-                            </select>
+        <div class="perfil_one br">
+            <div class="perfil__header">
+                <h2>ASIGNATURAS</h2>
+            </div>
+            {{-- BOTONES SUPERIORES --}}
+            <div class="table">
+                <div class="perfil__header-alt">
+                    <a href="{{ route('admin.carreras.addAsignaturaView', ['carrera' => $carrera->id]) }}">
+                        <button class="btn_blue"><i class="ti ti-circle-plus"
+                                style="font-size: 1.3em; margin-right: 8px;"></i>Agregar
+                            asignatura</button>
+                    </a>
 
-                            <select name="anio">
-                                <option value="">-- Año calendario --</option>
-                                @php
-                                    $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
-                                @endphp
-                                @foreach ($aniosCalendario as $anio)
-                                    <option value="{{ $anio }}" {{ request('anio') == $anio ? 'selected' : '' }}>
-                                        {{ $anio }}
+                    {{-- BOTÓN GENERAL DE EXPORTACIÓN --}}
+                    <div style="position: relative;">
+                        <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
+                            <i class="ti ti-file-download"></i> Exportar cursadas
+                        </button>
+                        <form method="GET" action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
+                            class="filtro-exportar">
+                            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                                <select name="genero">
+                                    <option value="">-- Género --</option>
+                                    <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>Femenino
                                     </option>
-                                @endforeach
-                            </select>
+                                    <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>Masculino
+                                    </option>
+                                    <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>Otro</option>
+                                </select>
 
-                            <select name="condicion">
-                                <option value="">-- Condición --</option>
-                                <option value="regular" {{ request('condicion') == 'regular' ? 'selected' : '' }}>Regular
-                                </option>
-                                <option value="libre" {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre
-                                </option>
-                                <option value="promocion" {{ request('condicion') == 'promocion' ? 'selected' : '' }}>
-                                    Promoción</option>
-                                <option value="equivalencia"
-                                    {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>Equivalencia</option>
-                                <option value="desertor" {{ request('condicion') == 'desertor' ? 'selected' : '' }}>
-                                    Desertor</option>
-                                <option value="itinerante" {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>
-                                    Itinerante</option>
-                                <option value="oyente" {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
-                                </option>
-                            </select>
+                                <select name="anio">
+                                    <option value="">-- Año calendario --</option>
+                                    @php
+                                        $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
+                                    @endphp
+                                    @foreach ($aniosCalendario as $anio)
+                                        <option value="{{ $anio }}"
+                                            {{ request('anio') == $anio ? 'selected' : '' }}>
+                                            {{ $anio }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                            <button class="btn_blue">
-                                <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i> Descargar
-                            </button>
-                        </div>
+                                <select name="condicion">
+                                    <option value="">-- Condición --</option>
+                                    <option value="regular" {{ request('condicion') == 'regular' ? 'selected' : '' }}>
+                                        Regular
+                                    </option>
+                                    <option value="libre" {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre
+                                    </option>
+                                    <option value="promocion" {{ request('condicion') == 'promocion' ? 'selected' : '' }}>
+                                        Promoción</option>
+                                    <option value="equivalencia"
+                                        {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>Equivalencia
+                                    </option>
+                                    <option value="desertor" {{ request('condicion') == 'desertor' ? 'selected' : '' }}>
+                                        Desertor</option>
+                                    <option value="itinerante"
+                                        {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>
+                                        Itinerante</option>
+                                    <option value="oyente" {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
+                                    </option>
+                                </select>
+
+                                <button class="btn_blue">
+                                    <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                    Descargar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    {{-- Formularios ocultos --}}
+                    <form id="form-desactivar-{{ $carrera->id }}"
+                        action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST"
+                        style="display:none;">
+                        @csrf
                     </form>
+                    <form id="form-reactivar-{{ $carrera->id }}"
+                        action="{{ route('admin.carreras.reactivar', $carrera) }}" method="POST" style="display:none;">
+                        @csrf
+                    </form>
+                    </td>
                 </div>
 
-                {{-- Formularios ocultos --}}
-                <form id="form-desactivar-{{ $carrera->id }}"
-                    action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST" style="display:none;">
-                    @csrf
-                </form>
-                <form id="form-reactivar-{{ $carrera->id }}" action="{{ route('admin.carreras.reactivar', $carrera) }}"
-                    method="POST" style="display:none;">
-                    @csrf
-                </form>
-                </td>
+                {{-- A C O R D E O N  D E  A S I G N A T U R A S --}}
+                <div class="accordion" id="asignaturasAccordion">
+                    @php
+                        $anio_actual = '';
+                        $anio_index = 0;
+                    @endphp
+
+                    @foreach ($carrera->asignaturas as $asignatura)
+                        @if ($anio_actual != $asignatura->anio)
+                            @if ($anio_actual != '')
+                                </tbody>
+                                </table>
+                </div>
             </div>
 
-            {{-- A C O R D E O N  D E  A S I G N A T U R A S --}}
-            <div class="accordion" id="asignaturasAccordion">
-                @php
-                    $anio_actual = '';
-                    $anio_index = 0;
-                @endphp
-
-                @foreach ($carrera->asignaturas as $asignatura)
-                    @if ($anio_actual != $asignatura->anio)
-                        @if ($anio_actual != '')
-                            </tbody>
-                            </table>
-            </div>
         </div>
-    </div>
-    @endif
+        @endif {{-- <-- este es el cierre del if ($anio_actual != '') --}}
+        @endif {{-- <-- AGREGÁ ESTE para cerrar el if ($anio_actual != $asignatura->anio) --}}
 
-    @php
-        $anio_index++;
-        $anio_actual = $asignatura->anio;
-    @endphp
 
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingAnio{{ $anio_index }}">
-            <button class="accordion-button collapsed font-500" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseAnio{{ $anio_index }}" aria-expanded="false"
-                aria-controls="collapseAnio{{ $anio_index }}">
-                {{ $anio_actual }}° año
-            </button>
-        </h2>
-        <div id="collapseAnio{{ $anio_index }}" class="accordion-collapse collapse"
-            aria-labelledby="headingAnio{{ $anio_index }}" data-bs-parent="#asignaturasAccordion">
-            <div class="accordion-body p-0">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="center">Año</th>
-                            <th>Materia</th>
-                            <th class="center">Carga anual/semanal</th>
-                            <th class="center">Crear</th>
-                            <th class="center">Exportar</th>
-                            <th class="center">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @endif
+        @php
+            $anio_index++;
+            $anio_actual = $asignatura->anio;
+        @endphp
 
-                        <tr>
-                            <td class="center">{{ $asignatura->anio }}</td>
-                            <td>{{ $asignatura->nombre }}</td>
-                            <td class="center">{{ $asignatura->carga_horaria }} horas</td>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingAnio{{ $anio_index }}">
+                <button class="accordion-button collapsed font-500" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseAnio{{ $anio_index }}" aria-expanded="false"
+                    aria-controls="collapseAnio{{ $anio_index }}">
+                    {{ $anio_actual }}° año
+                </button>
+            </h2>
+            <div id="collapseAnio{{ $anio_index }}" class="accordion-collapse collapse"
+                aria-labelledby="headingAnio{{ $anio_index }}" data-bs-parent="#asignaturasAccordion">
+                <div class="accordion-body p-0">
+                    <table>
+                        <thead>
+                            @php
+                                $hasCorrelativas = $asignatura->correlativas && $asignatura->correlativas->count();
+                            @endphp
 
-                            <td>
-                                <div style="display:flex; align-items: center; justify-content: center;">
+                            <tr x-data="{ open: false }"
+                                class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }}">
+                                <!-- Año + Chevron -->
+                                <td class="center">
+                                    <button @click="open = !open" class="chevron-btn">
+                                        <span x-show="!open">›</span>
+                                        <span x-show="open">⌄</span>
+                                    </button>
+                                    {{ $asignatura->anio }}
+                                </td>
+
+                                <!-- Materia -->
+                                <td>
+                                    {{ $asignatura->nombre }}
+                                    @if ($hasCorrelativas)
+                                        <span title="Tiene correlativas" class="icono-correlativa">📎</span>
+                                    @endif
+                                </td>
+
+                                <!-- Carga -->
+                                <td class="center">{{ $asignatura->carga_horaria }} horas</td>
+
+                                <!-- Correlativas resumen -->
+                                <td class="center">
+                                    {{ $hasCorrelativas ? $asignatura->correlativas->count() . ' asignadas' : '—' }}
+                                </td>
+
+                                <!-- Crear mesa -->
+                                <td class="center">
                                     <a
                                         href="{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
                                         <button class="btn_blue">
@@ -279,118 +293,137 @@
                                             Crear Mesa
                                         </button>
                                     </a>
-                                </div>
-                            </td>
-                            <td>
-                                <div style="display:flex; align-items: center; justify-content: center;">
-                                    <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
-                                        <i class="ti ti-file-download"></i> Exportar asignatura
-                                    </button>
+                                </td>
 
-                                    <form method="GET"
-                                        action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
-                                        class="filtro-exportar"
-                                        style="display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ccc; padding: 10px; z-index: 10; width: max-content; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
-
-                                        <input type="hidden" name="asignatura_id" value="{{ $asignatura->id }}">
-
-                                        <div style="display: flex; flex-direction: column; gap: 8px;">
-                                            <select name="genero">
-                                                <option value="">-- Género --</option>
-                                                <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>
-                                                    Femenino</option>
-                                                <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>
-                                                    Masculino</option>
-                                                <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>
-                                                    Otro</option>
-                                            </select>
-
-                                            <select name="anio">
-                                                <option value="">-- Año calendario --</option>
-                                                @php
-                                                    $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
-                                                @endphp
-                                                @foreach ($aniosCalendario as $anio)
-                                                    <option value="{{ $anio }}"
-                                                        {{ request('anio') == $anio ? 'selected' : '' }}>
-                                                        {{ $anio }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-
-                                            <select name="condicion">
-                                                <option value="">-- Condición --</option>
-                                                <option value="regular"
-                                                    {{ request('condicion') == 'regular' ? 'selected' : '' }}>Regular
-                                                </option>
-                                                <option value="libre"
-                                                    {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre</option>
-                                                <option value="promocion"
-                                                    {{ request('condicion') == 'promocion' ? 'selected' : '' }}>Promoción
-                                                </option>
-                                                <option value="equivalencia"
-                                                    {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>
-                                                    Equivalencia</option>
-                                                <option value="desertor"
-                                                    {{ request('condicion') == 'desertor' ? 'selected' : '' }}>Desertor
-                                                </option>
-                                                <option value="itinerante"
-                                                    {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>Itinerante
-                                                </option>
-                                                <option value="oyente"
-                                                    {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
-                                                </option>
-                                            </select>
-
-                                            <button type="submit" class="btn_blue">
-                                                <i class="ti ti-file-export"
-                                                    style="font-size: 1.3em; margin-right: 8px;"></i>
-                                                Aplicar filtros
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div style="display:flex; align-items: center; justify-content: center;">
-                                    <livewire:correlativa-add :carrera="$carrera" :asignatura="$asignatura">
-                                </div>
-                            </td>
-
-                            <td>
-                                <div style="display:flex; align-items: center; justify-content: center;">
+                                <!-- Exportar -->
+                                <td class="center">
                                     <div style="display:flex; align-items: center; justify-content: center;">
-                                        @if (!$config['modo_seguro'])
-                                            <form id="form-eliminar-{{ $asignatura->id }}"
-                                                action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button"
-                                                    onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
-                                `¿Estás seguro de que querés eliminar la asignatura?\n\n
-                                    Nombre: {{ strtoupper($asignatura->nombre) }}\n
-                                    {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
-                                    Año: {{ $asignatura->anio }}\n\n
-                                    ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
-                                                    class="btn_icon-danger" style="background-color: red;">
-                                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                        <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
+                                            <i class="ti ti-file-download"></i> Exportar asignatura
+                                        </button>
+
+                                        <form method="GET"
+                                            action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
+                                            class="filtro-exportar"
+                                            style="display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ccc; padding: 10px; z-index: 10; width: max-content; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+
+                                            <input type="hidden" name="asignatura_id" value="{{ $asignatura->id }}">
+
+                                            <div style="display: flex; flex-direction: column; gap: 8px;">
+                                                <select name="genero">
+                                                    <option value="">-- Género --</option>
+                                                    <option value="f"
+                                                        {{ request('genero') == 'f' ? 'selected' : '' }}>
+                                                        Femenino</option>
+                                                    <option value="m"
+                                                        {{ request('genero') == 'm' ? 'selected' : '' }}>
+                                                        Masculino</option>
+                                                    <option value="o"
+                                                        {{ request('genero') == 'o' ? 'selected' : '' }}>
+                                                        Otro</option>
+                                                </select>
+
+                                                <select name="anio">
+                                                    <option value="">-- Año calendario --</option>
+                                                    @php
+                                                        $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
+                                                    @endphp
+                                                    @foreach ($aniosCalendario as $anio)
+                                                        <option value="{{ $anio }}"
+                                                            {{ request('anio') == $anio ? 'selected' : '' }}>
+                                                            {{ $anio }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+
+                                                <select name="condicion">
+                                                    <option value="">-- Condición --</option>
+                                                    <option value="regular"
+                                                        {{ request('condicion') == 'regular' ? 'selected' : '' }}>Regular
+                                                    </option>
+                                                    <option value="libre"
+                                                        {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre
+                                                    </option>
+                                                    <option value="promocion"
+                                                        {{ request('condicion') == 'promocion' ? 'selected' : '' }}>
+                                                        Promoción
+                                                    </option>
+                                                    <option value="equivalencia"
+                                                        {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>
+                                                        Equivalencia</option>
+                                                    <option value="desertor"
+                                                        {{ request('condicion') == 'desertor' ? 'selected' : '' }}>Desertor
+                                                    </option>
+                                                    <option value="itinerante"
+                                                        {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>
+                                                        Itinerante
+                                                    </option>
+                                                    <option value="oyente"
+                                                        {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
+                                                    </option>
+                                                </select>
+
+                                                <button type="submit" class="btn_blue">
+                                                    <i class="ti ti-file-export"
+                                                        style="font-size: 1.3em; margin-right: 8px;"></i>
+                                                    Aplicar filtros
                                                 </button>
-                                            </form>
-                                        @endif
+                                            </div>
+                                        </form>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
 
-                        </tr>
-                        @endforeach
 
-                        {{-- cierre último bloque --}}
-                    </tbody>
-                </table>
+                                <!-- Acciones -->
+                                <td class="center">
+                                    @if (!$config['modo_seguro'])
+                                        <form id="form-eliminar-{{ $asignatura->id }}"
+                                            action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
+                                            method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button"
+                                                onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
+                            `¿Estás seguro de que querés eliminar la asignatura?\n\nNombre: {{ strtoupper($asignatura->nombre) }}\n
+                            {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
+                            Año: {{ $asignatura->anio }}\n\n
+                            ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
+                                                class="btn_icon-danger" style="background-color: red;">
+                                                <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                            </button>
+                                        </form>
+                                    @endif
+                                </td>
+                            </tr>
+
+                            <!-- Fila expandida -->
+                            <tr x-show="open" x-transition>
+                                <td colspan="7" class="correlativas-expandida">
+                                    <strong>Correlativas de "{{ $asignatura->nombre }}"</strong>
+
+                                    @if ($hasCorrelativas)
+                                        <ul class="lista-correlativas">
+                                            @foreach ($asignatura->correlativas as $corr)
+                                                <li>{{ $corr->nombre }}</li>
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <p class="text-muted">No hay correlativas asignadas.</p>
+                                    @endif
+
+                                    <div class="acciones-correlativas">
+                                        <livewire:correlativa-add :carrera="$carrera" :asignatura="$asignatura" />
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
+        @endforeach
     </div> {{-- accordion --}}
-    </div>
 
     <script>
         function toggleFiltroExportar(button) {
@@ -437,6 +470,7 @@
             } else {
                 preview.textContent = "";
             }
+
         }
     </script>
 @endsection
