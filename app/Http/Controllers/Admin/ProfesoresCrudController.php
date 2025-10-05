@@ -98,6 +98,7 @@ class ProfesoresCrudController extends BaseController
      */
     public function update(EditarProfesorRequest $request, Profesor $profesor)
     {
+
         try {
             $profesor->update($request->validated());
 
