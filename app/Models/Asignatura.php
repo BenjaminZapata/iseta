@@ -55,7 +55,7 @@ class Asignatura extends Model
             Asignatura::class,          // Modelo relacionado (a sí mismo)
             'correlatividades',             // Tabla pivote
             'id_asignatura',            // FK en pivote que apunta a esta asignatura
-            'id_asignatura_correlativa' // FK en pivote que apunta a la correlativa
+            'asignatura_correlativa' // FK en pivote que apunta a la correlativa
         )
             ->withPivot('tipo_correlativa')
             ->using(Correlativa::class);
@@ -87,19 +87,19 @@ class Asignatura extends Model
         foreach ($corr as $correlativa) {
             switch ($correlativa->pivot->tipo_correlativa) {
                 case 0:
-                    if (! $correlativa->aproboExamen($alumno)) {
+                    if (!$correlativa->aproboExamen($alumno)) {
                         $correlativasDebidas[] = $correlativa;
                     }
                     break;
                 case 1:
-                    if (! ($correlativa->aproboExamen($alumno) && $correlativa->aproboCursada($alumno))) {
+                    if (!($correlativa->aproboExamen($alumno) && $correlativa->aproboCursada($alumno))) {
                         $correlativasDebidas[] = $correlativa;
                     }
                     break;
             }
         }
 
-        if (! empty($correlativasDebidas)) {
+        if (!empty($correlativasDebidas)) {
             return $correlativasDebidas;
         }
 
@@ -108,7 +108,7 @@ class Asignatura extends Model
 
     public function aproboExamen($alumno): ?Examen
     {
-        if (! $alumno || ! $alumno->id) {
+        if (!$alumno || !$alumno->id) {
             throw new \InvalidArgumentException('No se recibió un alumno válido para verificar si aprobó el examen.');
         }
 

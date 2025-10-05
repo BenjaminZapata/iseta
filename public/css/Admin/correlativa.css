@@ -1,11 +1,15 @@
-.chevron-btn {
- background: none;
- border: none;
- font-size: 1.2em;
- cursor: pointer;
- padding: 0;
- margin-right: 6px;
+.chevron-btn[aria-expanded="true"] {
+ transform: rotate(90deg);
+ transition: transform 0.2s ease;
 }
+
+.chevron-btn {
+ transition: transform 0.2s ease;
+ border: none;
+ background: none;
+ font-size: 1.2em;
+}
+
 
 .icono-correlativa {
  font-size: 1em;
