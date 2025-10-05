@@ -1,7 +1,6 @@
 @extends('Admin.template')
 
 @section('content')
-
     <link rel="stylesheet" href="{{ asset('css/admin/vinculacion-profesor.css') }}">
     <div class="edit-form-container">
         <div class="perfil_one br">
@@ -96,13 +95,11 @@
                             'placeholder' => 'Ej: 2317-876544',
                             'maxlength' => 30,
                         ]),
-                        '<div class="input-group">' .
+                
                         $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2') ?? $profesor, [
                             'placeholder' => 'Ej: 2317-876543',
                             'maxlength' => 30,
-                        ]) .
-                        '<small class="text-muted">Ejemplo: 2317-876543</small>' .
-                        '</div>',
+                        ]),
                     ],
                     'Otros' => [
                         $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones') ?? $profesor, [
@@ -131,122 +128,18 @@
                 </div>
             </div>
 
-            {{-- BLOQUE VINCULACIÓN FUERA DEL FORM --}}
             <div class="perfil_one br">
                 <div class="perfil__header">
                     <h2>Vincular Asignaturas</h2>
                 </div>
 
-                <div style="margin-right: 10px;">
-                    <div id="bloqueVinculacionNueva" style="display: row; margin: 20px">
-                        @include('components.vinculacion-profesor', [
-                            'carreras' => $carreras,
-                            'profesor' => $profesor,
-                        ])
-                    </div>
-                </div>
-                <div class="botones-derecha">
-                    <button type="button" class="btn_blue"
-                       onclick="document.getElementById(\'bloqueVinculacionNueva\').style.display = 'block'">
-                        <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                        Vincular
-                    </button>
-                </div>
+                <livewire:admin.profesor-vinculacion :profesor="$profesor" />
             </div>
 
-            <div class="perfil_one br">
-                <div class="perfil__header">
-                    <h2>Asignaturas asignadas</h2>
-                </div>
+            {{-- ASIGNATURAS VINCULADAS --}}
 
-                @if ($profesor->asignaturas->isEmpty())
-                    <p class="text-muted" style="margin: 10px">Este profesor aún no tiene asignaturas vinculadas.</p>
-                @else
-                    @php
-                        // Agrupamos asignaturas por carrera
-                        $asignaturasPorCarrera = $profesor->asignaturas->groupBy(function ($asig) {
-                            return $asig->pivot->id_carrera;
-                        });
-                    @endphp
-
-                    @foreach ($asignaturasPorCarrera as $idCarrera => $asignaturas)
-                        @php
-                            $carrera = \App\Models\Carrera::find($idCarrera);
-                            // Agrupamos por año dentro de cada carrera
-                            $porAnio = $asignaturas->groupBy(fn($a) => $a->pivot->anio ?? 'Sin año');
-                        @endphp
-
-                        <div class="card mb-4 shadow-sm p-3">
-                            <h4 class="mb-3 text-primary border-bottom pb-2">
-                                {{ $carrera?->nombre ?? 'Carrera desconocida' }}</h4>
-
-                            <div class="accordion" id="accordionCarrera{{ $idCarrera }}">
-                                @foreach ($porAnio as $anio => $lista)
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="heading{{ $idCarrera }}-{{ $anio }}">
-                                            <button class="accordion-button collapsed font-500" type="button"
-                                                data-bs-toggle="collapse"
-                                                data-bs-target="#collapse{{ $idCarrera }}-{{ $anio }}"
-                                                aria-expanded="false"
-                                                aria-controls="collapse{{ $idCarrera }}-{{ $anio }}">
-                                                {{ is_numeric($anio) ? $anio . '° año' : $anio }}
-                                            </button>
-                                        </h2>
-                                        <div id="collapse{{ $idCarrera }}-{{ $anio }}"
-                                            class="accordion-collapse collapse"
-                                            aria-labelledby="heading{{ $idCarrera }}-{{ $anio }}"
-                                            data-bs-parent="#accordionCarrera{{ $idCarrera }}">
-                                            <div class="accordion-body p-0">
-                                                <table class="table table-bordered table-hover mb-0">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th>Asignatura</th>
-                                                            <th>Módulo</th>
-                                                            <th>Carga horaria</th>
-                                                            <th>Acciones</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($lista as $asignatura)
-                                                            @php
-                                                                $pivot = $asignatura->pivot;
-                                                            @endphp
-                                                            <tr>
-                                                                <td>
-                                                                    {{ $asignatura->nombre }}
-                                                                    @if ($asignatura->correlativas->isNotEmpty())
-                                                                        <span class="badge bg-info ms-2">📎</span>
-                                                                    @endif
-                                                                </td>
-                                                                <td>{{ $pivot->tipo_modulo ?? '—' }}</td>
-                                                                <td>{{ $pivot->carga_horaria ?? '—' }} hs</td>
-                                                                <td style="white-space: nowrap;">
-                                                                    <button class="btn btn-sm btn-outline-secondary me-1"
-                                                                        onclick="vincularCorrelativa({{ $asignatura->id }})">
-                                                                        Vincular correlativa
-                                                                    </button>
-
-                                                                    @if ($asignatura->dependientes->isNotEmpty())
-                                                                        <button class="btn btn-sm btn-outline-info"
-                                                                            onclick="mostrarDependencias({{ $asignatura->id }})">
-                                                                            Ver dependencias
-                                                                        </button>
-                                                                    @endif
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endforeach
-                @endif
-            </div>
-
+            <livewire:admin.profesor-asignaturas-asignadas :profesor="$profesor" />
+            <button wire:click="pruebaEmit">Emitir evento de prueba</button>
 
             {{-- TABLA MESAS --}}
             <div class="table mt-4">

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Livewire\Admin\ProfesorAsignaturasAsignadas;
 use App\Models\Alumno;
 use App\Models\Carrera;
 use App\Models\Configuracion;
@@ -15,13 +16,17 @@ use Illuminate\Support\Facades\Log;
 use Monolog\Logger;
 use Monolog\Handler\SocketHandler;
 use Monolog\Formatter\JsonFormatter;
+use Livewire\Livewire;
+use App\Http\Livewire\Admin\ProfesorVinculacion;
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register(): void {}
+    public function register(): void
+    {
+    }
 
     /**
      * Bootstrap any application services.
@@ -39,5 +44,7 @@ class AppServiceProvider extends ServiceProvider
         View::share('carreraM', new Carrera());
         // View::share('profesorM', new Profesor());
         // View::share('profesorM', new Profesor());
+        Livewire::component('admin.profesor-vinculacion', ProfesorVinculacion::class);
+        Livewire::component('admin.profesor-asignaturas-asignadas', ProfesorAsignaturasAsignadas::class);
     }
 }
