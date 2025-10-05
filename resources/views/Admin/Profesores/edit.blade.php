@@ -147,7 +147,7 @@
                 </div>
                 <div class="botones-derecha">
                     <button type="button" class="btn_blue"
-                       onclick="document.getElementById(\'bloqueVinculacionNueva\').style.display = 'block'">
+                        onclick="document.getElementById(\'bloqueVinculacionNueva\').style.display = 'block'">
                         <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
                         Vincular
                     </button>
@@ -279,7 +279,8 @@
                                 <td class="flex just-center">
                                     <a href="{{ route('admin.mesas.edit', ['mesa' => $mesa->id]) }}">
                                         <button class="btn_blue">
-                                            <i class="ti ti-file-info"></i> Detalles
+                                            <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px"></i>
+                                            Detalles
                                         </button>
                                     </a>
                                 </td>
