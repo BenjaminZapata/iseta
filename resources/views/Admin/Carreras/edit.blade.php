@@ -254,7 +254,7 @@
                     <table>
                         <thead>
                             @php
-                                $hasCorrelativas = $asignatura->correlativas && $asignatura->correlativas->count();
+                                $hasCorrelativas = $asignatura->correlativas && $asignatura->correlativas;
                             @endphp
 
                             <tr x-data="{ open: false }"
