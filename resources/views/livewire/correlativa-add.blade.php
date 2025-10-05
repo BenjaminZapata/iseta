@@ -12,8 +12,7 @@
                 <div class="form-group">
                     <label for="correlativa">Correlativa:</label>
                     <select name="correlativa" id="correlativa" wire:model="correlativa">
-                        @foreach ($carrera->asignaturas()->wherePivot('anio', '<=', $singleAsignatura->carrera->where('id', $carrera->id)->first()->pivot->anio)
-                            ->get() as $asignatura)
+                        @foreach ($carrera->asignaturas()->wherePivot('anio', '<', $singleAsignatura->carrera->where('id', $carrera->id)->first()->pivot->anio)->get() as $asignatura)
                             <option value="{{ $asignatura }}">{{ $asignatura->nombre }}</option>
                         @endforeach
                     </select>

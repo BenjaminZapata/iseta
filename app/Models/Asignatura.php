@@ -19,11 +19,8 @@ class Asignatura extends Model
     protected $fillable = [
         'id',
         'nombre',
-        'tipo_modulo',
         'carga_horaria',
-        'anio',
         'observaciones',
-        'cantidad_modulo',
     ];
 
     public function cursadas(): HasMany
@@ -52,10 +49,16 @@ class Asignatura extends Model
             ->withTimestamps();
     }
 
-    public function correlativas($id_carrera): HasMany
+    public function correlativas()
     {
-        return $this->hasMany(Correlativa::class, 'id_asignatura', 'id')
-            ->where('id_carrera', $id_carrera);
+        return $this->belongsToMany(
+            Asignatura::class,          // Modelo relacionado (a sí mismo)
+            'correlatividades',             // Tabla pivote
+            'id_asignatura',            // FK en pivote que apunta a esta asignatura
+            'id_asignatura_correlativa' // FK en pivote que apunta a la correlativa
+        )
+            ->withPivot('tipo_correlativa')
+            ->using(Correlativa::class);
     }
 
     public function mesas(): HasMany
@@ -75,6 +78,32 @@ class Asignatura extends Model
             ->where(column: 'aprobada', operator: 3)
             ->where(column: 'condicion', operator: 1)
             ->first();
+    }
+
+    public function debeCorrelativas($alumno, $id_carrera)
+    {
+        $correlativasDebidas = [];
+        $corr = $this->correlativas()->wherePivot('id_carrera', $id_carrera)->get();
+        foreach ($corr as $correlativa) {
+            switch ($correlativa->pivot->tipo_correlativa) {
+                case 0:
+                    if (! $correlativa->aproboExamen($alumno)) {
+                        $correlativasDebidas[] = $correlativa;
+                    }
+                    break;
+                case 1:
+                    if (! ($correlativa->aproboExamen($alumno) && $correlativa->aproboCursada($alumno))) {
+                        $correlativasDebidas[] = $correlativa;
+                    }
+                    break;
+            }
+        }
+
+        if (! empty($correlativasDebidas)) {
+            return $correlativasDebidas;
+        }
+
+        return false;
     }
 
     public function aproboExamen($alumno): ?Examen
@@ -124,21 +153,16 @@ class Asignatura extends Model
             ->get();
     }
 
-    public function anioStr(): string
+    public function anioStr($id_carrera): string
     {
         $strings = ['Primer año', 'Segundo año', 'Tercer año', 'Cuarto año', 'Quinto año', 'Sexto año'];
 
-        return $strings[$this->anio - 1];
+        return $strings[$this->carrera()->where('id', $id_carrera)->first()->pivot->anio];
     }
 
     public function setNombreAttribute($value): void
     {
         $this->attributes['nombre'] = TextFormatService::ucwords($value);
-    }
-
-    public function setAnioAttribute($value): void
-    {
-        $this->attributes['anio'] = $value - 1;
     }
 
     public function setObservacionesAttribute($value)

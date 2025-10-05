@@ -15,6 +15,7 @@ return new class extends Migration
             $table->addColumn('integer', 'id_asignatura_correlativa');
             $table->addColumn('integer', 'id_asignatura');
             $table->addColumn('integer', 'id_carrera');
+            $table->tinyInteger('tipo_correlativa')->default(0);
             $table->primary(['id_asignatura', 'id_asignatura_correlativa', 'id_carrera']);
 
             // Foreign keys
