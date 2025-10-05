@@ -333,12 +333,16 @@
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
-                                                                <button type="button"
-                                                                    onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', `¿Estás seguro...?`)"
-                                                                    class="btn_icon-danger"
-                                                                    style="background-color: red;">
-                                                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                                                </button>
+                                                                <div
+                                                                    style="display: flex; align-items: center; justify-content: center;">
+                                                                    <button type="button"
+                                                                        onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', `¿Está seguro que desea desvincular la asignatura {{ $asignatura->nombre }} de {{ $asignatura->anio }}° año de la carrera {{ $carrera->nombre }}?`)"
+                                                                        class="btn_icon-danger"
+                                                                        style="background-color: red;">
+                                                                        <i class="ti ti-trash"
+                                                                            style="font-size: 1.3em;"></i>
+                                                                    </button>
+                                                                </div>
                                                             </form>
                                                         @endif
                                                     </td>
@@ -347,21 +351,26 @@
                                                 <!-- Subacordeón (correlativas) -->
                                                 <tr class="collapse" id="{{ $collapseId }}">
                                                     <td colspan="7" class="correlativas-expandida">
-                                                        <strong>Correlativas de "{{ $asignatura->nombre }}"</strong>
+                                                        <div>
+                                                            <strong>Correlativas de "{{ $asignatura->nombre }}"</strong>
 
-                                                        @if ($hasCorrelativas)
-                                                            <ul class="lista-correlativas">
-                                                                @foreach ($asignatura->correlatividades as $corr)
-                                                                    <li>{{ $corr->nombre }}</li>
-                                                                @endforeach
-                                                            </ul>
-                                                        @else
-                                                            <p class="text-muted">No hay correlativas asignadas.</p>
-                                                        @endif
-
-                                                        <div class="acciones-correlativas">
-                                                            <livewire:correlativa-add :carrera="$carrera" :asignatura="$asignatura" />
+                                                            @if ($hasCorrelativas)
+                                                                <ul class="lista-correlativas">
+                                                                    @foreach ($asignatura->correlatividades as $corr)
+                                                                        <li>{{ $corr->nombre }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            @else
+                                                                <p class="text-muted">No tiene correlativas asignadas.</p>
+                                                            @endif
+                                                            <div class="acciones-correlativas">
+                                                                <livewire:correlativa-add :carrera="$carrera"
+                                                                    :asignatura="$asignatura" />
+                                                            </div>
                                                         </div>
+
+
+
                                                     </td>
                                                 </tr>
                                             @endforeach
