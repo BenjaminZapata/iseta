@@ -201,20 +201,14 @@
                                                     <thead class="thead-light">
                                                         <tr>
                                                             <th>Asignatura</th>
-                                                            <th>Módulo</th>
                                                             <th>Carga horaria</th>
-                                                            <th>Acciones</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($lista as $asignatura)
-                                                            @php
-                                                                $pivot = $asignatura->pivot;
-                                                            @endphp
+                                                        @foreach ($lista as $pivot)
                                                             <tr>
-                                                                <td>{{ $pivot->tipo_modulo ?? '—' }}</td>
+                                                                <td>{{ $pivot->nombre }}</td>
                                                                 <td>{{ $pivot->carga_horaria ?? '—' }} hs</td>
-                                                    
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
