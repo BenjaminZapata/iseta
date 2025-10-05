@@ -119,7 +119,8 @@ class CreateAlumno extends Component
 
         $this->reset();
         $this->step = 1;
-        $this->todasCarreras = Carrera::where('vigente', 1)->get();
+
+        return redirect()->route('admin.alumnos.index');
     }
 
     public function render()
