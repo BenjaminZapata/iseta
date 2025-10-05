@@ -31,6 +31,7 @@
                 <th class="center">Año</th>
                 <th class="center">Carga horaria</th>
                 <th class="center">Acción</th>
+
             </tr>
         </thead>
         <tbody>
@@ -48,12 +49,12 @@
                     </div>
                 </td>
                 <td>
-                    <div style="display: flex; justify-content: center;">
+                    <div style="display:flex; align-items: center; justify-content: center;"">
                         {{ $asignatura->carga_horaria }} hs
                     </div>
                 </td>
                 <td>
-                    <div style="display:flex; align-items: center; justify-content: center;">
+                    <div style=" display:flex; align-items: center; justify-content: center;">
                         <div style="display:flex; align-items: center; justify-content: center;">
                             @if (!$config['modo_seguro'])
                             <form id="form-eliminar-{{ $asignatura->id }}"
