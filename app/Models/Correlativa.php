@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
-class Correlativa extends Model
+class Correlativa extends Pivot
 {
     use HasFactory;
 
@@ -16,6 +17,7 @@ class Correlativa extends Model
         'id_asignatura',
         'id_carrera',
         'id_asignatura_correlativa',
+        'tipo_correlativa',
     ];
 
     public $timestamps = false;
@@ -25,7 +27,7 @@ class Correlativa extends Model
         return $this->BelongsTo(Asignatura::class, 'id_asignatura');
     }
 
-    public static function debeExamenesCorrelativos($asignatura, $alumno)
+    public static function debeExamenesCorrelativos($asignatura, $carrera, $alumno)
     {
         if (! $alumno) {
             $alumno = Auth::user();
@@ -55,26 +57,24 @@ class Correlativa extends Model
         }
     }
 
-    public static function debeCursadasCorrelativos($asignatura, $alumno)
+    public static function debeCursadasCorrelativos($asignatura, $carrera, $alumno)
     {
         if (! $alumno) {
             $alumno = Auth::user();
         }
-        $asignatura = Asignatura::with('correlativas.asignatura')
+        $asignatura = Asignatura::with('correlativas')
             ->where('id', $asignatura->id)
             ->first();
 
         $sinAprobar = [];
 
-        foreach ($asignatura->correlativas as $correlativa) {
+        foreach ($asignatura->correlativas()->wherePivot('id_carrera', $carrera->id)->get() as $correlativa) {
             $asigCorr = $correlativa->asignatura;
             if (is_null($asigCorr)) {
                 return false;
             }
-            log:debug($asigCorr->aproboCursada($alumno));
-            if ($asigCorr->aproboCursada($alumno)) {
-                continue;
-            } else {
+            Log::debug($asigCorr->aproboCursada($alumno));
+            if (! $asigCorr->aproboCursada($alumno)) {
                 $sinAprobar[] = $asigCorr;
             }
         }
