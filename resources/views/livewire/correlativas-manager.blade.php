@@ -4,7 +4,7 @@
         <ul class="lista-correlativas" style="padding-left: 0;">
             @foreach ($posiblesCorrelativas as $posible)
                 <li style="list-style: none; margin-bottom: 5px;">
-                    <label style="display: flex; align-items: center; gap: 8px;">
+                    <label style="display: flex; align-items: center; justifi-content: center; gap: 8px;">
                         <input type="checkbox" wire:click="toggleCorrelativa({{ $posible->id }})"
                             {{ $asignatura->correlativas->contains($posible->id) ? 'checked' : '' }}
                             {{ $posible->nombre }} <small class="text-muted">({{ $posible->anio }}° año)</small>

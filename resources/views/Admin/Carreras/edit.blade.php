@@ -258,20 +258,33 @@
                                                     $collapseId = 'collapseAsignatura' . $asignatura->id;
                                                 @endphp
 
-                                                <tr class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }}">
+                                                <tr
+                                                    @if ($asignatura->anio != 1) class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura"
+                                                    data-target="#{{ $collapseId }}"
+                                                    data-icon="#chevronIcon{{ $asignatura->id }}"
+                                                    @else
+                                                    class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura @endif">
                                                     <!-- Botón para expandir correlativas -->
                                                     <td class="center">
-                                                        <button class="chevron-btn" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#{{ $collapseId }}" aria-expanded="false"
-                                                            aria-controls="{{ $collapseId }}">
-                                                            ›
-                                                        </button>
-                                                        {{ $asignatura->anio }}
+                                                        @if ($asignatura->anio != 1)
+                                                            <button class="chevron-btn" type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#{{ $collapseId }}"
+                                                                aria-expanded="false"
+                                                                aria-controls="{{ $collapseId }}">
+                                                                <i id="chevronIcon{{ $asignatura->id }}"
+                                                                    class="ti ti-chevron-down collapse-icon"
+                                                                    style="font-size: 1.3em; margin-right: 8px; transition: transform 0.3s;"></i>
+                                                            </button>
+                                                            {{ $asignatura->anio }}
+                                                        @else
+                                                            {{ $asignatura->anio }}
+                                                        @endif
+
                                                     </td>
 
                                                     <!-- Nombre de la asignatura -->
-                                                    <td>
+                                                    <td class="bold">
                                                         {{ $asignatura->nombre }}
                                                         @if ($hasCorrelativas)
                                                             <span title="Tiene correlativas"
@@ -288,15 +301,16 @@
                                                     </td>
 
                                                     <!-- Crear mesa -->
-                                                    <td class="center">
-                                                        <a
-                                                            href="{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
-                                                            <button class="btn_blue">
+                                                    <td>
+                                                        <div
+                                                            style="display: flex; align-items: center; justify-content: center;">
+                                                            <button class="btn_blue"
+                                                                onclick="window.location.href='{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}'">
                                                                 <i class="ti ti-circle-plus"
-                                                                    style="font-size: 1.3em; margin-right: 8px;"></i>
+                                                                    style="font-size: 1.3em; margin-right: 8px; margin-top: 2px;"></i>
                                                                 Crear Mesa
                                                             </button>
-                                                        </a>
+                                                        </div>
                                                     </td>
 
                                                     <!-- Exportar -->
@@ -406,5 +420,55 @@
                         }
 
                     }
+
+                    // Para girar el ícono de chevron al expandir/colapsar
+
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const collapseButtons = document.querySelectorAll('[data-bs-toggle="collapse"]');
+
+                        collapseButtons.forEach(button => {
+                            const icon = button.querySelector('.collapse-icon');
+                            const targetSelector = button.getAttribute('data-bs-target') || button.getAttribute('href');
+                            const target = document.querySelector(targetSelector);
+
+                            if (!target || !icon) return;
+
+                            // Evento cuando se abre el collapse
+                            target.addEventListener('show.bs.collapse', function() {
+                                icon.style.transform = 'rotate(180deg)';
+                            });
+
+                            // Evento cuando se cierra el collapse
+                            target.addEventListener('hide.bs.collapse', function() {
+                                icon.style.transform = 'rotate(0deg)';
+                            });
+                        });
+
+                        // Hacer que todo el <tr> sea clickeable para expandir/collapse
+                        const filas = document.querySelectorAll('tr.tr-asignatura');
+
+                        filas.forEach(fila => {
+                            fila.addEventListener('click', function(e) {
+                                // Evitar que se dispare si clickeás un botón dentro del <tr>
+                                if (e.target.closest('button')) return;
+
+                                const targetSelector = this.getAttribute('data-target');
+                                const target = document.querySelector(targetSelector);
+
+                                if (target) {
+                                    const isCollapsed = !target.classList.contains('show');
+                                    const collapse = new bootstrap.Collapse(target, {
+                                        toggle: true
+                                    });
+
+                                    if (!isCollapsed) {
+                                        collapse.hide();
+                                    } else {
+                                        collapse.show();
+                                    }
+                                }
+                            });
+                        });
+                    });
                 </script>
             @endsection

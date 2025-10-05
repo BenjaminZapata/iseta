@@ -1,8 +1,3 @@
-.chevron-btn[aria-expanded="true"] {
- transform: rotate(90deg);
- transition: transform 0.2s ease;
-}
-
 .chevron-btn {
  transition: transform 0.2s ease;
  border: none;
@@ -34,4 +29,11 @@
 
 .acciones-correlativas {
  margin-top: 10px;
+}
+
+tr.asignatura-con-correlativas:hover,
+tr:hover {
+ background-color: #f0f8ff;
+ /* Celeste claro. Cambialo a gusto */
+ cursor: pointer;
 }
