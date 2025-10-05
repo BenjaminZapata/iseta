@@ -57,11 +57,12 @@
 
 
                             <label class="label-input-y-75">Año de cierre:
-                                <input type="text" name="anio_fin" value="{{ $carrera->anio_fin }}">
+                                <input type="text" placeholder='Ej: 2028 (si aplica)' name="anio_fin"
+                                    value="{{ $carrera->anio_fin }}">
                             </label>
 
                             <label class="label-input-y-75">Observaciones:
-                                <textarea name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
+                                <textarea placeholder='Notas adicionales sobre la carrera' name="observaciones" cols="20" rows="3">{{ $carrera->observaciones }}</textarea>
                             </label>
                             <input type="hidden" name="texthidden" value="{{ url()->previous() }}">
                         </div>
@@ -82,7 +83,7 @@
                                     <button type="button" class="btn_sky"
                                         onclick="document.getElementById('resolucionInput').click()">
                                         <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                        <span style="font-size: 0.9rem;">REEMPLAZAR</span>
+                                        Reemplazar
                                     </button>
                                     <input type="file" id="resolucionInput" name="resolucion_archivo_nuevo"
                                         accept="application/pdf" hidden onchange="mostrarNombreArchivo(this)">
@@ -90,9 +91,8 @@
                                     <div class="form-check form-check-danger">
                                         <input type="checkbox" name="eliminar_resolucion_archivo" value="1"
                                             class="form-check-input" id="eliminarArchivo">
-                                        <label class="form-check-label" for="eliminarArchivo" style="cursor: pointer;">
-                                            <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                            Eliminar actual
+                                        <label class="form-check-label" for="eliminarArchivo">
+                                            <i class="ti ti-trash"></i> Eliminar actual
                                         </label>
                                     </div>
                                 </div>
@@ -117,21 +117,12 @@
 
 
                     <div class="botones-derecha">
-
                         <x-botones-alumno />
-                        {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
                         <x-btn-cancelar />
                         <button type="submit" class="btn_blue">
-                            @if ($method == 'put')
-                                <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                Actualizar
-                            @elseif ($method == 'post')
-                                <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                Guardar
-                            @endif
-                            {{-- @endif --}}
+                            <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
+                            Actualizar
                         </button>
-
                     </div>
                 </form>
                 <div class="boton-eliminar">
@@ -266,9 +257,9 @@
                             <th class="center">Año</th>
                             <th>Materia</th>
                             <th class="center">Carga anual/semanal</th>
-                            <th class="center">Acción</th>
                             <th class="center">Crear</th>
                             <th class="center">Exportar</th>
+                            <th class="center">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -278,22 +269,7 @@
                             <td class="center">{{ $asignatura->anio }}</td>
                             <td>{{ $asignatura->nombre }}</td>
                             <td class="center">{{ $asignatura->carga_horaria }} horas</td>
-                            <td style="display:flex; align-items: center; justify-content: center;">
 
-                                <button type="button"
-                                    onclick="openGeneralModal(
-        'form-eliminar-{{ $asignatura->id }}',
-        `¿Estás seguro de que querés eliminar la asignatura?\n\n
-        Nombre: {{ strtoupper($asignatura->nombre) }}\n
-        {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
-         Año: {{ $asignatura->anio }}\n\n
-         ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
-                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                </button>
-
-
-                            </td>
                             <td>
                                 <div style="display:flex; align-items: center; justify-content: center;">
                                     <a
@@ -306,9 +282,9 @@
                                 </div>
                             </td>
                             <td>
-                                <div style="position: relative;">
+                                <div style="display:flex; align-items: center; justify-content: center;">
                                     <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
-                                        <i class="ti ti-file-download"></i> Exportar materia
+                                        <i class="ti ti-file-download"></i> Exportar asignatura
                                     </button>
 
                                     <form method="GET"
@@ -374,7 +350,36 @@
                                         </div>
                                     </form>
                                 </div>
+                                <div style="display:flex; align-items: center; justify-content: center;">
+                                    <livewire:correlativa-add :carrera="$carrera" :asignatura="$asignatura">
+                                </div>
                             </td>
+
+                            <td>
+                                <div style="display:flex; align-items: center; justify-content: center;">
+                                    <div style="display:flex; align-items: center; justify-content: center;">
+                                        @if (!$config['modo_seguro'])
+                                            <form id="form-eliminar-{{ $asignatura->id }}"
+                                                action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button"
+                                                    onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
+                                `¿Estás seguro de que querés eliminar la asignatura?\n\n
+                                    Nombre: {{ strtoupper($asignatura->nombre) }}\n
+                                    {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
+                                    Año: {{ $asignatura->anio }}\n\n
+                                    ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
+                                                    class="btn_icon-danger" style="background-color: red;">
+                                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            </td>
+
                         </tr>
                         @endforeach
 
