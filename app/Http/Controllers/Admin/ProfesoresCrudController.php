@@ -67,22 +67,6 @@ class ProfesoresCrudController extends BaseController
             Log::error($th);
         }
         $data['password'] = Hash::make($data['password']);
-        $profesor = Profesor::create($data);
-
-        $seleccionadas = $request->input('asignaturas_seleccionadas', []);
-
-       
-        foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
-            foreach ($idAsignaturas as $idAsignatura) {
-                $asignatura = Asignatura::find($idAsignatura);
-                if ($asignatura) {
-                    $asignatura->carrera()->updateExistingPivot($idCarrera, [
-                        'id_profesor' => $profesor->id,
-                    ]);
-                }
-            }
-        }
-
         return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');
     }
 
@@ -115,19 +99,6 @@ class ProfesoresCrudController extends BaseController
     try {
         // Actualiza los datos del profesor
         $profesor->update($request->validated());
-
-        // Reasigna las asignaturas seleccionadas
-        foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $idAsignaturas) {
-            foreach ($idAsignaturas as $idAsignatura) {
-                $asignatura = Asignatura::find($idAsignatura);
-
-                if ($asignatura) {
-                    $asignatura->carrera()->updateExistingPivot($idCarrera, [
-                        'id_profesor' => $profesor->id,
-                    ]);
-                }
-            }
-        }
 
         return redirect()->route('admin.profesores.index')
             ->with('mensaje', 'Se editó el profesor correctamente.');
@@ -173,4 +144,22 @@ class ProfesoresCrudController extends BaseController
                 ->with('error', 'No se pudo eliminar el Profesor. ' . $e->getMessage());
         }
     }
+    public function vincularAsignaturas(Request $request, Profesor $profesor)
+{
+    $seleccionadas = $request->input('asignaturas_seleccionadas', []);
+
+    foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
+        foreach ($idAsignaturas as $idAsignatura) {
+            $asignatura = Asignatura::find($idAsignatura);
+
+            if ($asignatura) {
+                $asignatura->carrera()->updateExistingPivot($idCarrera, [
+                    'id_profesor' => $profesor->id,
+                ]);
+            }
+        }
+    }
+
+    return response()->json(['success' => true]);
+}
 }
