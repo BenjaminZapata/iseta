@@ -158,24 +158,26 @@
                                             <table class="table table-bordered table-hover mb-0 text-center align-middle" style="table-layout: fixed;">
     <thead class="thead-light">
         <tr style="background-color: #f1f1f1;">
-            <th style="width: 25%;">Nombre</th>
-            <th style="width: 15%;">Módulo</th>
-            <th style="width: 15%;">Carga horaria</th>
-            <th style="width: 15%;">Condición</th>
-            <th style="width: 15%;">Estado</th>
-            <th style="width: 15%;">Acciones</th>
+           <th>Materia</th>
+                            <th>Condicion</th>
+                            <th class="center">Estado</th>
+                            <th class="center">Acción</th>
         </tr>
     </thead>
     <tbody>
         @foreach ($asignaturas as $asig)
             @php $pivot = $asig->pivot; @endphp
-            <tr>
-             
-                <td>{{ $pivot->tipo_modulo ?? '—' }}</td>
-                <td>{{ $pivot->carga_horaria ?? '—' }} hs</td>
-                <td>{{ $asig->condicionString() }}</td>
-                <td>{{ $asig->aprobado() }}</td>
-            </tr>
+            <tr data-name="MateriaCursada">
+                            <td>{{ $cursada->asignatura }}</td>
+                            <td>{{ $cursada->condicionString() }}</td>
+                            <td class="center">{{ $cursada->aprobado() }}</td>
+                            <td class="flex just-center">
+                                <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}">
+                                    <button class="btn_blue"><i class="ti ti-edit"
+                                            style="font-size: 1.3em; margin-right: 8px;"></i>Editar</button>
+                                </a>
+                            </td>
+                        </tr>
         @endforeach
     </tbody>
 </table>
