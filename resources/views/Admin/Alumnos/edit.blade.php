@@ -109,25 +109,14 @@
         </div>
         <div class="accordion" id="cursadasAccordion">
             @php
-                $carrera_actual = '';
-                $anio_actual = '';
+                $agrupadas = collect($cursadas)->groupBy(fn($c) => $c->carrera);
                 $carrera_index = 0;
-                $anio_index = 0;
-                $asignaturas_por_anio = [];
             @endphp
 
-            @foreach ($cursadas as $cursada)
-                {{-- Agrupar por carrera y año --}}
+            @foreach ($agrupadas as $carrera => $porCarrera)
                 @php
-                    $key = $cursada->carrera . '-' . $cursada->anio_asig;
-                    $asignaturas_por_anio[$key][] = $cursada;
-                @endphp
-            @endforeach
-
-            @foreach ($asignaturas_por_anio as $grupo_key => $asignaturas)
-                @php
-                    [$carrera, $anio] = explode('-', $grupo_key);
                     $carrera_index++;
+                    $porAnio = $porCarrera->groupBy('anio_asig');
                     $anio_index = 0;
                 @endphp
 
@@ -143,48 +132,53 @@
                         aria-labelledby="headingCarrera{{ $carrera_index }}" data-bs-parent="#cursadasAccordion">
                         <div class="accordion-body p-2">
                             <div class="accordion" id="anioAccordion{{ $carrera_index }}">
-                                <div class="accordion-item">
-                                    <h3 class="accordion-header" id="headingAnio{{ $carrera_index }}-{{ $anio_index }}">
-                                        <button class="accordion-button collapsed font-500" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#collapseAnio{{ $carrera_index }}-{{ $anio_index }}" aria-expanded="false"
-                                            aria-controls="collapseAnio{{ $carrera_index }}-{{ $anio_index }}">
-                                            {{ $anio}}° año
-                                        </button>
-                                    </h3>
-                                    <div id="collapseAnio{{ $carrera_index }}-{{ $anio_index }}" class="accordion-collapse collapse"
-                                        aria-labelledby="headingAnio{{ $carrera_index }}-{{ $anio_index }}"
-                                        data-bs-parent="#anioAccordion{{ $carrera_index }}">
-                                        <div class="accordion-body p-0">
-                                            <table class="table table-bordered table-hover mb-0 text-center align-middle" style="table-layout: fixed;">
-    <thead class="thead-light">
-        <tr style="background-color: #f1f1f1;">
-           <th>Materia</th>
-                            <th>Condicion</th>
-                            <th class="center">Estado</th>
-                            <th class="center">Acción</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($asignaturas as $asig)
-            @php $pivot = $asig->pivot; @endphp
-            <tr data-name="MateriaCursada">
-                            <td>{{ $cursada->asignatura }}</td>
-                            <td>{{ $cursada->condicionString() }}</td>
-                            <td class="center">{{ $cursada->aprobado() }}</td>
-                            <td class="flex just-center">
-                                <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}">
-                                    <button class="btn_blue"><i class="ti ti-edit"
-                                            style="font-size: 1.3em; margin-right: 8px;"></i>Editar</button>
-                                </a>
-                            </td>
-                        </tr>
-        @endforeach
-    </tbody>
-</table>
-
+                                @foreach ($porAnio as $anio => $asignaturas)
+                                    @php
+                                        $anio_index++;
+                                        $anio = (int) $anio;
+                                    @endphp
+                                    <div class="accordion-item">
+                                        <h3 class="accordion-header" id="headingAnio{{ $carrera_index }}-{{ $anio_index }}">
+                                            <button class="accordion-button collapsed font-500" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapseAnio{{ $carrera_index }}-{{ $anio_index }}" aria-expanded="false"
+                                                aria-controls="collapseAnio{{ $carrera_index }}-{{ $anio_index }}">
+                                                {{ $anio + 1 }}° año
+                                            </button>
+                                        </h3>
+                                        <div id="collapseAnio{{ $carrera_index }}-{{ $anio_index }}" class="accordion-collapse collapse"
+                                            aria-labelledby="headingAnio{{ $carrera_index }}-{{ $anio_index }}"
+                                            data-bs-parent="#anioAccordion{{ $carrera_index }}">
+                                            <div class="accordion-body p-0">
+                                                <table class="table table-bordered table-hover mb-0 text-center align-middle">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Materia</th>
+                                                            <th>Condición</th>
+                                                            <th class="center">Estado</th>
+                                                            <th class="center">Acción</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table__body">
+                                                        @foreach ($asignaturas as $cursada)
+                                                            <tr data-name="MateriaCursada">
+                                                                <td>{{ $cursada->asignatura }}</td>
+                                                                <td>{{ $cursada->condicionString() }}</td>
+                                                                <td class="center">{{ $cursada->aprobado() }}</td>
+                                                                <td class="flex just-center">
+                                                                    <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}">
+                                                                        <button class="btn_blue">
+                                                                            <i class="ti ti-edit"></i>Editar
+                                                                        </button>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div> {{-- Fin año --}}
+                                    </div> {{-- Fin año --}}
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -193,117 +187,100 @@
         </div>
     </div>
 </div>
-            <div class="table">
-                <div class="table__header">
-                    <h2>Examenes</h2>
-                    <p>Importante: algunos examanes de alumnos mas antiguos podrian no tener datos sobre las mesas.</p>
+
+        <div class="table">
+    <div class="table__header">
+        <h2>Exámenes</h2>
+        <p>Importante: algunos exámenes de alumnos más antiguos podrían no tener datos sobre las mesas.</p>
+    </div>
+
+    <div class="accordion" id="examenesAccordion">
+        @php
+            $agrupados = collect($examenes)->groupBy(fn($e) => $e->carrera);
+            $carrera_index = 0;
+        @endphp
+
+        @foreach ($agrupados as $carrera => $porCarrera)
+            @php
+                $carrera_index++;
+                $porAnio = $porCarrera->groupBy('anio_asig');
+                $anio_index = 0;
+            @endphp
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingExamenCarrera{{ $carrera_index }}">
+                    <button class="accordion-button collapsed font-500" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseExamenCarrera{{ $carrera_index }}" aria-expanded="false"
+                        aria-controls="collapseExamenCarrera{{ $carrera_index }}">
+                        {{ $carrera }}
+                    </button>
+                </h2>
+                <div id="collapseExamenCarrera{{ $carrera_index }}" class="accordion-collapse collapse"
+                    aria-labelledby="headingExamenCarrera{{ $carrera_index }}" data-bs-parent="#examenesAccordion">
+                    <div class="accordion-body p-2">
+                        <div class="accordion" id="anioExamenAccordion{{ $carrera_index }}">
+                            @foreach ($porAnio as $anio => $examenesDelAnio)
+                                @php
+                                    $anio_index++;
+                                    $anio = (int) $anio;
+                                @endphp
+
+                                <div class="accordion-item">
+                                    <h3 class="accordion-header" id="headingExamenAnio{{ $carrera_index }}-{{ $anio_index }}">
+                                        <button class="accordion-button collapsed font-500" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapseExamenAnio{{ $carrera_index }}-{{ $anio_index }}" aria-expanded="false"
+                                            aria-controls="collapseExamenAnio{{ $carrera_index }}-{{ $anio_index }}">
+                                            {{ $anio + 1 }}° año
+                                        </button>
+                                    </h3>
+                                    <div id="collapseExamenAnio{{ $carrera_index }}-{{ $anio_index }}" class="accordion-collapse collapse"
+                                        aria-labelledby="headingExamenAnio{{ $carrera_index }}-{{ $anio_index }}"
+                                        data-bs-parent="#anioExamenAccordion{{ $carrera_index }}">
+                                        <div class="accordion-body p-0">
+                                            <table class="table table-bordered table-hover mb-0 text-center align-middle">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Materia</th>
+                                                        <th>Fecha</th>
+                                                        <th>Nota</th>
+                                                        <th class="center">Acción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($examenesDelAnio as $examen)
+                                                        <tr>
+                                                            <td>{{ $examen->asignatura }}</td>
+                                                            <td>{{ $formatoFecha->dma($examen->fecha()) }}</td>
+                                                            <td>
+                                                                @if ($examen->aprobado == 3)
+                                                                    Ausente
+                                                                @elseif($examen->nota <= 0)
+                                                                    Sin nota
+                                                                @else
+                                                                    {{ $examen->nota }}
+                                                                @endif
+                                                            </td>
+                                                            <td class="flex just-center">
+                                                                <a href="{{ route('admin.examenes.edit', ['examen' => $examen->id]) }}">
+                                                                    <button class="btn_blue">
+                                                                        <i class="ti ti-edit" style="font-size: 1.3em; margin-right: 8px;"></i>Editar
+                                                                    </button>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div> {{-- Fin año --}}
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
-
-                <div class="accordion" id="examenesAccordion">
-
-                    @php
-                        $carrera_actual = '';
-                        $anio_actual = '';
-                        $carrera_index = 0;
-                        $anio_index = 0;
-                    @endphp
-                    @foreach ($examenes as $examen)
-                        @if ($carrera_actual != $examen->carrera)
-                            @if ($carrera_actual != '')
-                                </tbody>
-                                </table>
-                </div>
-            </div>
-        </div>
+            </div> {{-- Fin carrera --}}
+        @endforeach
     </div>
-    </div>
-    </div>
-    </div>
-    @endif
+</div>
 
-    @php
-        $carrera_index++;
-        $anio_index = 0;
-    @endphp
-
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="headingExamenCarrera{{ $carrera_index }}">
-            <button class="accordion-button collapsed font-500" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseExamenCarrera{{ $carrera_index }}" aria-expanded="false"
-                aria-controls="collapseExamenCarrera{{ $carrera_index }}">
-                {{ $examen->carrera }}
-            </button>
-        </h2>
-        <div id="collapseExamenCarrera{{ $carrera_index }}" class="accordion-collapse collapse"
-            aria-labelledby="headingExamenCarrera{{ $carrera_index }}" data-bs-parent="#examenesAccordion">
-            <div class="accordion-body p-2">
-                @php
-                    $carrera_actual = $examen->carrera;
-                    $anio_actual = '';
-                @endphp
-                @endif
-
-                @if ($anio_actual != $examen->anio_asig)
-                    @if ($anio_actual != '')
-                        </tbody>
-                        </table>
-            </div>
-        </div>
-    </div>
-    @endif
-
-    @php
-        $anio_index++;
-    @endphp
-
-    <div class="accordion-item">
-        <h3 class="accordion-header" id="headingExamenAnio{{ $carrera_index }}-{{ $anio_index }}">
-            <button class="accordion-button collapsed font-500" type="button" data-bs-toggle="collapse"
-                data-bs-target="#collapseExamenAnio{{ $carrera_index }}-{{ $anio_index }}" aria-expanded="false"
-                aria-controls="collapseExamenAnio{{ $carrera_index }}-{{ $anio_index }}">
-                {{ $examen->anio_asig + 1 }}° año
-            </button>
-        </h3>
-        <div id="collapseExamenAnio{{ $carrera_index }}-{{ $anio_index }}" class="accordion-collapse collapse"
-            aria-labelledby="headingExamenAnio{{ $carrera_index }}-{{ $anio_index }}">
-            <div class="accordion-body p-0">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Materia</th>
-                            <th>Fecha</th>
-                            <th>Nota</th>
-                            <th class="center">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $anio_actual = $examen->anio_asig;
-                        @endphp
-                        @endif
-
-                        <tr>
-                            <td>{{ $examen->asignatura }}</td>
-                            <td>{{ $formatoFecha->dma($examen->fecha()) }}</td>
-                            <td>
-                                @if ($examen->aprobado == 3)
-                                    Ausente
-                                @elseif($examen->nota <= 0)
-                                    Sin nota
-                                @else
-                                    {{ $examen->nota }}
-                                @endif
-                            </td>
-                            <td class="flex just-center">
-                                <a href="{{ route('admin.examenes.edit', ['examen' => $examen->id]) }}">
-                                    <button class="btn_blue"><i class="ti ti-edit"
-                                            style="font-size: 1.3em; margin-right: 8px;"></i>Editar</button>
-                                </a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-
-            </div>
         @endsection
