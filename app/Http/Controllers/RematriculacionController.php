@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Asignatura;
 use App\Models\Carrera;
 use App\Models\Configuracion;
-use App\Models\Correlativa;
 use App\Models\Cursada;
 use App\Services\AlumnoMatriculacionService;
 use App\Services\DiasHabiles;
 use DateTime;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Http\Request;
 
 class RematriculacionController extends Controller
 {
@@ -20,36 +18,37 @@ class RematriculacionController extends Controller
 
     public function __construct(AlumnoMatriculacionService $service)
     {
-        $this -> rematService = $service;
+        $this->rematService = $service;
 
-        $this -> middleware('auth:web');
-        $this -> middleware('verificado')->only([
+        $this->middleware('auth:web');
+        $this->middleware('verificado')->only([
             'rematriculacion',
-            'bajar_rematriculacion'
+            'bajar_rematriculacion',
         ]);
     }
 
-     /*
-     | ---------------------------------------------
-     | Vista de rematriculacion
-     | ---------------------------------------------
-     */
-    function rematriculacion_vista(Request $request){
-        if(!Configuracion::get('alumno_puede_anotarse_cursada')){
+    /*
+    | ---------------------------------------------
+    | Vista de rematriculacion
+    | ---------------------------------------------
+    */
+    public function rematriculacion_vista(Request $request)
+    {
+        if (! Configuracion::get('alumno_puede_anotarse_cursada')) {
             return redirect()->route('alumno.info')->with('error', 'El administrador ha desactivado la inscripcion a cursadas');
         }
-        $carrera = Carrera::getDefault();
+        $carrera = Carrera::getDefault(Auth::user());
         $esFechaDeRemat = $this->rematService->esFechaDeRematriculacion();
 
         $anotables = $this->rematService->matriculables(Auth::user(), $carrera);
 
-        return view('Alumnos.datos.rematriculacion', [
+        return view('Alumnos.Datos.rematriculacion', [
             'asignaturas' => $anotables,
-            'carrera'=>$carrera->id,
-            'esFechaDeRemat'=>$esFechaDeRemat
+            'alumno' => Auth::user(),
+            'carrera' => $carrera,
+            'esFechaDeRemat' => $esFechaDeRemat,
         ]);
     }
-
 
     /*
      | ---------------------------------------------
@@ -57,91 +56,95 @@ class RematriculacionController extends Controller
      | ---------------------------------------------
      */
 
+    public function rematriculacion(Request $request, Carrera $carrera)
+    {
 
-    public function rematriculacion(Request $request, Carrera $carrera){
-
-        if(!Configuracion::get('alumno_puede_anotarse_cursada')){
+        if (! Configuracion::get('alumno_puede_anotarse_cursada')) {
             return redirect()->back()->with('error', 'El administrador ha desactivado esta caracteristica');
         }
 
-        if(!$carrera->estaInscripto()){
-            return redirect()->back()->with('error','No estas inscripto en esta carrera');
+        if (! $carrera->estaInscripto()) {
+            return redirect()->back()->with('error', 'No estas inscripto en esta carrera');
         }
 
-
         // Ver que no haya seleccionado mas de 2 libres
-        $libres=0;
+        $libres = 0;
         foreach ($request->except('_token') as $value) {
-            if($value == 1){
+            if ($value == 1) {
                 $libres++;
             }
         }
 
-        if($libres>0 && !Configuracion::get('alumno_puede_anotarse_libre')){
+        if ($libres > 0 && ! Configuracion::get('alumno_puede_anotarse_libre')) {
             return redirect()->back()->with('error', 'El administrador no permite inscripciones como libres');
         }
 
-        $asignaturas = $this->rematService->validasParaRegistrar($carrera,$request->except('_token'),Auth::user());
+        $asignaturas = $this->rematService->validasParaRegistrar($carrera, $request->except('_token'), Auth::user());
 
-        if(!$asignaturas['success']) return redirect()->back()->with('error',$asignaturas['mensaje']);
-        else $asignaturas = $asignaturas['mensaje'];
+        if (! $asignaturas['success']) {
+            return redirect()->back()->with('error', $asignaturas['mensaje']);
+        } else {
+            $asignaturas = $asignaturas['mensaje'];
+        }
 
         // Año de la rematriculacion
         $anio_remat = Configuracion::get('anio_remat');
 
         // Registrar las cursadas
-        foreach($asignaturas as $asigId => $tipoCursada){
+        foreach ($asignaturas as $asigId => $tipoCursada) {
             Cursada::create([
                 'id_asignatura' => $asigId,
                 'id_alumno' => Auth::id(),
-                'condicion' => $tipoCursada-1,
-                'aprobada' => $tipoCursada==1? 1:3,
-                'anio_cursada' => $anio_remat
+                'condicion' => $tipoCursada - 1,
+                'aprobada' => $tipoCursada == 1 ? 1 : 3,
+                'anio_cursada' => $anio_remat,
             ]);
         }
 
-        return redirect()->back()->with('mensaje','Te has rematriculado correctamente');
+        return redirect()->back()->with('mensaje', 'Te has rematriculado correctamente');
     }
 
+    public function bajar_rematriculacion(Request $request, Cursada $cursada)
+    {
 
-
-
-    function bajar_rematriculacion(Request $request, Cursada $cursada){
-
-        if(!Configuracion::get('alumno_puede_bajarse_cursada')){
+        if (! Configuracion::get('alumno_puede_bajarse_cursada')) {
             return redirect()->back()->with('error', 'El administrador ha desactivado esta caracteristica');
         }
 
-
-        if(!$cursada) return redirect()->route('alumno.inscripciones')->with('error','No se encontro la cursada');
+        if (! $cursada) {
+            return redirect()->route('alumno.inscripciones')->with('error', 'No se encontro la cursada');
+        }
 
         // Es su cursada
-        if(!Gate::allows('delete-cursada', $cursada)){
+        if (! Gate::allows('delete-cursada', $cursada)) {
             return \redirect()->back()->with('error', 'Esta cursada no te pertenece... &#129320;');
         }
 
         // si es regular y tiene nota, ya la curso!
-        if($cursada->aprobada != 3 && $cursada->condicion!=0) return redirect()->back()->with('error','Ya has terminado de cursar');
+        if ($cursada->aprobada != 3 && $cursada->condicion != 0) {
+            return redirect()->back()->with('error', 'Ya has terminado de cursar');
+        }
 
         $config = Configuracion::todas();
 
         // Si aun no e termino el limite de tiempo para bajarse
-        if(DiasHabiles::desdeHoyHasta($config['fecha_limite_desrematriculacion'])<=0){
-            return redirect()->back()->with('error','Ya ha caducado el tiempo para desmatricularse');
+        if (DiasHabiles::desdeHoyHasta($config['fecha_limite_desrematriculacion']) <= 0) {
+            return redirect()->back()->with('error', 'Ya ha caducado el tiempo para desmatricularse');
         }
 
-        if($cursada->anio_cursada != $config['anio_remat']){
-            return redirect()->back()->with('error','No puedes bajarte de esta cursada porque es del año anterior');
+        if ($cursada->anio_cursada != $config['anio_remat']) {
+            return redirect()->back()->with('error', 'No puedes bajarte de esta cursada porque es del año anterior');
         }
 
         $fechaCursada = new DateTime($cursada->created_at);
         $fechaLimite = new DateTime($config['fecha_limite_desrematriculacion']);
 
-        if(isset($cursada->created_at) && $fechaCursada>$fechaLimite){
-            return redirect()->back()->with('error','Ya estas cursando esta asignatura');
+        if (isset($cursada->created_at) && $fechaCursada > $fechaLimite) {
+            return redirect()->back()->with('error', 'Ya estas cursando esta asignatura');
         }
 
         $cursada->delete();
-        return redirect()->back()->with('mensaje','Se ha eliminado la cursada');
+
+        return redirect()->back()->with('mensaje', 'Se ha eliminado la cursada');
     }
 }

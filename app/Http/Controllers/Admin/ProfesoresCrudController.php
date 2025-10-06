@@ -67,28 +67,6 @@ class ProfesoresCrudController extends BaseController
             Log::error($th);
         }
         $data['password'] = Hash::make($data['password']);
-        $profesor = Profesor::create($data);
-
-        $seleccionadas = $request->input('asignaturas_seleccionadas', []);
-
-        foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
-            foreach ($idAsignaturas as $idAsignatura) {
-                $asignatura = Asignatura::find($idAsignatura);
-                if ($asignatura) {
-                    DB::table('carrera_asignatura_profesor')->insert([
-                        'id_asignatura' => $idAsignatura,
-                        'id_carrera' => $idCarrera,
-                        'id_profesor' => $profesor->id,
-                        'anio' => $asignatura->anio,
-                        'tipo_modulo' => $asignatura->tipo_modulo,
-                        'carga_horaria' => $asignatura->carga_horaria,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]);
-                }
-            }
-        }
-
         return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');
     }
 
@@ -119,28 +97,28 @@ class ProfesoresCrudController extends BaseController
     public function update(EditarProfesorRequest $request, Profesor $profesor)
     {
         try {
+            // Actualiza los datos del profesor
             $profesor->update($request->validated());
-
-            $asignaciones = [];
-            foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $asignaturas) {
-                foreach ($asignaturas as $idAsignatura) {
-                    $asignaciones[$idAsignatura] = ['id_carrera' => $idCarrera];
-                }
-            }
-            $profesor->asignaturas()->sync($asignaciones);
 
             return redirect()->route('admin.profesores.index')
                 ->with('mensaje', 'Se editó el profesor correctamente.');
         } catch (\Illuminate\Database\QueryException $e) {
+            Log::error("Error al actualizar profesor: " . $e->getMessage());
+
             preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
             $campo = $matches[1] ?? 'desconocido';
 
             return redirect()->back()
                 ->withInput()
                 ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
+        } catch (\Throwable $e) {
+            Log::error("Error inesperado: " . $e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Ocurrió un error inesperado al actualizar el profesor.');
         }
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -165,5 +143,23 @@ class ProfesoresCrudController extends BaseController
             return redirect()->route('admin.profesores.index')
                 ->with('error', 'No se pudo eliminar el Profesor. ' . $e->getMessage());
         }
+    }
+    public function vincularAsignaturas(Request $request, Profesor $profesor)
+    {
+        $seleccionadas = $request->input('asignaturas_seleccionadas', []);
+
+        foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
+            foreach ($idAsignaturas as $idAsignatura) {
+                $asignatura = Asignatura::find($idAsignatura);
+
+                if ($asignatura) {
+                    $asignatura->carrera()->updateExistingPivot($idCarrera, [
+                        'id_profesor' => $profesor->id,
+                    ]);
+                }
+            }
+        }
+
+        return response()->json(['success' => true]);
     }
 }
