@@ -10,9 +10,9 @@
     <div style="display: flex; align-items: center; gap: 1rem; position: relative; padding-right: 30px;">
         <span style="font-size: 1rem; text-transform: none;">¡Bienvenido, {{ auth()->user()->rol() }}! </span>
         <!-- Notificaciones -->
-        <div>
+        {{--<div>
             <livewire:notificaciones />
-        </div>
+        </div>--}}
 
         <!-- Avatar con dropdown -->
         <div style="position: relative;">
@@ -28,12 +28,12 @@
             <!-- Dropdown (oculto por defecto) -->
             <div id="user-menu" class="header-dropdown-avatar">
                 <ul style="list-style: none; margin: 0; padding: 0;">
-                    <li>
+                    {{--<li>
                         <a href="{{ route('admin.config.modoseguro') }}" class="header-avatar-lista">
-                            <i class="ti ti-shield-lock" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            <span
-                                title="Oculta los botones de eliminación para evitar borrado accidental.">{{ $config['modo_seguro'] ? 'Desactivar modo seguro' : 'Activar modo seguro' }}</span>
-                        </a>
+                    <i class="ti ti-shield-lock" style="font-size: 1.3em; margin-right: 8px;"></i>
+                    <span
+                        title="Oculta los botones de eliminación para evitar borrado accidental.">{{ $config['modo_seguro'] ? 'Desactivar modo seguro' : 'Activar modo seguro' }}</span>
+                    </a>
                     </li>
                     <li>
                         <a href="{{ route('admin.habiles.index') }}" class="header-avatar-lista">
@@ -55,7 +55,7 @@
                     </li>
                     <li>
                         <hr style="margin: 0;">
-                    </li>
+                    </li> --}}
                     <li>
                         <a href="/admin/logout" class="header-avatar-lista">
                             <i class="ti ti-logout" style="font-size: 1.3em; margin-right: 8px;"></i>

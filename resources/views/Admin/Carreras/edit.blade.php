@@ -154,83 +154,83 @@ $fileUrl = $existsStorage ? Storage::url($path) : ($existsPublic ? asset($path) 
             </a>
 
             {{-- BOTÓN GENERAL DE EXPORTACIÓN --}}
-            <div style="position: relative;">
+            {{-- <div style="position: relative;">
                 <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
                     <i class="ti ti-file-download"></i> Exportar cursadas
                 </button>
                 <form method="GET" action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
-                    class="filtro-exportar">
-                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                        <select name="genero">
-                            <option value="">-- Género --</option>
-                            <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>Femenino</option>
-                            <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>Masculino</option>
-                            <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>Otro</option>
-                        </select>
+            class="filtro-exportar">
+            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <select name="genero">
+                    <option value="">-- Género --</option>
+                    <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>Femenino</option>
+                    <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>Masculino</option>
+                    <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>Otro</option>
+                </select>
 
-                        <select name="anio">
-                            <option value="">-- Año calendario --</option>
-                            @php
-                            $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
-                            @endphp
-                            @foreach ($aniosCalendario as $anio)
-                            <option value="{{ $anio }}" {{ request('anio') == $anio ? 'selected' : '' }}>
-                                {{ $anio }}
-                            </option>
-                            @endforeach
-                        </select>
+                <select name="anio">
+                    <option value="">-- Año calendario --</option>
+                    @php
+                    $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
+                    @endphp
+                    @foreach ($aniosCalendario as $anio)
+                    <option value="{{ $anio }}" {{ request('anio') == $anio ? 'selected' : '' }}>
+                        {{ $anio }}
+                    </option>
+                    @endforeach
+                </select>
 
-                        <select name="condicion">
-                            <option value="">-- Condición --</option>
-                            <option value="regular" {{ request('condicion') == 'regular' ? 'selected' : '' }}>Regular
-                            </option>
-                            <option value="libre" {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre
-                            </option>
-                            <option value="promocion" {{ request('condicion') == 'promocion' ? 'selected' : '' }}>
-                                Promoción</option>
-                            <option value="equivalencia"
-                                {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>Equivalencia</option>
-                            <option value="desertor" {{ request('condicion') == 'desertor' ? 'selected' : '' }}>
-                                Desertor</option>
-                            <option value="itinerante" {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>
-                                Itinerante</option>
-                            <option value="oyente" {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
-                            </option>
-                        </select>
+                <select name="condicion">
+                    <option value="">-- Condición --</option>
+                    <option value="regular" {{ request('condicion') == 'regular' ? 'selected' : '' }}>Regular
+                    </option>
+                    <option value="libre" {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre
+                    </option>
+                    <option value="promocion" {{ request('condicion') == 'promocion' ? 'selected' : '' }}>
+                        Promoción</option>
+                    <option value="equivalencia"
+                        {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>Equivalencia</option>
+                    <option value="desertor" {{ request('condicion') == 'desertor' ? 'selected' : '' }}>
+                        Desertor</option>
+                    <option value="itinerante" {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>
+                        Itinerante</option>
+                    <option value="oyente" {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
+                    </option>
+                </select>
 
-                        <button class="btn_blue">
-                            <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i> Descargar
-                        </button>
-                    </div>
-                </form>
+                <button class="btn_blue">
+                    <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i> Descargar
+                </button>
             </div>
-
-            {{-- Formularios ocultos --}}
-            <form id="form-desactivar-{{ $carrera->id }}"
-                action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST" style="display:none;">
-                @csrf
             </form>
-            <form id="form-reactivar-{{ $carrera->id }}" action="{{ route('admin.carreras.reactivar', $carrera) }}"
-                method="POST" style="display:none;">
-                @csrf
-            </form>
-            </td>
-        </div>
+        </div> --}}
 
-        {{-- A C O R D E O N  D E  A S I G N A T U R A S --}}
-        <div class="accordion" id="asignaturasAccordion">
-            @php
-            $anio_actual = '';
-            $anio_index = 0;
-            @endphp
-
-            @foreach ($carrera->asignaturas as $asignatura)
-            @if ($anio_actual != $asignatura->anio)
-            @if ($anio_actual != '')
-            </tbody>
-            </table>
-        </div>
+        {{-- Formularios ocultos --}}
+        <form id="form-desactivar-{{ $carrera->id }}"
+            action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST" style="display:none;">
+            @csrf
+        </form>
+        <form id="form-reactivar-{{ $carrera->id }}" action="{{ route('admin.carreras.reactivar', $carrera) }}"
+            method="POST" style="display:none;">
+            @csrf
+        </form>
+        </td>
     </div>
+
+    {{-- A C O R D E O N  D E  A S I G N A T U R A S --}}
+    <div class="accordion" id="asignaturasAccordion">
+        @php
+        $anio_actual = '';
+        $anio_index = 0;
+        @endphp
+
+        @foreach ($carrera->asignaturas as $asignatura)
+        @if ($anio_actual != $asignatura->anio)
+        @if ($anio_actual != '')
+        </tbody>
+        </table>
+    </div>
+</div>
 </div>
 @endif
 
@@ -258,7 +258,7 @@ $anio_actual = $asignatura->anio;
                         <th class="center">Carga anual/semanal</th>
                         <th class="center">Acción</th>
                         <th class="center">Crear</th>
-                        <th class="center">Exportar</th>
+                        {{-- <th class="center">Exportar</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -286,93 +286,93 @@ $anio_actual = $asignatura->anio;
                         </td>
                         <td>
                             <div style="display:flex; align-items: center; justify-content: center;">
-                                <a
-                                    href="{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}">
-                                    <button class="btn_blue">
-                                        <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                        Crear Mesa
-                                    </button>
-                                </a>
+                                {{-- <a href="{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}"></a> --}}
+
+                                <button class="btn_blue">
+                                    <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                    Crear Mesa
+                                </button>
+
                             </div>
                         </td>
-                        <td>
-                            <div style="position: relative;">
+                        {{-- <td>
+                            <div style="display:flex; align-items: center; justify-content: center;">
                                 <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
                                     <i class="ti ti-file-download"></i> Exportar materia
                                 </button>
 
                                 <form method="GET"
                                     action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
-                                    class="filtro-exportar"
-                                    style="display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ccc; padding: 10px; z-index: 10; width: max-content; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+                        class="filtro-exportar"
+                        style="display: none; position: absolute; top: 100%; left: 0; background: #fff; border: 1px solid #ccc; padding: 10px; z-index: 10; width: max-content; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
 
-                                    <input type="hidden" name="asignatura_id" value="{{ $asignatura->id }}">
+                        <input type="hidden" name="asignatura_id" value="{{ $asignatura->id }}">
 
-                                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                                        <select name="genero">
-                                            <option value="">-- Género --</option>
-                                            <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>
-                                                Femenino</option>
-                                            <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>
-                                                Masculino</option>
-                                            <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>
-                                                Otro</option>
-                                        </select>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <select name="genero">
+                                <option value="">-- Género --</option>
+                                <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>
+                                    Femenino</option>
+                                <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>
+                                    Masculino</option>
+                                <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>
+                                    Otro</option>
+                            </select>
 
-                                        <select name="anio">
-                                            <option value="">-- Año calendario --</option>
-                                            @php
-                                            $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
-                                            @endphp
-                                            @foreach ($aniosCalendario as $anio)
-                                            <option value="{{ $anio }}"
-                                                {{ request('anio') == $anio ? 'selected' : '' }}>
-                                                {{ $anio }}
-                                            </option>
-                                            @endforeach
-                                        </select>
+                            <select name="anio">
+                                <option value="">-- Año calendario --</option>
+                                @php
+                                $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
+                                @endphp
+                                @foreach ($aniosCalendario as $anio)
+                                <option value="{{ $anio }}"
+                                    {{ request('anio') == $anio ? 'selected' : '' }}>
+                                    {{ $anio }}
+                                </option>
+                                @endforeach
+                            </select>
 
-                                        <select name="condicion">
-                                            <option value="">-- Condición --</option>
-                                            <option value="regular"
-                                                {{ request('condicion') == 'regular' ? 'selected' : '' }}>Regular
-                                            </option>
-                                            <option value="libre"
-                                                {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre</option>
-                                            <option value="promocion"
-                                                {{ request('condicion') == 'promocion' ? 'selected' : '' }}>Promoción
-                                            </option>
-                                            <option value="equivalencia"
-                                                {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>
-                                                Equivalencia</option>
-                                            <option value="desertor"
-                                                {{ request('condicion') == 'desertor' ? 'selected' : '' }}>Desertor
-                                            </option>
-                                            <option value="itinerante"
-                                                {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>Itinerante
-                                            </option>
-                                            <option value="oyente"
-                                                {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
-                                            </option>
-                                        </select>
+                            <select name="condicion">
+                                <option value="">-- Condición --</option>
+                                <option value="regular"
+                                    {{ request('condicion') == 'regular' ? 'selected' : '' }}>Regular
+                                </option>
+                                <option value="libre"
+                                    {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre</option>
+                                <option value="promocion"
+                                    {{ request('condicion') == 'promocion' ? 'selected' : '' }}>Promoción
+                                </option>
+                                <option value="equivalencia"
+                                    {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>
+                                    Equivalencia</option>
+                                <option value="desertor"
+                                    {{ request('condicion') == 'desertor' ? 'selected' : '' }}>Desertor
+                                </option>
+                                <option value="itinerante"
+                                    {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>Itinerante
+                                </option>
+                                <option value="oyente"
+                                    {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
+                                </option>
+                            </select>
 
-                                        <button type="submit" class="btn_blue">
-                                            <i class="ti ti-file-export"
-                                                style="font-size: 1.3em; margin-right: 8px;"></i>
-                                            Aplicar filtros
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-
-                    {{-- cierre último bloque --}}
-                </tbody>
-            </table>
+                            <button type="submit" class="btn_blue">
+                                <i class="ti ti-file-export"
+                                    style="font-size: 1.3em; margin-right: 8px;"></i>
+                                Aplicar filtros
+                            </button>
+                        </div>
+                        </form>
         </div>
+        </td>--}}
+        </tr>
+        @endforeach
+
+        {{-- cierre último bloque --}}
+        </tbody>
+        </table>
     </div>
+</div>
 </div>
 </div> {{-- accordion --}}
 </div>

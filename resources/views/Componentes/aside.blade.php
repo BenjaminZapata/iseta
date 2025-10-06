@@ -24,12 +24,12 @@
     </ul>
     </li>--}}
 
-    <li>
+    {{-- <li>
         <a href="{{ route('admin.alumnos.index') }}">
-            <i class="ti ti-user"></i>
-            <span>Alumnos</span>
-        </a>
-    </li>
+    <i class="ti ti-user"></i>
+    <span>Alumnos</span>
+    </a>
+    </li>--}}
 
     <li>
         <a href="{{ route('admin.profesores.index') }}">
@@ -49,11 +49,11 @@
             <span>Asignaturas</span>
         </a>
     </li>
-    <li>
+    {{-- <li>
         <a href="{{ route('admin.mesas.index') }}">
-            <i class="ti ti-address-book"></i>
-            <span>Mesas</span>
-        </a>
+    <i class="ti ti-address-book"></i>
+    <span>Mesas</span>
+    </a>
     </li>
     <li>
         <a href="{{ route('admin.cursadas.index') }}">
@@ -61,7 +61,7 @@
             <span>Cursadas</span>
         </a>
     </li>
-    </ul>
+    </ul>--}}
 </aside>
 
 <script>
