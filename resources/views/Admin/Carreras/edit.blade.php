@@ -218,19 +218,18 @@
                 {{-- A C O R D E Ó N  D E  A S I G N A T U R A S --}}
                 <div class="accordion" id="asignaturasAccordion">
                     @php
-                        $asignaturasPorAnio = $carrera->asignaturas->groupBy('anio');
+                        $asignaturas = $carrera->asignaturas;
                         $anio_index = 0;
                     @endphp
 
-                    @foreach ($asignaturasPorAnio as $anio => $asignaturas)
+                    @foreach ($asignaturas as $asignatura)
                         @php $anio_index++; @endphp
-
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingAnio{{ $anio_index }}">
                                 <button class="accordion-button collapsed font-500" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#collapseAnio{{ $anio_index }}"
                                     aria-expanded="false" aria-controls="collapseAnio{{ $anio_index }}">
-                                    {{ $anio }}° año
+                                    {{ $asignatura->pivot->anio }}° año
                                 </button>
                             </h2>
 
