@@ -71,19 +71,13 @@ class ProfesoresCrudController extends BaseController
 
         $seleccionadas = $request->input('asignaturas_seleccionadas', []);
 
+       
         foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
             foreach ($idAsignaturas as $idAsignatura) {
                 $asignatura = Asignatura::find($idAsignatura);
                 if ($asignatura) {
-                    DB::table('carrera_asignatura_profesor')->insert([
-                        'id_asignatura' => $idAsignatura,
-                        'id_carrera' => $idCarrera,
+                    $asignatura->carrera()->updateExistingPivot($idCarrera, [
                         'id_profesor' => $profesor->id,
-                        'anio' => $asignatura->anio,
-                        'tipo_modulo' => $asignatura->tipo_modulo,
-                        'carga_horaria' => $asignatura->carga_horaria,
-                        'created_at' => now(),
-                        'updated_at' => now(),
                     ]);
                 }
             }
@@ -116,31 +110,44 @@ class ProfesoresCrudController extends BaseController
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditarProfesorRequest $request, Profesor $profesor)
-    {
-        try {
-            $profesor->update($request->validated());
+ public function update(EditarProfesorRequest $request, Profesor $profesor)
+{
+    try {
+        // Actualiza los datos del profesor
+        $profesor->update($request->validated());
 
-            $asignaciones = [];
-            foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $asignaturas) {
-                foreach ($asignaturas as $idAsignatura) {
-                    $asignaciones[$idAsignatura] = ['id_carrera' => $idCarrera];
+        // Reasigna las asignaturas seleccionadas
+        foreach ($request->input('asignaturas_seleccionadas', []) as $idCarrera => $idAsignaturas) {
+            foreach ($idAsignaturas as $idAsignatura) {
+                $asignatura = Asignatura::find($idAsignatura);
+
+                if ($asignatura) {
+                    $asignatura->carrera()->updateExistingPivot($idCarrera, [
+                        'id_profesor' => $profesor->id,
+                    ]);
                 }
             }
-            $profesor->asignaturas()->sync($asignaciones);
-
-            return redirect()->route('admin.profesores.index')
-                ->with('mensaje', 'Se editó el profesor correctamente.');
-        } catch (\Illuminate\Database\QueryException $e) {
-            preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
-            $campo = $matches[1] ?? 'desconocido';
-
-            return redirect()->back()
-                ->withInput()
-                ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
         }
-    }
 
+        return redirect()->route('admin.profesores.index')
+            ->with('mensaje', 'Se editó el profesor correctamente.');
+    } catch (\Illuminate\Database\QueryException $e) {
+        Log::error("Error al actualizar profesor: " . $e->getMessage());
+
+        preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
+        $campo = $matches[1] ?? 'desconocido';
+
+        return redirect()->back()
+            ->withInput()
+            ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
+    } catch (\Throwable $e) {
+        Log::error("Error inesperado: " . $e->getMessage());
+
+        return redirect()->back()
+            ->withInput()
+            ->with('error', 'Ocurrió un error inesperado al actualizar el profesor.');
+    }
+}
     /**
      * Remove the specified resource from storage.
      */

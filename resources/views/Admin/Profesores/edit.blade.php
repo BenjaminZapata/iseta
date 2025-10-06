@@ -207,32 +207,12 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($lista as $asignatura)
-                                                            @php
-                                                                $pivot = $asignatura->pivot;
-                                                            @endphp
+                                                        @foreach ($lista as $pivot)
                                                             <tr>
                                                                 <td>
-                                                                    {{ $asignatura->nombre }}
-                                                                    @if ($asignatura->correlativas->isNotEmpty())
-                                                                        <span class="badge bg-info ms-2">📎</span>
-                                                                    @endif
+                                                                    {{ $pivot->nombre }}
                                                                 </td>
-                                                                <td>{{ $pivot->tipo_modulo ?? '—' }}</td>
                                                                 <td>{{ $pivot->carga_horaria ?? '—' }} hs</td>
-                                                                <td style="white-space: nowrap;">
-                                                                    <button class="btn btn-sm btn-outline-secondary me-1"
-                                                                        onclick="vincularCorrelativa({{ $asignatura->id }})">
-                                                                        Vincular correlativa
-                                                                    </button>
-
-                                                                    @if ($asignatura->dependientes->isNotEmpty())
-                                                                        <button class="btn btn-sm btn-outline-info"
-                                                                            onclick="mostrarDependencias({{ $asignatura->id }})">
-                                                                            Ver dependencias
-                                                                        </button>
-                                                                    @endif
-                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
