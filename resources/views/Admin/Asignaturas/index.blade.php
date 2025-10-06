@@ -44,9 +44,10 @@
                     @endforeach
                 </td>
                 <td>
-                    <div style="display: flex; justify-content: center;">
-                        {{ $asignatura->anioStr() }}
-                    </div>
+               <div style="display: flex; justify-content: center;">
+    {{ $asignatura->anioStr($asignatura->carrera->first()->id ?? 0) }}
+</div>
+
                 </td>
                 <td>
                     <div style="display:flex; align-items: center; justify-content: center;"">
