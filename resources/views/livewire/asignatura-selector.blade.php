@@ -7,29 +7,29 @@
                 <p class="campo_info-noinput rounded"> {{ $carrera->nombre }} </p>
                 <input type="hidden" name="id_carrera" value="{{ $carrera->id }}">
             </div>
-           <div class="perfil_dataname">
-    <label>Año:</label>
-    <select name="anio" class="campo_info rounded" wire:model="anio" @if($selectedId) disabled @endif>
-        @if (is_null($anio))
-            <option value="">Elija el año de la asignatura</option>
-        @endif
-        @for ($i = 1; $i <= 5; $i++)
-            <option value="{{ $i }}" {{ $anio == $i ? 'selected' : '' }}>{{ $i }}º año</option>
-        @endfor
-    </select>
-</div>
+            <div class="perfil_dataname">
+                <label>Año:</label>
+                <select name="anio" class="campo_info rounded" wire:model="anio" @if($selectedId) disabled @endif>
+                    @if (is_null($anio))
+                    <option value="">Elija el año de la asignatura</option>
+                    @endif
+                    @for ($i = 1; $i <= 5; $i++)
+                        <option value="{{ $i }}" {{ $anio == $i ? 'selected' : '' }}>{{ $i }}º año</option>
+                        @endfor
+                </select>
+            </div>
 
-<div class="perfil_dataname">
-    <label for="selectedId">Asignatura:</label>
-    <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model="selectedId" form="add_asignatura">
-        <option value="">Seleccione una asignatura</option>
-        @foreach ($asignaturas as $asig)
-            @if($asig->id != ($carrera->asignaturas->first()->id ?? null))
-                <option value="{{ $asig->id }}">{{ $asig->nombre }}</option>
-            @endif
-        @endforeach
-    </select>
-</div>
+            <div class="perfil_dataname">
+                <label for="selectedId">Asignatura:</label>
+                <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model="selectedId" form="add_asignatura">
+                    <option value="">Seleccione una asignatura</option>
+                    @foreach ($asignaturas as $asig)
+                    @if($asig->id != ($carrera->asignaturas->first()->id ?? null))
+                    <option value="{{ $asig->id }}">{{ $asig->nombre }}</option>
+                    @endif
+                    @endforeach
+                </select>
+            </div>
 
 
             {{-- Carga horaria --}}
