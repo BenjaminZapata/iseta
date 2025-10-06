@@ -218,7 +218,7 @@
                 {{-- A C O R D E Ó N  D E  A S I G N A T U R A S --}}
                 <div class="accordion" id="asignaturasAccordion">
                     @php
-                        $asignaturas = $carrera->asignaturas->sortBy('pivot.anio');
+                        $asignaturas = $carrera->asignaturas->groupBy('pivot.anio');
                         $anio_index = 0;
                     @endphp
 
@@ -229,7 +229,7 @@
                                 <button class="accordion-button collapsed font-500" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#collapseAnio{{ $anio_index }}"
                                     aria-expanded="false" aria-controls="collapseAnio{{ $anio_index }}">
-                                    {{ $asignatura->pivot->anio }}° año
+                                    {{ $asignatura->pivot->anio + 1 }}° año
                                 </button>
                             </h2>
 
@@ -249,21 +249,21 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+
                                             @php
-                                                $hasCorrelativas =
-                                                    $asignatura->correlativas && $asignatura->correlativas->count();
+                                                $hasCorrelativas = $asignatura->correlativas()->exists();
                                                 $collapseId = 'collapseAsignatura' . $asignatura->id;
                                             @endphp
 
                                             <tr
-                                                @if ($asignatura->pivot->anio != 1) class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura"
+                                                @if ($asignatura->pivot->anio + 1 != 1) class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura"
                                                 data-target="#{{ $collapseId }}"
                                                 data-icon="#chevronIcon{{ $asignatura->id }}"
                                                 @else
                                                 class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura @endif">
                                                 <!-- Botón para expandir correlativas -->
                                                 <td class="center">
-                                                    @if ($asignatura->anio != 1)
+                                                    @if ($asignatura->anio + 1 != 1)
                                                         <button class="chevron-btn" type="button"
                                                             data-bs-toggle="collapse"
                                                             data-bs-target="#{{ $collapseId }}" aria-expanded="false"
@@ -272,9 +272,9 @@
                                                                 class="ti ti-chevron-down collapse-icon"
                                                                 style="font-size: 1.3em; margin-right: 8px; transition: transform 0.3s;"></i>
                                                         </button>
-                                                        {{ $asignatura->anio }}
+                                                        {{ $asignatura->anio + 1 }}
                                                     @else
-                                                        {{ $asignatura->anio }}
+                                                        {{ $asignatura->anio + 1 }}
                                                     @endif
 
                                                 </td>
@@ -293,7 +293,7 @@
 
                                                 <!-- Cantidad de correlativas -->
                                                 <td class="center">
-                                                    {{ $hasCorrelativas ? $asignatura->correlatividad->count() . ' asignadas' : '—' }}
+                                                    {{ $hasCorrelativas ? $asignatura->correlativas->count() . ' asignadas' : '—' }}
                                                 </td>
 
                                                 <!-- Crear mesa -->
@@ -352,7 +352,7 @@
 
                                                         @if ($hasCorrelativas)
                                                             <ul class="lista-correlativas">
-                                                                @foreach ($asignatura->correlatividad as $corr)
+                                                                @foreach ($asignatura->correlativas as $corr)
                                                                     <li>{{ $corr->nombre }}</li>
                                                                 @endforeach
                                                             </ul>
