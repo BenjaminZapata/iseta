@@ -36,14 +36,13 @@ class AdminCorrelativasController extends Controller
         return redirect()->back()->with('mensaje', 'Se agrego la correlativa');
     }
 
-    public function eliminar(Request $request, Asignatura $asignatura)
+    public function eliminar(Asignatura $asignatura, Carrera $carrera, Asignatura $asignaturaCorr)
     {
 
-        $correlativa = Correlativa::where('id_asignatura', $asignatura->id)
-            ->where('asignatura_correlativa', $request->asignatura_correlativa)
-            ->first();
-
-        $correlativa->delete();
+        $asignatura->correlativas()
+            ->wherePivot('id_asignatura_correlativa', $asignaturaCorr->id)
+            ->wherePivot('id_carrera', $carrera->id)
+            ->detach();
 
         return redirect()->back()->with('mensaje', 'Se elimino la correlativa');
     }
