@@ -55,7 +55,7 @@ class Asignatura extends Model
             Asignatura::class,          // Modelo relacionado (a sí mismo)
             'correlatividades',             // Tabla pivote
             'id_asignatura',            // FK en pivote que apunta a esta asignatura
-            'id_asignatura_correlativa' // FK en pivote que apunta a la correlativa
+            'asignatura_correlativa' // FK en pivote que apunta a la correlativa
         )
             ->withPivot('tipo_correlativa')
             ->using(Correlativa::class);
