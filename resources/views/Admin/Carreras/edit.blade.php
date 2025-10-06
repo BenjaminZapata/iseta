@@ -218,18 +218,18 @@
                 {{-- A C O R D E Ó N  D E  A S I G N A T U R A S --}}
                 <div class="accordion" id="asignaturasAccordion">
                     @php
-                        $asignaturas = $carrera->asignaturas->groupBy('pivot.anio');
+                        $asignaturasPorAnio = $carrera->asignaturas->groupBy('pivot.anio');
                         $anio_index = 0;
                     @endphp
 
-                    @foreach ($asignaturas as $asignatura)
+                    @foreach ($asignaturasPorAnio as $anio => $asignaturas)
                         @php $anio_index++; @endphp
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingAnio{{ $anio_index }}">
                                 <button class="accordion-button collapsed font-500" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#collapseAnio{{ $anio_index }}"
                                     aria-expanded="false" aria-controls="collapseAnio{{ $anio_index }}">
-                                    {{ $asignatura->pivot->anio + 1 }}° año
+                                    {{ $asignaturas[$anio]->pivot->anio + 1 }}° año
                                 </button>
                             </h2>
 
@@ -249,124 +249,136 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach ($asignaturas as $asignatura)
+                                                @php
+                                                    $hasCorrelativas = $asignatura->correlativas()->exists();
+                                                    $collapseId = 'collapseAsignatura' . $asignatura->id;
+                                                @endphp
 
-                                            @php
-                                                $hasCorrelativas = $asignatura->correlativas()->exists();
-                                                $collapseId = 'collapseAsignatura' . $asignatura->id;
-                                            @endphp
-
-                                            <tr
-                                                @if ($asignatura->pivot->anio + 1 != 1) class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura"
-                                                data-target="#{{ $collapseId }}"
-                                                data-icon="#chevronIcon{{ $asignatura->id }}"
-                                                @else
-                                                class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura @endif">
-                                                <!-- Botón para expandir correlativas -->
-                                                <td class="center">
-                                                    @if ($asignatura->anio + 1 != 1)
-                                                        <button class="chevron-btn" type="button"
-                                                            data-bs-toggle="collapse"
-                                                            data-bs-target="#{{ $collapseId }}" aria-expanded="false"
-                                                            aria-controls="{{ $collapseId }}">
-                                                            <i id="chevronIcon{{ $asignatura->id }}"
-                                                                class="ti ti-chevron-down collapse-icon"
-                                                                style="font-size: 1.3em; margin-right: 8px; transition: transform 0.3s;"></i>
-                                                        </button>
-                                                        {{ $asignatura->anio + 1 }}
+                                                <tr
+                                                    @if ($asignatura->pivot->anio + 1 != 1) class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura"
+                                                    data-target="#{{ $collapseId }}"
+                                                    data-icon="#chevronIcon{{ $asignatura->id }}"
                                                     @else
-                                                        {{ $asignatura->anio + 1 }}
-                                                    @endif
+                                                    class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura @endif">
+                                                    <!-- Botón para expandir correlativas -->
+                                                    <td class="center">
+                                                        @if ($asignatura->pivot->anio + 1 != 1)
+                                                            <button class="chevron-btn" type="button"
+                                                                data-bs-toggle="collapse"
+                                                                data-bs-target="#{{ $collapseId }}"
+                                                                aria-expanded="false"
+                                                                aria-controls="{{ $collapseId }}">
+                                                                <i id="chevronIcon{{ $asignatura->id }}"
+                                                                    class="ti ti-chevron-down collapse-icon"
+                                                                    style="font-size: 1.3em; margin-right: 8px; transition: transform 0.3s;"></i>
+                                                            </button>
+                                                            {{ $asignatura->pivot->anio + 1 }}
+                                                        @else
+                                                            {{ $asignatura->pivot->anio + 1 }}
+                                                        @endif
 
-                                                </td>
+                                                    </td>
 
-                                                <!-- Nombre de la asignatura -->
-                                                <td class="bold">
-                                                    {{ $asignatura->nombre }}
-                                                    @if ($hasCorrelativas)
-                                                        <span title="Tiene correlativas"
-                                                            class="icono-correlativa">📎</span>
-                                                    @endif
-                                                </td>
+                                                    <!-- Nombre de la asignatura -->
+                                                    <td class="bold">
+                                                        {{ $asignatura->nombre }}
+                                                        @if ($hasCorrelativas)
+                                                            <span title="Tiene correlativas"
+                                                                class="icono-correlativa">📎</span>
+                                                        @endif
+                                                    </td>
 
-                                                <!-- Carga horaria -->
-                                                <td class="center">{{ $asignatura->carga_horaria }} horas</td>
+                                                    <!-- Carga horaria -->
+                                                    <td class="center">{{ $asignatura->carga_horaria }} horas</td>
 
-                                                <!-- Cantidad de correlativas -->
-                                                <td class="center">
-                                                    {{ $hasCorrelativas ? $asignatura->correlativas->count() . ' asignadas' : '—' }}
-                                                </td>
+                                                    <!-- Cantidad de correlativas -->
+                                                    <td class="center">
+                                                        {{ $hasCorrelativas ? $asignatura->correlativas()->count() . ' asignadas' : '—' }}
+                                                    </td>
 
-                                                <!-- Crear mesa -->
-                                                <td>
-                                                    <div
-                                                        style="display: flex; align-items: center; justify-content: center;">
-                                                        <button class="btn_blue"
-                                                            onclick="window.location.href='{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}'">
-                                                            <i class="ti ti-circle-plus"
-                                                                style="font-size: 1.3em; margin-right: 8px; margin-top: 2px;"></i>
-                                                            Crear Mesa
-                                                        </button>
-                                                    </div>
-                                                </td>
+                                                    <!-- Crear mesa -->
+                                                    <td>
+                                                        <div
+                                                            style="display: flex; align-items: center; justify-content: center;">
+                                                            <button class="btn_blue"
+                                                                onclick="window.location.href='{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}'">
+                                                                <i class="ti ti-circle-plus"
+                                                                    style="font-size: 1.3em; margin-right: 8px; margin-top: 2px;"></i>
+                                                                Crear Mesa
+                                                            </button>
+                                                        </div>
+                                                    </td>
 
-                                                <!-- Exportar -->
-                                                <td class="center">
-                                                    <div
-                                                        style="display:flex; align-items: center; justify-content: center;">
-                                                        <button type="button" class="btn_exportar"
-                                                            onclick="toggleFiltroExportar(this)">
-                                                            <i class="ti ti-file-download"></i> Exportar asignatura
-                                                        </button>
-                                                        {{-- ... resto del form exportar ... --}}
-                                                    </div>
-                                                </td>
+                                                    <!-- Exportar -->
+                                                    <td class="center">
+                                                        <div
+                                                            style="display:flex; align-items: center; justify-content: center;">
+                                                            <button type="button" class="btn_exportar"
+                                                                onclick="toggleFiltroExportar(this)">
+                                                                <i class="ti ti-file-download"></i> Exportar asignatura
+                                                            </button>
+                                                            {{-- ... resto del form exportar ... --}}
+                                                        </div>
+                                                    </td>
 
-                                                <!-- Eliminar asignatura -->
-                                                <td class="center">
-                                                    @if (!$config['modo_seguro'])
-                                                        <form id="form-eliminar-{{ $asignatura->id }}"
-                                                            action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
+                                                    <!-- Eliminar asignatura -->
+                                                    <td class="center">
+                                                        @if (!$config['modo_seguro'])
+                                                            <form id="form-eliminar-{{ $asignatura->id }}"
+                                                                action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <div
+                                                                    style="display: flex; align-items: center; justify-content: center;">
+                                                                    <button type="button"
+                                                                        onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', `¿Está seguro que desea desvincular la asignatura {{ $asignatura->nombre }} de {{ $asignatura->anio }}° año de la carrera {{ $carrera->nombre }}?`)"
+                                                                        class="btn_icon-danger"
+                                                                        style="background-color: red;">
+                                                                        <i class="ti ti-trash"
+                                                                            style="font-size: 1.3em;"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+
+                                                <!-- Subacordeón (correlativas) -->
+                                                <tr class="collapse" id="{{ $collapseId }}">
+                                                    <td colspan="7" class="correlativas-expandida">
+                                                        <div>
                                                             <div
-                                                                style="display: flex; align-items: center; justify-content: center;">
-                                                                <button type="button"
-                                                                    onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', `¿Está seguro que desea desvincular la asignatura {{ $asignatura->nombre }} de {{ $asignatura->anio }}° año de la carrera {{ $carrera->nombre }}?`)"
-                                                                    class="btn_icon-danger"
-                                                                    style="background-color: red;">
-                                                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                                                style="display: flex; align-items: center; justify-content: space-between;">
+                                                                <strong class="perfil_dataname">Correlativas de
+                                                                    "{{ $asignatura->nombre }}"</strong>
+                                                                <button class="btn_sky"
+                                                                    x-on:click="$wire.showModal = false">
+                                                                    <i
+                                                                        class="ti ti-x"style="font-size: 1.3em; margin-right: 8px;">
+                                                                    </i>Cerrar
                                                                 </button>
                                                             </div>
-                                                        </form>
-                                                    @endif
-                                                </td>
-                                            </tr>
-
-                                            <!-- Subacordeón (correlativas) -->
-                                            <tr class="collapse" id="{{ $collapseId }}">
-                                                <td colspan="7" class="correlativas-expandida">
-                                                    <div>
-                                                        <strong class="perfil_dataname">Correlativas de
-                                                            "{{ $asignatura->nombre }}"</strong>
-
-                                                        @if ($hasCorrelativas)
-                                                            <ul class="lista-correlativas">
-                                                                @foreach ($asignatura->correlativas as $corr)
-                                                                    <li>{{ $corr->nombre }}</li>
-                                                                @endforeach
-                                                            </ul>
-                                                        @else
-                                                            <p class="archivo-vacio" style="margin-top:10px">No tiene
-                                                                correlativas asignadas.
-                                                            </p>
-                                                        @endif
-                                                        <div class="acciones-correlativas">
-                                                            <livewire:correlativa-add :carrera="$carrera" :asignatura="$asignatura" />
+                                                            @if ($hasCorrelativas)
+                                                                <ul class="lista-correlativas">
+                                                                    @foreach ($asignatura->correlativas as $corr)
+                                                                        <li>{{ $corr->nombre }}</li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            @else
+                                                                <p class="archivo-vacio" style="margin-top:10px">No tiene
+                                                                    correlativas asignadas.
+                                                                </p>
+                                                            @endif
+                                                            <div class="acciones-correlativas">
+                                                                <livewire:correlativa-add :carrera="$carrera"
+                                                                    :asignatura="$asignatura" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div> {{-- accordion-body --}}

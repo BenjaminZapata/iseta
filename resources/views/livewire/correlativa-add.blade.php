@@ -25,7 +25,7 @@
                     @foreach ($correlativas as $cor)
                         <div>
                             <p>{{ $cor['nombre'] }} <span class="close"
-                                    x-on:click="$wire.showModal = false">&times;</span></p>
+                                    wire:click="deleteCorrelativa({{ $cor['id'] }})">&times;</span></p>
                         </div>
                     @endforeach
                 </div>

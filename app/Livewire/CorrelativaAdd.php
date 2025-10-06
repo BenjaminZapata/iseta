@@ -27,6 +27,11 @@ class CorrelativaAdd extends Component
 
     public function addCorrelativa()
     {
+        if (! $this->correlativa) {
+            return flash()
+                ->option('position', 'top-center')
+                ->error('Seleccione una correlativa');
+        }
         $this->correlativa = json_decode($this->correlativa);
         $this->correlativa = (array) $this->correlativa;
         Log::debug('Asignatura a la que se quiere agregar correlativa', $this->correlativa);
@@ -44,6 +49,14 @@ class CorrelativaAdd extends Component
         }
 
         $this->correlativas[] = $this->correlativa;
+    }
+
+    public function deleteCorrelativa($asignaturaId)
+    {
+        $this->correlativas = array_filter(
+            $this->correlativas,
+            fn ($c) => $c['id'] != $asignaturaId
+        );
     }
 
     public function render()
