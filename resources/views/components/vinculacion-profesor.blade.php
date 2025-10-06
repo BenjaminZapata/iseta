@@ -1,13 +1,35 @@
 @php
-    $asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
-    $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignaturas', $profesor) : null;
+$asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
+$urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignaturas', $profesor) : null;
 @endphp
 
-<div class="label-input-y-75 mt-5">
-    <h3 class="mb-3">🎓 Seleccionar carrera/s</h3>
-    <select id="selectorCarreras" multiple class="form-control">
-        @foreach($carreras as $carrera)
-            <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
+<style>
+    .select-carreras {
+        font-size: 1.1em;
+        min-height: 180px;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background-color: #fafafa;
+    }
+
+    .select-carreras option {
+        padding: 6px 10px;
+    }
+
+    .select-carreras:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+        background-color: #fff;
+    }
+</style>
+
+<div style="display: flex; flex-direction: column; gap: 8px;">
+    <h3 class="mb-3">Seleccionar carrera/s</h3>
+    <select id="selectorCarreras" multiple class="form-control select-carreras">
+        @foreach ($carreras as $carrera)
+        <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
         @endforeach
     </select>
     <small class="form-text text-muted">Usá Ctrl (Windows) o Cmd (Mac) para seleccionar múltiples carreras.</small>
@@ -31,7 +53,7 @@
     const asignaturasActuales = @json($asignaturasActuales);
     const urlVinculacion = @json($urlVinculacion);
 
-    document.getElementById("selectorCarreras").addEventListener("change", function () {
+    document.getElementById("selectorCarreras").addEventListener("change", function() {
         const seleccionadas = Array.from(this.selectedOptions).map(opt => parseInt(opt.value));
         const contenedor = document.getElementById("contenedorTablas");
         contenedor.innerHTML = "";
@@ -50,7 +72,8 @@
                 agrupadasPorAnio[anio].push(asig);
             });
 
-            let acordeonHTML = `<h4 class="mb-4 text-primary border-bottom pb-2">📘 ${carrera.nombre}</h4>`;
+            let acordeonHTML =
+                `<h4 class="mb-4 text-primary border-bottom pb-2">📘 ${carrera.nombre}</h4>`;
             acordeonHTML += `<div class="accordion" id="acordeonCarrera${carrera.id}">`;
 
             Object.entries(agrupadasPorAnio).forEach(([anio, asignaturas], indexAnio) => {
@@ -58,7 +81,8 @@
                 const headingId = `heading${carrera.id}-${indexAnio}`;
 
                 const filas = asignaturas.map(asig => {
-                    const checked = asignaturasActuales.includes(asig.id) ? 'checked' : '';
+                    const checked = asignaturasActuales.includes(asig.id) ? 'checked' :
+                        '';
                     return `
                         <tr>
                             <td class="align-middle">${asig.nombre}</td>

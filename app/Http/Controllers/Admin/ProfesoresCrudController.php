@@ -94,31 +94,31 @@ class ProfesoresCrudController extends BaseController
     /**
      * Update the specified resource in storage.
      */
- public function update(EditarProfesorRequest $request, Profesor $profesor)
-{
-    try {
-        // Actualiza los datos del profesor
-        $profesor->update($request->validated());
+    public function update(EditarProfesorRequest $request, Profesor $profesor)
+    {
+        try {
+            // Actualiza los datos del profesor
+            $profesor->update($request->validated());
 
-        return redirect()->route('admin.profesores.index')
-            ->with('mensaje', 'Se editó el profesor correctamente.');
-    } catch (\Illuminate\Database\QueryException $e) {
-        Log::error("Error al actualizar profesor: " . $e->getMessage());
+            return redirect()->route('admin.profesores.index')
+                ->with('mensaje', 'Se editó el profesor correctamente.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            Log::error("Error al actualizar profesor: " . $e->getMessage());
 
-        preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
-        $campo = $matches[1] ?? 'desconocido';
+            preg_match("/for column '(\w+)'/", $e->getMessage(), $matches);
+            $campo = $matches[1] ?? 'desconocido';
 
-        return redirect()->back()
-            ->withInput()
-            ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
-    } catch (\Throwable $e) {
-        Log::error("Error inesperado: " . $e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->with('error', "El campo '{$campo}' tiene demasiados caracteres para la base de datos.");
+        } catch (\Throwable $e) {
+            Log::error("Error inesperado: " . $e->getMessage());
 
-        return redirect()->back()
-            ->withInput()
-            ->with('error', 'Ocurrió un error inesperado al actualizar el profesor.');
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Ocurrió un error inesperado al actualizar el profesor.');
+        }
     }
-}
     /**
      * Remove the specified resource from storage.
      */
