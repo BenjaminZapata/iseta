@@ -144,22 +144,58 @@ class ProfesoresCrudController extends BaseController
                 ->with('error', 'No se pudo eliminar el Profesor. ' . $e->getMessage());
         }
     }
-    public function vincularAsignaturas(Request $request, Profesor $profesor)
+   public function vincularAsignaturas(Request $request, Profesor $profesor)
 {
-    $seleccionadas = $request->input('asignaturas_seleccionadas', []);
+    try {
+        $seleccionadas = json_decode($request->input('asignaturas_payload'), true);
 
-    foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
-        foreach ($idAsignaturas as $idAsignatura) {
-            $asignatura = Asignatura::find($idAsignatura);
+        if (empty($seleccionadas)) {
+            return redirect()->back()->with('error', ' No hay asignaturas para asignar ni quitar.');
+        }
 
-            if ($asignatura) {
-                $asignatura->carrera()->updateExistingPivot($idCarrera, [
-                    'id_profesor' => $profesor->id,
-                ]);
+        $totalVinculadas = 0;
+        $totalDesvinculadas = 0;
+
+        foreach ($seleccionadas as $idCarrera => $acciones) {
+            // Vincular
+            if (!empty($acciones['vincular'])) {
+                foreach ($acciones['vincular'] as $idAsignatura) {
+                    $asignatura = Asignatura::find($idAsignatura);
+                    if ($asignatura) {
+                        $asignatura->carrera()->updateExistingPivot($idCarrera, [
+                            'id_profesor' => $profesor->id,
+                        ]);
+                        $totalVinculadas++;
+                    }
+                }
+            }
+
+            // Desvincular
+            if (!empty($acciones['desvincular'])) {
+                foreach ($acciones['desvincular'] as $idAsignatura) {
+                    $asignatura = Asignatura::find($idAsignatura);
+                    if ($asignatura) {
+                        $asignatura->carrera()->updateExistingPivot($idCarrera, [
+                            'id_profesor' => null,
+                        ]);
+                        $totalDesvinculadas++;
+                    }
+                }
             }
         }
-    }
 
-    return response()->json(['success' => true]);
+        if ($totalVinculadas === 0 && $totalDesvinculadas === 0) {
+            return redirect()->back()->with('error', ' No se realizaron cambios en las asignaturas.');
+        }
+
+        $mensaje = ' ';
+        if ($totalVinculadas > 0) $mensaje .= "$totalVinculadas asignatura(s) vinculada(s). ";
+        if ($totalDesvinculadas > 0) $mensaje .= "$totalDesvinculadas asignatura(s) desvinculada(s).";
+
+        return redirect()->back()->with('mensaje', $mensaje);
+    } catch (\Throwable $e) {
+        \Log::error("Error al vincular/desvincular asignaturas: " . $e->getMessage());
+        return redirect()->back()->with('error', ' Hubo un problema al procesar las asignaciones.');
+    }
 }
 }

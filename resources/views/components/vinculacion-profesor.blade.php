@@ -16,9 +16,12 @@
 <div id="contenedorTablas" class="mt-5"></div>
 
 @if(isset($profesor))
-    <div class="text-end mt-3">
+    <div class="text-end mt-3 d-flex gap-2 justify-content-end">
         <button id="btnVincularAsignaturas" class="btn btn-primary">
             🔗 Vincular asignaturas
+        </button>
+        <button id="btnDesvincularAsignaturas" class="btn btn-danger">
+            ❌ Desvincular asignaturas
         </button>
     </div>
 @endif
@@ -101,49 +104,62 @@
         });
     });
 
-    document.querySelector('form')?.addEventListener('submit', function () {
-        const inputs = document.querySelectorAll('input[name^="asignaturas_seleccionadas"]');
-        inputs.forEach(input => {
-            const clone = input.cloneNode(true);
-            clone.style.display = 'none';
-            this.appendChild(clone);
+    function enviarAsignaturas(tipo) {
+        const checkboxes = document.querySelectorAll("input[type='checkbox'][name^='asignaturas_seleccionadas']");
+        const seleccionadas = {};
+
+        checkboxes.forEach(cb => {
+            const carreraId = cb.name.match(/\d+/)[0];
+            const idAsignatura = parseInt(cb.value);
+            const estabaMarcada = asignaturasActuales.includes(idAsignatura);
+            const estaMarcada = cb.checked;
+
+            if (!seleccionadas[carreraId]) {
+                seleccionadas[carreraId] = { vincular: [], desvincular: [] };
+            }
+
+            if (tipo === 'vincular' && estaMarcada && !estabaMarcada) {
+                seleccionadas[carreraId].vincular.push(idAsignatura);
+            }
+
+            if (tipo === 'desvincular' && !estaMarcada && estabaMarcada) {
+                seleccionadas[carreraId].desvincular.push(idAsignatura);
+            }
         });
-    });
 
-    const btnVincular = document.getElementById("btnVincularAsignaturas");
-    if (urlVinculacion && btnVincular) {
-        btnVincular.addEventListener("click", function () {
-            const checkboxes = document.querySelectorAll("input[type='checkbox'][name^='asignaturas_seleccionadas']");
-            const seleccionadas = {};
+        const totalCambios = Object.values(seleccionadas).reduce((acc, obj) =>
+            acc + obj.vincular.length + obj.desvincular.length, 0);
 
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    const carreraId = cb.name.match(/\d+/)[0];
-                    if (!seleccionadas[carreraId]) seleccionadas[carreraId] = [];
-                    seleccionadas[carreraId].push(parseInt(cb.value));
-                }
-            });
+        if (totalCambios === 0) {
+            const mensaje = tipo === 'vincular'
+                ? '❌ No hay asignaturas para asignar.'
+                : '❌ No hay asignaturas para quitar.';
+            alert(mensaje);
+            return;
+        }
 
-            fetch(urlVinculacion, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: JSON.stringify({ asignaturas_seleccionadas: seleccionadas })
-            })
-            .then(response => {
-                if (!response.ok) throw new Error("Error al vincular asignaturas");
-                return response.json();
-            })
-            .then(data => {
-                alert("✅ Asignaturas vinculadas correctamente");
-                location.reload();
-            })
-            .catch(error => {
-                console.error(error);
-                alert("❌ Hubo un problema al vincular las asignaturas");
-            });
-        });
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = urlVinculacion;
+
+        const csrf = document.createElement("input");
+        csrf.type = "hidden";
+        csrf.name = "_token";
+        csrf.value = "{{ csrf_token() }}";
+        form.appendChild(csrf);
+
+        const payload = document.createElement("input");
+        payload.type = "hidden";
+        payload.name = "asignaturas_payload";
+        payload.value = JSON.stringify(seleccionadas);
+        form.appendChild(payload);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    if (urlVinculacion) {
+        document.getElementById("btnVincularAsignaturas")?.addEventListener("click", () => enviarAsignaturas('vincular'));
+        document.getElementById("btnDesvincularAsignaturas")?.addEventListener("click", () => enviarAsignaturas('desvincular'));
     }
 </script>

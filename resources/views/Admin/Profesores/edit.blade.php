@@ -183,7 +183,7 @@
                                                 aria-expanded="false"
                                                 aria-controls="collapse{{ $idCarrera }}-{{ $anio }}">
                                                 {{ is_numeric($anio) ? $anio . '° año' : $anio }}
-                                            </button>
+                                            </button>    {{-- esperar a manu --}}
                                         </h2>
                                         <div id="collapse{{ $idCarrera }}-{{ $anio }}"
                                             class="accordion-collapse collapse"
@@ -193,15 +193,17 @@
                                                 <table class="table table-bordered table-hover mb-0">
                                                     <thead class="thead-light">
                                                         <tr>
+                                                            <th>Año</th>
                                                             <th>Asignatura</th>
                                                             <th>Módulo</th>
                                                             <th>Carga horaria</th>
-                                                            <th>Acciones</th>
+                                                            <th>Acciones</th> {{-- agregar desvinculacion --}}
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($lista as $pivot)
                                                             <tr>
+                                                                <td>{{ $pivot->anio }} </td>
                                                                 <td>
                                                                     {{ $pivot->nombre }}
                                                                 </td>
