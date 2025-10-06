@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="{{ asset('css/global.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/form.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/create-carrera.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/edit-carrera.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/correlativa.css') }}">
 
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>

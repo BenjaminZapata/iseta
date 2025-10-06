@@ -253,8 +253,8 @@
                                             @foreach ($asignaturas as $asignatura)
                                                 @php
                                                     $hasCorrelativas =
-                                                        $asignatura->correlatividades &&
-                                                        $asignatura->correlatividades->count();
+                                                        $asignatura->correlatividad &&
+                                                        $asignatura->correlatividad->count();
                                                     $collapseId = 'collapseAsignatura' . $asignatura->id;
                                                 @endphp
 
@@ -297,7 +297,7 @@
 
                                                     <!-- Cantidad de correlativas -->
                                                     <td class="center">
-                                                        {{ $hasCorrelativas ? $asignatura->correlatividades->count() . ' asignadas' : '—' }}
+                                                        {{ $hasCorrelativas ? $asignatura->correlatividad->count() . ' asignadas' : '—' }}
                                                     </td>
 
                                                     <!-- Crear mesa -->
@@ -352,25 +352,25 @@
                                                 <tr class="collapse" id="{{ $collapseId }}">
                                                     <td colspan="7" class="correlativas-expandida">
                                                         <div>
-                                                            <strong>Correlativas de "{{ $asignatura->nombre }}"</strong>
+                                                            <strong class="perfil_dataname">Correlativas de
+                                                                "{{ $asignatura->nombre }}"</strong>
 
                                                             @if ($hasCorrelativas)
                                                                 <ul class="lista-correlativas">
-                                                                    @foreach ($asignatura->correlatividades as $corr)
+                                                                    @foreach ($asignatura->correlatividad as $corr)
                                                                         <li>{{ $corr->nombre }}</li>
                                                                     @endforeach
                                                                 </ul>
                                                             @else
-                                                                <p class="text-muted">No tiene correlativas asignadas.</p>
+                                                                <p class="archivo-vacio" style="margin-top:10px">No tiene
+                                                                    correlativas asignadas.
+                                                                </p>
                                                             @endif
                                                             <div class="acciones-correlativas">
                                                                 <livewire:correlativa-add :carrera="$carrera"
                                                                     :asignatura="$asignatura" />
                                                             </div>
                                                         </div>
-
-
-
                                                     </td>
                                                 </tr>
                                             @endforeach
