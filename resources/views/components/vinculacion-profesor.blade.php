@@ -1,6 +1,6 @@
 @php
-    $asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
-    $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignaturas', $profesor) : null;
+$asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
+$urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignaturas', $profesor) : null;
 @endphp
 
 <style>
@@ -29,7 +29,7 @@
     <h3 class="mb-3">Seleccionar carrera/s</h3>
     <select id="selectorCarreras" multiple class="form-control select-carreras">
         @foreach ($carreras as $carrera)
-            <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
+        <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
         @endforeach
     </select>
     <small class="form-text text-muted">Usá Ctrl (Windows) o Cmd (Mac) para seleccionar múltiples carreras.</small>
@@ -38,11 +38,12 @@
 <div id="contenedorTablas" class="mt-5"></div>
 
 @if (isset($profesor))
-    <div class="text-end mt-3">
-        <button id="btnVincularAsignaturas" class="btn btn-primary">
-            🔗 Vincular asignaturas
-        </button>
-    </div>
+<div class="botones-derecha">
+    <button id="btnVincularAsignaturas" class="btn_blue">
+        <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+        Vincular asignaturas
+    </button>
+</div>
 @endif
 
 <script>
