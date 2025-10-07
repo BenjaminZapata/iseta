@@ -349,21 +349,20 @@
                                                 <tr class="collapse" id="{{ $collapseId }}">
                                                     <td colspan="7" class="correlativas-expandida">
                                                         <div>
-                                                            <div
-                                                                style="display: flex; align-items: center; justify-content: space-between;">
-                                                                <strong class="perfil_dataname">Correlativas de
-                                                                    "{{ $asignatura->nombre }}"</strong>
-                                                                <button class="btn_sky"
-                                                                    x-on:click="$wire.showModal = false">
-                                                                    <i
-                                                                        class="ti ti-x"style="font-size: 1.3em; margin-right: 8px;">
-                                                                    </i>Cerrar
-                                                                </button>
-                                                            </div>
+                                                            <strong class="perfil_dataname">Correlativas de
+                                                                "{{ $asignatura->nombre }}"
+                                                            </strong>
                                                             @if ($hasCorrelativas)
                                                                 <ul class="lista-correlativas">
                                                                     @foreach ($asignatura->correlativas as $corr)
                                                                         <li>{{ $corr->nombre }}</li>
+                                                                        <button class="btn_sky" id="btnEliminar"
+                                                                            data-asignatura="{{ $corr->id }}"
+                                                                            data-carrera="{{ $carrera->id }}">
+                                                                            <i
+                                                                                class="ti ti-x"style="font-size: 1.3em; margin-right: 8px;">
+                                                                            </i>Eliminar
+                                                                        </button>
                                                                     @endforeach
                                                                 </ul>
                                                             @else
@@ -388,6 +387,30 @@
                 </div> {{-- accordion --}}
 
                 <script>
+                    $(document).ready(function() {
+                        $('#btnEliminar').on('click', function(e) {
+                            e.preventDefault(); // evita recargar la página
+                            const asignatura = $(this).data('asignatura');
+                            const carrera = $(this).data('carrera');
+                            const url = `/correlativa/${asignatura}/${carrera}`;
+                            $.ajax({
+                                url: url, // 🔹 Cambiá por tu endpoint real
+                                type: 'DELETE',
+                                data: {
+                                    _token: '{{ csrf_token() }}' // 🔹 necesario para Laravel
+                                },
+                                success: function(response) {
+                                    console.log('Eliminado correctamente', response);
+                                    // Podés cerrar el modal, mostrar mensaje, etc.
+                                },
+                                error: function(xhr) {
+                                    console.error('Error al eliminar:', xhr.responseText);
+                                }
+                            });
+                        });
+
+                    })
+
                     function toggleFiltroExportar(button) {
                         const container = button.closest('div');
                         const form = container.querySelector('.filtro-exportar');
