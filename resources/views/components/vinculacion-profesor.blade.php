@@ -34,16 +34,17 @@
         const contenedor = document.getElementById("contenedorTablas");
         contenedor.innerHTML = "";
 
-        seleccionadas.forEach((carreraId) => {
+        seleccionadas.forEach(carreraId => {
             const carrera = carreras.find(c => c.id === carreraId);
             if (!carrera || !carrera.asignaturas.length) return;
 
             const bloque = document.createElement("div");
             bloque.classList.add("card", "mb-5", "shadow-sm", "p-3");
 
+            // Agrupamos por pivot.anio (igual que en profesores)
             const agrupadasPorAnio = {};
             carrera.asignaturas.forEach(asig => {
-                const anio = asig.anio ?? 'Sin año';
+                const anio = asig.pivot?.anio ?? 'Sin año';
                 if (!agrupadasPorAnio[anio]) agrupadasPorAnio[anio] = [];
                 agrupadasPorAnio[anio].push(asig);
             });
@@ -51,9 +52,20 @@
             let acordeonHTML = `<h4 class="mb-4 text-primary border-bottom pb-2">📘 ${carrera.nombre}</h4>`;
             acordeonHTML += `<div class="accordion" id="acordeonCarrera${carrera.id}">`;
 
-            Object.entries(agrupadasPorAnio).forEach(([anio, asignaturas], indexAnio) => {
+            const añosOrdenados = Object.keys(agrupadasPorAnio).sort((a, b) => {
+                if (a === 'Sin año') return 1;
+                if (b === 'Sin año') return -1;
+                return a - b;
+            });
+
+            añosOrdenados.forEach((anio, indexAnio) => {
                 const collapseId = `collapse${carrera.id}-${indexAnio}`;
                 const headingId = `heading${carrera.id}-${indexAnio}`;
+                const asignaturas = agrupadasPorAnio[anio];
+
+                // Mismo formato de años que en profesores
+               const anioLabel = (anio === 'Sin año') ? 'Sin año definido' : `${parseInt(anio) + 1}° año`;
+
 
                 const filas = asignaturas.map(asig => {
                     const checked = asignaturasActuales.includes(asig.id) ? 'checked' : '';
@@ -65,7 +77,7 @@
                             </td>
                         </tr>
                     `;
-                }).join("");
+                }).join('');
 
                 acordeonHTML += `
                     <div class="accordion-item">
@@ -75,7 +87,7 @@
                                 data-bs-target="#${collapseId}"
                                 aria-expanded="false"
                                 aria-controls="${collapseId}">
-                                ${isNaN(anio) ? anio : `${anio}° año`}
+                                ${anioLabel}
                             </button>
                         </h2>
                         <div id="${collapseId}" class="accordion-collapse collapse"
@@ -112,13 +124,9 @@
             const estabaMarcada = asignaturasActuales.includes(idAsignatura);
             const estaMarcada = cb.checked;
 
-            if (!seleccionadas[carreraId]) {
-                seleccionadas[carreraId] = [];
-            }
+            if (!seleccionadas[carreraId]) seleccionadas[carreraId] = [];
 
-            if (estaMarcada && !estabaMarcada) {
-                seleccionadas[carreraId].push(idAsignatura);
-            }
+            if (estaMarcada && !estabaMarcada) seleccionadas[carreraId].push(idAsignatura);
         });
 
         const total = Object.values(seleccionadas).reduce((acc, arr) => acc + arr.length, 0);

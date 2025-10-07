@@ -148,26 +148,26 @@
             </div>
         </div>
 
-        <div class="perfil_one br">
-            <div class="perfil__header">
-                <h2>Asignaturas asignadas</h2>
-            </div>
+       <div class="perfil_one br">
+    <div class="perfil__header">
+        <h2>Asignaturas asignadas</h2>
+    </div>
 
-            @if ($profesor->asignaturas->isEmpty())
-            <p class="text-muted" style="margin: 10px">Este profesor aún no tiene asignaturas vinculadas.</p>
-            @else
-            @php
+    @if ($profesor->asignaturas->isEmpty())
+        <p class="text-muted" style="margin: 10px">Este profesor aún no tiene asignaturas vinculadas.</p>
+    @else
+        @php
             // Agrupamos asignaturas por carrera
             $asignaturasPorCarrera = $profesor->asignaturas->groupBy(function ($asig) {
-            return $asig->pivot->id_carrera;
+                return $asig->pivot->id_carrera;
             });
-            @endphp
+        @endphp
 
-            @foreach ($asignaturasPorCarrera as $idCarrera => $asignaturas)
+        @foreach ($asignaturasPorCarrera as $idCarrera => $asignaturas)
             @php
-            $carrera = \App\Models\Carrera::find($idCarrera);
-            // Agrupamos por año dentro de cada carrera
-            $porAnio = $asignaturas->groupBy(fn($a) => $a->pivot->anio ?? 'Sin año');
+                $carrera = \App\Models\Carrera::find($idCarrera);
+                // Agrupamos por año dentro de cada carrera
+                $porAnio = $asignaturas->groupBy(fn($a) => $a->pivot->anio ?? 'Sin año');
             @endphp
 
             <div class="card mb-4 shadow-sm p-3">
@@ -177,76 +177,67 @@
 
                 <div class="accordion" id="accordionCarrera{{ $idCarrera }}">
                     @foreach ($porAnio as $anio => $lista)
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading{{ $idCarrera }}-{{ $anio }}">
-                            <button class="accordion-button collapsed font-500" type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#collapse{{ $idCarrera }}-{{ $anio }}"
-                                aria-expanded="false"
-                                aria-controls="collapse{{ $idCarrera }}-{{ $anio }}">
-                                {{ is_numeric($anio) ? $anio . '° año' : $anio }}
-                            </button>
-                        </h2>
-                        <div id="collapse{{ $idCarrera }}-{{ $anio }}"
-                            class="accordion-collapse collapse"
-                            aria-labelledby="heading{{ $idCarrera }}-{{ $anio }}"
-                            data-bs-parent="#accordionCarrera{{ $idCarrera }}">
-                            <div class="accordion-body p-0">
-                                <table class="table table-bordered table-hover mb-0">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th class="center">Año</th>
-                                            <th>Asignatura</th>
-                                            <th class="center">Carga horaria</th>
-                                            <th class="center">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($lista as $pivot)
-                                        <tr>
-                                            <td>
-                                                <div style="display:flex; align-items: center; justify-content: center;">
-                                                    {{ $pivot->anio }}
-                                                </div>
-                                            </td>
-                                            <td class="bold">
-                                                {{ $pivot->nombre }}
-                                            </td>
-                                            <td>
-                                                <div style="display:flex; align-items: center; justify-content: center;">
-                                                    {{ $pivot->carga_horaria ?? '—' }} hs
-                                                </div>
-                                            </td>
-                                            <td>
-                                             <form method="POST" id="form-desvincular-{{ $profesor->id }}-{{ $pivot->id }}"
-      action="{{ route('admin.profesores.desvincular-asignatura', ['profesor' => $profesor->id, 'asignatura' => $pivot->id]) }}">
-    @csrf
-    @method('POST')
-    <div style="display:flex; align-items: center; justify-content: center;">
-        <button type="button" class="btn_icon-danger"
-            onclick="openGeneralModal(
-                'form-desvincular-{{ $profesor->id }}-{{ $pivot->id }}',
-                '¿Está seguro que desea desvincular al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }} de la asignatura: {{ $pivot->nombre }}?\n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
-            )"
-            style="background-color: red; margin-left: 10px;">
-            <i class="ti ti-x" style="font-size: 1.3em;"></i>
-        </button>
-    </div>
-</form>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading{{ $idCarrera }}-{{ $anio }}">
+                                <button class="accordion-button collapsed font-500" type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapse{{ $idCarrera }}-{{ $anio }}"
+                                    aria-expanded="false"
+                                    aria-controls="collapse{{ $idCarrera }}-{{ $anio }}">
+                                    {{-- 👇 Igual que el acordeón de carreras --}}
+                                    {{ is_numeric($anio) ? ($anio + 1) . '° año' : $anio }}
+                                </button>
+                            </h2>
+
+                            <div id="collapse{{ $idCarrera }}-{{ $anio }}"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="heading{{ $idCarrera }}-{{ $anio }}"
+                                data-bs-parent="#accordionCarrera{{ $idCarrera }}">
+                                <div class="accordion-body p-0">
+                                    <table class="table table-bordered table-hover mb-0">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th class="center">Año</th>
+                                                <th>Asignatura</th>
+                                                <th class="center">Carga horaria</th>
+                                                <th class="center">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($lista as $pivot)
+                                                <tr>
+                                                    <td class="center">{{ $pivot->pivot->anio + 1 }}°</td>
+                                                    <td class="bold">{{ $pivot->nombre }}</td>
+                                                    <td class="center">{{ $pivot->carga_horaria ?? '—' }} hs</td>
+                                                    <td class="center">
+                                                        <form method="POST"
+                                                            id="form-desvincular-{{ $profesor->id }}-{{ $pivot->id }}"
+                                                            action="{{ route('admin.profesores.desvincular-asignatura', ['profesor' => $profesor->id, 'asignatura' => $pivot->id]) }}">
+                                                            @csrf
+                                                            @method('POST')
+                                                            <button type="button" class="btn_icon-danger"
+                                                                onclick="openGeneralModal(
+                                                                    'form-desvincular-{{ $profesor->id }}-{{ $pivot->id }}',
+                                                                    '¿Está seguro que desea desvincular al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }} de la asignatura: {{ $pivot->nombre }}?\n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
+                                                                )"
+                                                                style="background-color: red;">
+                                                                <i class="ti ti-x" style="font-size: 1.3em;"></i>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
             </div>
-            @endforeach
-            @endif
-        </div>
+        @endforeach
+    @endif
+</div>
 
 
         {{-- TABLA MESAS --}}
