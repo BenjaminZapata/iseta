@@ -1,35 +1,13 @@
 @php
-$asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
-$urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignaturas', $profesor) : null;
+    $asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
+    $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignaturas', $profesor) : null;
 @endphp
 
-<style>
-    .select-carreras {
-        font-size: 1.1em;
-        min-height: 180px;
-        padding: 10px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        background-color: #fafafa;
-    }
-
-    .select-carreras option {
-        padding: 6px 10px;
-    }
-
-    .select-carreras:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-        background-color: #fff;
-    }
-</style>
-
-<div style="display: flex; flex-direction: column; gap: 8px;">
-    <h3 class="mb-3">Seleccionar carrera/s</h3>
-    <select id="selectorCarreras" multiple class="form-control select-carreras">
-        @foreach ($carreras as $carrera)
-        <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
+<div class="label-input-y-75 mt-5">
+    <h3 class="mb-3">🎓 Seleccionar carrera/s</h3>
+    <select id="selectorCarreras" multiple class="form-control">
+        @foreach($carreras as $carrera)
+            <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
         @endforeach
     </select>
     <small class="form-text text-muted">Usá Ctrl (Windows) o Cmd (Mac) para seleccionar múltiples carreras.</small>
@@ -38,12 +16,10 @@ $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignatura
 <div id="contenedorTablas" class="mt-5"></div>
 
 @if(isset($profesor))
-    <div class="text-end mt-3 d-flex gap-2 justify-content-end">
-        <button id="btnVincularAsignaturas" class="btn btn-primary">
-            🔗 Vincular asignaturas
-        </button>
-        <button id="btnDesvincularAsignaturas" class="btn btn-danger">
-            ❌ Desvincular asignaturas
+    <div class="botones-derecha">
+        <button id="btnVincularAsignaturas" class="btn_blue">
+            <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right:8px"></i>
+            Vincular asignaturas
         </button>
     </div>
 @endif
@@ -53,7 +29,7 @@ $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignatura
     const asignaturasActuales = @json($asignaturasActuales);
     const urlVinculacion = @json($urlVinculacion);
 
-    document.getElementById("selectorCarreras").addEventListener("change", function() {
+    document.getElementById("selectorCarreras").addEventListener("change", function () {
         const seleccionadas = Array.from(this.selectedOptions).map(opt => parseInt(opt.value));
         const contenedor = document.getElementById("contenedorTablas");
         contenedor.innerHTML = "";
@@ -72,8 +48,7 @@ $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignatura
                 agrupadasPorAnio[anio].push(asig);
             });
 
-            let acordeonHTML =
-                `<h4 class="mb-4 text-primary border-bottom pb-2">📘 ${carrera.nombre}</h4>`;
+            let acordeonHTML = `<h4 class="mb-4 text-primary border-bottom pb-2">📘 ${carrera.nombre}</h4>`;
             acordeonHTML += `<div class="accordion" id="acordeonCarrera${carrera.id}">`;
 
             Object.entries(agrupadasPorAnio).forEach(([anio, asignaturas], indexAnio) => {
@@ -81,8 +56,7 @@ $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignatura
                 const headingId = `heading${carrera.id}-${indexAnio}`;
 
                 const filas = asignaturas.map(asig => {
-                    const checked = asignaturasActuales.includes(asig.id) ? 'checked' :
-                        '';
+                    const checked = asignaturasActuales.includes(asig.id) ? 'checked' : '';
                     return `
                         <tr>
                             <td class="align-middle">${asig.nombre}</td>
@@ -128,7 +102,7 @@ $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignatura
         });
     });
 
-    function enviarAsignaturas(tipo) {
+    function enviarAsignaturas() {
         const checkboxes = document.querySelectorAll("input[type='checkbox'][name^='asignaturas_seleccionadas']");
         const seleccionadas = {};
 
@@ -139,26 +113,17 @@ $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignatura
             const estaMarcada = cb.checked;
 
             if (!seleccionadas[carreraId]) {
-                seleccionadas[carreraId] = { vincular: [], desvincular: [] };
+                seleccionadas[carreraId] = [];
             }
 
-            if (tipo === 'vincular' && estaMarcada && !estabaMarcada) {
-                seleccionadas[carreraId].vincular.push(idAsignatura);
-            }
-
-            if (tipo === 'desvincular' && !estaMarcada && estabaMarcada) {
-                seleccionadas[carreraId].desvincular.push(idAsignatura);
+            if (estaMarcada && !estabaMarcada) {
+                seleccionadas[carreraId].push(idAsignatura);
             }
         });
 
-        const totalCambios = Object.values(seleccionadas).reduce((acc, obj) =>
-            acc + obj.vincular.length + obj.desvincular.length, 0);
-
-        if (totalCambios === 0) {
-            const mensaje = tipo === 'vincular'
-                ? '❌ No hay asignaturas para asignar.'
-                : '❌ No hay asignaturas para quitar.';
-            alert(mensaje);
+        const total = Object.values(seleccionadas).reduce((acc, arr) => acc + arr.length, 0);
+        if (total === 0) {
+            alert('❌ No hay asignaturas para asignar.');
             return;
         }
 
@@ -183,7 +148,6 @@ $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignatura
     }
 
     if (urlVinculacion) {
-        document.getElementById("btnVincularAsignaturas")?.addEventListener("click", () => enviarAsignaturas('vincular'));
-        document.getElementById("btnDesvincularAsignaturas")?.addEventListener("click", () => enviarAsignaturas('desvincular'));
+        document.getElementById("btnVincularAsignaturas")?.addEventListener("click", () => enviarAsignaturas());
     }
 </script>

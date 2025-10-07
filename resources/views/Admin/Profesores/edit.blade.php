@@ -218,22 +218,21 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <form method="POST" id="form-eliminar-{{ $profesor->id }}"
-                                                    action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <div style="display:flex; align-items: center; justify-content: center;">
-                                                        <button type="button" class="btn_icon-danger"
-                                                            onclick="openGeneralModal(
-                'form-eliminar-{{ $profesor->id }}',
-                '¿Esta seguro que desea desvincular al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }} de la asignatura: {{ $pivot->nombre  }} ? \n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
+                                             <form method="POST" id="form-desvincular-{{ $profesor->id }}-{{ $pivot->id }}"
+      action="{{ route('admin.profesores.desvincular-asignatura', ['profesor' => $profesor->id, 'asignatura' => $pivot->id]) }}">
+    @csrf
+    @method('POST')
+    <div style="display:flex; align-items: center; justify-content: center;">
+        <button type="button" class="btn_icon-danger"
+            onclick="openGeneralModal(
+                'form-desvincular-{{ $profesor->id }}-{{ $pivot->id }}',
+                '¿Está seguro que desea desvincular al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }} de la asignatura: {{ $pivot->nombre }}?\n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
             )"
-                                                            style="background-color: red; margin-left: 10px;">
-                                                            <i class="ti ti-x" style="font-size: 1.3em;"></i>
-                                                        </button>
-                                                    </div>
-                                                </form>
-
+            style="background-color: red; margin-left: 10px;">
+            <i class="ti ti-x" style="font-size: 1.3em;"></i>
+        </button>
+    </div>
+</form>
                                             </td>
                                         </tr>
                                         @endforeach
