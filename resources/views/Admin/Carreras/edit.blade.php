@@ -352,24 +352,29 @@
                                                             <strong class="perfil_dataname">Correlativas de
                                                                 "{{ $asignatura->nombre }}"
                                                             </strong>
-                                                            @if ($hasCorrelativas)
-                                                                <ul class="lista-correlativas">
-                                                                    @foreach ($asignatura->correlativas as $corr)
-                                                                        <li>{{ $corr->nombre }}</li>
-                                                                        <button class="btn_sky" id="btnEliminar"
-                                                                            data-asignatura="{{ $corr->id }}"
-                                                                            data-carrera="{{ $carrera->id }}">
-                                                                            <i
-                                                                                class="ti ti-x"style="font-size: 1.3em; margin-right: 8px;">
-                                                                            </i>Eliminar
-                                                                        </button>
-                                                                    @endforeach
+                                                            <div x-data="{ correlativas: {{ json_encode($asignatura->correlativas) }} }">
+                                                                <ul>
+                                                                    <template x-for="corr in correlativas"
+                                                                        :key="corr.id">
+                                                                        <li class="flex items-center justify-between mb-2">
+                                                                            <span x-text="corr.nombre"></span>
+                                                                            <button class="btn_sky btnEliminar"
+                                                                                data-asignatura="{{ $asignatura }}"
+                                                                                data-carrera="{{ $carrera }}"
+                                                                                :data-correlativa="corr.id">
+                                                                                <i class="ti ti-x"
+                                                                                    style="font-size:1.3em; margin-right:8px;"></i>
+                                                                                Eliminar
+                                                                            </button>
+                                                                        </li>
+                                                                    </template>
                                                                 </ul>
-                                                            @else
-                                                                <p class="archivo-vacio" style="margin-top:10px">No tiene
-                                                                    correlativas asignadas.
+
+                                                                <p x-show="correlativas.length === 0"
+                                                                    class="archivo-vacio mt-2">
+                                                                    No tiene correlativas asignadas.
                                                                 </p>
-                                                            @endif
+                                                            </div>
                                                             <div class="acciones-correlativas">
                                                                 <livewire:correlativa-add :carrera="$carrera"
                                                                     :asignatura="$asignatura" />
@@ -387,29 +392,48 @@
                 </div> {{-- accordion --}}
 
                 <script>
-                    $(document).ready(function() {
-                        $('#btnEliminar').on('click', function(e) {
-                            e.preventDefault(); // evita recargar la página
-                            const asignatura = $(this).data('asignatura');
-                            const carrera = $(this).data('carrera');
-                            const url = `/correlativa/${asignatura}/${carrera}`;
-                            $.ajax({
-                                url: url, // 🔹 Cambiá por tu endpoint real
-                                type: 'DELETE',
-                                data: {
-                                    _token: '{{ csrf_token() }}' // 🔹 necesario para Laravel
-                                },
-                                success: function(response) {
-                                    console.log('Eliminado correctamente', response);
-                                    // Podés cerrar el modal, mostrar mensaje, etc.
-                                },
-                                error: function(xhr) {
-                                    console.error('Error al eliminar:', xhr.responseText);
-                                }
-                            });
-                        });
+                    $(document).on('click', '.btnEliminar', function(e) {
+                        e.preventDefault();
 
-                    })
+                        const button = $(this);
+                        const asignatura = button.data('asignatura');
+                        const carrera = button.data('carrera');
+                        const corr = button.data('correlativa');
+                        console.log(corr)
+                        const url = `/admin/correlativa/${carrera}/${asignatura}/${corr}`;
+
+                        if (!confirm('¿Seguro que querés eliminar esta correlativa?')) return;
+
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                carrera: carrera,
+                                asignatura: asignatura,
+                                correlativa: corr
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                console.log('Eliminado correctamente', response);
+
+                                // 🔹 Actualizar el array de Alpine para eliminar la correlativa
+                                Alpine.data("correlativas", function() {
+                                    return {
+                                        correlativas: correlativas.filter(c => c.id !== corr)
+                                    }
+                                });
+
+                                button.closest('li').remove();
+                            },
+                            error: function(xhr) {
+                                console.error('Error al eliminar:', xhr.responseText);
+                                alert('Hubo un error al eliminar la correlativa.');
+                            }
+                        });
+                    });
 
                     function toggleFiltroExportar(button) {
                         const container = button.closest('div');

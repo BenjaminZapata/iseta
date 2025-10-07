@@ -67,19 +67,19 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // -----------------------------
     // PRECEPTOR
     // -----------------------------
-    Route::middleware(['auth:admin'])->group(function () {
+/*     Route::middleware(['auth:admin'])->group(function () {
         Route::get('/alumnos/index', [AlumnoPreceptorController::class, 'index'])
             ->name('preceptor.alumnos.index');
-    });
+    }); */
 
     // -----------------------------
     // SECRETARIO
     // -----------------------------
-    Route::middleware(['auth:admin'])->group(function () {
+/*     Route::middleware(['auth:admin'])->group(function () {
         Route::get('/alumnos/index', [AlumnoSecretarioController::class, 'index'])
             ->name('secretario.alumnos.index');
     });
-
+ */
     // -----------------------------
     // EGRESADOS
     // -----------------------------
@@ -200,7 +200,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // CORRELATIVAS
     // -----------------------------
     Route::post('correlativa/{carrera}/{asignatura}', [AdminCorrelativasController::class, 'agregar'])->name('admin.correlativa.agregar');
-    Route::delete('correlativa/{carrera}/{asignatura}', [AdminCorrelativasController::class, 'eliminar'])->name('admin.correlativa.eliminar');
+    Route::delete('correlativa/{carrera}/{asignatura}/{correlativa}', [AdminCorrelativasController::class, 'eliminar'])->name('admin.correlativa.eliminar');
 
     // -----------------------------
     // DIAS HABILES

@@ -12,7 +12,6 @@ use App\Models\Examen;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Illuminate\view\WithInput;
 
 class AlumnoPreceptorController extends BaseController
 {

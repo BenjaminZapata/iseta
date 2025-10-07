@@ -19,6 +19,7 @@ class Carrera extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'id',
         'nombre',
         'resolucion',
         'anio_apertura',
