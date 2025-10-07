@@ -1,13 +1,13 @@
 @php
-    $asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
-    $urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignaturas', $profesor) : null;
+$asignaturasActuales = isset($profesor) ? $profesor->asignaturas->pluck('id')->toArray() : [];
+$urlVinculacion = isset($profesor) ? route('admin.profesores.vincular-asignaturas', $profesor) : null;
 @endphp
 
 <div class="label-input-y-75 mt-5">
-    <h3 class="mb-3">🎓 Seleccionar carrera/s</h3>
+    <h3 class="mb-3">Seleccionar carrera/s</h3>
     <select id="selectorCarreras" multiple class="form-control">
         @foreach($carreras as $carrera)
-            <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
+        <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
         @endforeach
     </select>
     <small class="form-text text-muted">Usá Ctrl (Windows) o Cmd (Mac) para seleccionar múltiples carreras.</small>
@@ -16,12 +16,12 @@
 <div id="contenedorTablas" class="mt-5"></div>
 
 @if(isset($profesor))
-    <div class="botones-derecha">
-        <button id="btnVincularAsignaturas" class="btn_blue">
-            <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right:8px"></i>
-            Vincular asignaturas
-        </button>
-    </div>
+<div class="botones-derecha">
+    <button id="btnVincularAsignaturas" class="btn_blue">
+        <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right:8px"></i>
+        Vincular asignaturas
+    </button>
+</div>
 @endif
 
 <script>
@@ -29,7 +29,7 @@
     const asignaturasActuales = @json($asignaturasActuales);
     const urlVinculacion = @json($urlVinculacion);
 
-    document.getElementById("selectorCarreras").addEventListener("change", function () {
+    document.getElementById("selectorCarreras").addEventListener("change", function() {
         const seleccionadas = Array.from(this.selectedOptions).map(opt => parseInt(opt.value));
         const contenedor = document.getElementById("contenedorTablas");
         contenedor.innerHTML = "";
@@ -49,7 +49,7 @@
                 agrupadasPorAnio[anio].push(asig);
             });
 
-            let acordeonHTML = `<h4 class="mb-4 text-primary border-bottom pb-2">📘 ${carrera.nombre}</h4>`;
+            let acordeonHTML = `<h4 class="mb-4 text-primary border-bottom pb-2"> ${carrera.nombre}</h4>`;
             acordeonHTML += `<div class="accordion" id="acordeonCarrera${carrera.id}">`;
 
             const añosOrdenados = Object.keys(agrupadasPorAnio).sort((a, b) => {
@@ -64,7 +64,7 @@
                 const asignaturas = agrupadasPorAnio[anio];
 
                 // Mismo formato de años que en profesores
-               const anioLabel = (anio === 'Sin año') ? 'Sin año definido' : `${parseInt(anio) + 1}° año`;
+                const anioLabel = (anio === 'Sin año') ? 'Sin año definido' : `${parseInt(anio) + 1}° año`;
 
 
                 const filas = asignaturas.map(asig => {
@@ -73,8 +73,10 @@
                         <tr>
                             <td class="align-middle">${asig.nombre}</td>
                             <td class="text-center align-middle">
+                            <div style="display: flex; justify-content: center; align-items: center;">
                                 <input type="checkbox" name="asignaturas_seleccionadas[${carrera.id}][]" value="${asig.id}" ${checked}>
-                            </td>
+                            </div>
+                                </td>
                         </tr>
                     `;
                 }).join('');
@@ -97,7 +99,7 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Asignatura</th>
-                                            <th>Acción</th>
+                                            <th class="center">Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>${filas}</tbody>
@@ -131,7 +133,7 @@
 
         const total = Object.values(seleccionadas).reduce((acc, arr) => acc + arr.length, 0);
         if (total === 0) {
-            alert('❌ No hay asignaturas para asignar.');
+            alert('No hay asignaturas para asignar.');
             return;
         }
 

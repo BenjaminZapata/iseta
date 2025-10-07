@@ -8,13 +8,23 @@
     @foreach ($fieldsets as $legend => $inputs)
     <fieldset class="p-2" style="margin: 10px;">
         <legend class="font-600 font-7">{{ $legend }}</legend>
+
+        @if ($legend == 'Vinculación')
+        <div style="display: flex; flex-direction: column; gap: 10px; margin: 20px 0;">
+            @foreach ($inputs as $input)
+            <?= $input ?>
+            @endforeach
+        </div>
+        @else
         <div class="grid-2 gap-2 p-0">
             @foreach ($inputs as $input)
             <?= $input ?>
             @endforeach
         </div>
+        @endif
     </fieldset>
     @endforeach
+
 
     <div class="botones-derecha">
 
