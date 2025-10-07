@@ -1,11 +1,10 @@
 .chevron-btn {
- background: none;
+ transition: transform 0.2s ease;
  border: none;
+ background: none;
  font-size: 1.2em;
- cursor: pointer;
- padding: 0;
- margin-right: 6px;
 }
+
 
 .icono-correlativa {
  font-size: 1em;
@@ -31,3 +30,14 @@
 .acciones-correlativas {
  margin-top: 10px;
 }
+
+tr.asignatura-con-correlativas:hover,
+tr:hover {
+ background-color: #f0f8ff;
+ /* Celeste claro. Cambialo a gusto */
+ cursor: pointer;
+}
+
+
+
+/*###############################       Estilos para el agregar correlativas      ############################# */

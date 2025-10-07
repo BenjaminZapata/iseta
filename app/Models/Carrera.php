@@ -39,6 +39,11 @@ class Carrera extends Model
             ->withTimestamps();
     }
 
+    public function cAP()
+    {
+        return $this->hasMany(CarreraAsignaturaProfesor::class, 'id_carrera', 'id');
+    }
+
     public function cursadas(): HasMany
     {
         return $this->hasMany(Cursada::class, 'id_carrera', 'id');

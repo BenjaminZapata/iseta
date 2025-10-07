@@ -12,6 +12,7 @@ use App\Services\Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
+use Livewire\Livewire;
 use Monolog\Logger;
 use Monolog\Handler\SocketHandler;
 use Monolog\Formatter\JsonFormatter;
@@ -21,7 +22,9 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
-    public function register(): void {}
+    public function register(): void
+    {
+    }
 
     /**
      * Bootstrap any application services.
@@ -39,5 +42,6 @@ class AppServiceProvider extends ServiceProvider
         View::share('carreraM', new Carrera());
         // View::share('profesorM', new Profesor());
         // View::share('profesorM', new Profesor());
+        Livewire::component('correlativas-manager', \App\Livewire\CorrelativasManager::class);
     }
 }
