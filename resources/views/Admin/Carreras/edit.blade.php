@@ -221,7 +221,11 @@
                                 <button class="accordion-button collapsed font-500" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#collapseAnio{{ $anio_index }}"
                                     aria-expanded="false" aria-controls="collapseAnio{{ $anio_index }}">
-                                    {{ $asignaturas[$anio]->pivot->anio + 1 }}° año
+                                    @if (is_array($asignaturas))
+                                        {{ $asignaturas[$anio]->pivot->anio + 1 }}° año
+                                    @else
+                                        {{ $asignaturas[0]->pivot->anio + 1 }}° año
+                                    @endif
                                 </button>
                             </h2>
 

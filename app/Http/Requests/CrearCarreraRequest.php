@@ -30,7 +30,7 @@ class CrearCarreraRequest extends FormRequest
                 'max_digits:4',
                 'numeric',
             ],
-            'resolucion_archivo' => ['nullable',
+            'resolucion_archivo.*' => ['nullable',
                 'file',
                 'mimes:pdf',
                 'max:2048',
