@@ -76,6 +76,11 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Egresado::class, 'id_alumno', 'id');
     }
 
+    public function carreraDefault()
+    {
+        return $this->hasOne(CarreraDefault::class, 'id_alumno', 'id');
+    }
+
     public static function existeSinPassword($data)
     {
         return Alumno::where('email', $data['email'])

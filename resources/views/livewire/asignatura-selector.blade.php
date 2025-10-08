@@ -8,29 +8,28 @@
                 <input type="hidden" name="id_carrera" value="{{ $carrera->id }}">
             </div>
             <div class="perfil_dataname">
-                <label>Año:</label>
-                <select name="anio" class="campo_info rounded" wire:model.change="anio">
-                    @if ($anio == null)
-                    <option value="">elija el año de la asignatura</option>
-                    @endif
-                    <option value="1" {{ $anio == 1 ? 'selected' : '' }}>1º año</option>
-                    <option value="2" {{ $anio == 2 ? 'selected' : '' }}>2º año</option>
-                    <option value="3" {{ $anio == 3 ? 'selected' : '' }}>3º año</option>
-                    <option value="4" {{ $anio == 4 ? 'selected' : '' }}>4º año</option>
-                    <option value="5" {{ $anio == 5 ? 'selected' : '' }}>5º año</option>
-                </select>
-            </div>
-            <div class="perfil_dataname">
-                <label for="selectedId">Asignatura:</label>
-                <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model.change="selectedId"
-                    form="add_asignatura">
-                    @foreach ($asignaturas->where('anio', $anio)->where('id', '!=', $carrera->asignaturas->first()->id) as $selectedId)
-                    <option value="{{ $selectedId->id }}">
-                        {{ $selectedId->nombre }}
-                    </option>
-                    @endforeach
-                </select>
-            </div>
+    <label>Año:</label>
+    <select name="anio" class="campo_info rounded" wire:model="anio" @if($selectedId) disabled @endif>
+        @if (is_null($anio))
+            <option value="">Elija el año de la asignatura</option>
+        @endif
+        @for ($i = 1; $i <= 5; $i++)
+            <option value="{{ $i }}" {{ $anio == $i ? 'selected' : '' }}>{{ $i }}º año</option>
+        @endfor
+    </select>
+</div>
+
+<div class="perfil_dataname">
+    <label for="selectedId">Asignatura:</label>
+    <select name="id_asignatura" id="selectedId" class="campo_info rounded" wire:model="selectedId" form="add_asignatura">
+        <option value="">Seleccione una asignatura</option>
+        @foreach ($asignaturas as $asig)
+            @if($asig->id != ($carrera->asignaturas->first()->id ?? null))
+                <option value="{{ $asig->id }}">{{ $asig->nombre }}</option>
+            @endif
+        @endforeach
+    </select>
+</div>
 
 
             {{-- Carga horaria --}}

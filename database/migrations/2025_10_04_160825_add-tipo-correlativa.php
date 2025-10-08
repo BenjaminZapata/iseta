@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('asignaturas', function (Blueprint $table) {
-            $table->integer('cantidad_modulo')->default(0);
-            $table->integer('carga_horaria')->nullable()->change();
-            $table->dropColumn('anio');
-            $table->dropColumn('id_carrera');
-           
+        Schema::table('correlatividades', function (Blueprint $table) {
+            $table->tinyInteger('tipo_correlativa')->default(0);
         });
     }
 
