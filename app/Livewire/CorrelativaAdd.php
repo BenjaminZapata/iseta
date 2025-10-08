@@ -14,31 +14,20 @@ class CorrelativaAdd extends Component
 
     public $correlativa;
 
-    public $correlativasId;
     public $correlativas;
-    public array $correlativasId;
-    public array $correlativas;
 
     public $showModal = false;
 
     public function mount($carrera, $asignatura)
     {
         $this->carrera = $carrera;
-        $this->correlativasId = [];
         $this->singleAsignatura = $asignatura;
-        $this->correlativasId = [];
-        foreach ($asignatura->correlativas as $corr) {
-            $this->correlativasId[] = $corr->id;
-        }
         $this->correlativas = [];
     }
 
     public function addCorrelativa()
     {
-        
-        if (!$this->correlativa) {
-        
-        if (empty($this->correlativa)) {
+        if (! $this->correlativa) {
             return flash()
                 ->option('position', 'top-center')
                 ->error('Seleccione una correlativa');
@@ -53,27 +42,20 @@ class CorrelativaAdd extends Component
                 ->option('position', 'top-center')
                 ->error('El año de la correlativa debe ser menor al de la asignatura');
         }
-        if ($asignaturaOwn->correlativas()->where('id_asignatura', $asignaturaCorr->id)->exists()) {
-        if ($asignaturaOwn->correlativas()->where('id_asignatura', $asignaturaCorr->id)->exists()) {
+        if ($asignaturaOwn->correlativas($this->carrera->id)->where('id_asignatura', $asignaturaCorr->id)->exists()) {
             return flash()
                 ->option('position', 'top-center')
                 ->error('Esta asignatura ya tiene esta correlativa');
         }
+
         $this->correlativas[] = $this->correlativa;
-        $this->correlativasId[] = $this->correlativa['id'];
-        $this->correlativasId[] = $this->correlativa['id'];
-        $this->correlativa = '';
     }
 
     public function deleteCorrelativa($asignaturaId)
     {
         $this->correlativas = array_filter(
             $this->correlativas,
-            fn ($c) => $c['id'] != $asignaturaId
-        );
-        $this->correlativasId = array_filter(
-            $this->correlativasId,
-            fn ($c) => $c != $asignaturaId
+            fn($c) => $c['id'] != $asignaturaId
         );
     }
 
