@@ -30,12 +30,18 @@ class Telefono implements ValidationRule
             return;
         }
 
-        // Debe tener exactamente 1 guion
-        if (substr_count($value, '-') !== 1) {
-            $fail('El campo telefono debe contener exactamente 1 guion (-).');
+     // Solo validar cantidad de guiones si es telefono1 o telefono2
+if (in_array($attribute, ['telefono1', 'telefono2'])) {
+    // Determinar número legible
+    $numero = $attribute === 'telefono1' ? '1' : '2';
 
-            return;
-        }
+    // Debe tener exactamente 1 guion
+    if (substr_count($value, '-') !== 1) {
+        $fail("El campo teléfono {$numero} debe contener exactamente 1 guion (-).");
+        return;
+    }
+}
+
 
         // El guion no puede estar al inicio ni al final
         if (preg_match('/(^-|-$)/', $value)) {

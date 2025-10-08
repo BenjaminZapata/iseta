@@ -265,4 +265,17 @@ class CarrerasCrudController extends BaseController
 
         return redirect()->back()->with('success', 'Carrera reactivada correctamente');
     }
+public function destroyAsignatura(Carrera $carrera, Asignatura $asignatura)
+{
+    try {
+        $carrera->asignaturas()->detach($asignatura->id);
+
+        return redirect()->route('admin.carreras.edit', $carrera)
+                         ->with('mensaje', 'Se ha eliminado la asignatura de la carrera');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.carreras.edit', $carrera)
+                         ->with('error', 'No se pudo eliminar la asignatura de la carrera');
+    }
+}
+
 }

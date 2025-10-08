@@ -321,24 +321,22 @@
 
                                                     <!-- Eliminar asignatura -->
                                                     <td class="center">
-                                                        @if (!$config['modo_seguro'])
-                                                            <form id="form-eliminar-{{ $asignatura->id }}"
-                                                                action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <div
-                                                                    style="display: flex; align-items: center; justify-content: center;">
-                                                                    <button type="button"
-                                                                        onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', `¿Está seguro que desea desvincular la asignatura {{ $asignatura->nombre }} de {{ $asignatura->anio }}° año de la carrera {{ $carrera->nombre }}?`)"
-                                                                        class="btn_icon-danger"
-                                                                        style="background-color: red;">
-                                                                        <i class="ti ti-trash"
-                                                                            style="font-size: 1.3em;"></i>
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        @endif
+                                                 @if (!$config['modo_seguro'])
+                                                    <form id="form-eliminar-{{ $asignatura->id }}"
+                                                    action="{{ route('admin.carreras.destroyAsignatura', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <div style="display: flex; align-items: center; justify-content: center;">
+                                                    <button type="button"
+                                                    onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', `¿Está seguro que desea desvincular la asignatura {{ $asignatura->nombre }} de {{ $asignatura->anio }}° año de la carrera {{ $carrera->nombre }}?`)"
+                                                    class="btn_icon-danger"
+                                                    style="background-color: red;">
+                                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                                    </button>
+                                                    </div>
+                                                    </form>
+                                                    @endif
                                                     </td>
                                                 </tr>
 
