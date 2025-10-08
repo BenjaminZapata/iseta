@@ -21,22 +21,19 @@
                 <div class="gap-2 p-0 center">
                     <legend class="font-600 font-7 black" for="correlativa">Correlativa:</legend>
                     <select class="campo_info rounded" name="correlativa" id="correlativa" wire:model="correlativa">
-                        <option value="">Seleccioná una correlativa</option>
                         @foreach ($carrera->asignaturas()->wherePivot('anio', '<', $singleAsignatura->carrera->where('id', $carrera->id)->first()->pivot->anio)->get() as $asignatura)
-                            @if (!in_array($asignatura->id, $correlativasId))
-                                <option value="{{ $asignatura }}">{{ $asignatura->nombre }}</option>
-                            @endif
-                        @endforeach
+                            <option value="{{ $asignatura }}">{{ $asignatura->nombre }}</option>
+                            @endforeach
                     </select>
                 </div>
                 <div style="margin-left: 10px">
                     <legend class="font-600 font-7 black" for="correlativa">AGREGADAS</legend>
                     @foreach ($correlativas as $cor)
-                        <div>
-                            <p>{{ $cor['nombre'] }} <span class="close" style="margin-right: 5px"
-                                    wire:click="deleteCorrelativa({{ $cor['id'] }})">
-                                    &times;</span></p>
-                        </div>
+                    <div>
+                        <p>{{ $cor['nombre'] }} <span class="close" style="margin-right: 5px"
+                                wire:click="deleteCorrelativa({{ $cor['id'] }})">
+                                &times;</span></p>
+                    </div>
                     @endforeach
 
                 </div>
