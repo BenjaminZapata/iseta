@@ -85,14 +85,6 @@
                                 'maxlength' => 30,
                             ]),
                         ],
-                        'Vinculación' => [
-                            new \Illuminate\Support\HtmlString(
-                                view('components.vinculacion-profesor', [
-                                    'carreras' => $carreras,
-                                    'profesor' => null,
-                                ])->render(),
-                            ),
-                        ],
                         'Otros' => [
                             $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones'), [
                                 'placeholder' => 'Notas adicionales sobre el profesor/a',

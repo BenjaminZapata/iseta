@@ -99,6 +99,8 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     });
     Route::post('admin/profesores/{profesor}/vincular-asignaturas', [ProfesoresCrudController::class, 'vincularAsignaturas'])
     ->name('admin.profesores.vincular-asignaturas');
+Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [ProfesoresCrudController::class, 'desvincularAsignatura'])
+    ->name('admin.profesores.desvincular-asignatura');
     
 
     // -----------------------------

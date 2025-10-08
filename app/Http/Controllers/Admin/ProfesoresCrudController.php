@@ -59,15 +59,26 @@ class ProfesoresCrudController extends BaseController
     public function store(crearProfesorRequest $request)
     {
         $data = $request->validated();
-        $data['password'] = Str::password();
+        $data['password'] = Str::password(); // genera un password aleatorio temporal
 
         try {
+            // Enviar mail con las credenciales o aviso
             Mail::to($data['email'])->queue(new ProfesorCreado($data));
         } catch (\Throwable $th) {
-            Log::error($th);
+            Log::error('Error al enviar mail de creación de profesor: ' . $th->getMessage());
         }
+
+        // Hashear la contraseña antes de guardar
         $data['password'] = Hash::make($data['password']);
-        return redirect()->route('admin.profesores.index')->with('mensaje', 'Se creó el profesor');
+
+        // Crear el profesor
+        $profesor = Profesor::create($data);
+
+        // Redirigir directamente al formulario de edición
+        return redirect()
+            ->route('admin.profesores.edit', $profesor->id)
+            ->with('mensaje', 'El profesor ha sido creado con éxito. 
+            AHORA PUEDE VINCULAR SUS ASIGNATURAS');
     }
 
     /**
@@ -146,20 +157,55 @@ class ProfesoresCrudController extends BaseController
     }
     public function vincularAsignaturas(Request $request, Profesor $profesor)
     {
-        $seleccionadas = $request->input('asignaturas_seleccionadas', []);
+        try {
+            $seleccionadas = json_decode($request->input('asignaturas_payload'), true);
 
-        foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
-            foreach ($idAsignaturas as $idAsignatura) {
-                $asignatura = Asignatura::find($idAsignatura);
+            if (empty($seleccionadas)) {
+                return redirect()->back()->with('error', 'No hay asignaturas para asignar.');
+            }
 
-                if ($asignatura) {
-                    $asignatura->carrera()->updateExistingPivot($idCarrera, [
-                        'id_profesor' => $profesor->id,
-                    ]);
+            $totalVinculadas = 0;
+
+            foreach ($seleccionadas as $idCarrera => $idAsignaturas) {
+                foreach ($idAsignaturas as $idAsignatura) {
+                    $asignatura = Asignatura::find($idAsignatura);
+                    if ($asignatura) {
+                        $asignatura->carrera()->updateExistingPivot($idCarrera, [
+                            'id_profesor' => $profesor->id,
+                        ]);
+                        $totalVinculadas++;
+                    }
                 }
             }
-        }
 
-        return response()->json(['success' => true]);
+            if ($totalVinculadas === 0) {
+                return redirect()->back()->with('error', 'No se vinculó ninguna asignatura.');
+            }
+
+            return redirect()->back()->with('mensaje', "$totalVinculadas asignatura(s) vinculada(s).");
+        } catch (\Throwable $e) {
+            \Log::error("Error al vincular asignaturas: " . $e->getMessage());
+            return redirect()->back()->with('error', 'Hubo un problema al vincular las asignaturas.');
+        }
+    }
+
+    public function desvincularAsignatura(Profesor $profesor, Asignatura $asignatura)
+    {
+        try {
+            $carrera = $asignatura->carrera()->first();
+
+            if (!$carrera) {
+                return redirect()->back()->with('error', 'La asignatura no está vinculada a ninguna carrera.');
+            }
+
+            $asignatura->carrera()->updateExistingPivot($carrera->id, [
+                'id_profesor' => null,
+            ]);
+
+            return redirect()->back()->with('mensaje', 'Asignatura desvinculada correctamente.');
+        } catch (\Throwable $e) {
+            \Log::error("Error al desvincular asignatura: " . $e->getMessage());
+            return redirect()->back()->with('error', 'Hubo un problema al desvincular la asignatura.');
+        }
     }
 }
