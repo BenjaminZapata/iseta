@@ -218,7 +218,7 @@
                 {{-- A C O R D E Ó N  D E  A S I G N A T U R A S --}}
                 <div class="accordion" id="asignaturasAccordion">
                     @php
-                        $asignaturasPorAnio = $carrera->asignaturas->groupBy('pivot.anio');
+                        $asignaturasPorAnio = $carrera->asignaturas->groupBy('pivot.anio')->sortKeys();
                         $anio_index = 0;
                     @endphp
 
@@ -229,7 +229,11 @@
                                 <button class="accordion-button collapsed font-500" type="button"
                                     data-bs-toggle="collapse" data-bs-target="#collapseAnio{{ $anio_index }}"
                                     aria-expanded="false" aria-controls="collapseAnio{{ $anio_index }}">
-                                    {{ $asignaturas[$anio]->pivot->anio + 1 }}° año
+                                    @if (is_array($asignaturas))
+                                        {{ $asignaturas[$anio]->pivot->anio + 1 }}° año
+                                    @else
+                                        {{ $asignaturas[0]->pivot->anio + 1 }}° año
+                                    @endif
                                 </button>
                             </h2>
 
