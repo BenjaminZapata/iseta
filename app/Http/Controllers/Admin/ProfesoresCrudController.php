@@ -77,7 +77,8 @@ class ProfesoresCrudController extends BaseController
         // Redirigir directamente al formulario de edición
         return redirect()
             ->route('admin.profesores.edit', $profesor->id)
-            ->with('mensaje', 'Profesor creado correctamente. Ahora podés vincular sus asignaturas.');
+            ->with('mensaje', 'El profesor ha sido creado con éxito. 
+            AHORA PUEDE VINCULAR SUS ASIGNATURAS');
     }
 
     /**
