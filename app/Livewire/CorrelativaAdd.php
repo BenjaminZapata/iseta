@@ -14,6 +14,7 @@ class CorrelativaAdd extends Component
 
     public $correlativa;
 
+    public $correlativasId;
     public $correlativas;
 
     public $showModal = false;
@@ -22,12 +23,14 @@ class CorrelativaAdd extends Component
     {
         $this->carrera = $carrera;
         $this->singleAsignatura = $asignatura;
+        $this->correlativasId = [];
         $this->correlativas = [];
     }
 
     public function addCorrelativa()
     {
-        if (! $this->correlativa) {
+        
+        if (!$this->correlativa) {
             return flash()
                 ->option('position', 'top-center')
                 ->error('Seleccione una correlativa');
@@ -42,13 +45,13 @@ class CorrelativaAdd extends Component
                 ->option('position', 'top-center')
                 ->error('El año de la correlativa debe ser menor al de la asignatura');
         }
-        if ($asignaturaOwn->correlativas($this->carrera->id)->where('id_asignatura', $asignaturaCorr->id)->exists()) {
+        if ($asignaturaOwn->correlativas()->where('id_asignatura', $asignaturaCorr->id)->exists()) {
             return flash()
                 ->option('position', 'top-center')
                 ->error('Esta asignatura ya tiene esta correlativa');
         }
-
         $this->correlativas[] = $this->correlativa;
+        $this->correlativasId[] = $this->correlativa['id'];
     }
 
     public function deleteCorrelativa($asignaturaId)
@@ -56,6 +59,10 @@ class CorrelativaAdd extends Component
         $this->correlativas = array_filter(
             $this->correlativas,
             fn ($c) => $c['id'] != $asignaturaId
+        );
+        $this->correlativasId = array_filter(
+            $this->correlativasId,
+            fn ($c) => $c != $asignaturaId
         );
     }
 
