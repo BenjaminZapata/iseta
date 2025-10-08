@@ -1,19 +1,17 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\AdminLoginRequest;
 use App\Models\Admin;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
-use App\Http\Requests\AdminLoginRequest;
-use Illuminate\Support\Facades\Log;
 
 class AdminAuthController extends Controller
 {
-
     /*
      | ---------------------------------------------
      | Middleware de administrador, excepto el login
@@ -27,7 +25,6 @@ class AdminAuthController extends Controller
 
     /**
      * Vista Logueo de administrador
-     * @return \Illuminate\View\View
      */
     public function loginView(): View
     {
@@ -37,7 +34,7 @@ class AdminAuthController extends Controller
     /**
      * Valida las credenciales del administrador y loguea al mismo
      *
-     * @param AdminLoginRequest $request
+     * @param  AdminLoginRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function login(Request $request)
@@ -50,7 +47,7 @@ class AdminAuthController extends Controller
 
         $admin = Admin::where('username', $request->username)->first();
 
-        if (!$admin) {
+        if (! $admin) {
             return back()->withErrors(['username' => 'El usuario no existe.']);
         }
 
@@ -68,7 +65,7 @@ class AdminAuthController extends Controller
         }
 
         // Validar contraseña
-        if (!\Hash::check($request->password, $admin->password)) {
+        if (! \Hash::check($request->password, $admin->password)) {
             return back()->withErrors(['password' => 'Contraseña incorrecta.']);
         }
 
@@ -77,22 +74,19 @@ class AdminAuthController extends Controller
 
         return match ($request->rol) {
             'preceptor' => redirect()->route('preceptor.alumnos.index'),
-            'regente' => redirect()->route('admin.alumnos.index'),
+            'regente' => redirect()->route('admin.profesores.index'),
             'secretario' => redirect()->route('secretario.alumnos.index'),
             default => redirect()->route('admin.alumnos.index'),
         };
     }
 
-
-
     /**
      * cierra sesion del administrador
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
     public function logout(): RedirectResponse
     {
         Auth::logout();
+
         return redirect()->route('admin.login');
     }
 }
