@@ -18,6 +18,7 @@ class Asignatura extends Model
     public $timestamps = false;
 
     protected $fillable =  [
+        'id',
         'nombre',
         'tipo_modulo',
         'carga_horaria',
