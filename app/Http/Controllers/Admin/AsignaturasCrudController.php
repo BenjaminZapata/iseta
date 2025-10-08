@@ -70,8 +70,7 @@ class AsignaturasCrudController extends BaseController
 
         // Verificar unicidad contextual
         $existe = Asignatura::where('nombre', $data['nombre'])
-            ->where('carga_horaria', $data['carga_horaria'])
-            ->where('anio', 0)// dejar carga_horaria en estos datos aunque se usen "cantidad de modulos" ya que se usa "carga_horaria" en la base de datos
+            ->where('carga_horaria', $data['carga_horaria'])// dejar carga_horaria en estos datos aunque se usen "cantidad de modulos" ya que se usa "carga_horaria" en la base de datos
             ->exists();
 
         if ($existe) {
@@ -96,29 +95,29 @@ class AsignaturasCrudController extends BaseController
         try {
 
             // Verificar si la asignatura está vinculada a alguna carrera vigente
-            $carrerasVigentes = $asignatura->carrera->filter(fn($c) => $c->vigente);
+            $carrerasVigentes = $asignatura->carrera->filter(fn ($c) => $c->vigente);
 
             if ($carrerasVigentes->isNotEmpty()) {
-            return redirect()->route('admin.asignaturas.index')
-            ->with('error', 'No se pudo eliminar la asignatura porque está vinculada a una o más carreras vigentes.');
+                return redirect()->route('admin.asignaturas.index')
+                    ->with('error', 'No se pudo eliminar la asignatura porque está vinculada a una o más carreras vigentes.');
             }
 
             // Verificar si la asignatura tiene relaciones con cursadas
             if ($asignatura->cursadas()->exists()) {
-            return redirect()->route('admin.asignaturas.index')
-            ->with('error', 'No se pudo eliminar la asignatura porque tiene cursadas asociadas.');
+                return redirect()->route('admin.asignaturas.index')
+                    ->with('error', 'No se pudo eliminar la asignatura porque tiene cursadas asociadas.');
             }
 
             // Verificar si la asignatura tiene relaciones con materias correlativas
             if ($asignatura->correlativas()->exists()) {
-            return redirect()->route('admin.asignaturas.index')
-            ->with('error', 'No se pudo eliminar la asignatura porque tiene materias correlativas asociadas.');
+                return redirect()->route('admin.asignaturas.index')
+                    ->with('error', 'No se pudo eliminar la asignatura porque tiene materias correlativas asociadas.');
             }
 
             // Verificar si la asignatura tiene relaciones con mesas
             if ($asignatura->mesas()->exists()) {
-            return redirect()->route('admin.asignaturas.index')
-            ->with('error', 'No se pudo eliminar la asignatura porque tiene mesas asociadas.');
+                return redirect()->route('admin.asignaturas.index')
+                    ->with('error', 'No se pudo eliminar la asignatura porque tiene mesas asociadas.');
             }
 
             // Si no tiene relaciones bloqueantes, procedemos a eliminarla
