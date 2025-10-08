@@ -293,8 +293,9 @@
                                                     <td class="center">{{ $asignatura->carga_horaria }} horas</td>
 
                                                     <!-- Cantidad de correlativas -->
-                                                    <td class="center">
-                                                        {{ $hasCorrelativas ? $asignatura->correlativas()->count() . ' asignadas' : '—' }}
+                                                    <td class="center" x-data="{ asignaturaId: {{ $asignatura->id }} }">
+                                                        <span
+                                                            x-text="$store.correlativas[asignaturaId]?.length > 0 ? $store.correlativas[asignaturaId].length + ' asignadas' : '—'"></span>
                                                     </td>
 
                                                     <!-- Crear mesa -->
@@ -345,41 +346,58 @@
                                                     </td>
                                                 </tr>
 
-                                                <!-- Subacordeón (correlativas) -->
+                                                {{-- Subacordeón de correlativas --}}
                                                 <tr class="collapse" id="{{ $collapseId }}">
                                                     <td colspan="7" class="correlativas-expandida">
-                                                        <div>
-                                                            <strong class="perfil_dataname">Correlativas de
-                                                                "{{ $asignatura->nombre }}"
-                                                            </strong>
-                                                            <div x-data="{ correlativas: {{ json_encode($asignatura->correlativas) }} }">
+                                                        <div x-data="{
+                                                            asignaturaId: {{ $asignatura->id }},
+                                                            init() {
+                                                                $store.correlativas[this.asignaturaId] = {{ json_encode($asignatura->correlativas) }};
+                                                            },
+                                                            get correlativas() {
+                                                                return $store.correlativas[this.asignaturaId] || [];
+                                                            },
+                                                            eliminar(id) {
+                                                                $store.correlativas[this.asignaturaId] = this.correlativas.filter(c => c.id !== id);
+                                                            }
+                                                        }" x-init="init()">
+                                                            <div class="perfil_one br">
+                                                                <div class="perfil__header">
+                                                                    <legend class="font-600 font-7 white">
+                                                                        Correlativas de "{{ $asignatura->nombre }}"
+                                                                    </legend>
+                                                                </div>
+
                                                                 <ul>
                                                                     <template x-for="corr in correlativas"
                                                                         :key="corr.id">
-                                                                        <li class="flex items-center justify-between mb-2">
+                                                                        <li class="flex items-center justify-between mb-2"
+                                                                            style="margin: 15px; font-size: 1em;">
                                                                             <span x-text="corr.nombre"></span>
-                                                                            <button class="btn_sky btnEliminar"
+                                                                            <button class="btn_desvincular btnEliminar"
+                                                                                style="margin-left: 15px"
+                                                                                @click.prevent="eliminar(corr.id)"
+                                                                                :data-correlativa="corr.id"
                                                                                 data-asignatura="{{ $asignatura }}"
-                                                                                data-carrera="{{ $carrera }}"
-                                                                                :data-correlativa="corr.id">
+                                                                                data-carrera="{{ $carrera }}">
                                                                                 <i class="ti ti-x"
-                                                                                    style="font-size:1.3em; margin-right:8px;"></i>
-                                                                                Eliminar
+                                                                                    style="font-size:0.8em;"></i>
                                                                             </button>
                                                                         </li>
                                                                     </template>
                                                                 </ul>
 
                                                                 <p x-show="correlativas.length === 0"
-                                                                    class="archivo-vacio mt-2">
+                                                                    class="archivo-vacio mt-2"
+                                                                    style="margin: 20px; font-size: 1em;">
                                                                     No tiene correlativas asignadas.
                                                                 </p>
+
+                                                                <div class="acciones-correlativas mt-2">
+                                                                    <livewire:correlativa-add :carrera="$carrera"
+                                                                        :asignatura="$asignatura" />
+                                                                </div>
                                                             </div>
-                                                            <div class="acciones-correlativas">
-                                                                <livewire:correlativa-add :carrera="$carrera"
-                                                                    :asignatura="$asignatura" />
-                                                            </div>
-                                                        </div>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -530,6 +548,11 @@
                                 }
                             });
                         });
+                    });
+                </script>
+                <script>
+                    document.addEventListener('alpine:init', () => {
+                        Alpine.store('correlativas', {}); // Un objeto que va a guardar correlativas por ID de asignatura
                     });
                 </script>
             @endsection
