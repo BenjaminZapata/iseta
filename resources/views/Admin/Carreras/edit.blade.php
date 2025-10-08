@@ -210,7 +210,7 @@
                 {{-- A C O R D E Ó N  D E  A S I G N A T U R A S --}}
                 <div class="accordion" id="asignaturasAccordion">
                     @php
-                        $asignaturasPorAnio = $carrera->asignaturas->groupBy('pivot.anio');
+                        $asignaturasPorAnio = $carrera->asignaturas->groupBy('pivot.anio')->sortKeys();
                         $anio_index = 0;
                     @endphp
 

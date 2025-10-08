@@ -9,14 +9,18 @@
             </div>
             <div class="perfil_dataname">
                 <label>Año:</label>
-                <select name="anio" class="campo_info rounded" wire:model="anio" @if($selectedId) disabled @endif>
-                    @if (is_null($anio))
-                    <option value="">Elija el año de la asignatura</option>
-                    @endif
-                    @for ($i = 1; $i <= 5; $i++)
-                        <option value="{{ $i }}" {{ $anio == $i ? 'selected' : '' }}>{{ $i }}º año</option>
-                        @endfor
-                </select>
+             <select name="anio" class="campo_info rounded" wire:model="anio" @if($selectedId) disabled @endif>
+    @if (is_null($anio))
+        <option value="">Elija el año de la asignatura</option>
+    @endif
+
+    @for ($i = 1; $i <= 5; $i++)
+        <option value="{{ $i - 1 }}" {{ $anio == ($i - 1) ? 'selected' : '' }}>
+            {{ $i }}º año
+        </option>
+    @endfor
+</select>
+
             </div>
 
             <div class="perfil_dataname">
