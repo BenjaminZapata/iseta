@@ -23,8 +23,8 @@
             <select name="rol" id="rol" required aria-required="true" aria-label="Seleccione su rol">
                 <option value="" disabled {{ old('rol') ? '' : 'selected' }}>Seleccione rol</option>
                 <option value="regente" {{ old('rol') === 'regente' ? 'selected' : '' }}>Regente</option>
-                <option value="preceptor" {{ old('rol') === 'preceptor' ? 'selected' : '' }}>Preceptor</option>
-                <option value="secretario" {{ old('rol') === 'secretario' ? 'selected' : '' }}>Secretario</option>
+               <!--  <option value="preceptor" {{ old('rol') === 'preceptor' ? 'selected' : '' }}>Preceptor</option>-->
+                <!-- <option value="secretario" {{ old('rol') === 'secretario' ? 'selected' : '' }}>Secretario</option>-->
             </select>
             @error('rol')
                 <div class="error-message">{{ $message }}</div>
