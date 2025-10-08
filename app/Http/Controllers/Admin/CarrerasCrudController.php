@@ -64,7 +64,7 @@ class CarrerasCrudController extends BaseController
     public function store(CrearCarreraRequest $request)
     {
         $data = $request->validated();
-
+        Log::debug($request->file('resolucion_archivo'));
         $data['vigente'] = 1;
 
         if ($request->hasFile('resolucion_archivo')) {

@@ -30,11 +30,6 @@ class CrearCarreraRequest extends FormRequest
                 'max_digits:4',
                 'numeric',
             ],
-            'resolucion_archivo.*' => ['nullable',
-                'file',
-                'mimes:pdf',
-                'max:2048',
-            ],
             'anio_fin' => ['nullable', 'integer', 'gt:anio_apertura', 'max_digits:4'],
             'observaciones' => ['nullable', 'string', 'max:255'],
         ];
