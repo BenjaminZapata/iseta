@@ -54,8 +54,8 @@ class AdminAuthController extends Controller
         // Validar rol seleccionado
         $roles = [
             'regente' => 0,
-           // 'preceptor' => 1,
-            //'secretario' => 2,
+            // 'preceptor' => 1,
+            // 'secretario' => 2,
         ];
 
         $rolSeleccionado = $roles[$request->rol] ?? null;
@@ -73,9 +73,9 @@ class AdminAuthController extends Controller
         Auth::guard('admin')->login($admin);
 
         return match ($request->rol) {
-            //'preceptor' => redirect()->route('preceptor.alumnos.index'),
+            // 'preceptor' => redirect()->route('preceptor.alumnos.index'),
             'regente' => redirect()->route('admin.profesores.index'),
-            //'secretario' => redirect()->route('secretario.alumnos.index'),
+            // 'secretario' => redirect()->route('secretario.alumnos.index'),
             default => redirect()->route('admin.alumnos.index'),
         };
     }
