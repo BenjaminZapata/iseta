@@ -239,8 +239,8 @@
                                                 <th>Materia</th>
                                                 <th class="center">Carga</th>
                                                 <th class="center">Correlativas</th>
-                                                <th class="center">Mesa</th>
-                                                <th class="center">Exportar</th>
+                                                 <!-- <th class="center">Mesa</th>-->
+                                                 <!-- <th class="center">Exportar</th>-->
                                                 <th class="center">Acciones</th>
                                             </tr>
                                         </thead>
@@ -295,6 +295,7 @@
                                                     </td>
 
                                                     <!-- Crear mesa -->
+                                                     <!-- 
                                                     <td>
                                                         <div
                                                             style="display: flex; align-items: center; justify-content: center;">
@@ -305,10 +306,10 @@
                                                                 Crear Mesa
                                                             </button>
                                                         </div>
-                                                    </td>
+                                                    </td>-->
 
                                                     <!-- Exportar -->
-                                                    <td class="center">
+                                                    <!-- <td class="center">
                                                         <div
                                                             style="display:flex; align-items: center; justify-content: center;">
                                                             <button type="button" class="btn_exportar"
@@ -317,7 +318,7 @@
                                                             </button>
                                                             {{-- ... resto del form exportar ... --}}
                                                         </div>
-                                                    </td>
+                                                    </td>-->
 
                                                     <!-- Eliminar asignatura -->
                                                     <td class="center">
