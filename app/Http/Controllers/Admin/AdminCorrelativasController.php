@@ -8,6 +8,7 @@ use App\Models\Carrera;
 use App\Models\Correlativa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Psy\Readline\Hoa\Console;
 
 class AdminCorrelativasController extends Controller
 {
@@ -36,14 +37,16 @@ class AdminCorrelativasController extends Controller
         return redirect()->back()->with('mensaje', 'Se agrego la correlativa');
     }
 
-    public function eliminar(Asignatura $asignatura, Carrera $carrera, Asignatura $asignaturaCorr)
+    public function eliminar(Request $request)
     {
-
-        $asignatura->correlativas()
-            ->wherePivot('id_asignatura_correlativa', $asignaturaCorr->id)
+        $data = $request->all();
+        $asignatura = new Asignatura($data['asignatura']);
+        $carrera = new Carrera($data['carrera']);
+        $response = $asignatura->correlativas()
+            ->wherePivot('id_asignatura_correlativa', $data['correlativa'])
             ->wherePivot('id_carrera', $carrera->id)
-            ->detach();
-
-        return redirect()->back()->with('mensaje', 'Se elimino la correlativa');
+            ->detach($data['correlativa']);
+        Log::debug("algo diferente");
+        Log::debug($response);
     }
 }

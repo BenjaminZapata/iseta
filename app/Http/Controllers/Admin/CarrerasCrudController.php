@@ -52,14 +52,12 @@ class CarrerasCrudController extends BaseController
         $this->data['aniosPorCarrera'] = $aniosPorCarrera;
         $filterVigente = $request->input('filter_vigente', '');
 
-
-
         return view('Admin.Carreras.index', $this->data);
     }
 
     public function create()
     {
-     return view('Admin.Carreras.create');
+        return view('Admin.Carreras.create');
 
     }
 
@@ -67,16 +65,12 @@ class CarrerasCrudController extends BaseController
     {
         $data = $request->validated();
 
-    $request->validate([
-        'resolucion_archivo' => 'nullable|file|mimes:pdf|max:300000',
-    ]);
-
         $data['vigente'] = 1;
 
         if ($request->hasFile('resolucion_archivo')) {
-            $nombre = str_replace(' ', '_', $request->input('nombre')) . '.pdf';
+            $nombre = str_replace(' ', '_', $request->input('nombre')).'.pdf';
             $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
-            $data['resolucion_archivo'] = 'storage/' . $ruta;
+            $data['resolucion_archivo'] = 'storage/'.$ruta;
         }
 
         Carrera::create($data);
@@ -112,7 +106,7 @@ class CarrerasCrudController extends BaseController
         try {
             $datos = $request->validated();
 
-            /// Eliminar archivo
+            // / Eliminar archivo
             if ($request->has('eliminar_resolucion_archivo')) {
                 if ($carrera->resolucion_archivo) {
                     \Storage::disk('public')->delete(
@@ -124,10 +118,10 @@ class CarrerasCrudController extends BaseController
 
             // Subir nuevo archivo
             if ($request->hasFile('resolucion_archivo_nuevo')) {
-                $nombreArchivo = str_replace(' ', '_', $carrera->nombre) . '.pdf';
+                $nombreArchivo = str_replace(' ', '_', $carrera->nombre).'.pdf';
                 $ruta = $request->file('resolucion_archivo_nuevo')
                     ->storeAs('resoluciones', $nombreArchivo, 'public');
-                $datos['resolucion_archivo'] = 'storage/' . $ruta;
+                $datos['resolucion_archivo'] = 'storage/'.$ruta;
             }
 
             $carrera->update($datos);
@@ -135,11 +129,10 @@ class CarrerasCrudController extends BaseController
             return redirect()->back()->with('mensaje', 'Se editó la carrera');
         } catch (\Exception $e) {
             \Log::error($e);
+
             return redirect()->back()->with('error', 'No se pudo editar la carrera');
         }
     }
-
-
 
     public function createAsignaturaView(Carrera $carrera)
     {
@@ -168,10 +161,11 @@ class CarrerasCrudController extends BaseController
                     'tipo_modulo' => $asignatura->tipo_modulo,
                     'carga_horaria' => $asignatura->carga_horaria,
                     'anio' => $asignatura->anio,
-                ]
+                ],
             ]);
         } catch (\Exception $e) {
             Log::error($e);
+
             return redirect()->back()->with('error', 'No se pudo agregar la asignatura');
         }
 

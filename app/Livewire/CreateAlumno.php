@@ -7,7 +7,6 @@ use App\Livewire\Forms\InscripcionForm;
 use App\Models\Alumno;
 use App\Models\Carrera;
 use App\Models\Egresado;
-use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
 class CreateAlumno extends Component
@@ -65,7 +64,6 @@ class CreateAlumno extends Component
     {
         $carrera = (array) json_decode($carreraStd);
         $this->carrera = $carrera;
-        Log::info($this->carrera['id']);
         // reset datos previos de inscripción
         $this->show = true;
     }

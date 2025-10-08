@@ -19,6 +19,7 @@ class Carrera extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'id',
         'nombre',
         'resolucion',
         'anio_apertura',
@@ -37,6 +38,11 @@ class Carrera extends Model
             ->withPivot('id_profesor', 'anio', 'tipo_modulo', 'carga_horaria')
             ->using(CarreraAsignaturaProfesor::class)
             ->withTimestamps();
+    }
+
+    public function cAP()
+    {
+        return $this->hasMany(CarreraAsignaturaProfesor::class, 'id_carrera', 'id');
     }
 
     public function cursadas(): HasMany
