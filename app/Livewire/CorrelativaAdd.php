@@ -14,23 +14,26 @@ class CorrelativaAdd extends Component
 
     public $correlativa;
 
-    public $correlativasId;
-    public $correlativas;
+    public array $correlativasId;
+    public array $correlativas;
 
     public $showModal = false;
 
     public function mount($carrera, $asignatura)
     {
         $this->carrera = $carrera;
-        $this->singleAsignatura = $asignatura;
         $this->correlativasId = [];
+        $this->singleAsignatura = $asignatura;
+        foreach ($asignatura->correlativas as $corr) {
+            $this->correlativasId[] = $corr->id;
+        }
         $this->correlativas = [];
     }
 
     public function addCorrelativa()
     {
         
-        if (!$this->correlativa) {
+        if (empty($this->correlativa)) {
             return flash()
                 ->option('position', 'top-center')
                 ->error('Seleccione una correlativa');
@@ -52,6 +55,7 @@ class CorrelativaAdd extends Component
         }
         $this->correlativas[] = $this->correlativa;
         $this->correlativasId[] = $this->correlativa['id'];
+        $this->correlativa = '';
     }
 
     public function deleteCorrelativa($asignaturaId)
