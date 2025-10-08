@@ -184,22 +184,25 @@ class CarrerasCrudController extends BaseController
     }
 
     public function addAsignatura(AddAsignaturaRequest $request, Carrera $carrera)
-    {
-        $data = $request->validated();
+{
+    $data = $request->validated();
 
-        if ($carrera->asignaturas()->where('id_asignatura', $data['id_asignatura'])->exists()) {
-            return redirect()->back()->with('error', 'La asignatura ya está en la carrera')->withInput();
-        }
+   
+    $data['anio'] = $data['anio'] == 1 ? 0 : $data['anio'];
 
-        $carrera->asignaturas()->attach($data['id_asignatura'], [
-            'id_profesor' => $data['id_profesor'] ?? null,
-            'anio' => $data['anio'],
-            'carga_horaria' => $data['carga_horaria'],
-            'tipo_modulo' => $data['tipo_modulo'] ?? 0,
-        ]);
-
-        return redirect()->back()->with('mensaje', 'Se agregó la asignatura a la carrera');
+    if ($carrera->asignaturas()->where('id_asignatura', $data['id_asignatura'])->exists()) {
+        return redirect()->back()->with('error', 'La asignatura ya está en la carrera')->withInput();
     }
+
+    $carrera->asignaturas()->attach($data['id_asignatura'], [
+        'id_profesor'   => $data['id_profesor'] ?? null,
+        'anio'          => $data['anio'],
+        'carga_horaria' => $data['carga_horaria'],
+        'tipo_modulo'   => $data['tipo_modulo'] ?? 0,
+    ]);
+
+    return redirect()->back()->with('mensaje', 'Se agregó la asignatura a la carrera');
+}
 
     public function destroy(Carrera $carrera)
     {
