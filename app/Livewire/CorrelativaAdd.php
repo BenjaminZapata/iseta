@@ -14,6 +14,8 @@ class CorrelativaAdd extends Component
 
     public $correlativa;
 
+    public $correlativasId;
+    public $correlativas;
     public array $correlativasId;
     public array $correlativas;
 
@@ -24,6 +26,7 @@ class CorrelativaAdd extends Component
         $this->carrera = $carrera;
         $this->correlativasId = [];
         $this->singleAsignatura = $asignatura;
+        $this->correlativasId = [];
         foreach ($asignatura->correlativas as $corr) {
             $this->correlativasId[] = $corr->id;
         }
@@ -32,6 +35,8 @@ class CorrelativaAdd extends Component
 
     public function addCorrelativa()
     {
+        
+        if (!$this->correlativa) {
         
         if (empty($this->correlativa)) {
             return flash()
@@ -49,11 +54,13 @@ class CorrelativaAdd extends Component
                 ->error('El año de la correlativa debe ser menor al de la asignatura');
         }
         if ($asignaturaOwn->correlativas()->where('id_asignatura', $asignaturaCorr->id)->exists()) {
+        if ($asignaturaOwn->correlativas()->where('id_asignatura', $asignaturaCorr->id)->exists()) {
             return flash()
                 ->option('position', 'top-center')
                 ->error('Esta asignatura ya tiene esta correlativa');
         }
         $this->correlativas[] = $this->correlativa;
+        $this->correlativasId[] = $this->correlativa['id'];
         $this->correlativasId[] = $this->correlativa['id'];
         $this->correlativa = '';
     }
