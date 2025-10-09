@@ -9,10 +9,11 @@ use App\Models\Correlativa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Psy\Readline\Hoa\Console;
+use App\Services\Admin\AdminCorrelativasService;
 
 class AdminCorrelativasController extends Controller
 {
-    public function __construct()
+    public function __construct(protected AdminCorrelativasService $adminCorrelativas)
     {
         $this->middleware('auth:admin');
     }
@@ -25,16 +26,11 @@ class AdminCorrelativasController extends Controller
          * $asignatura = asignatura a la que se le agrega la correlativa, ej, Ingles 2.
          * $asigCorrelativa = la asignatura que se agrega como correlativa, ej, Ingles 1.
          */
-        foreach ($data as $correlativa) {
-            Log::debug($correlativa);
-            Correlativa::create([
-                'id_asignatura' => $asignatura->id,
-                'id_asignatura_correlativa' => $correlativa['id'],
-                'id_carrera' => $carrera->id,
-            ]);
+        if ($this->adminCorrelativas->agregar($data,$carrera,$asignatura)) {
+            return redirect()->back()->with('error', 'No se pudieron agregar las correlativas');
         }
 
-        return redirect()->back()->with('mensaje', 'Se agrego la correlativa');
+        return redirect()->back()->with('mensaje', 'Se agregaron las correlativas');
     }
 
     public function eliminar(Request $request)

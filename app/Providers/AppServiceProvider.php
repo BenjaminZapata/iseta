@@ -6,6 +6,7 @@ use App\Models\Alumno;
 use App\Models\Carrera;
 use App\Models\Configuracion;
 use App\Models\Profesor;
+use App\Services\Admin\AdminCorrelativasService;
 use App\Services\Fecha;
 use App\Services\Filter;
 use App\Services\Form;
@@ -13,9 +14,8 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
 use Livewire\Livewire;
-use Monolog\Logger;
-use Monolog\Handler\SocketHandler;
-use Monolog\Formatter\JsonFormatter;
+use Illuminate\Contracts\Foundation\Application;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +24,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singletonIf(AdminCorrelativasService::class, function  (Application $app) {
+            return new AdminCorrelativasService();
+        });
     }
 
     /**

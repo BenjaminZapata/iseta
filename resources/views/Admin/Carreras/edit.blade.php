@@ -13,8 +13,6 @@
 @extends('Admin.template')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('css/admin/edit-carrera.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/correlativa.css') }}">
     <div class="edit-form-container">
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CARRERA'])
@@ -211,6 +209,7 @@
                 <div class="accordion" id="asignaturasAccordion">
                     @php
                         $asignaturasPorAnio = $carrera->asignaturas->groupBy('pivot.anio')->sortKeys();
+                        $asignaturasPorAnio = $carrera->asignaturas->groupBy('pivot.anio')->sortKeys();
                         $anio_index = 0;
                     @endphp
 
@@ -239,8 +238,8 @@
                                                 <th>Materia</th>
                                                 <th class="center">Carga</th>
                                                 <th class="center">Correlativas</th>
-                                                 <!-- <th class="center">Mesa</th>-->
-                                                 <!-- <th class="center">Exportar</th>-->
+                                                <!-- <th class="center">Mesa</th>-->
+                                                <!-- <th class="center">Exportar</th>-->
                                                 <th class="center">Acciones</th>
                                             </tr>
                                         </thead>
@@ -288,14 +287,7 @@
                                                     <!-- Carga horaria -->
                                                     <td class="center">{{ $asignatura->carga_horaria }} horas</td>
 
-                                                    <!-- Cantidad de correlativas -->
-                                                    <td class="center" x-data="{ asignaturaId: {{ $asignatura->id }} }">
-                                                        <span
-                                                            x-text="$store.correlativas[asignaturaId]?.length > 0 ? $store.correlativas[asignaturaId].length + ' asignadas' : '—'"></span>
-                                                    </td>
-
                                                     <!-- Crear mesa -->
-                                                     <!-- 
                                                     <td>
                                                         <div
                                                             style="display: flex; align-items: center; justify-content: center;">
@@ -309,7 +301,7 @@
                                                     </td>-->
 
                                                     <!-- Exportar -->
-                                                    <!-- <td class="center">
+                                                    <td class="center">
                                                         <div
                                                             style="display:flex; align-items: center; justify-content: center;">
                                                             <button type="button" class="btn_exportar"
@@ -322,77 +314,31 @@
 
                                                     <!-- Eliminar asignatura -->
                                                     <td class="center">
-                                                 @if (!$config['modo_seguro'])
-                                                    <form id="form-eliminar-{{ $asignatura->id }}"
-                                                    action="{{ route('admin.carreras.destroyAsignatura', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <div style="display: flex; align-items: center; justify-content: center;">
-                                                    <button type="button"
-                                                    onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', `¿Está seguro que desea desvincular la asignatura {{ $asignatura->nombre }} de {{ $asignatura->anio }}° año de la carrera {{ $carrera->nombre }}?`)"
-                                                    class="btn_icon-danger"
-                                                    style="background-color: red;">
-                                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                                    </button>
-                                                    </div>
-                                                    </form>
-                                                    @endif
+                                                        @if (!$config['modo_seguro'])
+                                                            <form id="form-eliminar-{{ $asignatura->id }}"
+                                                                action="{{ route('admin.carreras.destroyAsignatura', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <div
+                                                                    style="display: flex; align-items: center; justify-content: center;">
+                                                                    <button type="button"
+                                                                        onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}', `¿Está seguro que desea desvincular la asignatura {{ $asignatura->nombre }} de {{ $asignatura->anio }}° año de la carrera {{ $carrera->nombre }}?`)"
+                                                                        class="btn_icon-danger"
+                                                                        style="background-color: red;">
+                                                                        <i class="ti ti-trash"
+                                                                            style="font-size: 1.3em;"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </form>
+                                                        @endif
                                                     </td>
                                                 </tr>
 
                                                 {{-- Subacordeón de correlativas --}}
                                                 <tr class="collapse" id="{{ $collapseId }}">
                                                     <td colspan="7" class="correlativas-expandida">
-                                                        <div x-data="{
-                                                            asignaturaId: {{ $asignatura->id }},
-                                                            init() {
-                                                                $store.correlativas[this.asignaturaId] = {{ json_encode($asignatura->correlativas) }};
-                                                            },
-                                                            get correlativas() {
-                                                                return $store.correlativas[this.asignaturaId] || [];
-                                                            },
-                                                            eliminar(id) {
-                                                                $store.correlativas[this.asignaturaId] = this.correlativas.filter(c => c.id !== id);
-                                                            }
-                                                        }" x-init="init()">
-                                                            <div class="perfil_one br">
-                                                                <div class="perfil__header">
-                                                                    <legend class="font-600 font-7 white">
-                                                                        Correlativas de "{{ $asignatura->nombre }}"
-                                                                    </legend>
-                                                                </div>
-
-                                                                <ul>
-                                                                    <template x-for="corr in correlativas"
-                                                                        :key="corr.id">
-                                                                        <li class="flex items-center justify-between mb-2"
-                                                                            style="margin: 15px; font-size: 1em;">
-                                                                            <span x-text="corr.nombre"></span>
-                                                                            <button class="btn_desvincular btnEliminar"
-                                                                                style="margin-left: 15px"
-                                                                                @click.prevent="eliminar(corr.id)"
-                                                                                :data-correlativa="corr.id"
-                                                                                data-asignatura="{{ $asignatura }}"
-                                                                                data-carrera="{{ $carrera }}">
-                                                                                <i class="ti ti-x"
-                                                                                    style="font-size:0.8em;"></i>
-                                                                            </button>
-                                                                        </li>
-                                                                    </template>
-                                                                </ul>
-
-                                                                <p x-show="correlativas.length === 0"
-                                                                    class="archivo-vacio mt-2"
-                                                                    style="margin: 20px; font-size: 1em;">
-                                                                    No tiene correlativas asignadas.
-                                                                </p>
-
-                                                                <div class="acciones-correlativas mt-2">
-                                                                    <livewire:correlativa-add :carrera="$carrera"
-                                                                        :asignatura="$asignatura" />
-                                                                </div>
-                                                            </div>
+                                                        <livewire:correlativa-add :carrera="$carrera" :asignatura="$asignatura" />
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -403,151 +349,106 @@
                         </div> {{-- accordion-item --}}
                     @endforeach
                 </div> {{-- accordion --}}
+            </div>
+        </div>
+    </div>
 
-                <script>
-                    $(document).on('click', '.btnEliminar', function(e) {
-                        e.preventDefault();
+    <script>
+        function toggleFiltroExportar(button) {
+            const container = button.closest('div');
+            const form = container.querySelector('.filtro-exportar');
+            const isVisible = form.style.display === 'block';
 
-                        const button = $(this);
-                        const asignatura = button.data('asignatura');
-                        const carrera = button.data('carrera');
-                        const corr = button.data('correlativa');
-                        console.log(corr)
-                        const url = `/admin/correlativa/${carrera}/${asignatura}/${corr}`;
+            document.querySelectorAll('.filtro-exportar').forEach(f => f.style.display = 'none');
 
-                        if (!confirm('¿Seguro que querés eliminar esta correlativa?')) return;
+            if (!isVisible) {
+                form.style.display = 'block';
+            }
+        }
 
-                        $.ajax({
-                            url: url,
-                            type: 'DELETE',
-                            data: {
-                                _token: '{{ csrf_token() }}',
-                                carrera: carrera,
-                                asignatura: asignatura,
-                                correlativa: corr
-                            },
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function(response) {
-                                console.log('Eliminado correctamente', response);
+        document.addEventListener('click', function(e) {
+            const clickedInside = e.target.closest('.filtro-exportar') || e.target.closest(
+                'button[onclick^="toggleFiltroExportar"]');
+            if (!clickedInside) {
+                document.querySelectorAll('.filtro-exportar').forEach(f => f.style.display = 'none');
+            }
+        });
 
-                                // 🔹 Actualizar el array de Alpine para eliminar la correlativa
-                                Alpine.data("correlativas", function() {
-                                    return {
-                                        correlativas: correlativas.filter(c => c.id !== corr)
-                                    }
-                                });
+        // Para ver el nombre antes de Guardar
 
-                                button.closest('li').remove();
-                            },
-                            error: function(xhr) {
-                                console.error('Error al eliminar:', xhr.responseText);
-                                alert('Hubo un error al eliminar la correlativa.');
-                            }
-                        });
-                    });
-
-                    function toggleFiltroExportar(button) {
-                        const container = button.closest('div');
-                        const form = container.querySelector('.filtro-exportar');
-                        const isVisible = form.style.display === 'block';
-
-                        document.querySelectorAll('.filtro-exportar').forEach(f => f.style.display = 'none');
-
-                        if (!isVisible) {
-                            form.style.display = 'block';
-                        }
+        document.querySelector('input[name="resolucion_archivo_nuevo"]')
+            ?.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const fileName = e.target.files[0].name;
+                    let preview = document.getElementById('archivoPreview');
+                    if (!preview) {
+                        preview = document.createElement('p');
+                        preview.id = 'archivoPreview';
+                        preview.className = 'text-info mt-2';
+                        e.target.parentNode.appendChild(preview);
                     }
+                    preview.textContent = "Archivo seleccionado: " + fileName;
+                }
+            });
 
-                    document.addEventListener('click', function(e) {
-                        const clickedInside = e.target.closest('.filtro-exportar') || e.target.closest(
-                            'button[onclick^="toggleFiltroExportar"]');
-                        if (!clickedInside) {
-                            document.querySelectorAll('.filtro-exportar').forEach(f => f.style.display = 'none');
-                        }
-                    });
+        function mostrarNombreArchivo(input) {
+            const preview = document.getElementById('archivoPreview');
+            if (input.files.length > 0) {
+                preview.textContent = "Archivo seleccionado: " + input.files[0].name;
+            } else {
+                preview.textContent = "";
+            }
 
-                    // Para ver el nombre antes de Guardar
+        }
 
-                    document.querySelector('input[name="resolucion_archivo_nuevo"]')
-                        ?.addEventListener('change', function(e) {
-                            if (e.target.files.length > 0) {
-                                const fileName = e.target.files[0].name;
-                                let preview = document.getElementById('archivoPreview');
-                                if (!preview) {
-                                    preview = document.createElement('p');
-                                    preview.id = 'archivoPreview';
-                                    preview.className = 'text-info mt-2';
-                                    e.target.parentNode.appendChild(preview);
-                                }
-                                preview.textContent = "Archivo seleccionado: " + fileName;
-                            }
+        // Para girar el ícono de chevron al expandir/colapsar
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const collapseButtons = document.querySelectorAll('[data-bs-toggle="collapse"]');
+
+            collapseButtons.forEach(button => {
+                const icon = button.querySelector('.collapse-icon');
+                const targetSelector = button.getAttribute('data-bs-target') || button.getAttribute('href');
+                const target = document.querySelector(targetSelector);
+
+                if (!target || !icon) return;
+
+                // Evento cuando se abre el collapse
+                target.addEventListener('show.bs.collapse', function() {
+                    icon.style.transform = 'rotate(180deg)';
+                });
+
+                // Evento cuando se cierra el collapse
+                target.addEventListener('hide.bs.collapse', function() {
+                    icon.style.transform = 'rotate(0deg)';
+                });
+            });
+
+            // Hacer que todo el <tr> sea clickeable para expandir/collapse
+            const filas = document.querySelectorAll('tr.tr-asignatura');
+
+            filas.forEach(fila => {
+                fila.addEventListener('click', function(e) {
+                    // Evitar que se dispare si clickeás un botón dentro del <tr>
+                    if (e.target.closest('button')) return;
+
+                    const targetSelector = this.getAttribute('data-target');
+                    const target = document.querySelector(targetSelector);
+
+                    if (target) {
+                        const isCollapsed = !target.classList.contains('show');
+                        const collapse = new bootstrap.Collapse(target, {
+                            toggle: true
                         });
 
-                    function mostrarNombreArchivo(input) {
-                        const preview = document.getElementById('archivoPreview');
-                        if (input.files.length > 0) {
-                            preview.textContent = "Archivo seleccionado: " + input.files[0].name;
+                        if (!isCollapsed) {
+                            collapse.hide();
                         } else {
-                            preview.textContent = "";
+                            collapse.show();
                         }
-
                     }
-
-                    // Para girar el ícono de chevron al expandir/colapsar
-
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const collapseButtons = document.querySelectorAll('[data-bs-toggle="collapse"]');
-
-                        collapseButtons.forEach(button => {
-                            const icon = button.querySelector('.collapse-icon');
-                            const targetSelector = button.getAttribute('data-bs-target') || button.getAttribute('href');
-                            const target = document.querySelector(targetSelector);
-
-                            if (!target || !icon) return;
-
-                            // Evento cuando se abre el collapse
-                            target.addEventListener('show.bs.collapse', function() {
-                                icon.style.transform = 'rotate(180deg)';
-                            });
-
-                            // Evento cuando se cierra el collapse
-                            target.addEventListener('hide.bs.collapse', function() {
-                                icon.style.transform = 'rotate(0deg)';
-                            });
-                        });
-
-                        // Hacer que todo el <tr> sea clickeable para expandir/collapse
-                        const filas = document.querySelectorAll('tr.tr-asignatura');
-
-                        filas.forEach(fila => {
-                            fila.addEventListener('click', function(e) {
-                                // Evitar que se dispare si clickeás un botón dentro del <tr>
-                                if (e.target.closest('button')) return;
-
-                                const targetSelector = this.getAttribute('data-target');
-                                const target = document.querySelector(targetSelector);
-
-                                if (target) {
-                                    const isCollapsed = !target.classList.contains('show');
-                                    const collapse = new bootstrap.Collapse(target, {
-                                        toggle: true
-                                    });
-
-                                    if (!isCollapsed) {
-                                        collapse.hide();
-                                    } else {
-                                        collapse.show();
-                                    }
-                                }
-                            });
-                        });
-                    });
-                </script>
-                <script>
-                    document.addEventListener('alpine:init', () => {
-                        Alpine.store('correlativas', {}); // Un objeto que va a guardar correlativas por ID de asignatura
-                    });
-                </script>
-            @endsection
+                });
+            });
+        });
+    </script>
+@endsection
