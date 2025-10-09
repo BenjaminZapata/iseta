@@ -238,8 +238,8 @@
                                                 <th>Materia</th>
                                                 <th class="center">Carga</th>
                                                 <th class="center">Correlativas</th>
-                                                <!-- <th class="center">Mesa</th>-->
-                                                <!-- <th class="center">Exportar</th>-->
+                                                <th class="center">Mesa</th>
+                                                <th class="center">Exportar</th>
                                                 <th class="center">Acciones</th>
                                             </tr>
                                         </thead>
