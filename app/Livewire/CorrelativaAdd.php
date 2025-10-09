@@ -93,6 +93,7 @@ class CorrelativaAdd extends Component
             $this->correlativasSA[] = $corr;
         }
         $this->correlativas = [];
+        $this->hasCorr = false;
     }
 
     public function render()
