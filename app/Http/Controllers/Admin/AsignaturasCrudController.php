@@ -110,7 +110,7 @@ class AsignaturasCrudController extends BaseController
             }
 
             // Verificar si la asignatura tiene relaciones con materias correlativas
-            if ($asignatura->correlativas()->exists()) {
+            if ($asignatura->correlativasReverse()->exists()) {
             return redirect()->route('admin.asignaturas.index')
             ->with('error', 'No se pudo eliminar la asignatura porque tiene materias correlativas asociadas.');
             }
