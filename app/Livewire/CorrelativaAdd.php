@@ -21,8 +21,7 @@ class CorrelativaAdd extends Component
     public array $correlativasSA;
 
     public array $correlativasId;
-
-    public array $corrT;
+    public array $correlativas;
 
     public $showModal = false;
 
@@ -42,8 +41,8 @@ class CorrelativaAdd extends Component
 
     public function addCorrelativa()
     {
-
-        if (empty($this->corrS)) {
+        
+        if (empty($this->correlativa)) {
             return flash()
                 ->option('position', 'top-center')
                 ->error('Seleccione una correlativa');
@@ -62,15 +61,15 @@ class CorrelativaAdd extends Component
                 ->option('position', 'top-center')
                 ->error('Esta asignatura ya tiene esta correlativa');
         }
-        $this->corrT[] = $this->corrS;
-        $this->correlativasId[] = $this->corrS['id'];
-        $this->corrS = '';
+        $this->correlativas[] = $this->correlativa;
+        $this->correlativasId[] = $this->correlativa['id'];
+        $this->correlativa = '';
     }
 
     public function deleteCorrelativa($asignaturaId)
     {
         $this->correlativas = array_filter(
-            $this->corrT,
+            $this->correlativas,
             fn ($c) => $c['id'] != $asignaturaId
         );
         $this->correlativasId = array_filter(
