@@ -4,12 +4,10 @@ namespace App\Services;
 
 class Form
 {
-
-    function select($name, $label, $class, $item = null, $optionsE = [], $options = [])
+    // SELECT
+    public function select($name, $label, $class, $item = null, $optionsE = [], $options = [])
     {
-        if (!isset($options['inputclass'])) {
-            $options['inputclass'] = 'p-1';
-        }
+        $options['inputclass'] = $options['inputclass'] ?? 'p-1';
 
         return view('Componentes.form.generic-select', [
             'type' => 'text',
@@ -22,12 +20,10 @@ class Form
         ])->render();
     }
 
-    function text($name, $label, $class, $item = null, $options = [])
+    // TEXT INPUT
+    public function text($name, $label, $class, $item = null, $options = [])
     {
-
-        if (!isset($options['inputclass'])) {
-            $options['inputclass'] = 'p-1';
-        }
+        $options['inputclass'] = $options['inputclass'] ?? 'p-1';
 
         return view('Componentes.form.text-input', [
             'type' => 'text',
@@ -38,12 +34,11 @@ class Form
             'options' => $options
         ])->render();
     }
-    function textarea($name, $label, $class, $item = null, $options = [])
-    {
 
-        if (!isset($options['inputclass'])) {
-            $options['inputclass'] = 'p-1';
-        }
+    // TEXTAREA
+    public function textarea($name, $label, $class, $item = null, $options = [])
+    {
+        $options['inputclass'] = $options['inputclass'] ?? 'p-1';
 
         return view('Componentes.form.textarea-input', [
             'name' => $name,
@@ -54,13 +49,10 @@ class Form
         ])->render();
     }
 
-
-    function date($name, $label, $class, $item = null, $options = [])
+    // DATE INPUT
+    public function date($name, $label, $class, $item = null, $options = [])
     {
-
-        if (!isset($options['inputclass'])) {
-            $options['inputclass'] = 'p-1';
-        }
+        $options['inputclass'] = $options['inputclass'] ?? 'p-1';
 
         return view('Componentes.form.text-input', [
             'type' => 'date',
@@ -72,12 +64,10 @@ class Form
         ])->render();
     }
 
-    function password($name, $label, $class, $item = null, $options = [])
+    // PASSWORD INPUT
+    public function password($name, $label, $class, $item = null, $options = [])
     {
-
-        if (!isset($options['inputclass'])) {
-            $options['inputclass'] = 'p-1';
-        }
+        $options['inputclass'] = $options['inputclass'] ?? 'p-1';
 
         return view('Componentes.form.text-input', [
             'type' => 'password',
@@ -89,13 +79,11 @@ class Form
         ])->render();
     }
 
-
-    function checkbox($name, $label, $class, $item = null, $options = [])
+    // CHECKBOX
+    public function checkbox($name, $label, $class, $item = null, $options = [])
     {
+        $options['inputclass'] = $options['inputclass'] ?? 'p-1';
 
-        if (!isset($options['inputclass'])) {
-            $options['inputclass'] = 'p-1';
-        }
         return view('Componentes.form.checkbox-input', [
             'type' => 'checkbox',
             'name' => $name,
@@ -106,14 +94,26 @@ class Form
         ])->render();
     }
 
-    function generate($url, $method, $fieldsets)
+    // FILE INPUT
+    public function file($name, $label, $class, $item = null, $options = [])
     {
+        $options['inputclass'] = $options['inputclass'] ?? 'p-1';
 
+        return view('Componentes.form.file-input', [
+            'type' => 'file',
+            'name' => $name,
+            'item' => $item,
+            'class' => $class,
+            'label' => $label,
+            'options' => $options
+        ])->render();
+    }
+
+    // FORM GENERATOR
+    public function generate($url, $method, $fieldsets)
+    {
         $fieldsets = (object) $fieldsets;
 
-        if (!isset($options['inputclass'])) {
-            $options['inputclass'] = 'p-1';
-        }
         return view('Componentes.form.edit-form', [
             'url' => $url,
             'method' => $method,
@@ -121,28 +121,12 @@ class Form
         ])->render();
     }
 
-    function texthidden($value)
+    // HIDDEN TEXT
+    public function texthidden($value)
     {
         return view('Componentes.form.text-hidden', [
             'value' => $value,
         ])->render();
     }
-
-    function file($name, $label, $class, $item = null, $options = [])
-{
-    if (!isset($options['inputclass'])) {
-        $options['inputclass'] = 'p-1';
-    }
-
-    return view('Componentes.form.file-input', [
-        'type' => 'file',
-        'name' => $name,
-        'item' => $item,
-        'class' => $class,
-        'label' => $label,
-        'options' => $options
-    ])->render();
 }
-
-
-}
+ 

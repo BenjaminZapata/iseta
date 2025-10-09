@@ -12,6 +12,8 @@ use App\Models\Carrera;
 use App\Repositories\Admin\CarreraRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 
 class CarrerasCrudController extends BaseController
 {
@@ -61,22 +63,34 @@ class CarrerasCrudController extends BaseController
 
     }
 
-    public function store(CrearCarreraRequest $request)
-    {
-        $data = $request->validated();
-        Log::debug($request->file('resolucion_archivo'));
-        $data['vigente'] = 1;
+ 
 
-        if ($request->hasFile('resolucion_archivo')) {
-            $nombre = str_replace(' ', '_', $request->input('nombre')).'.pdf';
-            $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
-            $data['resolucion_archivo'] = 'storage/'.$ruta;
-        }
+public function store(CrearCarreraRequest $request)
+{
+    $data = $request->validated();
+    $data['vigente'] = 1;
+    Log::debug('Archivos recibidos:', $request->allFiles());
 
-        Carrera::create($data);
+    if ($request->hasFile('resolucion_archivo')) {
+        $nombre = str_replace(' ', '_', $request->input('nombre')) . '.pdf';
+        // Asegura que exista el directorio
+        Storage::disk('public')->makeDirectory('resoluciones');
+        // Guarda el archivo en storage/app/public/resoluciones/
+        $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
 
-        return redirect()->route('admin.carreras.index')->with('mensaje', 'Se creó la carrera correctamente');
-    }
+        // Guarda la ruta accesible públicamente
+        $data['resolucion_archivo'] = 'storage/' . $ruta;
+
+        Log::debug("Archivo guardado en: " . $data['resolucion_archivo']);
+    } 
+
+    Carrera::create($data);
+
+    return redirect()
+        ->route('admin.carreras.index')
+        ->with('mensaje', 'Se creó la carrera correctamente');
+}
+
 
     public function show(Carrera $carrera)
     {
