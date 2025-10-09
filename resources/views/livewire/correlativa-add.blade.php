@@ -37,7 +37,7 @@
 
                 <div class="gap-2 p-0 center">
                     <legend class="font-600 font-7 black" for="correlativa">Correlativa:</legend>
-                    <select class="campo_info rounded" name="correlativa" id="correlativa" wire:model="corrS">
+                    <select class="campo_info rounded" name="correlativa" id="correlativa" wire:model="correlativa">
                         <option value="">Seleccioná una correlativa</option>
                         @foreach ($carrera->asignaturas()->wherePivot('anio', '<', $singleAsignatura->carrera->where('id', $carrera->id)->first()->pivot->anio)->get() as $asignatura)
                             @if (!in_array($asignatura->id, $correlativasId))
