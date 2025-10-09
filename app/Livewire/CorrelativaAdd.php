@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Asignatura;
+use Http;
 use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 
@@ -14,6 +15,8 @@ class CorrelativaAdd extends Component
 
     public $correlativa;
 
+    public $correlativasSA;
+
     public array $correlativasId;
     public array $correlativas;
 
@@ -22,6 +25,8 @@ class CorrelativaAdd extends Component
     public function mount($carrera, $asignatura)
     {
         $this->carrera = $carrera;
+        $this->correlativasSA = $asignatura->correlativas()->get();
+        Log::debug($this->correlativasSA);
         $this->correlativasId = [];
         $this->singleAsignatura = $asignatura;
         foreach ($asignatura->correlativas as $corr) {
@@ -38,11 +43,10 @@ class CorrelativaAdd extends Component
                 ->option('position', 'top-center')
                 ->error('Seleccione una correlativa');
         }
-        $this->correlativa = json_decode($this->correlativa);
-        $this->correlativa = (array) $this->correlativa;
-        Log::debug('Asignatura a la que se quiere agregar correlativa', $this->correlativa);
+        Log::debug("aca pasa");
         $asignaturaOwn = $this->singleAsignatura;
-        $asignaturaCorr = new Asignatura($this->correlativa);
+        $asignaturaCorr = Asignatura::find($this->correlativa);
+        $this->correlativa = $asignaturaCorr->toArray();
         if ($asignaturaOwn->carrera()->where('id', $this->carrera->id)->first()->pivot->anio < $asignaturaCorr->carrera()->where('id', $this->carrera->id)->first()->pivot->anio) { // una asig del 2do año, no puede tener una correlativa de 1er año ni 2do
             return flash()
                 ->option('position', 'top-center')
@@ -68,6 +72,11 @@ class CorrelativaAdd extends Component
             $this->correlativasId,
             fn ($c) => $c != $asignaturaId
         );
+    }
+
+    public function desvincularCorrelativa($asignaturaId)
+    {
+        Http::delete("admin/correlativa/$this->carrera/$this->singleAsignatura/$asignaturaId");
     }
 
     public function render()

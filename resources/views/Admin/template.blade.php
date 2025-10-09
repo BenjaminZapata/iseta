@@ -17,11 +17,8 @@
     <link rel="stylesheet" href="{{ asset('css/global.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/form.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/create-carrera.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/edit-carrera.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/correlativa.css') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/Admin/edit-carrera.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/correlativa.css') }}">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
