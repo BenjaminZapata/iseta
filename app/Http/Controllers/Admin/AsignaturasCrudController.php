@@ -107,13 +107,12 @@ class AsignaturasCrudController extends BaseController
                 return redirect()->route('admin.asignaturas.index')
                     ->with('error', 'No se pudo eliminar la asignatura porque tiene cursadas asociadas.');
             }
-
-            // Verificar si la asignatura tiene relaciones con materias correlativas
-            if ($asignatura->correlativas()->exists()) {
+            // Verificar si la asignatura tiene relaciones con correlativas
+            Log::info('Verificando correlativas para la asignatura ID: ' . $asignatura->correlativasReverse());
+            if ($asignatura->correlativasReverse()->exists()) {
                 return redirect()->route('admin.asignaturas.index')
                     ->with('error', 'No se pudo eliminar la asignatura porque tiene materias correlativas asociadas.');
             }
-
             // Verificar si la asignatura tiene relaciones con mesas
             if ($asignatura->mesas()->exists()) {
                 return redirect()->route('admin.asignaturas.index')

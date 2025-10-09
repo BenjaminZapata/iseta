@@ -62,6 +62,17 @@ class Asignatura extends Model
             ->withPivot('tipo_correlativa')
             ->using(Correlativa::class);
     }
+    public function correlativasReverse()
+    {
+        return $this->belongsToMany(
+            Asignatura::class,          // Modelo relacionado (a sí mismo)
+            'correlatividades',             // Tabla pivote
+            'id_asignatura_correlativa', // FK en pivote que apunta a la correlativa
+            'id_asignatura'           // FK en pivote que apunta a esta asignatura
+        )
+            ->withPivot('tipo_correlativa')
+            ->using(Correlativa::class);
+    }
     public function correlativasPivot(): HasMany{
         return $this -> hasMany(Correlativa::class, 'id_asignatura');
     }
