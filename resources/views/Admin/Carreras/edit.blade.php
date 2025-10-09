@@ -237,8 +237,8 @@
                                                 <th class="center">#</th>
                                                 <th>Materia</th>
                                                 <th class="center">Carga</th>
-                                                <th class="center">Mesa</th>
-                                                <th class="center">Exportar</th>
+                                                <!--<th class="center">Mesa</th>-->
+                                                <!--<th class="center">Exportar</th>-->
                                                 <th class="center">Acciones</th>
                                             </tr>
                                         </thead>
@@ -287,29 +287,29 @@
                                                     <td class="center">{{ $asignatura->carga_horaria }} horas</td>
 
                                                     <!-- Crear mesa -->
-                                                    <td>
-                                                        <div
-                                                            style="display: flex; align-items: center; justify-content: center;">
-                                                            <button class="btn_blue"
-                                                                onclick="window.location.href='{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}'">
-                                                                <i class="ti ti-circle-plus"
-                                                                    style="font-size: 1.3em; margin-right: 8px; margin-top: 2px;"></i>
-                                                                Crear Mesa
-                                                            </button>
-                                                        </div>
-                                                    </td>
+                                                    <!-- <td>
+                                                            <div
+                                                                style="display: flex; align-items: center; justify-content: center;">
+                                                                <button class="btn_blue"
+                                                                    onclick="window.location.href='{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}'">
+                                                                    <i class="ti ti-circle-plus"
+                                                                        style="font-size: 1.3em; margin-right: 8px; margin-top: 2px;"></i>
+                                                                    Crear Mesa
+                                                                </button>
+                                                            </div>
+                                                        </td>-->
 
                                                     <!-- Exportar -->
-                                                    <td class="center">
-                                                        <div
-                                                            style="display:flex; align-items: center; justify-content: center;">
-                                                            <button type="button" class="btn_exportar"
-                                                                onclick="toggleFiltroExportar(this)">
-                                                                <i class="ti ti-file-download"></i> Exportar asignatura
-                                                            </button>
-                                                            {{-- ... resto del form exportar ... --}}
-                                                        </div>
-                                                    </td>
+                                                    <!-- <td class="center">
+                                                                <div
+                                                                    style="display:flex; align-items: center; justify-content: center;">
+                                                                    <button type="button" class="btn_exportar"
+                                                                        onclick="toggleFiltroExportar(this)">
+                                                                        <i class="ti ti-file-download"></i> Exportar asignatura
+                                                                    </button>
+                                                                    {{-- ... resto del form exportar ... --}}
+                                                                </div>
+                                                            </td>-->
 
                                                     <!-- Eliminar asignatura -->
                                                     <td class="center">
