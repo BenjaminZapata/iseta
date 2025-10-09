@@ -64,7 +64,14 @@ class AlumnoAuthController extends Controller
     /**
      * muestra vista de login
      */
-    function loginView(): View{
+    function loginView(){ 
+        if (Auth()->check()) {
+            return redirect('alumno/inscripciones');
+        } elseif (Auth('profesor')->check()) {
+            return redirect('profesor/mesas');
+        } elseif (Auth('admin')->check()) {
+            return redirect('admin/alumnos');
+        }
         return view('Alumnos.Auth.login');
     }
 
