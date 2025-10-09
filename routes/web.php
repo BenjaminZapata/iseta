@@ -27,6 +27,3 @@ include("secretario.php");
 Route::fallback(function () {
     return response()->view('Error.404', [], 404);
 });
-
-
-
