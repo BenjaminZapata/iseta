@@ -298,7 +298,7 @@
                                                                 Crear Mesa
                                                             </button>
                                                         </div>
-                                                    </td>-->
+                                                    </td>
 
                                                     <!-- Exportar -->
                                                     <td class="center">
@@ -310,7 +310,7 @@
                                                             </button>
                                                             {{-- ... resto del form exportar ... --}}
                                                         </div>
-                                                    </td>-->
+                                                    </td>
 
                                                     <!-- Eliminar asignatura -->
                                                     <td class="center">
