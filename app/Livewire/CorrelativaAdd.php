@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Services\Admin\AdminCorrelativasService;
 use App\Models\Asignatura;
 use Http;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +16,9 @@ class CorrelativaAdd extends Component
 
     public $correlativa;
 
-    public $correlativasSA;
+    public bool $hasCorr;
+
+    public array $correlativasSA;
 
     public array $correlativasId;
     public array $correlativas;
@@ -25,14 +28,15 @@ class CorrelativaAdd extends Component
     public function mount($carrera, $asignatura)
     {
         $this->carrera = $carrera;
-        $this->correlativasSA = $asignatura->correlativas()->get();
-        Log::debug($this->correlativasSA);
+        $this->correlativasSA = $asignatura->correlativas->toArray();
+        $this->hasCorr = empty($this->correlativasSA);
         $this->correlativasId = [];
         $this->singleAsignatura = $asignatura;
         foreach ($asignatura->correlativas as $corr) {
             $this->correlativasId[] = $corr->id;
         }
         $this->correlativas = [];
+        $this->correlativa = '';
     }
 
     public function addCorrelativa()
@@ -76,7 +80,18 @@ class CorrelativaAdd extends Component
 
     public function desvincularCorrelativa($asignaturaId)
     {
-        Http::delete("admin/correlativa/$this->carrera/$this->singleAsignatura/$asignaturaId");
+        app(AdminCorrelativasService::class)->eliminar($this->carrera->id, $this->singleAsignatura, $asignaturaId);
+        $this->correlativasSA = array_filter($this->correlativasSA, fn ($c) => $c['id'] != $asignaturaId);
+        $this->hasCorr = empty($this->correlativasSA);
+
+    }
+
+    public function saveCorrelativas(){
+        app(AdminCorrelativasService::class)->agregar($this->singleAsignatura, $this->correlativas, $this->carrera->id);
+        foreach($this->correlativas as $corr) {
+            $this->correlativasSA[] = $corr;
+        }
+        $this->correlativas = [];
     }
 
     public function render()

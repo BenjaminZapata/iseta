@@ -8,17 +8,18 @@
         <ul>
             @foreach ($correlativasSA as $corr)
                 <li class="flex items-center justify-between mb-2" style="margin: 15px; font-size: 1em;">
-                    <span>{{ $corr->nombre }}</span>
+                    <span>{{ $corr['nombre'] }}</span>
                     <button class="btn_desvincular btnEliminar" style="margin-left: 15px" type="button"
-                        wire:click="desvincularCorrelativa({{ $corr->id }})">
+                        wire:click="desvincularCorrelativa({{ $corr['id'] }})">
                         <i class="ti ti-x" style="font-size:0.8em;"></i>
                     </button>
                 </li>
             @endforeach
         </ul>
-        <p wire:show="correlativasSA === null " class="archivo-vacio mt-2" style="margin: 20px; font-size: 1em;">
+        <p wire:show="hasCorr" class="archivo-vacio mt-2" style="margin: 20px; font-size: 1em;">
             No tiene correlativas asignadas.
         </p>
+
     </div>
     <div>
         <button x-on:click="$wire.showModal = true" class="btn_blue" style="margin: 20px">
@@ -47,7 +48,7 @@
                 </div>
                 <div style="margin-left: 10px">
                     <legend class="font-600 font-7 black" for="correlativa">AGREGADAS</legend>
-                    @foreach ($correlativas as $cor)
+                    @foreach ($correlativas as $index => $cor)
                         <div>
                             <p>{{ $cor['nombre'] }} <span class="close" style="margin-right: 5px"
                                     wire:click="deleteCorrelativa({{ $cor['id'] }})">
@@ -60,16 +61,10 @@
                         style="font-size: 1.3em; margin-right: 8px;"></i> Agregar
                 </button>
             </fieldset>
-
-            <form method="post"
-                action="{{ route('admin.correlativa.agregar', ['asignatura' => $singleAsignatura->id, 'carrera' => $carrera->id]) }}">
-                @csrf
-                <div class="botones-derecha">
-                    <input type="hidden" name="correlativas" value="{{ json_encode($correlativas) }}">
-                    <button type="submit" class="btn_blue" style="margin: 15px"><i class="ti ti-device-floppy"
-                            style="font-size: 1.3em; margin-right: 8px;"></i>Guardar</button>
-                </div>
-            </form>
+            <div class="botones-derecha">
+                <button type="button" class="btn_blue" style="margin: 15px" wire:click="saveCorrelativas"><i
+                        class="ti ti-device-floppy" style="font-size: 1.3em; margin-right: 8px;"></i>Guardar</button>
+            </div>
         </div>
     </div>
 </div>
