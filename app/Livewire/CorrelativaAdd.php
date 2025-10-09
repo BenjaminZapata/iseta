@@ -82,6 +82,7 @@ class CorrelativaAdd extends Component
     {
         app(AdminCorrelativasService::class)->eliminar($this->carrera->id, $this->singleAsignatura, $asignaturaId);
         $this->correlativasSA = array_filter($this->correlativasSA, fn ($c) => $c['id'] != $asignaturaId);
+        $this->correlativasId = array_filter($this->correlativasId, fn ($c) => $c != $asignaturaId);
         $this->hasCorr = empty($this->correlativasSA);
 
     }
