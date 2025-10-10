@@ -458,8 +458,8 @@ table td {
 .btn_desvincular {
   position: relative;
   z-index: 1;
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   border: none;
   display: flex;
@@ -468,7 +468,7 @@ table td {
   cursor: pointer;
   padding: 0;
   overflow: hidden;
-  background-color: #150a5c33;
+  background-color: #150a5c;
   /* Fondo rojo predeterminado */
   color: white;
   transition: background 0.35s;

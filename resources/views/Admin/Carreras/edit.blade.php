@@ -246,7 +246,6 @@
                                                 <th class="center">Carga</th>
                                                 <th class="center">Correlativas</th>
                                                 <th class="center">Mesa</th>
-                                                <th class="center">Exportar</th>
                                                 <th class="center">Acciones</th>
                                             </tr>
                                         </thead>
@@ -266,14 +265,10 @@
                                                     <!-- Botón para expandir correlativas -->
                                                     <td class="center">
                                                         @if ($asignatura->pivot->anio + 1 != 1)
-                                                            <button class="chevron-btn" type="button"
-                                                                data-bs-toggle="collapse"
+                                                            <button type="button" data-bs-toggle="collapse"
                                                                 data-bs-target="#{{ $collapseId }}"
                                                                 aria-expanded="false"
                                                                 aria-controls="{{ $collapseId }}">
-                                                                <i id="chevronIcon{{ $asignatura->id }}"
-                                                                    class="ti ti-chevron-down collapse-icon"
-                                                                    style="font-size: 1.3em; margin-right: 8px; transition: transform 0.3s;"></i>
                                                             </button>
                                                             {{ $asignatura->pivot->anio + 1 }}
                                                         @else
@@ -285,14 +280,28 @@
                                                     <!-- Nombre de la asignatura -->
                                                     <td class="bold">
                                                         {{ $asignatura->nombre }}
-                                                        @if ($hasCorrelativas)
-                                                            <span title="Tiene correlativas"
-                                                                class="icono-correlativa">📎</span>
-                                                        @endif
                                                     </td>
+
+
 
                                                     <!-- Carga horaria -->
                                                     <td class="center">{{ $asignatura->carga_horaria }} horas</td>
+
+                                                    <!-- Correlativa -->
+                                                    <td>
+                                                        <div
+                                                            style="display: flex; align-items: center; justify-content: center;">
+                                                            @if ($hasCorrelativas)
+                                                                <span title="Tiene correlativas"
+                                                                    class="icono-correlativa">
+                                                                    TIENE CORRELATIVAS </span>
+                                                            @else
+                                                                <button class="btn_desvincular" type="button">
+                                                                    <i class="ti ti-plus" style="font-size:1em;"></i>
+                                                                </button>
+                                                            @endif
+                                                        </div>
+                                                    </td>
 
                                                     <!-- Crear mesa -->
                                                     <td>
@@ -304,18 +313,6 @@
                                                                     style="font-size: 1.3em; margin-right: 8px; margin-top: 2px;"></i>
                                                                 Crear Mesa
                                                             </button>
-                                                        </div>
-                                                    </td>
-
-                                                    <!-- Exportar -->
-                                                    <td class="center">
-                                                        <div
-                                                            style="display:flex; align-items: center; justify-content: center;">
-                                                            <button type="button" class="btn_exportar"
-                                                                onclick="toggleFiltroExportar(this)">
-                                                                <i class="ti ti-file-download"></i> Exportar asignatura
-                                                            </button>
-                                                            {{-- ... resto del form exportar ... --}}
                                                         </div>
                                                     </td>
 

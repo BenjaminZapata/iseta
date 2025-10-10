@@ -1,24 +1,67 @@
 <div>
     <div class="perfil_one br">
-        <div class="perfil__header">
+        <div class="perfil__header" style="background-color: #2a1a8c">
             <legend class="font-600 font-7 white">
                 Correlativas de "{{ $singleAsignatura->nombre }}"
             </legend>
         </div>
-        <ul>
-            @foreach ($correlativasSA as $corr)
-                <li class="flex items-center justify-between mb-2" style="margin: 15px; font-size: 1em;">
-                    <span>{{ $corr['nombre'] }}</span>
+
+        @if (!empty($correlativasSA))
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="center" style="background-color: #2a1a8c">Año</th>
+                        <th class="center" style="background-color: #2a1a8c">Materia</th>
+                        <th class="center" style="background-color: #2a1a8c">Desvincular</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach ($correlativasSA as $corr)
+                        <tr>
+                            <td>
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                    Año
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                    <span class="bold">{{ $corr['nombre'] }}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                    <button class="btn_desvincular2 btnEliminar" style="background-color: #b23a48"
+                                        type="button" wire:click="desvincularCorrelativa({{ $corr['id'] }})">
+                                        <i class="ti ti-x" style="font-size:1em;"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            <p wire:show="hasCorr" class="archivo-vacio mt-2" style="margin: 20px; font-size: 1em;">
+                No tiene correlativas asignadas.
+            </p>
+        @endif
+
+        {{-- @foreach ($correlativasSA as $corr)  
+            <ul>
+                    <li class="flex items-center justify-between mb-2" style="margin: 15px; font-size: 1em;">
+                        <span>{{ $corr['nombre'] }}</span> 
                     <button class="btn_desvincular btnEliminar" style="margin-left: 15px" type="button"
                         wire:click="desvincularCorrelativa({{ $corr['id'] }})">
                         <i class="ti ti-x" style="font-size:0.8em;"></i>
                     </button>
-                </li>
-            @endforeach
-        </ul>
-        <p wire:show="hasCorr" class="archivo-vacio mt-2" style="margin: 20px; font-size: 1em;">
+                </li> 
+                </ul>
+                @endforeach 
+                <p wire:show="hasCorr" class="archivo-vacio mt-2" style="margin: 20px; font-size: 1em;">
             No tiene correlativas asignadas.
         </p>
+        --}}
 
     </div>
     <div>

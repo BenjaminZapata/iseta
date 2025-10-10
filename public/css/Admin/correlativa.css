@@ -13,8 +13,20 @@
 }
 
 .asignatura-con-correlativas {
- background-color: #f3f6ff;
+ background-color: #f1f1f1;
+ box-shadow: inset 5px 0 0 #215bd8;
+ padding: 0.5rem 1rem;
+ margin-top: 0.5rem;
+ border-radius: 0 4px 4px 0;
 }
+
+.asignatura-con-correlativas:hover {
+ background-color: #e0e0e0;
+ /* más oscuro */
+ box-shadow: inset 5px 0 0 #3823be;
+ /* mantiene el borde más oscuro */
+}
+
 
 .correlativas-expandida {
  background: #f9f9f9;
@@ -36,6 +48,11 @@ tr:hover {
  background-color: #f0f8ff;
  /* Celeste claro. Cambialo a gusto */
  cursor: pointer;
+}
+
+.tabla-correlativas thead {
+ background-color: var(--azul-iseta);
+ color: #fff;
 }
 
 
