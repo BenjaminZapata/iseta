@@ -26,9 +26,10 @@ class CrearCarreraRequest extends FormRequest
             'nombre' => ['required', 'string', 'max:151'],
             'resolucion' => ['required', new Resolucion, 'unique:carreras,resolucion'],
             'anio_apertura' => [
-                'required',
+                'min_digits:4',
                 'max_digits:4',
                 'numeric',
+                'between:'.(now()->year - 1).','. (now()->year + 1),
             ],
             'resolucion_archivo' => ['nullable',
                 'file',
