@@ -298,9 +298,12 @@
                                                                         class="icono-correlativa">
                                                                         TIENE CORRELATIVAS </span>
                                                                 @else
-                                                                    <button class="btn_desvincular" type="button">
+                                                                    <span title="Tiene correlativas"
+                                                                        class="icono-correlativa">
+                                                                        --- </span>
+                                                                    {{-- <button class="btn_desvincular" type="button">
                                                                         <i class="ti ti-plus" style="font-size:1em;"></i>
-                                                                    </button>
+                                                                    </button> --}}
                                                                 @endif
                                                             @endif
                                                         </div>
