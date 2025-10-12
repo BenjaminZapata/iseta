@@ -289,26 +289,22 @@
 
                                                     <!-- Correlativa -->
 
-                                                    <td class="center" x-data="{ asignaturaId: {{ $asignatura->id }} }">
-                                                        <span
-                                                            x-text="$store.correlativas[asignaturaId]?.length > 0 ? $store.correlativas[asignaturaId].length + ' asignadas' : '—'"></span>
-                                                    </td>
-
-
-                                                    {{-- <td>
+                                                    <td>
                                                         <div
                                                             style="display: flex; align-items: center; justify-content: center;">
-                                                            @if ($hasCorrelativas)
-                                                                <span title="Tiene correlativas"
-                                                                    class="icono-correlativa">
-                                                                    TIENE CORRELATIVAS </span>
-                                                            @else
-                                                                <button class="btn_desvincular" type="button">
-                                                                    <i class="ti ti-plus" style="font-size:1em;"></i>
-                                                                </button>
+                                                            @if ($asignatura->pivot->anio + 1 !== 1)
+                                                                @if ($hasCorrelativas)
+                                                                    <span title="Tiene correlativas"
+                                                                        class="icono-correlativa">
+                                                                        TIENE CORRELATIVAS </span>
+                                                                @else
+                                                                    <button class="btn_desvincular" type="button">
+                                                                        <i class="ti ti-plus" style="font-size:1em;"></i>
+                                                                    </button>
+                                                                @endif
                                                             @endif
                                                         </div>
-                                                    </td> --}}
+                                                    </td>
 
                                                     <!-- Crear mesa -->
                                                     <td>

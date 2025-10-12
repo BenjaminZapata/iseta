@@ -41,7 +41,7 @@ class CorrelativaAdd extends Component
 
     public function addCorrelativa()
     {
-        
+
         if (empty($this->correlativa)) {
             return flash()
                 ->option('position', 'top-center')
@@ -70,25 +70,26 @@ class CorrelativaAdd extends Component
     {
         $this->correlativas = array_filter(
             $this->correlativas,
-            fn ($c) => $c['id'] != $asignaturaId
+            fn($c) => $c['id'] != $asignaturaId
         );
         $this->correlativasId = array_filter(
             $this->correlativasId,
-            fn ($c) => $c != $asignaturaId
+            fn($c) => $c != $asignaturaId
         );
     }
 
     public function desvincularCorrelativa($asignaturaId)
     {
         app(AdminCorrelativasService::class)->eliminar($this->carrera->id, $this->singleAsignatura, $asignaturaId);
-        $this->correlativasSA = array_filter($this->correlativasSA, fn ($c) => $c['id'] != $asignaturaId);
+        $this->correlativasSA = array_filter($this->correlativasSA, fn($c) => $c['id'] != $asignaturaId);
         $this->hasCorr = empty($this->correlativasSA);
 
     }
 
-    public function saveCorrelativas(){
+    public function saveCorrelativas()
+    {
         app(AdminCorrelativasService::class)->agregar($this->singleAsignatura, $this->correlativas, $this->carrera->id);
-        foreach($this->correlativas as $corr) {
+        foreach ($this->correlativas as $corr) {
             $this->correlativasSA[] = $corr;
         }
         $this->correlativas = [];

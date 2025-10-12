@@ -18,18 +18,25 @@
                 <tbody>
 
                     @foreach ($correlativasSA as $corr)
+                        @php
+                            // Cargar el año de la asignatura correlativa en la carrera actual
+                            $anio = \App\Models\Asignatura::find($corr['id'])
+                                ?->carrera()
+                                ->where('id', $carrera->id)
+                                ->first()?->pivot?->anio;
+                        @endphp
                         <tr>
-                            <td>
+                            <td title="Año">
                                 <div style="display: flex; align-items: center; justify-content: center;">
-                                    Año
+                                    {{ $anio + 1 ?? '-' }}
                                 </div>
                             </td>
-                            <td>
+                            <td title="Materia">
                                 <div style="display: flex; align-items: center; justify-content: center;">
                                     <span class="bold">{{ $corr['nombre'] }}</span>
                                 </div>
                             </td>
-                            <td>
+                            <td title="Desvincular">
                                 <div style="display: flex; align-items: center; justify-content: center;">
                                     <button class="btn_desvincular2 btnEliminar" style="background-color: #b23a48"
                                         type="button" wire:click="desvincularCorrelativa({{ $corr['id'] }})">
