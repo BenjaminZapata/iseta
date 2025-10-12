@@ -288,7 +288,14 @@
                                                     <td class="center">{{ $asignatura->carga_horaria }} horas</td>
 
                                                     <!-- Correlativa -->
-                                                    <td>
+
+                                                    <td class="center" x-data="{ asignaturaId: {{ $asignatura->id }} }">
+                                                        <span
+                                                            x-text="$store.correlativas[asignaturaId]?.length > 0 ? $store.correlativas[asignaturaId].length + ' asignadas' : '—'"></span>
+                                                    </td>
+
+
+                                                    {{-- <td>
                                                         <div
                                                             style="display: flex; align-items: center; justify-content: center;">
                                                             @if ($hasCorrelativas)
@@ -301,7 +308,7 @@
                                                                 </button>
                                                             @endif
                                                         </div>
-                                                    </td>
+                                                    </td> --}}
 
                                                     <!-- Crear mesa -->
                                                     <td>
