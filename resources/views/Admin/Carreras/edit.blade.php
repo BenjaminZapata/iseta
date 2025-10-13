@@ -257,11 +257,15 @@
                                                 @endphp
 
                                                 <tr
-                                                    @if ($asignatura->pivot->anio + 1 != 1) class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura"
-                                                    data-target="#{{ $collapseId }}"
-                                                    data-icon="#chevronIcon{{ $asignatura->id }}"
-                                                    @else
-                                                    class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura @endif">
+                                                    x-data="{ has_corr: false }"
+                                                    x-init="window.addEventListener('has-corr.{{ $asignatura->id }}', event => { has_corr = event.detail.has_corr })"
+                                                    class="tr-asignatura"
+                                                    :class="has_corr ? 'asignatura-con-correlativas' : ''"
+                                                    @if ($asignatura->pivot->anio + 1 != 1)
+                                                        data-target="#{{ $collapseId }}"
+                                                        data-icon="#chevronIcon{{ $asignatura->id }}"
+                                                    @endif
+                                                >
                                                     <!-- Botón para expandir correlativas -->
                                                     <td class="center">
                                                         @if ($asignatura->pivot->anio + 1 != 1)
@@ -293,18 +297,19 @@
                                                         <div
                                                             style="display: flex; align-items: center; justify-content: center;">
                                                             @if ($asignatura->pivot->anio + 1 !== 1)
-                                                                @if ($hasCorrelativas)
+                                                                <div x-show="has_corr">
                                                                     <span title="Tiene correlativas"
                                                                         class="icono-correlativa">
                                                                         TIENE CORRELATIVAS </span>
-                                                                @else
+                                                                </div>
+                                                                <div x-show="!has_corr">
                                                                     <span title="Tiene correlativas"
                                                                         class="icono-correlativa">
                                                                         --- </span>
                                                                     {{-- <button class="btn_desvincular" type="button">
-                                                                        <i class="ti ti-plus" style="font-size:1em;"></i>
-                                                                    </button> --}}
-                                                                @endif
+                                                                                <i class="ti ti-plus" style="font-size:1em;"></i>
+                                                                            </button> --}}
+                                                                </div>
                                                             @endif
                                                         </div>
                                                     </td>
@@ -352,8 +357,8 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        </tbody>
                                     </table>
+                                    </tbody>
                                 </div> {{-- accordion-body --}}
                             </div> {{-- collapse --}}
                         </div> {{-- accordion-item --}}
@@ -362,7 +367,6 @@
             </div>
         </div>
     </div>
-
     <script>
         function toggleFiltroExportar(button) {
             const container = button.closest('div');

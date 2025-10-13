@@ -99,35 +99,32 @@ class AsignaturasCrudController extends BaseController
             $carrerasVigentes = $asignatura->carrera->filter(fn($c) => $c->vigente);
 
             if ($carrerasVigentes->isNotEmpty()) {
-            return redirect()->route('admin.asignaturas.index')
-            ->with('error', 'No se pudo eliminar la asignatura porque está vinculada a una o más carreras vigentes.');
+                return redirect()->back()->with('error', 'No se pudo eliminar la asignatura porque está vinculada a una carrera vigente.');
             }
 
             // Verificar si la asignatura tiene relaciones con cursadas
             if ($asignatura->cursadas()->exists()) {
-            return redirect()->route('admin.asignaturas.index')
-            ->with('error', 'No se pudo eliminar la asignatura porque tiene cursadas asociadas.');
+            return redirect()->back()->with('error', 'No se pudo eliminar la asignatura porque tiene cursadas asociadas.');
             }
 
             // Verificar si la asignatura tiene relaciones con materias correlativas
             if ($asignatura->correlativasReverse()->exists()) {
-            return redirect()->route('admin.asignaturas.index')
-            ->with('error', 'No se pudo eliminar la asignatura porque tiene materias correlativas asociadas.');
+            return redirect()->back()->with('error', 'No se pudo eliminar la asignatura porque tiene materias correlativas asociadas.');
             }
 
             // Verificar si la asignatura tiene relaciones con mesas
             if ($asignatura->mesas()->exists()) {
-            return redirect()->route('admin.asignaturas.index')
+            return redirect()->back()
             ->with('error', 'No se pudo eliminar la asignatura porque tiene mesas asociadas.');
             }
 
             // Si no tiene relaciones bloqueantes, procedemos a eliminarla
             $asignatura->delete();
 
-            return redirect()->route('admin.asignaturas.index')
-                ->with('mensaje', 'Se ha eliminado la asignatura');
+            return redirect()->back()
+            ->with('mensaje', 'Se ha eliminado la asignatura');
         } catch (\Exception $e) {
-            return redirect()->route('admin.asignaturas.index')
+            return redirect()->back()
                 ->with('error', 'No se pudo eliminar la asignatura');
         }
     }

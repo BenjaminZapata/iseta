@@ -49,7 +49,7 @@
                 </tbody>
             </table>
         @else
-            <p wire:show="hasCorr" class="archivo-vacio mt-2" style="margin: 20px; font-size: 1em;">
+            <p wire:show="!hasCorr" class="archivo-vacio mt-2" style="margin: 20px; font-size: 1em;">
                 No tiene correlativas asignadas.
             </p>
         @endif
