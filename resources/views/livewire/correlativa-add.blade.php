@@ -71,7 +71,7 @@
         --}}
 
     </div>
-    <div>
+    <div class="botones-derecha">
         <button x-on:click="$wire.showModal = true" class="btn_blue" style="margin: 20px">
             <i class="ti ti-file-plus" style="font-size: 1.3em; margin-right: 8px;"></i> Agregar Correlativa
         </button>

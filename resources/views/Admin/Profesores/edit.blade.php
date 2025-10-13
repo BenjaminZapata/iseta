@@ -97,7 +97,6 @@
                             'placeholder' => 'Ej: 2317-876544',
                             'maxlength' => 30,
                         ]),
-                
                         $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2') ?? $profesor, [
                             'placeholder' => 'Ej: 2317-876543',
                             'maxlength' => 30,
