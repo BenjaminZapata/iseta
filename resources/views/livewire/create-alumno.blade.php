@@ -13,8 +13,8 @@
         <fieldset class="p-2" style="margin: 10px">
             <legend class="font-600 font-7">Alumno</legend>
             <div class="grid-2 gap-2 p-0">
-                <label class="label-input-y-75">Nombre:
-                    <input type="text" wire:model="form.nombre"
+                <label class="label-input-y-75">Nombre:*
+                    <input type="text" wire:model="form.nombre" placeholder="Ej: Juan"
                         class="@error('form.nombre') input-error border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.nombre')
@@ -22,8 +22,8 @@
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Apellido:
-                    <input type="text" wire:model="form.apellido"
+                <label class="label-input-y-75">Apellido:*
+                    <input type="text" wire:model="form.apellido" placeholder="Ej: Pérez"
                         class="@error('form.apellido') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.apellido')
@@ -31,16 +31,17 @@
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">DNI:
-                    <input type="text" wire:model="form.dni" class="@error('form.dni') border-red-500 @enderror">
+                <label class="label-input-y-75">DNI:*
+                    <input type="text" wire:model="form.dni" placeholder="Ej: 12345678"
+                        class="@error('form.dni') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.dni')
                             {{ $message }}
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Fecha de nacimiento:
-                    <input type="date" wire:model="form.fecha_nacimiento"
+                <label class="label-input-y-75">Fecha de nacimiento:*
+                    <input type="date" wire:model="form.fecha_nacimiento" placeholder="Formato: dd/mm/aaaa"
                         class="p-1 w-75p @error('form.fecha_nacimiento') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.fecha_nacimiento')
@@ -48,8 +49,8 @@
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Lugar de nacimiento:
-                    <input type="text" wire:model="form.lugar_nacimiento"
+                <label class="label-input-y-75">Ciudad de nacimiento:
+                    <input type="text" wire:model="form.lugar_nacimiento" placeholder="Ej: Córdoba"
                         class="@error('form.lugar_nacimiento') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.lugar_nacimiento')
@@ -59,12 +60,12 @@
                 </label>
                 <label class="label-input-y-75">Estado civil:
                     <select wire:model="form.estado_civil" class="@error('form.estado_civil') border-red-500 @enderror">
-                        <option value="">Vacio</option>
+                        <option value="">Seleccione una opción</option>
                         <option value="0">Soltero</option>
                         <option value="1">Casado</option>
                         <option value="2">Divorciado</option>
                         <option value="3">Viudo</option>
-                        <option value="4">Conyuge</option>
+                        <option value="4">Cónyuge</option>
                         <option value="5">Otro</option>
                     </select>
                     <div class="campo-alert">
@@ -75,7 +76,7 @@
                 </label>
                 <label class="label-input-y-75">Género:
                     <select wire:model="form.genero" class="@error('form.genero') border-red-500 @enderror">
-                        <option value="">Vacio</option>
+                        <option value="">Seleccione una opción</option>
                         <option value="0">Masculino</option>
                         <option value="1">Femenino</option>
                         <option value="2">Otro</option>
@@ -94,7 +95,7 @@
             <legend class="font-600 font-7">Dirección</legend>
             <div class="grid-2 gap-2 p-0">
                 <label class="label-input-y-75">Ciudad:
-                    <input type="text" wire:model="form.ciudad"
+                    <input type="text" wire:model="form.ciudad" placeholder="Ej: 9 de Julio"
                         class="@error('form.ciudad') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.ciudad')
@@ -103,7 +104,7 @@
                     </div>
                 </label>
                 <label class="label-input-y-75">Código postal:
-                    <input type="text" wire:model="form.codigo_postal"
+                    <input type="text" wire:model="form.codigo_postal" placeholder="Ej: 6500 "
                         class="@error('form.codigo_postal') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.codigo_postal')
@@ -112,7 +113,8 @@
                     </div>
                 </label>
                 <label class="label-input-y-75">Calle:
-                    <input type="text" wire:model="form.calle" class="@error('form.calle') border-red-500 @enderror">
+                    <input type="text" wire:model="form.calle" placeholder="Ej: Av. Eva Perón"
+                        class="@error('form.calle') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.calle')
                             {{ $message }}
@@ -120,7 +122,7 @@
                     </div>
                 </label>
                 <label class="label-input-y-75">Altura:
-                    <input type="text" wire:model="form.casa_numero"
+                    <input type="text" wire:model="form.casa_numero" placeholder="Ej: 742"
                         class="@error('form.casa_numero') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.casa_numero')
@@ -129,7 +131,8 @@
                     </div>
                 </label>
                 <label class="label-input-y-75">Departamento:
-                    <input type="text" wire:model="form.dpto" class="@error('form.dpto') border-red-500 @enderror">
+                    <input type="text" wire:model="form.dpto" placeholder="Ej: A"
+                        class="@error('form.dpto') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.dpto')
                             {{ $message }}
@@ -137,7 +140,8 @@
                     </div>
                 </label>
                 <label class="label-input-y-75">Piso:
-                    <input type="text" wire:model="form.piso" class="@error('form.piso') border-red-500 @enderror">
+                    <input type="text" wire:model="form.piso" placeholder="Ej: 3"
+                        class="@error('form.piso') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.piso')
                             {{ $message }}
@@ -151,8 +155,8 @@
         <fieldset class="p-2" style="margin: 10px">
             <legend class="font-600 font-7">Contacto</legend>
             <div class="grid-2 gap-2 p-0">
-                <label class="label-input-y-75">Email:
-                    <input type="email" wire:model="form.email"
+                <label class="label-input-y-75">Email:*
+                    <input type="email" wire:model="form.email" placeholder="Ej: ejemplo@dominio.com"
                         class="@error('form.email') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.email')
@@ -160,8 +164,8 @@
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Teléfono 1:
-                    <input type="text" wire:model="form.telefono1"
+                <label class="label-input-y-75">Teléfono 1:*
+                    <input type="text" wire:model="form.telefono1" placeholder="Ej: 2317-876544"
                         class="@error('form.telefono1') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.telefono1')
@@ -170,7 +174,7 @@
                     </div>
                 </label>
                 <label class="label-input-y-75">Teléfono 2:
-                    <input type="text" wire:model="form.telefono2"
+                    <input type="text" wire:model="form.telefono2" placeholder="Ej: 2317-876543"
                         class="@error('form.telefono2') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.telefono2')
@@ -186,7 +190,7 @@
             <legend class="font-600 font-7">Académico</legend>
             <div class="grid-2 gap-2 p-0">
                 <label class="label-input-y-75">Título anterior:
-                    <input type="text" wire:model="form.titulo_anterior"
+                    <input type="text" wire:model="form.titulo_anterior" placeholder="Ej: Técnico en Informática"
                         class="@error('form.titulo_anterior') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.titulo_anterior')
@@ -195,7 +199,7 @@
                     </div>
                 </label>
                 <label class="label-input-y-75">Becas:
-                    <input type="text" wire:model="form.becas"
+                    <input type="text" wire:model="form.becas" placeholder="Ej: 2"
                         class="@error('form.becas') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.becas')
@@ -203,8 +207,9 @@
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Nombre de institución secundaria:
+                <label class="label-input-y-75">Institución secundaria:
                     <input type="text" wire:model="form.nombre_institucion_secundario"
+                        placeholder="Ej: Escuela Nacional N°1"
                         class="@error('form.nombre_institucion_secundario') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.nombre_institucion_secundario')
@@ -212,14 +217,14 @@
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Título secundario:
+                <label class="label-input-y-75">Título secundario:*
                     <select wire:model="form.titulo_secundario"
                         class="@error('form.titulo_secundario') border-red-500 @enderror">
                         <option value="">Seleccione una opción</option>
-                        <option value="0">Fotocopia del título original secundario</option>
-                        <option value="1">Certificado de constancia de título en trámite</option>
-                        <option value="2">Constancia de alumno del último año del nivel secundario</option>
-                        <option value="3">No entregado</option>
+                        <option value="1">Fotocopia del título Secundario</option>
+                        <option value="2">Certificado de constancia de título en trámite</option>
+                        <option value="3">Constancia de alumno del último año del nivel secundario</option>
+                        <option value="4">No entregado</option>
                     </select>
                     <div class="campo-alert">
                         @error('form.titulo_secundario')
@@ -229,6 +234,7 @@
                 </label>
             </div>
         </fieldset>
+
 
         <div class="botones-derecha">
             <x-btn-cancelar />

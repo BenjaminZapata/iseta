@@ -97,13 +97,10 @@
                             'placeholder' => 'Ej: 2317-876544',
                             'maxlength' => 30,
                         ]),
-                        '<div class="input-group">' .
                         $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', old('telefono2') ?? $profesor, [
                             'placeholder' => 'Ej: 2317-876543',
                             'maxlength' => 30,
-                        ]) .
-                        '<small class="text-muted">Ejemplo: 2317-876543</small>' .
-                        '</div>',
+                        ]),
                     ],
                     'Otros' => [
                         $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones') ?? $profesor, [
