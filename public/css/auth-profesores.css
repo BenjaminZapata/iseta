@@ -1,240 +1,14 @@
-/* ====== BASE GENERAL ====== */
-body#logeo-profes {
- min-height: 100vh;
- display: flex;
- align-items: center;
- justify-content: center;
- font-family: 'Segoe UI', sans-serif;
- margin: 0;
-}
-
-/* Login box base */
-section.login {
- width: 360px;
- max-width: 90vw;
- background: #fff;
- border-radius: 12px;
- box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
- padding: 32px 28px;
- display: flex;
- flex-direction: column;
- align-items: center;
-}
-
-/* Logo institucional */
-.logo-container {
- display: flex;
- justify-content: center;
- align-items: center;
- margin-bottom: 16px;
- width: 100%;
-}
-
-.logo-full {
- max-width: 80%;
- height: auto;
- object-fit: contain;
- display: block;
-}
-
-.login .logo {
- font-size: 28px;
- font-weight: 700;
- margin-bottom: 12px;
- color: #111827;
-}
-
-/* Título y subtítulo */
-.titulo-login {
- text-align: center;
- margin-bottom: 24px;
-}
-
-.titulo-login h1 {
- font-size: 20px;
- margin: 0;
- color: #111827;
-}
-
-.titulo-login p {
- font-size: 14px;
- color: #6b7280;
- margin-top: 4px;
-}
-
-/* Selector de rol */
-.who {
- display: flex;
- justify-content: center;
- margin-bottom: 20px;
- gap: 12px;
-}
-
-.who a {
- padding: 6px 14px;
- border-radius: 20px;
- font-size: 14px;
- text-decoration: none;
- color: #374151;
- background: #e5e7eb;
- transition: all .3s ease;
-}
-
-.who a:hover {
- background: #d1d5db;
-}
-
-.who a.act,
-.who a.act2,
-.who a.act3 {
- color: #fff;
-}
-
-/* Campos de entrada */
-.input-box {
- width: 100%;
- margin-bottom: 18px;
- display: flex;
- flex-direction: column;
- align-items: center;
-}
-
-.input-box input {
- width: 100%;
- max-width: 100%;
- padding: 12px 10px;
- border: 1px solid #d1d5db;
- border-radius: 6px;
- font-size: 14px;
- outline: none;
- transition: border-color .3s;
-}
-
-.input-box input:focus {
- border-color: #2563eb;
-}
-
-.input-wrapper,
-.password-wrapper {
- width: 100%;
- position: relative;
-}
-
-.input-wrapper input,
-.password-wrapper input {
- width: 100%;
- padding: 12px 10px;
- border: 1px solid #d1d5db;
- border-radius: 6px;
- font-size: 14px;
- box-sizing: border-box;
- outline: none;
-}
-
-.password-wrapper input {
- padding-right: 2.5rem;
-}
-
-.toggle-password {
- position: absolute;
- right: 12px;
- top: 50%;
- transform: translateY(-50%);
- background: none;
- border: none;
- cursor: pointer;
- font-size: 18px;
- color: #6b7280;
-}
-
-/* Botón principal */
-.input-box.button input[type="submit"] {
- color: #fff;
- font-weight: 600;
- cursor: pointer;
- border: none;
- transition: background .3s;
-}
-
-/* Links secundarios */
-.etiquetas {
- margin-top: 8px;
- text-align: center;
-}
-
-.etiquetas a {
- font-size: 13px;
- color: #2563eb;
- text-decoration: none;
-}
-
-.etiquetas a:hover {
- text-decoration: underline;
-}
-
-/* Botón admin - sólo si se usa */
-.admin-btn-container {
- margin-top: 16px;
- text-align: center;
-}
-
-.admin-btn {
- font-size: 13px;
- color: #6b7280;
- text-decoration: none;
- display: inline-flex;
- align-items: center;
- gap: 4px;
-}
-
-.admin-btn:hover {
- color: #111827;
-}
-
-
-
-/* ====== ESTILOS ESPECÍFICOS POR ROL ====== */
-
-
-/* =============== ALUMNOS ================ */
-
-
-/* ===== Fondo y colores de alumno ===== */
-body#logeo-alumno {
- background: #0829b9;
-}
-
-/* ===== Rol selector activo ===== */
-.login.alumno .who a.act {
- background: #0829b9;
- color: #fff;
-}
-
-/* ===== Botón de envío ===== */
-.login.alumno .input-box.button input[type="submit"] {
- background: #0829b9;
- color: #fff;
-}
-
-.login.alumno .input-box.button input[type="submit"]:hover {
- background: #062094;
-}
-
-
-
-/* =============== PROFESORES ================ */
-
-/* ====== RESET Y BASE GENERAL ====== */
+/* ===== RESET GENERAL ===== */
 * {
  box-sizing: border-box;
  margin: 0;
  padding: 0;
 }
 
+/* ===== BASE GENERAL ===== */
 body#logeo-profes {
  min-height: 100vh;
  background: #042d78;
- /* color principal */
  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
  color: #ffffff;
  display: flex;
@@ -242,7 +16,7 @@ body#logeo-profes {
  align-items: center;
 }
 
-/* ====== LOGIN BOX ====== */
+/* ===== LOGIN BOX ===== */
 .login-profes {
  background: #063b9c;
  padding: 40px 32px;
@@ -255,7 +29,7 @@ body#logeo-profes {
  align-items: center;
 }
 
-/* ====== LOGO ====== */
+/* ===== LOGO ===== */
 .logo-container-profes {
  display: flex;
  justify-content: center;
@@ -270,7 +44,7 @@ body#logeo-profes {
  object-fit: contain;
 }
 
-/* ====== TÍTULOS ====== */
+/* ===== TÍTULOS ===== */
 .titulo-login-profes h1 {
  font-size: 20px;
  font-weight: bold;
@@ -286,7 +60,7 @@ body#logeo-profes {
  margin-bottom: 24px;
 }
 
-/* ====== SELECTOR DE ROL ====== */
+/* ===== SELECTOR DE ROL ===== */
 .who-profes {
  display: flex;
  justify-content: center;
@@ -315,7 +89,7 @@ body#logeo-profes {
  color: #fff;
 }
 
-/* ====== FORMULARIO ====== */
+/* ===== FORMULARIO ===== */
 form {
  width: 100%;
  display: flex;
@@ -363,7 +137,7 @@ input:focus {
  color: #bcbcf5;
 }
 
-/* ====== TOGGLE PASSWORD BUTTON ====== */
+/* ===== TOGGLE PASSWORD BUTTON ===== */
 .toggle-password-profes {
  position: absolute;
  right: 12px;
@@ -376,7 +150,14 @@ input:focus {
  cursor: pointer;
 }
 
-/* ====== BOTÓN PRINCIPAL ====== */
+/* ===== BOTÓN PRINCIPAL ===== */
+.input-box-profes.button-profes {
+ width: 100%;
+ display: flex;
+ justify-content: center;
+ /* Centra horizontalmente */
+}
+
 .input-box-profes.button-profes input[type="submit"] {
  background-color: #1a6cff;
  border: none;
@@ -387,13 +168,19 @@ input:focus {
  cursor: pointer;
  color: #ffffff;
  transition: background-color 0.3s;
+ width: 100%;
+ /* 🔥 Asegura que ocupe todo el ancho disponible */
+ max-width: 100%;
 }
 
 .input-box-profes.button-profes input[type="submit"]:hover {
  background-color: #0f4ec7;
+ outline: none;
+ /* color más oscuro al hacer hover */
 }
 
-/* ====== OLVIDÓ CONTRASEÑA / REGISTRO ====== */
+
+/* ===== OLVIDÓ CONTRASEÑA / REGISTRO ===== */
 .etiquetas-profes {
  margin-top: 12px;
  text-align: center;
@@ -409,7 +196,7 @@ input:focus {
  text-decoration: underline;
 }
 
-/* ====== ERRORES ====== */
+/* ===== ERRORES ===== */
 .campo-alert-profes {
  color: #e74c3c;
  background: rgba(255, 0, 0, 0.1);

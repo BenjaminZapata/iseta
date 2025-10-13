@@ -22,7 +22,7 @@ body#logeo-alumno {
  /* caja blanca */
  padding: 40px 32px;
  border-radius: 12px;
- box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+ box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
  width: 360px;
  max-width: 90vw;
  display: flex;

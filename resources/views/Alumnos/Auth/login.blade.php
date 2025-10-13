@@ -62,7 +62,7 @@
 
 
             <div class="entrar input-box button">
-                <input type="submit" value="Entrar">
+                <input type="submit" value="Ingresar">
             </div>
 
             <div class="etiquetas">
