@@ -5,20 +5,26 @@
         @method('put')
     @endif
 
-    <p class="info-obligatorios">
-        Los campos marcados con <span style="color:red">*</span> son obligatorios.
-    </p>
-
     @foreach ($fieldsets as $legend => $inputs)
         <fieldset class="p-2" style="margin: 10px;">
             <legend class="font-600 font-7">{{ $legend }}</legend>
-            <div class="grid-2 gap-2 p-0">
-                @foreach ($inputs as $input)
-                    <?= $input ?>
-                @endforeach
-            </div>
+
+            @if ($legend == 'Vinculación')
+                <div style="display: flex; flex-direction: column; gap: 10px; margin: 20px 0;">
+                    @foreach ($inputs as $input)
+                        <?= $input ?>
+                    @endforeach
+                </div>
+            @else
+                <div class="grid-2 gap-2 p-0">
+                    @foreach ($inputs as $input)
+                        <?= $input ?>
+                    @endforeach
+                </div>
+            @endif
         </fieldset>
     @endforeach
+
 
     <div class="botones-derecha">
 
@@ -38,3 +44,20 @@
 
     </div>
 </form>
+
+<script>
+    function toggleExportar() {
+        const opciones = document.getElementById('exportar-opciones');
+        opciones.style.display = opciones.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Opcional: cerrar si clickean fuera
+    document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('exportar-opciones');
+        const button = event.target.closest('.dropdown');
+
+        if (!button) {
+            dropdown.style.display = 'none';
+        }
+    });
+</script>

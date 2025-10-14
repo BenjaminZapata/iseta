@@ -1,0 +1,60 @@
+.chevron-btn {
+ transition: transform 0.2s ease;
+ border: none;
+ background: none;
+ font-size: 1.2em;
+}
+
+
+.icono-correlativa {
+ font-size: 1em;
+ margin-left: 6px;
+ color: #555;
+}
+
+.asignatura-con-correlativas {
+ background-color: #f1f1f1;
+ box-shadow: inset 5px 0 0 #215bd8;
+ padding: 0.5rem 1rem;
+ margin-top: 0.5rem;
+ border-radius: 0 4px 4px 0;
+}
+
+.asignatura-con-correlativas:hover {
+ background-color: #e0e0e0;
+ /* más oscuro */
+ box-shadow: inset 5px 0 0 #3823be;
+ /* mantiene el borde más oscuro */
+}
+
+
+.correlativas-expandida {
+ background: #f9f9f9;
+ padding: 15px;
+ border-top: 1px solid #ccc;
+}
+
+.lista-correlativas {
+ margin: 10px 0;
+ padding-left: 18px;
+}
+
+.acciones-correlativas {
+ margin-top: 10px;
+}
+
+tr.asignatura-con-correlativas:hover,
+tr:hover {
+ background-color: #f0f8ff;
+ /* Celeste claro. Cambialo a gusto */
+ cursor: pointer;
+}
+
+.tabla-correlativas thead {
+ background-color: var(--azul-iseta);
+ color: #fff;
+}
+
+
+
+/*###############################       Estilos para el agregar correlativas      ############################# */

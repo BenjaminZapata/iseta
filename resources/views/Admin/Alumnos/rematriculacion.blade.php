@@ -34,8 +34,7 @@
 
                     @if (count($asignaturas) <= 0)
                         <div class="alert-box bg-warning p-3 rounded text-center">
-                            <p>No tienes asignaturas para rendir de esta carrera.</p>
-                            <p>Si crees que se trata de un error, comunicate con la institución para solucionarlo.</p>
+                            <p>Este alumno no cuenta con asignaturas para rendir de esta carrera.</p>
                         </div>
                     @else
                         @foreach ($asignaturas as $asignatura)
@@ -44,7 +43,7 @@
                                 <div class="grid grid-cols-2 gap-6 mb-2">
                                     <div>
                                         <label class="font-semibold">Año:</label>
-                                        <span>{{ $asignatura->anio }}</span>
+                                        <span>{{ $asignatura->carrera()->wherePivot('id_carrera', $carrera->id)->first()->pivot->anio + 1 }}</span>
                                     </div>
                                     <div>
                                         <label class="font-semibold">Asignatura:</label>
@@ -57,16 +56,17 @@
 
 
                                 <div>
-                                    @if ($asignatura->equivalencias_previas)
+                                    @if ($asignatura->debeCorrelativas($alumno, $carrera->id))
                                         <div class="correlativa-header cursor-pointer flex items-center justify-between"
                                             onclick="toggleEquiv({{ $asignatura->id }})">
-                                            <p class="font-semibold text-warning">Debes correlativas</p>
+                                            <p class="font-semibold text-warning">Debe correlativas</p>
                                             <i class="ti ti-chevron-down chevron icon-{{ $asignatura->id }}"></i>
                                         </div>
 
                                         <ul class="equiv-list id-{{ $asignatura->id }} pl-4 list-disc text-sm">
-                                            @foreach ($asignatura->equivalencias_previas as $equiv)
-                                                <li><strong>{{ $equiv->anioStr() }}:</strong> {{ $equiv->nombre }}</li>
+                                            @foreach ($asignatura->debeCorrelativas($alumno, $carrera->id) as $equiv)
+                                                <li><strong>{{ $equiv->anioStr($carrera->id) }}:</strong>
+                                                    {{ $equiv->nombre }}</li>
                                             @endforeach
                                         </ul>
                                     @else
@@ -82,10 +82,11 @@
                             </div>
                         @endforeach
 
-                        <div class="text-right mt-4"  style="display: inline-flex; align-items: center; text-transform: none;">   
+                        <div class="text-right mt-4"
+                            style="display: inline-flex; align-items: center; text-transform: none;">
                             <button class="btn_blue"><i class="ti ti-send" style="margin-right: 8px; font-size: 1.3em;"></i>
                                 Matricular</button>
-                                
+
                         </div>
                         <x-btn-cancelar />
                     @endif

@@ -4,9 +4,6 @@ namespace App\Http\Requests;
 
 use App\Rules\Telefono;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Carbon;
-
-
 
 class CrearProfesorRequest extends FormRequest
 {
@@ -26,33 +23,28 @@ class CrearProfesorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'dni' => ['required', 'integer', 'gte:0', 'unique:profesores,dni', 'max_digits:10'],
+            'dni' => ['required', 'integer', 'unique:profesores,dni', 'max_digits:10'],
             'nombre' => ['required', 'string', 'max:30'],
             'apellido' => ['required', 'string', 'max:30'],
             'fecha_nacimiento' => [
                 'nullable',
                 'date',
-                function ($attribute, $value, $fail) {
-                    if (Carbon::parse($value)->age < 18) {
-                        $fail('El profesor debe tener al menos 18 años.');
-                    }
-                },
             ],
             'ciudad' => ['nullable', 'string', 'max:30'],
             'calle' => ['nullable', 'string', 'max:30'],
-            'casa_numero' => ['nullable', 'numeric', 'max_digits:4'],
+            'casa_numero' => ['nullable', 'numeric', 'regex:/^-?\d{1,4}$/'],
             'dpto' => ['nullable', 'string', 'max:5'],
-            'piso' => ['nullable', 'numeric', 'max_digits:15'],
+            'piso' => ['nullable', 'numeric', 'regex:/^-?\d{1,15}$/'],
             'estado_civil' => ['nullable', 'integer', 'between:0,5'],
             'email' => ['required', 'email', 'max:50'],
             'formacion_academica' => ['required', 'regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u', 'max:150'],
             'titulo' => ['nullable', 'numeric'],
             'observaciones' => ['nullable', 'string', 'max:150'],
-            'telefono_1' => ['required', new Telefono, 'max:30'],
-            'telefono_2' => ['nullable', new Telefono, 'max:30'],
+            'telefono1' => ['required', new Telefono, 'max:30'],
+            'telefono2' => ['nullable', new Telefono, 'max:30'],
             'codigo_postal' => ['nullable', 'alpha_num', 'max:10'],
             'lugar_nacimiento' => ['nullable', 'string', 'max:255'],
-            'anio_ingreso' => ['required', 'date_format:Y', 'before_or_equal:now', 'after:1980'],
+            'anio_ingreso' => ['required', 'numeric', 'regex:/^-?\d{1,4}$/'],
         ];
     }
 
@@ -73,7 +65,7 @@ class CrearProfesorRequest extends FormRequest
             'formacion_academica.required' => 'La formación académica es obligatoria.',
             'formacion_academica.regex' => 'La formación académica solo puede contener letras y espacios.',
             'formacion_academica.max' => 'La formación académica no puede tener más de 150 caracteres.',
-            'telefono_1.required' => 'El teléfono 1 es obligatorio.',
+            'telefono1.required' => 'El teléfono 1 es obligatorio.',
             'telefono_1.max' => 'El teléfono 1 no puede tener más de 30 caracteres.',
             'telefono_2.max' => 'El teléfono 2 no puede tener más de 30 caracteres.',
             'año_ingreso.required' => 'El año de ingreso es obligatorio.',
@@ -83,7 +75,7 @@ class CrearProfesorRequest extends FormRequest
     public function attributes()
     {
         return [
-            'anio_ingreso' => 'año de ingreso'
+            'anio_ingreso' => 'año de ingreso',
         ];
     }
 }

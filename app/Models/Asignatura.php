@@ -18,6 +18,7 @@ class Asignatura extends Model
     public $timestamps = false;
 
     protected $fillable =  [
+        'id',
         'nombre',
         'tipo_modulo',
         'carga_horaria',
@@ -38,21 +39,42 @@ class Asignatura extends Model
     }
 
    public function carrera(): BelongsToMany
-{
-    return $this->belongsToMany(
-        Carrera::class,
-        'carrera_asignatura_profesor',
-        'id_asignatura',
-        'id_carrera'
-    )
-    ->withPivot('id_profesor','tipo_modulo','carga_horaria','anio')
-    ->using(CarreraAsignaturaProfesor::class)
-    ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(
+            Carrera::class,
+            'carrera_asignatura_profesor',
+            'id_asignatura',
+            'id_carrera'
+        )
+        ->withPivot('id_profesor','tipo_modulo','carga_horaria','anio')
+        ->using(CarreraAsignaturaProfesor::class)
+        ->withTimestamps();
+    }
 
+    public function correlativasReverse()
+    {
+        return $this->belongsToMany(
+            Asignatura::class,          // Modelo relacionado (a sí mismo)
+            'correlatividades',             // Tabla pivote
+            'id_asignatura_correlativa', // FK en pivote que apunta a la correlativa
+            'id_asignatura'           // FK en pivote que apunta a esta asignatura
+        )
+            ->withPivot('tipo_correlativa')
+            ->using(Correlativa::class);
+    }
 
-
-    public function correlativas(): HasMany{
+    public function correlativas()
+    {
+        return $this->belongsToMany(
+            Asignatura::class,          // Modelo relacionado (a sí mismo)
+            'correlatividades',             // Tabla pivote
+            'id_asignatura',            // FK en pivote que apunta a esta asignatura
+            'id_asignatura_correlativa' // FK en pivote que apunta a la correlativa
+        )
+            ->withPivot('tipo_correlativa')
+            ->using(Correlativa::class);
+    }
+    public function correlativasPivot(): HasMany{
         return $this -> hasMany(Correlativa::class, 'id_asignatura');
     }
 

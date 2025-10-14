@@ -1,42 +1,34 @@
 <?php
 
-use App\Http\Controllers\Secretario\AlumnoSecretarioController;
-use App\Http\Controllers\Admin\AdminCopiaDB;
-use App\Http\Controllers\preceptor\AlumnoPreceptorController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminCorrelativasController;
 use App\Http\Controllers\Admin\AdminCursadasLotes;
 use App\Http\Controllers\Admin\AdminDiasHabilesController;
-use App\Http\Controllers\Admin\AdminExcelController;
 use App\Http\Controllers\Admin\AdminExportController;
 use App\Http\Controllers\Admin\AdminMatriculacionController;
-use App\Http\Controllers\Admin\AdminMesaPorCarreraController;
 use App\Http\Controllers\Admin\AdminMesasLotes;
 use App\Http\Controllers\Admin\AdminPdfController;
+use App\Http\Controllers\Admin\AdminsCrudController;
+use App\Http\Controllers\Admin\AdminSeguridadController;
 use App\Http\Controllers\Admin\AlumnoCrudController;
 use App\Http\Controllers\Admin\AsignaturasCrudController;
 use App\Http\Controllers\Admin\CarrerasCrudController;
-use App\Http\Controllers\Admin\MesasCrudController;
-use App\Http\Controllers\Admin\ProfesoresCrudController;
-use App\Http\Controllers\Admin\AdminsCrudController;
-use App\Http\Controllers\Admin\AdminSeguridadController;
 use App\Http\Controllers\Admin\ConfigController;
-use App\Http\Controllers\Admin\ExamenesCrudController;
 use App\Http\Controllers\Admin\CursadasAdminController;
 use App\Http\Controllers\Admin\EgresadosAdminController;
-use App\Http\Controllers\PdfsController;
-use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\Admin\ExamenesCrudController;
+use App\Http\Controllers\Admin\MesasCrudController;
+use App\Http\Controllers\Admin\ProfesoresCrudController;
+use App\Http\Controllers\preceptor\AlumnoPreceptorController;
+use App\Http\Controllers\Secretario\AlumnoSecretarioController;
 use App\Models\Alumno;
 use App\Models\Asignatura;
 use App\Models\Carrera;
-use App\Models\Mensaje;
-use App\Models\Mesa;
 use App\Models\Profesor;
 use App\Services\TextFormatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Admin\AsignaturaController;
 
 Route::redirect('/admin', '/admin/login');
 
@@ -75,20 +67,19 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // -----------------------------
     // PRECEPTOR
     // -----------------------------
-    Route::middleware(['auth:admin'])->group(function () {
+/*     Route::middleware(['auth:admin'])->group(function () {
         Route::get('/alumnos/index', [AlumnoPreceptorController::class, 'index'])
             ->name('preceptor.alumnos.index');
-    });
+    }); */
 
-    //-----------------------------
+    // -----------------------------
     // SECRETARIO
-    //-----------------------------
-    Route::middleware(['auth:admin'])->group(function () {
+    // -----------------------------
+/*     Route::middleware(['auth:admin'])->group(function () {
         Route::get('/alumnos/index', [AlumnoSecretarioController::class, 'index'])
             ->name('secretario.alumnos.index');
     });
-
-
+ */
     // -----------------------------
     // EGRESADOS
     // -----------------------------
@@ -102,10 +93,15 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // -----------------------------
     Route::resource('profesores', ProfesoresCrudController::class, [
         'as' => 'admin',
-        'parameters' => ['profesores' => 'profesor']
+        'parameters' => ['profesores' => 'profesor'],
     ])->except('show')->missing(function () {
         return redirect()->route('admin.profesores.index')->with('aviso', 'El profesor no existe o ha sido eliminado');
     });
+    Route::post('admin/profesores/{profesor}/vincular-asignaturas', [ProfesoresCrudController::class, 'vincularAsignaturas'])
+    ->name('admin.profesores.vincular-asignaturas');
+Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [ProfesoresCrudController::class, 'desvincularAsignatura'])
+    ->name('admin.profesores.desvincular-asignatura');
+    
 
     // -----------------------------
     // CARRERAS
@@ -118,7 +114,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
 
     Route::post('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignatura'])
         ->name('admin.carreras.addAsignatura');
-    Route::get('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
+    Route::get  ('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
         ->name('admin.carreras.addAsignaturaView');
 
     Route::get('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignaturaView'])
@@ -138,6 +134,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         Storage::delete($carrera->resolucion_archivo);
         $carrera->resolucion_archivo = '';
         $carrera->save();
+
         return redirect()->back();
     })->name('admin.carreras.resolucion.borrar');
 
@@ -187,7 +184,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::delete('mesas/{mesa}/edit/eliminar', [MesasCrudController::class, 'destroy'])->name('admin.mesas.destroy');
     Route::resource('examenes', ExamenesCrudController::class, [
         'as' => 'admin',
-        'parameters' => ['examenes' => 'examen']
+        'parameters' => ['examenes' => 'examen'],
     ])->only('store', 'edit', 'update', 'destroy');
     Route::post('examenes/{examen}/nota', [ExamenesCrudController::class, 'modificarNota'])->name('admin.examenes.nota');
 
@@ -207,8 +204,8 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // -----------------------------
     // CORRELATIVAS
     // -----------------------------
-    Route::post('correlativa/{asignatura}', [AdminCorrelativasController::class, 'agregar'])->name('correlativa.agregar');
-    Route::delete('correlativa/{asignatura}', [AdminCorrelativasController::class, 'eliminar'])->name('correlativa.eliminar');
+    Route::post('correlativa/{carrera}/{asignatura}', [AdminCorrelativasController::class, 'agregar'])->name('admin.correlativa.agregar');
+    Route::delete('correlativa/{carrera}/{asignatura}/{correlativa}', [AdminCorrelativasController::class, 'eliminar'])->name('admin.correlativa.eliminar');
 
     // -----------------------------
     // DIAS HABILES

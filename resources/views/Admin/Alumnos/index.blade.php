@@ -38,7 +38,6 @@
                         $form->select('filter_vencido', 'Plazo de entrega del título:', 'label-input-y-100', old('filter_vencido', $filters->filter_vencido ?? 'null'), [
                             null => 'Todos',
                             1 => 'Vencido',
-                            0 => 'No vencido',
                         ]),
                     ],
                     'fields' => [
