@@ -12,37 +12,37 @@
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-    <!-- Estilos reutilizados -->
-    <link rel="stylesheet" href="{{ asset('css/auth-alumnos.css') }}">
+    <!-- Estilos de profesor -->
+    <link rel="stylesheet" href="{{ asset('css/auth-profesores.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/mensaje.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/form.css') }}">
 </head>
 
-<body id="logeo-alumno">
+<body id="logeo-profes">
     @include('Componentes.mensaje')
 
-    <section class="login alumno">
+    <section class="login-profes">
         <form action="{{ route('reset.password.mail') }}" method="GET">
-            <div class="logo-container">
-                <img src="{{ asset('img/logo-alumnos-bk.png') }}" class="logo-full" alt="Logo ISETA Alumnos">
+            <div class="logo-container-profes">
+                <img src="{{ asset('img/logo-profes.png') }}" class="logo-full-profes" alt="Logo ISETA Profesores">
             </div>
 
-            <div class="titulo-login">
+            <div class="titulo-login-profes">
                 <h1>Verificar correo</h1>
                 <p>Ingresá el correo electrónico donde recibirás el código de verificación</p>
             </div>
 
-            <div class="usuario input-box">
-                <div class="input-wrapper">
+            <div class="input-box-profes">
+                <div class="input-wrapper-profes">
                     <input type="email" name="email" required placeholder="Correo electrónico">
                 </div>
             </div>
 
-            <div class="crear input-box button">
+            <div class="input-box-profes button-profes">
                 <input type="submit" value="Enviar mail">
             </div>
-            <div class="etiquetas">
-                <a href="{{ route('alumno.login') }}">Volver al inicio</a>
+            <div class="etiquetas-profes">
+                <a href="{{ route('profesor.login') }}">Volver al inicio</a>
             </div>
         </form>
     </section>

@@ -77,7 +77,7 @@
             </div>
 
             <div class="etiquetas-profes">
-                <a href="{{ route('reset.password') }}">¿Ha olvidado su contraseña?</a>
+                <a href="{{ route('reset.password.profe') }}">¿Ha olvidado su contraseña?</a>
             </div>
         </form>
     </section>

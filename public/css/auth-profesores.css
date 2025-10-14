@@ -116,7 +116,8 @@ form {
 }
 
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+input[type="text"] {
  width: 100%;
  padding: 12px;
  border: 1px solid #0845b3;

@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISETA - Registro Profesor</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ISETA - Restablecer contraseña</title>
     <link rel="icon" type="image/png" href="{{ asset('img/icono-iseta.png') }}">
 
     <!-- Iconos -->
@@ -21,15 +21,8 @@
 <body id="logeo-profes">
     @include('Componentes.mensaje')
 
-    <section class="login-profes profesor-profes">
-        <!-- Selector de rol -->
-        <div class="who-profes">
-            <a class="tag-alumno-profes" href="{{ route('alumno.registro') }}">Alumno</a>
-            <a class="tag-profesor-profes act-profes" href="{{ route('profesor.register') }}">Profesor</a>
-        </div>
-
-        <!-- Formulario -->
-        <form action="{{ route('profesor.register.post') }}" method="POST">
+    <section class="login-profes">
+        <form action="{{ route('reset.password.post.profe') }}" method="POST">
             @csrf
 
             <div class="logo-container-profes">
@@ -37,26 +30,19 @@
             </div>
 
             <div class="titulo-login-profes">
-                <h1>Registrate</h1>
-                <p>¡Bienvenido! Por favor ingrese sus datos</p>
+                <h1>Restablecer contraseña</h1>
+                <p>Ingresá el código recibido por correo y elegí tu nueva contraseña</p>
             </div>
 
             <div class="input-box-profes">
                 <div class="input-wrapper-profes">
-                    <input type="email" name="email" value="{{ old('email') }}" required
-                        placeholder="Correo electrónico">
-                </div>
-            </div>
-
-            <div class="input-box-profes">
-                <div class="input-wrapper-profes">
-                    <input type="text" name="dni" value="{{ old('dni') }}" required placeholder="DNI">
+                    <input type="text" name="token" required placeholder="Código de verificación">
                 </div>
             </div>
 
             <div class="input-box-profes">
                 <div class="password-wrapper-profes">
-                    <input type="password" name="password" required placeholder="Contraseña">
+                    <input type="password" name="password" required placeholder="Nueva contraseña">
                     <button type="button" class="toggle-password-profes" aria-label="Mostrar u ocultar contraseña">
                         <i class="ti ti-eye"></i>
                     </button>
@@ -64,16 +50,15 @@
             </div>
 
             <div class="input-box-profes button-profes">
-                <input type="submit" value="Crear">
+                <input type="submit" value="Restablecer">
             </div>
 
             <div class="etiquetas-profes">
-                <p>¿Ya estás registrado? <a href="{{ route('profesor.login') }}">¡Iniciá sesión!</a></p>
+                <a href="{{ route('profesor.login') }}">Volver al inicio</a>
             </div>
         </form>
     </section>
 
-    <!-- Scripts -->
     <script src="{{ asset('js/ocultar-mensaje.js') }}"></script>
     <script src="{{ asset('js/mostrar-contrasenia.js') }}"></script>
 </body>
