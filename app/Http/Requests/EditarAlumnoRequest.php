@@ -37,6 +37,7 @@ class EditarAlumnoRequest extends FormRequest
                 'date',
                 Rule::date()->before(now()->subYear(18)),
             ],
+            'estado' => ['required', 'integer', 'between:0,1'],
             'ciudad' => ['nullable', 'string', 'max:30'],
             'calle' => ['nullable', 'string', 'max:30'],
             'casa_numero' => ['nullable', 'numeric', 'max_digits:4'],
