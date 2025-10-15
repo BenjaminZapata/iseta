@@ -48,9 +48,9 @@
                         placeholder="Correo electrónico">
                 </div>
                 @if (session('error'))
-                    <div class="campo-alert-profes">
-                        {{ session('error') }}
-                    </div>
+                <div class="campo-alert-profes">
+                    {{ session('error') }}
+                </div>
                 @endif
             </div>
 
@@ -62,9 +62,9 @@
                     </button>
                 </div>
                 @if (session('error'))
-                    <div class="campo-alert-profes">
-                        {{ session('error') }}
-                    </div>
+                <div class="campo-alert-profes">
+                    {{ session('error') }}
+                </div>
                 @endif
             </div>
 
@@ -83,8 +83,9 @@
     </section>
 
     <!-- Scripts funcionales -->
-    <script src="{{ asset('js/ocultar-mensaje.js') }}"></script>
-    <script src="{{ asset('js/mostrar-contrasenia.js') }}"></script>
+
 </body>
+<script src="{{ asset('js/ocultar-mensaje.js') }}"></script>
+<script src="{{ asset('js/mostrar-contrasenia.js') }}"></script>
 
 </html>

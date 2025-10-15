@@ -50,7 +50,7 @@
                     </select>
                 </div>
                 @error('rol')
-                    <div class="campo-alert">{{ $message }}</div>
+                <div class="campo-alert">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -61,7 +61,7 @@
                         value="{{ old('username') }}">
                 </div>
                 @error('username')
-                    <div class="campo-alert">{{ $message }}</div>
+                <div class="campo-alert">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -74,7 +74,7 @@
                     </button>
                 </div>
                 @error('password')
-                    <div class="campo-alert">{{ $message }}</div>
+                <div class="campo-alert">{{ $message }}</div>
                 @enderror
             </div>
 
@@ -89,8 +89,11 @@
         </form>
     </section>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/mostrar-contrasenia.js') }}"></script>
+
 </body>
+
+<!-- Scripts -->
+<script src="{{ asset('js/ocultar-mensaje.js') }}"></script>
+<script src="{{ asset('js/mostrar-contrasenia.js') }}"></script>
 
 </html>

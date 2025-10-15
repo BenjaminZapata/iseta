@@ -115,28 +115,37 @@ form {
  width: 100%;
 }
 
+/* ===== CAMPOS DE FORMULARIO: ESTILO ADMIN PERO CON COLORES PROFES ===== */
 input[type="email"],
 input[type="password"],
 input[type="text"] {
  width: 100%;
  padding: 12px;
- border: 1px solid #0845b3;
+ border: none;
+ /* sin borde por defecto */
  border-radius: 6px;
- background-color: #063b9c;
+ background-color: #114dbe;
+ /* fondo más claro que el contenedor */
  color: #ffffff;
  font-size: 1rem;
  transition: border 0.3s, background-color 0.3s;
 }
 
+/* Al enfocar el campo */
 input:focus {
- border-color: #1a6cff;
+ border: 1px solid #5fa8f6;
+ /* aparece el borde */
+ background-color: #0a57d1;
+ /* un poquito más brillante */
  outline: none;
- background-color: #0845b3;
 }
 
+/* Placeholder */
 ::placeholder {
- color: #bcbcf5;
+ color: #d1d1ff;
 }
+
+
 
 /* ===== TOGGLE PASSWORD BUTTON ===== */
 .toggle-password-profes {

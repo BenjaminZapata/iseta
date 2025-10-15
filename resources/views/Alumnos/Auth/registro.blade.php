@@ -32,7 +32,7 @@
             @csrf
 
             <div class="logo-container">
-                <img src="{{ asset('img/logo-alumnos-bk.png') }}" class="logo-full" alt="Logo ISETA Alumnos">
+                <img src="{{ asset('img/logo-alumnos.png') }}" class="logo-full" alt="Logo ISETA Alumnos">
             </div>
 
             <div class="titulo-login">
