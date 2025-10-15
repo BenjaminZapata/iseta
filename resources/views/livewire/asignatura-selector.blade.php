@@ -8,16 +8,20 @@
                 <input type="hidden" name="id_carrera" value="{{ $carrera->id }}">
             </div>
             <div class="perfil_dataname">
-                <label>Año:</label>
-                <select name="anio" class="campo_info rounded" wire:model="anio" @if($selectedId) disabled @endif>
-                    @if (is_null($anio))
-                    <option value="">Elija el año de la asignatura</option>
-                    @endif
-                    @for ($i = 1; $i <= 5; $i++)
-                        <option value="{{ $i }}" {{ $anio == $i ? 'selected' : '' }}>{{ $i }}º año</option>
-                        @endfor
-                </select>
-            </div>
+    <label>Año:</label>
+    <select name="anio" class="campo_info rounded" wire:model="anio" @if($selectedId) disabled @endif>
+        @if (is_null($anio))
+            <option value="">Elija el año de la asignatura</option>
+        @endif
+
+        @for ($i = 1; $i <= 5; $i++)
+            <option value="{{ $i }}" {{ $anio == $i ? 'selected' : '' }}>
+                {{ $i }}º año
+            </option>
+        @endfor
+    </select>
+</div>
+
 
             <div class="perfil_dataname">
                 <label for="selectedId">Asignatura:</label>

@@ -39,12 +39,5 @@
                 <span>Cursadas</span>
             </a>
         </li>
-        <li>
-            <a href="{{ route('preceptor.inscriptos.index') }}">
-                <i class="ti ti-file-invoice"></i>
-                <span>Inscriptos</span>
-            </a>
-        </li>
-        
     </ul>
 </aside>

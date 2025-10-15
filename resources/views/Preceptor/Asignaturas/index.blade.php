@@ -11,55 +11,16 @@
 </style>
 
 <div class="table" data-name="tablaAsignatura">
-   @include('preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
+    @include('preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ASIGNATURAS'])
 
     {{-- BOTÓN CREAR Y FILTROS --}}
     <div class="perfil__header-alt">
         <a href="{{ route('preceptor.asignaturas.create') }}">
             <button class="btn_blue">
-                <i class="ti ti-circle-plus"></i>Agregar asignatura
+                <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>Agregar asignatura
             </button>
         </a>
-        {{-- FILTROS --}}
-        <?= $filtergen->generate('preceptor.asignaturas.index', $filters, [
-            'dropdowns' => [
-                $carreraM->dropdown(
-                    'filter_carrera_id',
-                    'Carrera:',
-                    'label-input-y-100',
-                    [
-                        'first_items' => ['Todas'],
-                        'id' => 'carrera_select',
-                        'value' => old('filter_carrera_id', $filters->filter_carrera_id ?? null)
-                    ]
-                ),
-
-                $form->select(
-                    'filter_asignatura_id',
-                    'Asignatura:',
-                    'label-input-y-100',
-                    old('filter_asignatura_id', $filters->filter_asignatura_id ?? null),
-                    $asignaturasList->pluck('nombre', 'id')->prepend('Todas', 0)->toArray(),
-                ),
-
-                $form->select('filter_anio', 'Año:', 'label-input-y-100', $filters, ['Todos', '1er Año', '2do Año', '3er Año', '4to Año', '5to Año']),
-               $form->select('filter_carga_horaria', 'Carga Horaria:', 'label-input-y-100', $filters, [
-    'Cualquiera' => 'Cualquiera',
-    'Menos de 10 hs' => 'Menos de 10 hs',
-    '10 a 20 hs' => '10 a 20 hs',
-    'Más de 20 hs' => 'Más de 20 hs',
-])
-
-            ],
-            'fields' => [
-                'nombre' => 'Nombre',
-                'carrera' => 'Carrera',
-                'anio' => 'Año',
-                'carga_horaria' => 'Carga Horaria',
-            ],
-        ]) ?>
     </div>
-
 
     {{-- TABLA DE ASIGNATURAS --}}
     <table class="table__body">
@@ -70,6 +31,7 @@
                 <th class="center">Año</th>
                 <th class="center">Carga horaria</th>
                 <th class="center">Acción</th>
+
             </tr>
         </thead>
         <tbody>
@@ -82,36 +44,37 @@
                     @endforeach
                 </td>
                 <td>
-                    <div style="display: flex; justify-content: center;">
-                        {{ $asignatura->anioStr() }}
-                    </div>
+               <div style="display: flex; justify-content: center;">
+    {{ $asignatura->anioStr($asignatura->carrera->first()->id ?? 0) }}
+</div>
+
                 </td>
                 <td>
-                    <div style="display: flex; justify-content: center;">
+                    <div style="display:flex; align-items: center; justify-content: center;"">
                         {{ $asignatura->carga_horaria }} hs
                     </div>
                 </td>
                 <td>
-                    <div style="display: flex; justify-content: center;">
-                        <a href="{{ route('preceptor.asignaturas.edit', $asignatura->id) }}">
-                            <button class="btn_blue">
-                                <i class="ti ti-file-info" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                Modificar
-                            </button>
-                        </a>
-
-                        <form id="form-eliminar-{{ $asignatura->id }}"
-                            action="{{ route('preceptor.asignaturas.destroy', $asignatura->id) }}" method="POST"
-                            style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button"
-                                onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
-                                    '¿Estás seguro de que querés eliminar a la asignatura: {{ strtoupper($asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                                <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                            </button>
-                        </form>
+                    <div style=" display:flex; align-items: center; justify-content: center;">
+                        <div style="display:flex; align-items: center; justify-content: center;">
+                            @if (!$config['modo_seguro'])
+                            <form id="form-eliminar-{{ $asignatura->id }}"
+                                action="{{ route('preceptor.asignaturas.destroy', $asignatura->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button"
+                                    onclick="openGeneralModal('form-eliminar-{{ $asignatura->id }}',
+                                `¿Estás seguro de que querés eliminar la asignatura?\n\n
+        Nombre: {{ strtoupper($asignatura->nombre) }}\n
+        {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
+         Año: {{ $asignatura->anio }}\n\n
+         ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
+                                    class="btn_icon-danger" style="background-color: red;">
+                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                </button>
+                            </form>
+                            @endif
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -125,6 +88,4 @@
 <div class="w-full flex justify-center p-5 pagination">
     {{ $asignaturas->appends(request()->query())->links('Componentes.pagination') }}
 </div>
-
-
 @endsection
