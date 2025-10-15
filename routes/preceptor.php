@@ -4,13 +4,12 @@ use App\Http\Controllers\Preceptor\PreceptorDiasHabiles;
 use App\Http\Controllers\Preceptor\InscripcionPreceptorController;
 use App\Http\Controllers\Preceptor\CursadasPreceptorController;
 use App\Http\Controllers\Preceptor\AlumnoPreceptorController;
-use App\Http\Controllers\RematriculacionController;
+use App\Http\Controllers\Preceptor\PreceptorMatriculacionController;
 use App\Http\Controllers\Preceptor\ExamenPreceptorController;
 use App\Http\Controllers\Preceptor\MesaPreceptorController;
 use App\Http\Controllers\Admin\AdminPdfController;
 use App\Http\Controllers\Preceptor\AsignaturasPreceptorController;
 use App\Http\Controllers\Preceptor\CarrerasPreceptorController;
-use App\Http\Controllers\Admin\AdminMatriculacionController;
 use App\Http\Controllers\Preceptor\PreceptorCursadasLotes;
 use App\Http\Controllers\Preceptor\PreceptorMesasLotes;
 use App\Http\Controllers\Preceptor\PreceptorConfigController;
@@ -23,28 +22,26 @@ Route::prefix('preceptor')
     ->group(function () {
 
         // Alumnos
-        Route::get('alumnos/verificar/{alumno}', [AlumnoPreceptorController::class, 'verificar'])
-            ->name('alumnos.verificar')->middleware('auth:admin');
+  Route::get('alumnos/verificar/{alumno}', [AlumnoPreceptorController::class, 'verificar'])
+        ->name('admin.alumnos.verificar')->middleware('auth:admin');
 
-        Route::resource('alumnos', AlumnoPreceptorController::class)
-            ->middleware('auth:admin')
-            ->missing(function () {
-                return redirect()->route('preceptor.alumnos.index')
-                    ->with('aviso', 'El alumno no existe o ha sido eliminado');
-            })->except('show');
+    Route::resource('alumnos', AlumnoPreceptorController::class, )
+        ->middleware('auth:admin')
+        ->missing(function () {
+            return redirect()->route('preceptor.alumnos.index')->with('aviso', 'El alumno no existe o ha sido eliminado');
+        })->except('show');
 
+    Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
+        ->name('preceptor.alumnos.analitico.pdf');
 
+    Route::get('/alumnos/regular/{alumno}', [AdminPdfController::class, 'constanciaRegular'])
+        ->name('preceptor.alumnos.regular');
 
-        Route::get('alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
-            ->name('admin.alumnos.analitico.pdf');
+    Route::get('matricular/{alumno}', [PreceptorMatriculacionController::class, 'rematriculacion_vista'])
+        ->name('preceptor.alumno.rematricular');
+    Route::post('matricular/{alumno}/{carrera}', [PreceptorMatriculacionController::class, 'rematriculacion'])
+        ->name('preceptor.alumno.matricular.post');
 
-        Route::get('/alumnos/regular/{alumno}', [AdminPdfController::class, 'constanciaRegular'])
-            ->name('admin.alumnos.regular');
-
-        Route::get('matricular/{alumno}', [AdminMatriculacionController::class, 'rematriculacion_vista'])
-            ->name('alumno.rematricular');
-        Route::post('matricular/{alumno}/{carrera}', [AdminMatriculacionController::class, 'rematriculacion'])
-            ->name('alumno.matricular.post');
 
         // Inscriptos
         Route::get('/inscriptos/create', [InscripcionPreceptorController::class, 'create'])->name('inscriptos.create');
@@ -102,46 +99,46 @@ Route::prefix('preceptor')
             ->name('asignaturas.desvincular');
 
         // Carreras
-        Route::resource('carreras', CarrerasPreceptorController::class)
-            ->middleware('auth:admin')
-            ->missing(function () {
-                return redirect()->route('carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
-            })->except('show');
+        Route::resource('carreras', CarrerasPreceptorController::class, ['as' => 'admin'])
+        ->middleware('auth:admin')
+        ->missing(function () {
+            return redirect()->route('admin.carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
+        })->except('show');
 
-        Route::post('carreras/add_asignatura', [CarrerasPreceptorController::class, 'addAsignatura'])
-            ->name('carreras.addAsignatura');
-        Route::get('carreras/add_asignatura/{carrera}', [CarrerasPreceptorController::class, 'addAsignaturaView'])
-            ->name('carreras.addAsignaturaView');
+    Route::post('carreras/add_asignatura/{carrera}', [CarrerasPreceptorController::class, 'addAsignatura'])
+        ->name('admin.carreras.addAsignatura');
+    Route::get  ('carreras/add_asignatura/{carrera}', [CarrerasPreceptorController::class, 'addAsignaturaView'])
+        ->name('admin.carreras.addAsignaturaView');
 
-        Route::get('carreras/create_asignatura/{carrera}', [CarrerasPreceptorController::class, 'createAsignaturaView'])
-            ->name('carreras.createAsignaturaView');
-        Route::post('carreras/create_asignatura/{carrera}', [CarrerasPreceptorController::class, 'createAsignatura'])
-            ->name('carreras.createAsignatura');
+    Route::get('carreras/create_asignatura/{carrera}', [CarrerasPreceptorController::class, 'createAsignaturaView'])
+        ->name('admin.carreras.createAsignaturaView');
+    Route::post('carreras/create_asignatura/{carrera}', [CarrerasPreceptorController::class, 'createAsignatura'])
+        ->name('admin.carreras.createAsignatura');
 
-        Route::delete('carreras/{carrera}', [CarrerasPreceptorController::class, 'destroy'])->name('carreras.destroy');
-        Route::post('carreras/{carrera}/desactivar', [CarrerasPreceptorController::class, 'desactivar'])->name('carreras.desactivar');
-        Route::post('carreras/{carrera}/reactivar', [CarrerasPreceptorController::class, 'reactivar'])->name('carreras.reactivar');
+    Route::delete('carreras/{carrera}', [CarrerasPreceptorController::class, 'destroy'])->name('admin.carreras.destroy');
+    Route::post('carreras/{carrera}/desactivar', [CarrerasPreceptorController::class, 'desactivar'])->name('admin.carreras.desactivar');
+    Route::post('carreras/{carrera}/reactivar', [CarrerasPreceptorController::class, 'reactivar'])->name('admin.carreras.reactivar');
 
-        Route::get('carreras/resolucion/{carrera}', function (Request $request, Carrera $carrera) {
-            return Storage::download($carrera->resolucion_archivo);
-        })->name('carreras.resolucion');
+    Route::get('carreras/resolucion/{carrera}', function (Request $request, Carrera $carrera) {
+        return Storage::download($carrera->resolucion_archivo);
+    })->name('admin.carreras.resolucion');
 
-        Route::get('carreras/resolucion-delete/{carrera}', function (Request $request, Carrera $carrera) {
-            Storage::delete($carrera->resolucion_archivo);
-            $carrera->resolucion_archivo = '';
-            $carrera->save();
-            return redirect()->back();
-        })->name('carreras.resolucion.borrar');
+    Route::get('carreras/resolucion-delete/{carrera}', function (Request $request, Carrera $carrera) {
+        Storage::delete($carrera->resolucion_archivo);
+        $carrera->resolucion_archivo = '';
+        $carrera->save();
 
+        return redirect()->back();
+    })->name('admin.carreras.resolucion.borrar');
 
-        //inscriptos
-        Route::resource('inscriptos', InscripcionPreceptorController::class,)
-            ->missing(function () {
+    //inscriptos
+     Route::resource('inscriptos', InscripcionPreceptorController::class,)
+        ->missing(function () {
                 return redirect()->route('preceptor.inscriptos.index')->with('aviso', 'La inscripcion no existe o ha sido eliminada');
-            })->except('show');
+         })->except('show');
 
         // Dias habiles
-        Route::get('dias-habiles', [PreceptorDiasHabiles::class, 'index'])->name('habiles.index');
+    Route::get('dias-habiles', [PreceptorDiasHabiles::class, 'index'])->name('habiles.index');
     Route::post('dias-habiles', [PreceptorDiasHabiles::class, 'store'])->name('habiles.store');
     Route::delete('dias-habiles/{habil}', [PreceptorDiasHabiles::class, 'destroy'])->name('habiles.destroy');
 
