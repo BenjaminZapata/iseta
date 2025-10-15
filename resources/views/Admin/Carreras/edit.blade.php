@@ -142,7 +142,7 @@
                     </a>
 
                     {{-- BOTÓN GENERAL DE EXPORTACIÓN --}}
-                    {{-- <div style="position: relative;">
+                  <div style="position: relative;">
                 <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
                     <i class="ti ti-file-download"></i> Exportar cursadas
                 </button>
@@ -191,7 +191,7 @@
                 </button>
             </div>
             </form>
-        </div> --}}
+        </div> 
 
                     {{-- Formularios ocultos --}}
                     <form id="form-desactivar-{{ $carrera->id }}"
@@ -237,8 +237,8 @@
                                                 <th class="center">#</th>
                                                 <th>Materia</th>
                                                 <th class="center">Carga</th>
-                                                <!--<th class="center">Mesa</th>-->
-                                                <!--<th class="center">Exportar</th>-->
+                                                <th class="center">Mesa</th>
+                                               -<th class="center">Exportar</th>
                                                 <th class="center">Acciones</th>
                                             </tr>
                                         </thead>
@@ -287,7 +287,7 @@
                                                     <td class="center">{{ $asignatura->carga_horaria }} horas</td>
 
                                                     <!-- Crear mesa -->
-                                                    <!-- <td>
+                                               <td>
                                                             <div
                                                                 style="display: flex; align-items: center; justify-content: center;">
                                                                 <button class="btn_blue"
@@ -297,10 +297,10 @@
                                                                     Crear Mesa
                                                                 </button>
                                                             </div>
-                                                        </td>-->
+                                                        </td>
 
                                                     <!-- Exportar -->
-                                                    <!-- <td class="center">
+                                                    <td class="center">
                                                                 <div
                                                                     style="display:flex; align-items: center; justify-content: center;">
                                                                     <button type="button" class="btn_exportar"
@@ -309,7 +309,7 @@
                                                                     </button>
                                                                     {{-- ... resto del form exportar ... --}}
                                                                 </div>
-                                                            </td>-->
+                                                            </td>
 
                                                     <!-- Eliminar asignatura -->
                                                     <td class="center">
