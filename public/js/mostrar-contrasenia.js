@@ -1,9 +1,24 @@
-const passInput = document.getElementById("pw-input");
-const toggleBtn = document.querySelector(".toggle-password i");
+document.addEventListener("DOMContentLoaded", () => {
+    // Busca cualquier contenedor de password, sin importar el sufijo
+    const passwordWrappers = document.querySelectorAll(
+        '[class*="password-wrapper"]'
+    );
 
-toggleBtn.parentElement.addEventListener("click", () => {
-    const isPassword = passInput.type === "password";
-    passInput.type = isPassword ? "text" : "password";
-    toggleBtn.classList.toggle("ti-eye", !isPassword);
-    toggleBtn.classList.toggle("ti-eye-off", isPassword);
+    passwordWrappers.forEach(wrapper => {
+        const input = wrapper.querySelector('input[type="password"], input[type="text"]');
+        const toggleBtn =
+            wrapper.querySelector('[class*="toggle-password"] i') ||
+            wrapper.querySelector('button[class*="toggle-password"] i');
+
+        if (!input || !toggleBtn) return;
+
+        toggleBtn.parentElement.addEventListener("click", () => {
+            const isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+
+            // Cambiar íconos (Tabler Icons)
+            toggleBtn.classList.toggle("ti-eye", !isPassword);
+            toggleBtn.classList.toggle("ti-eye-off", isPassword);
+        });
+    });
 });
