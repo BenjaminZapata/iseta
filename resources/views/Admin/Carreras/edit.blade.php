@@ -142,60 +142,68 @@
                     </a>
 
                     {{-- BOTÓN GENERAL DE EXPORTACIÓN --}}
-                    {{-- <div style="position: relative;">
-                <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
-                    <i class="ti ti-file-download"></i> Exportar cursadas
-                </button>
-                <form method="GET" action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
-            class="filtro-exportar">
-            <div style="display: flex; flex-direction: column; align-items: flex-start;">
-                <select name="genero">
-                    <option value="">-- Género --</option>
-                    <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>Femenino</option>
-                    <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>Masculino</option>
-                    <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>Otro</option>
-                </select>
+                    <div style="position: relative;">
+                        <button type="button" class="btn_exportar" onclick="toggleFiltroExportar(this)">
+                            <i class="ti ti-file-download"></i> Exportar cursadas
+                        </button>
+                        <form method="GET" action="{{ route('excel.cursadas.carrera', ['carrera' => $carrera->id]) }}"
+                            class="filtro-exportar">
+                            <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                                <select name="genero">
+                                    <option value="">-- Género --</option>
+                                    <option value="f" {{ request('genero') == 'f' ? 'selected' : '' }}>Femenino
+                                    </option>
+                                    <option value="m" {{ request('genero') == 'm' ? 'selected' : '' }}>Masculino
+                                    </option>
+                                    <option value="o" {{ request('genero') == 'o' ? 'selected' : '' }}>Otro</option>
+                                </select>
 
-                <select name="anio">
-                    <option value="">-- Año calendario --</option>
-                    @php
-                    $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
-                    @endphp
-                    @foreach ($aniosCalendario as $anio)
-                    <option value="{{ $anio }}" {{ request('anio') == $anio ? 'selected' : '' }}>
-                        {{ $anio }}
-                    </option>
-                    @endforeach
-                </select>
+                                <select name="anio">
+                                    <option value="">-- Año calendario --</option>
+                                    @php
+                                        $aniosCalendario = $aniosPorCarrera[$carrera->id] ?? [];
+                                    @endphp
+                                    @foreach ($aniosCalendario as $anio)
+                                        <option value="{{ $anio }}"
+                                            {{ request('anio') == $anio ? 'selected' : '' }}>
+                                            {{ $anio }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
-                <select name="condicion">
-                    <option value="">-- Condición --</option>
-                    <option value="regular" {{ request('condicion') == 'regular' ? 'selected' : '' }}>Regular
-                    </option>
-                    <option value="libre" {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre
-                    </option>
-                    <option value="promocion" {{ request('condicion') == 'promocion' ? 'selected' : '' }}>
-                        Promoción</option>
-                    <option value="equivalencia"
-                        {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>Equivalencia</option>
-                    <option value="desertor" {{ request('condicion') == 'desertor' ? 'selected' : '' }}>
-                        Desertor</option>
-                    <option value="itinerante" {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>
-                        Itinerante</option>
-                    <option value="oyente" {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
-                    </option>
-                </select>
+                                <select name="condicion">
+                                    <option value="">-- Condición --</option>
+                                    <option value="regular" {{ request('condicion') == 'regular' ? 'selected' : '' }}>
+                                        Regular
+                                    </option>
+                                    <option value="libre" {{ request('condicion') == 'libre' ? 'selected' : '' }}>Libre
+                                    </option>
+                                    <option value="promocion" {{ request('condicion') == 'promocion' ? 'selected' : '' }}>
+                                        Promoción</option>
+                                    <option value="equivalencia"
+                                        {{ request('condicion') == 'equivalencia' ? 'selected' : '' }}>Equivalencia
+                                    </option>
+                                    <option value="desertor" {{ request('condicion') == 'desertor' ? 'selected' : '' }}>
+                                        Desertor</option>
+                                    <option value="itinerante"
+                                        {{ request('condicion') == 'itinerante' ? 'selected' : '' }}>
+                                        Itinerante</option>
+                                    <option value="oyente" {{ request('condicion') == 'oyente' ? 'selected' : '' }}>Oyente
+                                    </option>
+                                </select>
 
-                <button class="btn_blue">
-                    <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i> Descargar
-                </button>
-            </div>
-            </form>
-        </div> --}}
+                                <button class="btn_blue">
+                                    <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                    Descargar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
 
                     {{-- Formularios ocultos --}}
                     <form id="form-desactivar-{{ $carrera->id }}"
-                        action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST" style="display:none;">
+                        action="{{ route('admin.carreras.desactivar', $carrera) }}" method="POST"
+                        style="display:none;">
                         @csrf
                     </form>
                     <form id="form-reactivar-{{ $carrera->id }}"
@@ -208,7 +216,6 @@
                 {{-- A C O R D E Ó N  D E  A S I G N A T U R A S --}}
                 <div class="accordion" id="asignaturasAccordion">
                     @php
-                        $asignaturasPorAnio = $carrera->asignaturas->groupBy('pivot.anio')->sortKeys();
                         $asignaturasPorAnio = $carrera->asignaturas->groupBy('pivot.anio')->sortKeys();
                         $anio_index = 0;
                     @endphp
@@ -223,7 +230,7 @@
                                     @if (is_array($asignaturas))
                                         {{ $asignaturas[$anio]->pivot->anio + 1 }}° año
                                     @else
-                                        {{ $asignaturas[0]->pivot->anio + 1 }}° año
+                                        {{ $asignaturas[0]->pivot->anio + 1 }}° año
                                     @endif
                                 </button>
                             </h2>
@@ -237,8 +244,8 @@
                                                 <th class="center">#</th>
                                                 <th>Materia</th>
                                                 <th class="center">Carga</th>
-                                                <!--<th class="center">Mesa</th>-->
-                                                <!--<th class="center">Exportar</th>-->
+                                                <th class="center">Correlativas</th>
+                                                <th class="center">Mesa</th>
                                                 <th class="center">Acciones</th>
                                             </tr>
                                         </thead>
@@ -250,22 +257,22 @@
                                                 @endphp
 
                                                 <tr
-                                                    @if ($asignatura->pivot->anio + 1 != 1) class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura"
-                                                    data-target="#{{ $collapseId }}"
-                                                    data-icon="#chevronIcon{{ $asignatura->id }}"
-                                                    @else
-                                                    class="{{ $hasCorrelativas ? 'asignatura-con-correlativas' : '' }} tr-asignatura @endif">
+                                                    x-data="{ has_corr: false }"
+                                                    x-init="window.addEventListener('has-corr.{{ $asignatura->id }}', event => { has_corr = event.detail.has_corr })"
+                                                    class="tr-asignatura"
+                                                    :class="has_corr ? 'asignatura-con-correlativas' : ''"
+                                                    @if ($asignatura->pivot->anio + 1 != 1)
+                                                        data-target="#{{ $collapseId }}"
+                                                        data-icon="#chevronIcon{{ $asignatura->id }}"
+                                                    @endif
+                                                >
                                                     <!-- Botón para expandir correlativas -->
                                                     <td class="center">
                                                         @if ($asignatura->pivot->anio + 1 != 1)
-                                                            <button class="chevron-btn" type="button"
-                                                                data-bs-toggle="collapse"
+                                                            <button type="button" data-bs-toggle="collapse"
                                                                 data-bs-target="#{{ $collapseId }}"
                                                                 aria-expanded="false"
                                                                 aria-controls="{{ $collapseId }}">
-                                                                <i id="chevronIcon{{ $asignatura->id }}"
-                                                                    class="ti ti-chevron-down collapse-icon"
-                                                                    style="font-size: 1.3em; margin-right: 8px; transition: transform 0.3s;"></i>
                                                             </button>
                                                             {{ $asignatura->pivot->anio + 1 }}
                                                         @else
@@ -277,45 +284,54 @@
                                                     <!-- Nombre de la asignatura -->
                                                     <td class="bold">
                                                         {{ $asignatura->nombre }}
-                                                        @if ($hasCorrelativas)
-                                                            <span title="Tiene correlativas"
-                                                                class="icono-correlativa">📎</span>
-                                                        @endif
                                                     </td>
+
+
 
                                                     <!-- Carga horaria -->
                                                     <td class="center">{{ $asignatura->carga_horaria }} horas</td>
 
-                                                    <!-- Crear mesa -->
-                                                    <!-- <td>
-                                                            <div
-                                                                style="display: flex; align-items: center; justify-content: center;">
-                                                                <button class="btn_blue"
-                                                                    onclick="window.location.href='{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}'">
-                                                                    <i class="ti ti-circle-plus"
-                                                                        style="font-size: 1.3em; margin-right: 8px; margin-top: 2px;"></i>
-                                                                    Crear Mesa
-                                                                </button>
-                                                            </div>
-                                                        </td>-->
+                                                    <!-- Correlativa -->
 
-                                                    <!-- Exportar -->
-                                                    <!-- <td class="center">
-                                                                <div
-                                                                    style="display:flex; align-items: center; justify-content: center;">
-                                                                    <button type="button" class="btn_exportar"
-                                                                        onclick="toggleFiltroExportar(this)">
-                                                                        <i class="ti ti-file-download"></i> Exportar asignatura
-                                                                    </button>
-                                                                    {{-- ... resto del form exportar ... --}}
+                                                    <td>
+                                                        <div
+                                                            style="display: flex; align-items: center; justify-content: center;">
+                                                            @if ($asignatura->pivot->anio + 1 !== 1)
+                                                                <div x-show="has_corr">
+                                                                    <span title="Tiene correlativas"
+                                                                        class="icono-correlativa">
+                                                                        TIENE CORRELATIVAS </span>
                                                                 </div>
-                                                            </td>-->
+                                                                <div x-show="!has_corr">
+                                                                    <span title="Tiene correlativas"
+                                                                        class="icono-correlativa">
+                                                                        --- </span>
+                                                                    {{-- <button class="btn_desvincular" type="button">
+                                                                                <i class="ti ti-plus" style="font-size:1em;"></i>
+                                                                            </button> --}}
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </td>
+
+                                                    <!-- Crear mesa -->
+                                                    <td>
+                                                        <div
+                                                            style="display: flex; align-items: center; justify-content: center;">
+                                                            <button class="btn_blue"
+                                                                onclick="window.location.href='{{ route('admin.mesas.dual', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}'">
+                                                                <i class="ti ti-circle-plus"
+                                                                    style="font-size: 1.3em; margin-right: 8px; margin-top: 2px;"></i>
+                                                                Crear Mesa
+                                                            </button>
+                                                        </div>
+                                                    </td>
 
                                                     <!-- Eliminar asignatura -->
                                                     <td class="center">
                                                         @if (!$config['modo_seguro'])
                                                             <form id="form-eliminar-{{ $asignatura->id }}"
-                                                                action="{{ route('admin.carreras.destroyAsignatura', ['carrera' => $carrera->id, 'asignatura' => $asignatura->id]) }}"
+                                                                action="{{ route('admin.asignaturas.destroy', $asignatura->id) }}"
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -341,8 +357,8 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-                                        </tbody>
                                     </table>
+                                    </tbody>
                                 </div> {{-- accordion-body --}}
                             </div> {{-- collapse --}}
                         </div> {{-- accordion-item --}}
@@ -351,7 +367,6 @@
             </div>
         </div>
     </div>
-
     <script>
         function toggleFiltroExportar(button) {
             const container = button.closest('div');
