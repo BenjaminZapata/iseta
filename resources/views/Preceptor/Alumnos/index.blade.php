@@ -14,7 +14,7 @@
 
     <div class="table" data-name="tablaAlumnos">
 
-        @include('preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
+        @include('Preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
 
         {{-- BOTON CREAR --}}
         <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
@@ -25,7 +25,7 @@
             </a>
 
             {{-- FILTROS --}}
-            <?= $filtergen->generate('precpetor.alumnos.index', $filters, [
+            <?= $filtergen->generate('preceptor.alumnos.index', $filters, [
                     'dropdowns' => [
                         $form->select('filter_titulo', 'Estado del título:', 'label-input-y-100', old('filter_titulo', $filters->filter_titulo ?? null), [
                             null => 'Todos',

@@ -90,7 +90,7 @@
                 <td class="center">{{ $carrera->vigente == 1 ? 'Vigente' : 'No vigente' }}</td>
                 <td class="flex just-center">
                     <div>
-                        <a href="{{ route('precptor.carreras.edit', ['carrera' => $carrera]) }}">
+                        <a href="{{ route('preceptor.carreras.edit', ['carrera' => $carrera]) }}">
                             <button class="btn_blue">
                                 <i class="ti ti-file-info"
                                     style="font-size: 1.3em; margin-right: 8px;"></i>Modificar

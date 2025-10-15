@@ -1,4 +1,4 @@
-@extends('precptor.template')
+@extends('preceptor.template')
 
 @section('content')
 <style>

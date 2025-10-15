@@ -23,7 +23,7 @@ Route::prefix('preceptor')
 
         // Alumnos
   Route::get('alumnos/verificar/{alumno}', [AlumnoPreceptorController::class, 'verificar'])
-        ->name('admin.alumnos.verificar')->middleware('auth:admin');
+        ->name('alumnos.verificar')->middleware('auth:admin');
 
     Route::resource('alumnos', AlumnoPreceptorController::class, )
         ->middleware('auth:admin')
@@ -38,9 +38,9 @@ Route::prefix('preceptor')
         ->name('preceptor.alumnos.regular');
 
     Route::get('matricular/{alumno}', [PreceptorMatriculacionController::class, 'rematriculacion_vista'])
-        ->name('preceptor.alumno.rematricular');
+        ->name('alumno.rematricular');
     Route::post('matricular/{alumno}/{carrera}', [PreceptorMatriculacionController::class, 'rematriculacion'])
-        ->name('preceptor.alumno.matricular.post');
+        ->name('alumno.matricular.post');
 
 
         // Inscriptos
@@ -99,10 +99,10 @@ Route::prefix('preceptor')
             ->name('asignaturas.desvincular');
 
         // Carreras
-        Route::resource('carreras', CarrerasPreceptorController::class, ['as' => 'admin'])
+        Route::resource('carreras', CarrerasPreceptorController::class, )
         ->middleware('auth:admin')
         ->missing(function () {
-            return redirect()->route('admin.carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
+            return redirect()->route('preceptor.carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
         })->except('show');
 
     Route::post('carreras/add_asignatura/{carrera}', [CarrerasPreceptorController::class, 'addAsignatura'])

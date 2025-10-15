@@ -106,7 +106,8 @@
 
     {{-- PAGINACIÓN --}}
   <div class="w-full flex justify-center p-5 pagination">
-        {{ $mesas>appends(request()->query())->links('Componentes.pagination') }}
+        {{ $mesas->appends(request()->query())->links('Componentes.pagination') }}
+
     </div>
 
     <script src="{{ asset('js/obtener-materias.js') }}"></script>
