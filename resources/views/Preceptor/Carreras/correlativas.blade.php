@@ -1,11 +1,12 @@
 @extends('preceptor.template')
+
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/Admin/rematriculacion.css') }}">
 
 
 
     <div class="perfil_one br">
-        @include('Preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
+        @include('preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
         <button id="ayuda-btn" class="btn-ayuda" title="Información">
             <i class="ti ti-help-circle"></i>
         </button>
@@ -29,12 +30,13 @@
 
             <div class="perfil__info">
                 <form method="POST"
-                    action="{{ route('admin.alumno.matricular.post', ['alumno' => $alumno->id, 'carrera' => $carrera->id]) }}">
+                    action="{{ route('preceptor.alumno.matricular.post', ['alumno' => $alumno->id, 'carrera' => $carrera->id]) }}">
                     @csrf
 
                     @if (count($asignaturas) <= 0)
                         <div class="alert-box bg-warning p-3 rounded text-center">
-                            <p>Este alumno no cuenta con asignaturas para rendir de esta carrera.</p>
+                            <p>No tienes asignaturas para rendir de esta carrera.</p>
+                            <p>Si crees que se trata de un error, comunicate con la institución para solucionarlo.</p>
                         </div>
                     @else
                         @foreach ($asignaturas as $asignatura)
@@ -43,7 +45,7 @@
                                 <div class="grid grid-cols-2 gap-6 mb-2">
                                     <div>
                                         <label class="font-semibold">Año:</label>
-                                        <span>{{ $asignatura->carrera()->wherePivot('id_carrera', $carrera->id)->first()->pivot->anio + 1 }}</span>
+                                        <span>{{ $asignatura->anio }}</span>
                                     </div>
                                     <div>
                                         <label class="font-semibold">Asignatura:</label>
@@ -56,17 +58,16 @@
 
 
                                 <div>
-                                    @if ($asignatura->debeCorrelativas($alumno, $carrera->id))
+                                    @if ($asignatura->equivalencias_previas)
                                         <div class="correlativa-header cursor-pointer flex items-center justify-between"
                                             onclick="toggleEquiv({{ $asignatura->id }})">
-                                            <p class="font-semibold text-warning">Debe correlativas</p>
+                                            <p class="font-semibold text-warning">Debes correlativas</p>
                                             <i class="ti ti-chevron-down chevron icon-{{ $asignatura->id }}"></i>
                                         </div>
 
                                         <ul class="equiv-list id-{{ $asignatura->id }} pl-4 list-disc text-sm">
-                                            @foreach ($asignatura->debeCorrelativas($alumno, $carrera->id) as $equiv)
-                                                <li><strong>{{ $equiv->anioStr($carrera->id) }}:</strong>
-                                                    {{ $equiv->nombre }}</li>
+                                            @foreach ($asignatura->equivalencias_previas as $equiv)
+                                                <li><strong>{{ $equiv->anioStr() }}:</strong> {{ $equiv->nombre }}</li>
                                             @endforeach
                                         </ul>
                                     @else
