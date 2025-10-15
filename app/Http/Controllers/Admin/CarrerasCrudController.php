@@ -12,6 +12,8 @@ use App\Models\Carrera;
 use App\Repositories\Admin\CarreraRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
 
 class CarrerasCrudController extends BaseController
 {
@@ -61,22 +63,34 @@ class CarrerasCrudController extends BaseController
 
     }
 
-    public function store(CrearCarreraRequest $request)
-    {
-        $data = $request->validated();
+ 
 
-        $data['vigente'] = 1;
+public function store(CrearCarreraRequest $request)
+{
+    $data = $request->validated();
+    $data['vigente'] = 1;
+    Log::debug('Archivos recibidos:', $request->allFiles());
 
-        if ($request->hasFile('resolucion_archivo')) {
-            $nombre = str_replace(' ', '_', $request->input('nombre')).'.pdf';
-            $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
-            $data['resolucion_archivo'] = 'storage/'.$ruta;
-        }
+    if ($request->hasFile('resolucion_archivo')) {
+        $nombre = str_replace(' ', '_', $request->input('nombre')) . '.pdf';
+        // Asegura que exista el directorio
+        Storage::disk('public')->makeDirectory('resoluciones');
+        // Guarda el archivo en storage/app/public/resoluciones/
+        $ruta = $request->file('resolucion_archivo')->storeAs('resoluciones', $nombre, 'public');
 
-        Carrera::create($data);
+        // Guarda la ruta accesible públicamente
+        $data['resolucion_archivo'] = 'storage/' . $ruta;
 
-        return redirect()->route('admin.carreras.index')->with('mensaje', 'Se creó la carrera correctamente');
-    }
+        Log::debug("Archivo guardado en: " . $data['resolucion_archivo']);
+    } 
+
+    Carrera::create($data);
+
+    return redirect()
+        ->route('admin.carreras.index')
+        ->with('mensaje', 'Se creó la carrera correctamente');
+}
+
 
     public function show(Carrera $carrera)
     {
@@ -184,22 +198,25 @@ class CarrerasCrudController extends BaseController
     }
 
     public function addAsignatura(AddAsignaturaRequest $request, Carrera $carrera)
-    {
-        $data = $request->validated();
+{
+    $data = $request->validated();
 
-        if ($carrera->asignaturas()->where('id_asignatura', $data['id_asignatura'])->exists()) {
-            return redirect()->back()->with('error', 'La asignatura ya está en la carrera')->withInput();
-        }
+   
+    $data['anio'] = $data['anio'] == 1 ? 0 : $data['anio'];
 
-        $carrera->asignaturas()->attach($data['id_asignatura'], [
-            'id_profesor' => $data['id_profesor'] ?? null,
-            'anio' => $data['anio'],
-            'carga_horaria' => $data['carga_horaria'],
-            'tipo_modulo' => $data['tipo_modulo'] ?? 0,
-        ]);
-
-        return redirect()->back()->with('mensaje', 'Se agregó la asignatura a la carrera');
+    if ($carrera->asignaturas()->where('id_asignatura', $data['id_asignatura'])->exists()) {
+        return redirect()->back()->with('error', 'La asignatura ya está en la carrera')->withInput();
     }
+
+    $carrera->asignaturas()->attach($data['id_asignatura'], [
+        'id_profesor'   => $data['id_profesor'] ?? null,
+        'anio'          => $data['anio'],
+        'carga_horaria' => $data['carga_horaria'],
+        'tipo_modulo'   => $data['tipo_modulo'] ?? 0,
+    ]);
+
+    return redirect()->back()->with('mensaje', 'Se agregó la asignatura a la carrera');
+}
 
     public function destroy(Carrera $carrera)
     {
@@ -262,4 +279,17 @@ class CarrerasCrudController extends BaseController
 
         return redirect()->back()->with('success', 'Carrera reactivada correctamente');
     }
+public function destroyAsignatura(Carrera $carrera, Asignatura $asignatura)
+{
+    try {
+        $carrera->asignaturas()->detach($asignatura->id);
+
+        return redirect()->route('admin.carreras.edit', $carrera)
+                         ->with('mensaje', 'Se ha eliminado la asignatura de la carrera');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.carreras.edit', $carrera)
+                         ->with('error', 'No se pudo eliminar la asignatura de la carrera');
+    }
+}
+
 }

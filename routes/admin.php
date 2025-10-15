@@ -130,6 +130,10 @@ Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [Profes
         return Storage::download($carrera->resolucion_archivo);
     })->name('admin.carreras.resolucion');
 
+  Route::delete('/admin/carreras/{carrera}/asignaturas/{asignatura}', [CarrerasCrudController::class, 'destroyAsignatura'])
+    ->name('admin.carreras.destroyAsignatura');
+
+
     Route::get('carreras/resolucion-delete/{carrera}', function (Request $request, Carrera $carrera) {
         Storage::delete($carrera->resolucion_archivo);
         $carrera->resolucion_archivo = '';
