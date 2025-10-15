@@ -19,6 +19,7 @@ class AlumnoRepository
     public function index($request)
     {
         $query = Alumno::select('alumnos.*')
+            ->distinct()
             ->leftJoin('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id')
             ->leftJoin('carreras', 'carreras.id', '=', 'egresadoinscripto.id_carrera');
 
