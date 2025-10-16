@@ -56,8 +56,14 @@ class AdminsCrudController extends Controller
 
     // Validación amigable
     $validated = $request->validate([
-        'username' => 'required|string|max:50|unique:admins,username',
-        'password' => 'required|string|min:8|max:16|regex:^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$',
+        'username' => 'required|string|max:50|unique:administradores,username',
+    'password' => [
+    'required',
+    'string',
+    'min:8',
+    'max:16',
+    'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/'
+],
         'rol' => 'required|in:regente,preceptor,secretario',
         'email' => 'required|string|email|max:128|unique:administradores,email',
     ], [
@@ -107,7 +113,7 @@ class AdminsCrudController extends Controller
         ];
         // Validación amigable
         $validated = $request->validate([
-            'username' => 'required|string|max:50|unique:admins,username,' . $admin->id,
+            'username' => 'required|string|max:50|unique:administradores,username,' . $admin->id,
             'password' => 'nullable|string|min:8|max:16|regex:^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$',
             'rol' => 'required|in:regente,preceptor,secretario',
             'email' => 'required|string|email|max:128|unique:administradores,email,' . $admin->id,
