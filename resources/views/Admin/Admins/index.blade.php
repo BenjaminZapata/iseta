@@ -74,7 +74,7 @@
                                 <button type="button" 
                                     onclick="openGeneralModal(
                                         'form-eliminar-{{ $admin->id }}',
-                                        `¿Estás seguro de que querés eliminar al usuario: {{ strtoupper($admin->apellido ?? '') }} {{ strtoupper($admin->nombre ?? '') }}?\n\nRol asignado: {{ $nombresRol[$admin->rol] ?? 'Sin rol definido' }}\n\nESTA ACCIÓN NO SE PUEDE DESHACER.`
+                                        `¿Estás seguro de que querés eliminar al usuario: {{ strtoupper($admin->username ?? '') }} ?\n\nRol asignado: {{ $nombresRol[$admin->rol] ?? 'Sin rol definido' }}\n\nESTA ACCIÓN NO SE PUEDE DESHACER.`
                                     )"
                                     class="btn_icon-danger"
                                     style="background-color: red; margin-left: 10px;">

@@ -4,36 +4,36 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Repositories\Admin\AdminRepository;
 use App\Models\Configuracion;
 use Illuminate\Http\Request;
 
 class AdminsCrudController extends Controller
 {
-    function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
+    protected $repo;
+    function __construct(AdminRepository $repo)
+{
+    $this->middleware('auth:admin');
+    $this->repo = $repo;
+}
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        $admins = [];
-        $filtro = "";
-        $porPagina = Configuracion::get('filas_por_tabla', true);
+   public function index(Request $request)
+{
+    $porPagina = Configuracion::get('filas_por_tabla', true);
 
+    $username = $request->input('filtro'); // campo de búsqueda por nombre de usuario
+    $rol = $request->input('rol');         // campo select en tu formulario
 
-        if ($request->has('filtro')) {
-            $filtro = $request->filtro;
+    $admins = $this->repo->getAdmins($username, $rol, $porPagina);
 
-            $admins = Admin::where('username', 'LIKE', '%' . $filtro . '%')->paginate($porPagina);
-
-        } else {
-            $admins = Admin::paginate($porPagina);
-        }
-        return view('Admin.Admins.index', ['admins' => $admins, 'filtro' => $filtro]);
-
-    }
+    return view('Admin.Admins.index', [
+        'admins' => $admins,
+        'filtro' => $username,
+        'rolSeleccionado' => $rol,
+    ]);
+}
 
     /**
      * Show the form for creating a new resource.
