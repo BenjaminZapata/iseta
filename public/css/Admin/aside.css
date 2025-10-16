@@ -75,8 +75,9 @@
 }
 
 .sidebar__link:hover {
-    background-color: #2616a099;
-    color: white;
+    background-color: #6854fb59;
+    color: #140b5c;
+    font-weight: bold;
     /* gris claro */
 }
 
