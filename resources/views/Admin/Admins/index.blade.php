@@ -13,7 +13,7 @@
             {!! $form->text('username', 'Usuario:', 'label-input-y-100', old('username')) !!}
 
             {{-- Campo Contraseña --}}
-            {!! $form->password('password', 'Contraseña:', 'label-input-y-100', null) !!}
+            {!! $form->password('password', 'Contraseña:', 'label-input-y-100',old('password')) !!}
 
             {{-- Campo Rol --}}
             {!! $form->select('rol', 'Rol:', 'label-input-y-100', old('rol'), [
@@ -21,6 +21,9 @@
                 'preceptor' => 'Preceptor',
                 'secretario' => 'Secretario',
             ]) !!}
+
+            {{-- Campo Email --}}
+            {!! $form->text('email', 'Email:', 'label-input-y-100', old('email')) !!}
             
             <div class="botones-derecha">
         {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
@@ -40,8 +43,9 @@
         <table class="table__body">
             <thead>
                 <tr>
-                    <th class="center">ID</th>
+                    <th class="center">rol</th>
                     <th class="center">Usuario</th>
+                    <th class="center">Email</th>
                     <th class="center">Acción</th>
                 </tr>
             </thead>
@@ -56,8 +60,10 @@
 
                 @foreach ($admins as $admin)
                     <tr>
-                        <td class="center">{{ $admin->id }}</td>
+                        <td class="center">{{ $nombresRol[$admin->rol]}}</td>
                         <td class="center">{{ $admin->username }}</td>
+                        <td class="center">{{ $admin->email }}</td>
+                        {{-- Botón Eliminar --}}
                         <td class="center">
                             @if (!$config['modo_seguro'])
                             <form id="form-eliminar-{{ $admin->id }}"
@@ -65,14 +71,14 @@
                                 method="POST" class="inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="button"
+                                <button type="button" 
                                     onclick="openGeneralModal(
                                         'form-eliminar-{{ $admin->id }}',
                                         `¿Estás seguro de que querés eliminar al usuario: {{ strtoupper($admin->apellido ?? '') }} {{ strtoupper($admin->nombre ?? '') }}?\n\nRol asignado: {{ $nombresRol[$admin->rol] ?? 'Sin rol definido' }}\n\nESTA ACCIÓN NO SE PUEDE DESHACER.`
                                     )"
                                     class="btn_icon-danger"
                                     style="background-color: red; margin-left: 10px;">
-                                    <i class="ti ti-trash" style="font-size: 1.3em"></i>
+                                    <i class="ti ti-trash" style="font-size: 1.3em" ></i>
                                 </button>
                             </form>
                             @endif

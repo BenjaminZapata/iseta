@@ -56,9 +56,10 @@ class AdminsCrudController extends Controller
 
     // Validación amigable
     $validated = $request->validate([
-        'username' => 'required|string|max:255',
-        'password' => 'required|string|min:6',
+        'username' => 'required|string|max:50|unique:admins,username',
+        'password' => 'required|string|min:8|max:16|regex:^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$',
         'rol' => 'required|in:regente,preceptor,secretario',
+        'email' => 'required|string|email|max:128|unique:administradores,email',
     ], [
         'username.required' => 'El campo usuario es obligatorio.',
         'password.required' => 'La contraseña es obligatoria.',
@@ -97,7 +98,33 @@ class AdminsCrudController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $admin = Admin::findOrFail($id);
+
+        $roles = [
+            'regente' => 0,
+            'preceptor' => 1,
+            'secretario' => 2
+        ];
+        // Validación amigable
+        $validated = $request->validate([
+            'username' => 'required|string|max:50|unique:admins,username,' . $admin->id,
+            'password' => 'nullable|string|min:8|max:16|regex:^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$',
+            'rol' => 'required|in:regente,preceptor,secretario',
+            'email' => 'required|string|email|max:128|unique:administradores,email,' . $admin->id,
+        ], [
+            'username.required' => 'El campo usuario es obligatorio.',
+            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'rol.required' => 'Debes seleccionar un rol.',
+            'rol.in' => 'El rol seleccionado no es válido.',
+        ]);
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+        $validated['rol'] = $roles[$validated['rol']];
+        $admin->update($validated);
+        return redirect()->back()->with('mensaje', 'Administrador actualizado correctamente');
     }
 
     /**
