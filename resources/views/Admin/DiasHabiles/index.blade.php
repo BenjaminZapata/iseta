@@ -1,56 +1,114 @@
 @extends('Admin.template')
 
 @section('content')
-    <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'DIAS NO HÁBILES']) 
 
-        @php
-            $meses = [31,29,31,30,31,30,31,31,30,31,30,31];
-            $mesesStr = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
-        @endphp
+<link rel="stylesheet" href="{{ asset('css/Admin/calendario.css') }}">
 
-        <div class="dias-hab">
-            <p class="font-4" style="padding-bottom: 0.5em">Los días no hábiles o feriados se marcan en rojo y no se contaran como horas habiles previas a una mesa, ademas no se permitira crear mesas en un dia no habil.</p>
-            <p class="font-4" style="padding-bottom: 2em">No es necesario marcar fines de semana.</p>
-           @foreach ($meses as $key=>$mesDias)
-               <div>
-                <p>{{$mesesStr[$key]}}</p>
-                <div class="w-100p ">
-                    <ul class="flex gap-2 flex-wrap">
-                        
-                        @for ($i = 01; $i <= $mesDias; $i++)
+@php
+use Carbon\Carbon;
 
-                        @php
-                            $dia = $i;
-                            $mes = $key+1;
-                            if(strlen($i) == 1) $dia='0'.$dia;
-                            if(strlen($mes) == 1) $mes='0'.$mes;
-                            $fecha = $dia.'-'.$mes;
-                        @endphp
+$mesesStr = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
-                            @if (in_array($fecha,$noHabiles))
-                                <form method="post" action="{{route('admin.habiles.destroy',['habil' => $fecha])}}">
-                                @csrf
-                                @method('delete')    
-                            @else    
-                                <form method="post" action="{{route('admin.habiles.store')}}">
-                            @endif
-                                @csrf
-                                <input  name="fecha" type="hidden" value="{{$fecha}}">
+$mesActual = request()->get('mes', now()->month);
+$mesActual = max(1, min(12, (int)$mesActual)); // Forzamos de 1 a 12
 
-                                <button  @class([
-                                    'bg-red-200' => in_array($fecha,$noHabiles),
-                                    'rounded-5 img32 p-6 flex just-center items-center' => true
-                                    ])><span>{{$i}}</span></button>
-                            </form>
-                        @endfor
-                    </ul>
+$carbon = Carbon::createFromDate(now()->year, $mesActual, 1);
+$diasEnMes = $carbon->daysInMonth;
+$primerDiaSemana = $carbon->copy()->startOfMonth()->dayOfWeekIso; // 1 (lunes) a 7 (domingo)
+@endphp
+
+<div class="perfil_one br">
+    @include('components.header-avatar', ['tituloSeccion' => 'DIAS NO HÁBILES'])
+
+    <div class="dias-hab">
+        <div class="mes-selector">
+            @foreach ($mesesStr as $index => $mesNombre)
+            <a
+                href="{{ route(Route::currentRouteName(), ['mes' => $index + 1]) }}"
+                @class([ 'mes-pill' , 'active'=> ($mesActual === $index + 1)
+                ])
+                >{{ substr($mesNombre, 0, 3) }}</a>
+            @endforeach
+        </div>
+
+        <div class="calendario-seccion">
+            <div class="calendario-encabezado">
+                <h3 class="calendario-mes-titulo">{{ $mesesStr[$mesActual - 1] }}</h3>
+            </div>
+
+            <div class="calendario-grid">
+                <div>Lun</div>
+                <div>Mar</div>
+                <div>Mié</div>
+                <div>Jue</div>
+                <div>Vie</div>
+                <div>Sáb</div>
+                <div>Dom</div>
+
+                {{-- Espacios en blanco antes del primer día --}}
+                @for ($e = 1; $e < $primerDiaSemana; $e++)
+                    <div class="calendario-dia empty">
+            </div>
+            @endfor
+
+            {{-- Días del mes --}}
+            @for ($d = 1; $d <= $diasEnMes; $d++)
+                @php
+                $date=Carbon::createFromDate(now()->year, $mesActual, $d);
+                $dia = str_pad($d, 2, '0', STR_PAD_LEFT);
+                $mes = str_pad($mesActual, 2, '0', STR_PAD_LEFT);
+                $fecha = $dia . '-' . $mes;
+                $esNoHabil = in_array($fecha, $noHabiles);
+                $diaSemana = $date->dayOfWeekIso;
+                $esFinDeSemana = in_array($diaSemana, [6,7]);
+                @endphp
+
+                <div>
+                    @if ($esFinDeSemana)
+                    <button class="dia-btn disabled" disabled>{{ $d }}</button>
+                    @else
+                    <form method="post" action="{{ $esNoHabil ? route('admin.habiles.destroy', ['habil' => $fecha]) : route('admin.habiles.store') }}">
+                        @csrf
+                        @if ($esNoHabil)
+                        @method('delete')
+                        @endif
+                        <input type="hidden" name="fecha" value="{{ $fecha }}">
+                        <button
+                            type="submit"
+                            @class([ 'dia-btn' , 'no-habil'=> $esNoHabil,
+                            'habil' => !$esNoHabil,
+                            ])
+                            >{{ $d }}</button>
+                    </form>
+                    @endif
                 </div>
-               </div>
-           @endforeach
-           <div class="botones-derecha">
-        <x-btn-cancelar />
-    </div>
+                @endfor
         </div>
     </div>
+
+    <div id="help-button" onclick="toggleHelp()">
+        ?
+    </div>
+
+    <div id="help-text" class="help-box hidden">
+        <p>
+            Los días no hábiles o feriados se marcan en rojo y no se contarán como horas hábiles previas a una mesa. Además, no se permitirá crear mesas en un día no hábil.
+        </p>
+        <p>
+            Los fines de semana aparecen deshabilitados y no es necesario marcarlos.
+        </p>
+    </div>
+
+    <div class="botones-derecha">
+        <x-btn-cancelar />
+    </div>
+</div>
+</div>
+
+<script>
+    function toggleHelp() {
+        const helpBox = document.getElementById('help-text');
+        helpBox.classList.toggle('hidden');
+    }
+</script>
 @endsection
