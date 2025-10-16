@@ -1,106 +1,72 @@
-<aside id="sidebar" onmouseover="expandSidebar()" onmouseout="handleSidebarMouseOut(event)"">
-    <div class=" sidebar-header">
-    {{-- Logo colapsado (chico) --}}
-    <img src="{{ asset('img/logo-mini.png') }}" alt="Logo Mini" class="logo-mini">
-
-    {{-- Logo expandido (grande) --}}
-    <img src="{{ asset('img/logo.png') }}" alt="Logo Completo" class="logo-full">
+<aside id="sidebar" class="sidebar" onmouseover="expandSidebar()" onmouseout="handleSidebarMouseOut(event)" aria-label="Barra lateral de navegación">
+    <div class="sidebar__header">
+        {{-- Logos --}}
+        <img src="{{ asset('img/logo-mini.png') }}" alt="Logo Mini" class="sidebar__logo--mini">
+        <img src="{{ asset('img/logo.png') }}" alt="Logo Completo" class="sidebar__logo--full">
     </div>
 
-    <ul>
-        {{--<li class="dropdown">
-            <a href="#" onclick="toggleDropdown(event)">
-                <i class="ti ti-user"></i>
-                <span>Alumnos</span>
-                <i class="ti ti-chevron-down arrow"></i>
-            </a>
-            <ul class="submenu">
-                <li>
-                    <a href="{{ route('admin.alumnos.index') }}">Listado de Alumnos</a>
-        </li>
-        <li>
-            <a href="{{ route('admin.inscriptos.index') }}">Inscriptos</a>
-        </li>
-    </ul>
-    </li>--}}
+    <nav class="sidebar__nav" role="navigation">
+        <ul class="sidebar__list">
+            <li class="sidebar__item {{ request()->routeIs('admin.alumnos.*') ? 'is-active' : '' }}">
+                <a class="sidebar__link" href="{{ route('admin.alumnos.index') }}">
+                    <i class="ti ti-user sidebar__icon"></i>
+                    <span class="sidebar__text">Alumnos</span>
+                </a>
+            </li>
 
-    <li>
-        <a href="{{ route('admin.alumnos.index') }}">
-            <i class="ti ti-user"></i>
-            <span>Alumnos</span>
-        </a>
-    </li>
+            <li class="sidebar__item {{ request()->routeIs('admin.profesores.*') ? 'is-active' : '' }}">
+                <a class="sidebar__link" href="{{ route('admin.profesores.index') }}">
+                    <i class="ti ti-users sidebar__icon"></i>
+                    <span class="sidebar__text">Profesores</span>
+                </a>
+            </li>
 
-    <li>
-        <a href="{{ route('admin.profesores.index') }}">
-            <i class="ti ti-users"></i>
-            <span>Profesores</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('admin.carreras.index') }}">
-            <i class="ti ti-folders"></i>
-            <span>Carreras</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('admin.asignaturas.index') }}">
-            <i class="ti ti-notes"></i>
-            <span>Asignaturas</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('admin.mesas.index') }}">
-            <i class="ti ti-address-book"></i>
-            <span>Mesas</span>
-        </a>
-    </li>
-    <li>
-        <a href="{{ route('admin.cursadas.index') }}">
-            <i class="ti ti-books"></i>
-            <span>Cursadas</span>
-        </a>
-    </li>
-    </ul>
+            <li class="sidebar__item {{ request()->routeIs('admin.carreras.*') ? 'is-active' : '' }}">
+                <a class="sidebar__link" href="{{ route('admin.carreras.index') }}">
+                    <i class="ti ti-folders sidebar__icon"></i>
+                    <span class="sidebar__text">Carreras</span>
+                </a>
+            </li>
+
+            <li class="sidebar__item {{ request()->routeIs('admin.asignaturas.*') ? 'is-active' : '' }}">
+                <a class="sidebar__link" href="{{ route('admin.asignaturas.index') }}">
+                    <i class="ti ti-notes sidebar__icon"></i>
+                    <span class="sidebar__text">Asignaturas</span>
+                </a>
+            </li>
+
+            <li class="sidebar__item {{ request()->routeIs('admin.mesas.*') ? 'is-active' : '' }}">
+                <a class="sidebar__link" href="{{ route('admin.mesas.index') }}">
+                    <i class="ti ti-address-book sidebar__icon"></i>
+                    <span class="sidebar__text">Mesas</span>
+                </a>
+            </li>
+
+            <li class="sidebar__item {{ request()->routeIs('admin.cursadas.*') ? 'is-active' : '' }}">
+                <a class="sidebar__link" href="{{ route('admin.cursadas.index') }}">
+                    <i class="ti ti-books sidebar__icon"></i>
+                    <span class="sidebar__text">Cursadas</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </aside>
 
 <script>
-    function toggleDropdown(event) {
-        event.preventDefault();
-        const li = event.currentTarget.closest('.dropdown');
-        li.classList.toggle('open');
-    }
-
     function expandSidebar() {
         const sidebar = document.getElementById('sidebar');
-        sidebar.style.width = '16rem';
-        sidebar.classList.add('expanded');
+        sidebar.classList.add('is-expanded');
     }
 
     function handleSidebarMouseOut(event) {
         const sidebar = document.getElementById('sidebar');
         const toElement = event.relatedTarget;
-
-        // Si el cursor sigue dentro del sidebar o sus hijos, no colapsar
-        if (sidebar.contains(toElement)) return;
-
+        if (sidebar && toElement && sidebar.contains(toElement)) return;
         collapseSidebar();
     }
 
     function collapseSidebar() {
         const sidebar = document.getElementById('sidebar');
-        sidebar.style.width = '4rem';
-        sidebar.classList.remove('expanded');
-
-        // Cerrar dropdowns
-        document.querySelectorAll('.dropdown.open').forEach(el => {
-            el.classList.remove('open');
-        });
-    }
-
-    function toggleDropdown(event) {
-        event.preventDefault();
-        const li = event.currentTarget.closest('.dropdown');
-        li.classList.toggle('open');
+        sidebar.classList.remove('is-expanded');
     }
 </script>
