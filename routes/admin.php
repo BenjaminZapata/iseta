@@ -196,6 +196,9 @@ Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [Profes
     // ADMINS
     // -----------------------------
     Route::resource('admins', AdminsCrudController::class, ['as' => 'admin'])->except('show');
+Route::delete('admin/admins/eliminar-masivo', [AdminsCrudController::class, 'eliminarMasivo'])
+    ->name('admin.admins.eliminarMasivo');
+
 
     // -----------------------------
     // CONFIGURACION

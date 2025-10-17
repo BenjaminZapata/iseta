@@ -55,6 +55,7 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
     <script src="{{ asset('js/usuarios/ModificarUsuarios.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/usuarios/EliminarAdmins.js') }}?v={{ time() }}"></script>
 
 
 

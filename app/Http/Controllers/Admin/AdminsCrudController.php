@@ -123,4 +123,11 @@ public function update(Request $request, Admin $admin)
 
         return redirect()->back()->with('mensaje', 'Se ha eliminado el administrador');
     }
+    public function eliminarMasivo(Request $request)
+    {
+        $ids = explode(',', $request->ids);
+        Admin::whereIn('id', $ids)->delete();
+        
+        return redirect()->back()->with('success', 'Usuarios eliminados correctamente.');
+    }
 }

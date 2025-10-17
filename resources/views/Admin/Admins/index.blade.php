@@ -22,6 +22,7 @@
     ]) ?>
 </div>
 
+{{-- FORMULARIO CREAR ADMIN --}}
 <div class="perfil_one br p-5">
     <form method="POST" action="{{ route('admin.admins.store') }}" class="grid grid-cols-2 gap-4">
         @csrf
@@ -42,11 +43,23 @@
         </div>
     </form>
 </div>
+{{-- Botón eliminar seleccionados --}}
+<form id="form-eliminar-seleccionados" action="{{ route('admin.admins.eliminarMasivo') }}" method="POST">
+    @csrf
+    @method('DELETE')
+    <input type="hidden" name="ids" id="ids-seleccionados" value="">
+    <button type="button" id="btn-eliminar-seleccionados" class="btn_red">
+        <i class="ti ti-trash"></i> Eliminar seleccionados
+    </button>
+</form>
 
+
+{{-- TABLA ADMIN --}}
 <div class="table br mt-2">
     <table class="table__body">
         <thead>
             <tr>
+                <th class="center"><input type="checkbox" id="check-todos"></th>
                 <th class="center">Rol</th>
                 <th class="center">Usuario</th>
                 <th class="center">Email</th>
@@ -64,16 +77,20 @@
             @endphp
 
             @foreach ($admins as $admin)
-                <tr id="fila-{{ $admin->id }}"
-                    data-id="{{ $admin->id }}"
-                    data-username="{{ $admin->username }}"
-                    data-rol="{{ $admin->rol }}"
+                <tr id="fila-{{ $admin->id }}" 
+                    data-id="{{ $admin->id }}" 
+                    data-username="{{ $admin->username }}" 
+                    data-rol="{{ $admin->rol }}" 
                     data-email="{{ $admin->email }}">
+                    <td class="center">
+                        <input type="checkbox" class="check-admin" value="{{ $admin->id }}">
+                    </td>
                     <td class="center rol-text">{{ $nombresRol[$admin->rol] }}</td>
                     <td class="center username-text">{{ $admin->username }}</td>
                     <td class="center email-text">{{ $admin->email }}</td>
                     <td class="center password-text">****</td>
                     <td class="center">
+                        {{-- Botones individuales --}}
                         <button type="button"
                             class="btn_blue btn-modificar"
                             style="font-size: 1em; margin-right: 5px;">
@@ -114,6 +131,7 @@
     </table>
 </div>
 
+{{-- PAGINACION --}}
 <div class="w-full flex justify-center py-6">
     {{ $admins->appends(request()->query())->links('Componentes.pagination') }}
 </div>
@@ -121,6 +139,9 @@
 @endsection
 
 @section('scripts')
-    <!-- Incluir JS externo para modificar usuarios -->
-    <script src="{{ asset('js/ModificarUsuarios.js') }}?v={{ time() }}"></script>
+    {{-- JS de modificar usuarios --}}
+    <script src="{{ asset('js/usuarios/ModificarUsuarios.js') }}?v={{ time() }}"></script>
+
+    {{-- JS independiente solo para eliminar múltiples --}}
+    <script src="{{ asset('js/usuarios/EliminarAdmins.js') }}?v={{ time() }}"></script>
 @endsection
