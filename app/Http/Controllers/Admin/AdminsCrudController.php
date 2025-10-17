@@ -7,6 +7,7 @@ use App\Models\Admin;
 use App\Repositories\Admin\AdminRepository;
 use App\Models\Configuracion;
 use Illuminate\Http\Request;
+use Validator;
 
 class AdminsCrudController extends Controller
 {
@@ -78,14 +79,20 @@ class AdminsCrudController extends Controller
     /**
      * Actualizar administrador (para edición inline)
      */
-    public function update(Request $request, Admin $admin)
+public function update(Request $request, Admin $admin)
 {
-    $data = $request->validate([
+    $validator = Validator::make($request->all(), [
         'username' => 'required|string|max:255',
         'email' => 'required|email|max:255',
         'rol' => 'required|in:0,1,2',
         'password' => 'nullable|string|min:4',
     ]);
+
+    if ($validator->fails()) {
+        return response()->json(['success' => false, 'errors' => $validator->errors()]);
+    }
+
+    $data = $validator->validated();
 
     $admin->username = $data['username'];
     $admin->email = $data['email'];
@@ -97,8 +104,11 @@ class AdminsCrudController extends Controller
 
     $admin->save();
 
-    return response()->json(['success' => true]);
+    return response()->json(['success' => true, 'message' => 'Administrador modificado correctamente']);
 }
+
+
+
 
     /**
      * Eliminar administrador

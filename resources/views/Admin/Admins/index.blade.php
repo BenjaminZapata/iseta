@@ -166,10 +166,13 @@ function editarFila(fila) {
 
 function guardarFila(fila) {
     const id = fila.dataset.id;
-    const username = document.getElementById(`input-username-${id}`).value;
-    const email = document.getElementById(`input-email-${id}`).value;
-    const rol = document.getElementById(`input-rol-${id}`).value;
-    const password = document.getElementById(`input-password-${id}`).value;
+    const usernameInput = document.getElementById(`input-username-${id}`);
+    const emailInput = document.getElementById(`input-email-${id}`);
+    const rolInput = document.getElementById(`input-rol-${id}`);
+    const passwordInput = document.getElementById(`input-password-${id}`);
+
+    // Limpiar errores previos
+    fila.querySelectorAll('.error-text').forEach(e => e.remove());
 
     fetch(`{{ url('admin/admins') }}/${id}`, {
         method: 'PUT',
@@ -177,19 +180,53 @@ function guardarFila(fila) {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': '{{ csrf_token() }}'
         },
-        body: JSON.stringify({ username, email, rol, password })
+        body: JSON.stringify({
+            username: usernameInput.value,
+            email: emailInput.value,
+            rol: rolInput.value,
+            password: passwordInput.value
+        })
     })
     .then(res => res.json())
     .then(data => {
         if (data.success) {
-            location.reload();
-        } else {
-            alert(data.message || 'Error al actualizar el usuario');
+            location.reload(); // mensaje de éxito se muestra con Componentes.mensaje
+        } else if (data.errors) {
+            // mostrar errores debajo de cada input
+            if(data.errors.username){
+                const span = document.createElement('div');
+                span.classList.add('error-text');
+                span.style.color = 'red';
+                span.textContent = data.errors.username[0];
+                usernameInput.parentNode.appendChild(span);
+                usernameInput.focus();
+            }
+            if(data.errors.email){
+                const span = document.createElement('div');
+                span.classList.add('error-text');
+                span.style.color = 'red';
+                span.textContent = data.errors.email[0];
+                emailInput.parentNode.appendChild(span);
+            }
+            if(data.errors.rol){
+                const span = document.createElement('div');
+                span.classList.add('error-text');
+                span.style.color = 'red';
+                span.textContent = data.errors.rol[0];
+                rolInput.parentNode.appendChild(span);
+            }
+            if(data.errors.password){
+                const span = document.createElement('div');
+                span.classList.add('error-text');
+                span.style.color = 'red';
+                span.textContent = data.errors.password[0];
+                passwordInput.parentNode.appendChild(span);
+            }
         }
     })
     .catch(err => {
         console.error(err);
-        alert('Error al actualizar el usuario');
+        // No se muestran mensajes genéricos
     });
 }
 </script>
