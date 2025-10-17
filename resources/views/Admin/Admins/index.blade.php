@@ -4,6 +4,24 @@
 
 @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE USUARIOS ADMINISTRATIVOS'])
 
+{{-- FILTROS --}}
+<div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
+    <?= $filtergen->generate('admin.admins.index', $filters, [
+        'dropdowns' => [
+            $form->select('rol', 'rol:', 'label-input-y-100', old('rol', $filters->rol ?? ''), [
+                '' => 'Todos',
+                0 => 'Regente',
+                1 => 'Preceptor',
+                2 => 'Secretario',
+            ]),
+        ],
+        'fields' => [
+            'username' => 'Usuario',
+            'email' => 'Email',
+        ],
+    ]) ?>
+</div>
+
 <div class="perfil_one br p-5">
     <form method="POST" action="{{ route('admin.admins.store') }}" class="grid grid-cols-2 gap-4">
         @csrf
