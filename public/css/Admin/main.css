@@ -548,6 +548,50 @@ table td {
 }
 
 
+/* BOTON CONTRAIBLE-EXPANDIBLE */
+
+/* Botón expandible con ícono */
+/* --- BOTÓN CONTRAÍBLE (complementario) --- */
+.btn_contraible {
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Cuando se hace hover, el botón se expande */
+.btn_contraible:hover {
+  border-radius: 20px;
+  width: auto;
+  padding: 10px 16px;
+}
+
+/* Oculta el texto por defecto */
+.btn_contraible .btn-text {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* Muestra el texto en hover */
+.btn_contraible:hover .btn-text {
+  max-width: 200px;
+  opacity: 1;
+  margin-left: 6px;
+}
+
+
+
+
 /*---------------------------------------------- E  D  I  T  ,   C  R  E  A  T  E    y    R  E  M  A  T  ---------------------------------------------------------------*/
 
 .nwt {

@@ -60,6 +60,7 @@
         opacity: 0;
         transform: translateY(-5px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -87,4 +88,59 @@
 .rol-text:has(.error-text) select {
     border-color: #ef4444;
     background-color: #fef2f2;
+}
+
+/* Botón eliminar con icono expandible */
+.btn_eliminar_seleccionados {
+    background-color: #ec212d;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    /* Redondo inicialmente */
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    white-space: nowrap;
+}
+
+/* Cuando se hace hover, el botón se expande */
+.btn_eliminar_seleccionados:hover {
+    background-color: #000000;
+    width: auto;
+    padding: 10px 16px;
+    border-radius: 20px;
+}
+
+/* Texto oculto por defecto */
+.btn_eliminar_seleccionados .btn-text {
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+/* Mostrar texto al hacer hover */
+.btn_eliminar_seleccionados:hover .btn-text {
+    max-width: 200px;
+    opacity: 1;
+    margin-left: 8px;
+}
+
+
+/* Checkbox más grandes */
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #007bff;
+    /* Color personalizado si el navegador lo soporta */
 }
