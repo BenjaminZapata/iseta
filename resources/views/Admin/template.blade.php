@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{ asset('css/Admin/create-carrera.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/edit-carrera.css') }}">
     <link rel="stylesheet" href="{{ asset('css/Admin/correlativa.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/modificar-Admin.css') }}">
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
