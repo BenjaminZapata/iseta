@@ -14,7 +14,8 @@ class Admin extends Authenticatable
     protected $fillable = [
         'username',
         'password',
-        'rol'
+        'rol',
+        'email'
     ];
 
     public $timestamps = false;

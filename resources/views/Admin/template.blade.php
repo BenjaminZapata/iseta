@@ -5,25 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{ asset('img/icon.png') }}" type="image/png">
     <title>Iseta manager</title>
 
-    <link rel="stylesheet" href="{{asset('css/Reset/reset.css')}}">
-    <link rel="stylesheet" href="{{asset('css/Admin/Edit/edit-page.css')}}">
-    <link rel="stylesheet" href="{{asset('css/Admin/main.css')}}">
-    <link rel="stylesheet" href="{{asset('css/Admin/aside.css')}}">
-    <link rel="stylesheet" href="{{asset('css/Admin/header-avatar.css')}}">
-    <link rel="stylesheet" href="{{asset('css/global.css')}}">
-    <link rel="stylesheet" href="{{asset('css/form.css')}}">
+
+    <link rel="stylesheet" href="{{ asset('css/Reset/reset.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/Edit/edit-page.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/aside.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/header-avatar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/mensaje.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/global.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/form.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/create-carrera.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/edit-carrera.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/Admin/correlativa.css') }}">
 
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
-
 </head>
 
 <body>
-    <script src="{{asset('js/libs/ElementEv.js')}}"></script>
-    <script src="{{asset('js/libs/ElementList.js')}}"></script>
+    @livewireStyles
+    @livewireScripts
+    <script src="{{ asset('js/libs/ElementEv.js') }}"></script>
+    <script src="{{ asset('js/libs/ElementList.js') }}"></script>
 
     @include('Componentes.mensaje')
     @include('Componentes.aside')

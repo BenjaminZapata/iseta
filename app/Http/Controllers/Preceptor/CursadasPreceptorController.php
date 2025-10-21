@@ -17,58 +17,175 @@ use Illuminate\Support\Facades\log;
 
 class CursadasPreceptorController extends BaseController
 {
- public $defaultFilters = [
-  'filter_carrera_id' => 0,
-  'filter_asignatura' => 0,
-  'filter_alumno_id' => 0,
-  'filter_condicion' => 0,
-  'filter_aprobada' => 0
- ];
+    public $defaultFilters = [
+        'filter_carrera_id' => 0,
+        'filter_asignatura' => 0,
+        'filter_alumno_id' => 0,
+        'filter_condicion' => 0,
+        'filter_aprobada' => 0
+    ];
 
- function __construct()
- {
-  parent::__construct();
-  $this->middleware('auth:admin');
- }
+    function __construct()
+    {
+        parent::__construct();
+        $this->middleware('auth:admin');
+    }
 
- public function index(Request $request, CursadaRepository $cursadaRepo)
- {
-  $this->setFilters($request);
-  $this->data['cursadas'] = $cursadaRepo->index($request);
-  session(['return_to' => url()->previous()]);
-  return view('Preceptor.Cursadas.index', $this->data);
- }
+    public function index(Request $request, CursadaRepository $cursadaRepo)
+    {
+        $this->setFilters($request);
+        $this->data['cursadas'] = $cursadaRepo->index($request);
+        session(['return_to' => url()->previous()]);
+        $request->flash();
+        return view('preceptor.cursadas.index', $this->data);
+    }
 
- function delete(Cursada $cursada)
- {
-  $cursada->delete();
-  return redirect()->route('Preceptor.cursadas.index');
- }
+    function delete(Cursada $cursada)
+    {
+        $cursada->delete();
+        return redirect()->route('preceptor.cursadas.index');
+    }
 
- function edit(Request $request, Cursada $cursada)
- {
-  $nota = Examen::where('id_carrera', $cursada->id_carrera)
-   ->where('id_asignatura', $cursada->id_asignatura)
-   ->where('id_alumno', $cursada->id_alumno)
-   ->value('nota'); // Equivalencia
-  Log::debug("message", ['cursada' => $cursada]);
-  return view('Preceptor.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
- }
+    function edit(Request $request, Cursada $cursada)
+    {
+        $nota = Examen::where('id_carrera', $cursada->id_carrera)
+            ->where('id_asignatura', $cursada->id_asignatura)
+            ->where('id_alumno', $cursada->id_alumno)
+            ->value('nota'); // Equivalencia
+        Log::debug("message", ['cursada' => $cursada]);
+        return view('preceptor.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
+    }
 
- function update(Request $request, Cursada $cursada)
- {
-  $data = $request->except('_token', '_method');
-  // Update logic here...
- }
+    function update(Request $request, Cursada $cursada)
+    {
+        $data = $request->except('_token', '_method');
+        $mensajes = [];
 
- function create()
- {
-  $alumnos = Alumno::orderBy('nombre', 'asc')->orderBy('apellido', 'asc')->get();
-  $carreras = Carrera::vigentes();
+        if (
+            $request->input('condicion') == 0 ||
+            $request->input('condicion') == 2 ||
+            $request->input('condicion') == 3
+        ) {
 
-  return view('preceptor/Cursadas/create', [
-   'alumnos' => $alumnos,
-   'carreras' => $carreras
-  ]);
- }
+
+            if ($cursada->aprobada == 1 && ($request->aprobada == 2 || $request->aprobada == 3)) {
+                $mensajes[] = "No puedes desaprobar una cursada libre, promocionada o aprobada por equivalencias";
+            }
+
+            $data['aprobada'] = 1;
+        }
+        if ($request->aprobada == 5) {
+            if ($request->nota < 4 || $request->nota > 10) {
+                $mensajes[] = "La nota debe estar entre 4 y 10";
+                return redirect()->back()->with('error', $mensajes)->withInput();
+            }
+            Examen::updateOrInsert(
+                [
+                    'id_carrera' => $cursada->id_carrera,
+                    'id_asignatura' => $cursada->id_asignatura,
+                    'id_alumno' => $cursada->id_alumno
+                ],
+                [
+                    'id_carrera' => $cursada->id_carrera,
+                    'id_asignatura' => $cursada->id_asignatura,
+                    'id_alumno' => $cursada->id_alumno,
+                    'tipo_final' => 4, // Equivalencia
+                    // 'libro' => $request->libro,
+                    // 'acta' => $request->acta,
+                    'nota' => $request->nota,
+                    //  'fecha' => $request->fecha,
+                    'aprobado' => 1
+                ]
+            );
+        }
+
+        $cursada->update($data);
+        $mensajes[] = 'Se ha editado correctamente';
+
+        return redirect()->back()->with('mensaje', $mensajes);
+    }
+
+    function create()
+    {
+        $alumnos = Alumno::orderBy('nombre', 'asc')->orderBy('apellido', 'asc')->get();
+        $carreras = Carrera::vigentes();
+
+        return view('preceptor.cursadas.create', [
+            'alumnos' => $alumnos,
+            'carreras' => $carreras
+        ]);
+    }
+
+    function store(Request $request)
+    {
+        $request->validate([
+            'carrera' => ['required'],
+            'asignatura' => ['required'],
+            'alumno' => ['required'],
+        ]);
+
+        $asignatura = Asignatura::where('id', $request->asignatura)->with('correlativas.asignatura')->first();
+        $alumno = Alumno::find($request->alumno);
+
+
+        // Ver que no este ya anotado o que ya la haya aprobado
+        $yaAnotadoEnCursada = Cursada::where('id_alumno', $alumno->id)
+            ->whereRaw('(aprobada=3 OR aprobada=1)')
+            ->where('id_asignatura', $asignatura->id)
+            ->first();
+
+        // Si lo esta, no incluir
+        if ($yaAnotadoEnCursada) {
+            return \redirect()->back()->with('error', 'El alumno ya registra una cursada de la asignatura del año ' . $yaAnotadoEnCursada->anio_cursada)->withInput();
+        }
+
+        // Obtener datos de la asignatura con sus correlativas
+        $correlativas = Correlativa::debeCursadasCorrelativos($asignatura, $alumno);
+
+        if ($correlativas) {
+            $mensajes = [];
+            foreach ($correlativas as $correlativa) {
+                $mensajes[] = 'Debe la cursada de ' . $correlativa->nombre;
+            }
+            return \redirect()->back()->with(['error' => $mensajes])->withInput();
+        }
+        // WARN: Aprobado por equivalencia se crea un examen sin mesa (faltan datos)
+        if ($request->aprobada == 5) {
+            Examen::create([
+                'id_carrera' => $request->carrera,
+                'id_asignatura' => $request->asignatura,
+                'id_alumno' => $request->alumno,
+                'tipo_final' => 4, // Equivalencia
+                // 'libro' => $request->libro,
+                // 'acta' => $request->acta,
+                'nota' => $request->nota,
+                //  'fecha' => $request->fecha,
+                'aprobado' => 1
+            ]);
+        }
+
+
+        Cursada::create([
+            'id_carrera' => $request->carrera,
+            'id_asignatura' => $request->asignatura,
+            'id_alumno' => $request->alumno,
+            'anio_cursada' => $request->anio_cursada,
+            'condicion' => $request->condicion,
+            'aprobada' => $request->aprobada
+        ]);
+
+        return redirect()->back()->with('mensaje', 'Se creo la cursada');
+    }
+
+    public function destroy(Cursada $cursada)
+    {
+        try {
+            $cursada->delete();
+            return redirect()->route('preceptor.cursadas.index')
+                ->with('mensaje', 'Se ha eliminado el alumno');
+        } catch (\Exception $e) {
+            return redirect()->route('preceptor.cursadas.index')
+                ->with('error', 'No se pudo eliminar el alumno. Error: ' . $e->getMessage());
+        }
+    }
 }

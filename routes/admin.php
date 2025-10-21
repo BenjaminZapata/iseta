@@ -1,41 +1,34 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminCopiaDB;
-use App\Http\Controllers\preceptor\AlumnoPreceptorController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AdminCorrelativasController;
 use App\Http\Controllers\Admin\AdminCursadasLotes;
 use App\Http\Controllers\Admin\AdminDiasHabilesController;
-use App\Http\Controllers\Admin\AdminExcelController;
 use App\Http\Controllers\Admin\AdminExportController;
 use App\Http\Controllers\Admin\AdminMatriculacionController;
-use App\Http\Controllers\Admin\AdminMesaPorCarreraController;
 use App\Http\Controllers\Admin\AdminMesasLotes;
 use App\Http\Controllers\Admin\AdminPdfController;
+use App\Http\Controllers\Admin\AdminsCrudController;
+use App\Http\Controllers\Admin\AdminSeguridadController;
 use App\Http\Controllers\Admin\AlumnoCrudController;
 use App\Http\Controllers\Admin\AsignaturasCrudController;
 use App\Http\Controllers\Admin\CarrerasCrudController;
-use App\Http\Controllers\Admin\MesasCrudController;
-use App\Http\Controllers\Admin\ProfesoresCrudController;
-use App\Http\Controllers\Admin\AdminsCrudController;
-use App\Http\Controllers\Admin\AdminSeguridadController;
 use App\Http\Controllers\Admin\ConfigController;
-use App\Http\Controllers\Admin\ExamenesCrudController;
 use App\Http\Controllers\Admin\CursadasAdminController;
 use App\Http\Controllers\Admin\EgresadosAdminController;
-use App\Http\Controllers\PdfsController;
-use App\Http\Controllers\AlumnoController;
+use App\Http\Controllers\Admin\ExamenesCrudController;
+use App\Http\Controllers\Admin\MesasCrudController;
+use App\Http\Controllers\Admin\ProfesoresCrudController;
+use App\Http\Controllers\preceptor\AlumnoPreceptorController;
+use App\Http\Controllers\Secretario\AlumnoSecretarioController;
 use App\Models\Alumno;
 use App\Models\Asignatura;
 use App\Models\Carrera;
-use App\Models\Mensaje;
-use App\Models\Mesa;
 use App\Models\Profesor;
 use App\Services\TextFormatService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Admin\AsignaturaController;
 
 Route::redirect('/admin', '/admin/login');
 
@@ -74,11 +67,19 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // -----------------------------
     // PRECEPTOR
     // -----------------------------
-    Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/preceptor/alumnos/index', [AlumnoPreceptorController::class, 'index'])
+/*     Route::middleware(['auth:admin'])->group(function () {
+        Route::get('/alumnos/index', [AlumnoPreceptorController::class, 'index'])
             ->name('preceptor.alumnos.index');
-    });
+    }); */
 
+    // -----------------------------
+    // SECRETARIO
+    // -----------------------------
+/*     Route::middleware(['auth:admin'])->group(function () {
+        Route::get('/alumnos/index', [AlumnoSecretarioController::class, 'index'])
+            ->name('secretario.alumnos.index');
+    });
+ */
     // -----------------------------
     // EGRESADOS
     // -----------------------------
@@ -92,10 +93,15 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // -----------------------------
     Route::resource('profesores', ProfesoresCrudController::class, [
         'as' => 'admin',
-        'parameters' => ['profesores' => 'profesor']
+        'parameters' => ['profesores' => 'profesor'],
     ])->except('show')->missing(function () {
         return redirect()->route('admin.profesores.index')->with('aviso', 'El profesor no existe o ha sido eliminado');
     });
+    Route::post('admin/profesores/{profesor}/vincular-asignaturas', [ProfesoresCrudController::class, 'vincularAsignaturas'])
+    ->name('admin.profesores.vincular-asignaturas');
+Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [ProfesoresCrudController::class, 'desvincularAsignatura'])
+    ->name('admin.profesores.desvincular-asignatura');
+    
 
     // -----------------------------
     // CARRERAS
@@ -106,9 +112,9 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             return redirect()->route('admin.carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
         })->except('show');
 
-    Route::post('carreras/add_asignatura', [CarrerasCrudController::class, 'addAsignatura'])
+    Route::post('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignatura'])
         ->name('admin.carreras.addAsignatura');
-    Route::get('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
+    Route::get  ('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
         ->name('admin.carreras.addAsignaturaView');
 
     Route::get('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignaturaView'])
@@ -124,10 +130,15 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         return Storage::download($carrera->resolucion_archivo);
     })->name('admin.carreras.resolucion');
 
+  Route::delete('/admin/carreras/{carrera}/asignaturas/{asignatura}', [CarrerasCrudController::class, 'destroyAsignatura'])
+    ->name('admin.carreras.destroyAsignatura');
+
+
     Route::get('carreras/resolucion-delete/{carrera}', function (Request $request, Carrera $carrera) {
         Storage::delete($carrera->resolucion_archivo);
         $carrera->resolucion_archivo = '';
         $carrera->save();
+
         return redirect()->back();
     })->name('admin.carreras.resolucion.borrar');
 
@@ -145,13 +156,11 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::post('/asignaturas', [AsignaturasCrudController::class, 'store'])->name('admin.asignaturas.store');
     Route::put('/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'update'])->name('admin.asignaturas.update');
     Route::delete('/asignaturas/{asignatura}', [AsignaturasCrudController::class, 'destroy'])->name('admin.asignaturas.destroy');
-Route::post('/admin/asignaturas/{asignatura}/desvincular/{carrera}', 
-    [AsignaturasCrudController::class,'Desvincular'])
-    ->name('admin.asignaturas.desvincular');
-
-
-
-
+    Route::post(
+        '/asignaturas/{asignatura}/desvincular/{carrera}',
+        [AsignaturasCrudController::class, 'Desvincular']
+    )
+        ->name('admin.asignaturas.desvincular');
     // -----------------------------
     // CURSADAS
     // -----------------------------
@@ -168,7 +177,7 @@ Route::post('/admin/asignaturas/{asignatura}/desvincular/{carrera}',
     // -----------------------------
     // MESAS / EXAMENES
     // -----------------------------
-    Route::resource('mesas', MesasCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->except('show');
+    Route::resource('mesas', MesasCrudController::class, ['as' => 'admin'])->middleware('auth:admin')->except('show', 'destroy');
 
     Route::get('mesas-dual/{carrera}/{asignatura}', [AdminMesasLotes::class, 'vista'])->name('admin.mesas.dual');
     Route::post('mesas-dual/{carrera}/{asignatura}', [AdminMesasLotes::class, 'store'])->name('admin.mesas.dualpost');
@@ -176,10 +185,10 @@ Route::post('/admin/asignaturas/{asignatura}/desvincular/{carrera}',
     Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('admin.mesas.acta');
     Route::get('/mesas/acta-volante-prom/{mesa}', [AdminPdfController::class, 'actaVolantePromocion'])->name('admin.mesas.actaprom');
     Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('admin.mesas.actalibre');
-
+    Route::delete('mesas/{mesa}/edit/eliminar', [MesasCrudController::class, 'destroy'])->name('admin.mesas.destroy');
     Route::resource('examenes', ExamenesCrudController::class, [
         'as' => 'admin',
-        'parameters' => ['examenes' => 'examen']
+        'parameters' => ['examenes' => 'examen'],
     ])->only('store', 'edit', 'update', 'destroy');
     Route::post('examenes/{examen}/nota', [ExamenesCrudController::class, 'modificarNota'])->name('admin.examenes.nota');
 
@@ -187,6 +196,9 @@ Route::post('/admin/asignaturas/{asignatura}/desvincular/{carrera}',
     // ADMINS
     // -----------------------------
     Route::resource('admins', AdminsCrudController::class, ['as' => 'admin'])->except('show');
+Route::delete('admin/admins/eliminar-masivo', [AdminsCrudController::class, 'eliminarMasivo'])
+    ->name('admin.admins.eliminarMasivo');
+
 
     // -----------------------------
     // CONFIGURACION
@@ -199,8 +211,8 @@ Route::post('/admin/asignaturas/{asignatura}/desvincular/{carrera}',
     // -----------------------------
     // CORRELATIVAS
     // -----------------------------
-    Route::post('correlativa/{asignatura}', [AdminCorrelativasController::class, 'agregar'])->name('correlativa.agregar');
-    Route::delete('correlativa/{asignatura}', [AdminCorrelativasController::class, 'eliminar'])->name('correlativa.eliminar');
+    Route::post('correlativa/{carrera}/{asignatura}', [AdminCorrelativasController::class, 'agregar'])->name('admin.correlativa.agregar');
+    Route::delete('correlativa/{carrera}/{asignatura}/{correlativa}', [AdminCorrelativasController::class, 'eliminar'])->name('admin.correlativa.eliminar');
 
     // -----------------------------
     // DIAS HABILES
@@ -259,10 +271,4 @@ Route::post('/admin/asignaturas/{asignatura}/desvincular/{carrera}',
 
         return redirect()->back()->with('mensaje', 'Se han normalizado los datos');
     });
-
-    // -----------------------------
-    // COPIA DE SEGURIDAD / RESTAURACION
-    // -----------------------------
-    Route::get('copia', [AdminCopiaDB::class, 'crearCopia']);
-    Route::get('restaurar', [AdminCopiaDB::class, 'restaurarCopia']);
 });

@@ -40,7 +40,7 @@ class EgresadosAdminController extends BaseController
         $this->setFilters($request);
         $this->data['inscripciones'] = $inscriptosRepo->index($request);
 
-
+        $request->flash();
         return view('Admin.Inscriptos.index', $this->data);
     }
 
@@ -59,24 +59,44 @@ class EgresadosAdminController extends BaseController
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $data = $request->validate([
-            'id_alumno' => ['required'],
-            'id_carrera' => ['required'],
-            'anio_inscripcion' => ['required'],
-            'indice_libro_matriz' => ['nullable'],
-            'anio_finalizacion' => ['nullable'],
-            'estado' => ['required']
-        ]);
+{
+    $data = $request->validate([
+        'id_alumno' => ['required', 'integer'],
+        'id_carrera' => ['required', 'integer'],
+        'anio_inscripcion' => ['required', 'integer', 'min:1900', 'max:' . (date('Y') + 10)],
+        'indice_libro_matriz' => ['nullable', 'string', 'max:50'],
+        'anio_finalizacion' => ['nullable', 'integer', 'min:1900', 'max:' . (date('Y') + 10)],
+        'estado' => ['required', 'integer']
+    ]);
 
+    try {
         Egresado::create($data);
-
+        
         if ($request->has('redirect'))
-            return redirect()->to($request->input('redirect'))->with('mensaje', 'Se creo la inscripción');
+            return redirect()->to($request->input('redirect'))->with('mensaje', 'Se creó la inscripción');
         else
-            return redirect()->route('admin.Inscriptos.index')->with('mensaje', 'Se creo la inscripción');
+            return redirect()->route('admin.Inscriptos.index')->with('mensaje', 'Se creó la inscripción');
+            
+    } catch (\Illuminate\Database\QueryException $e) {
+        // Capturar errores específicos de base de datos
+        if (str_contains($e->getMessage(), 'Incorrect integer value')) {
+            return redirect()->back()
+                ->with('error', 'Los datos ingresados no son válidos. Revisa que los años sean números enteros.')
+                ->withInput();
+        }
+        
+        // Otros errores de base de datos
+        return redirect()->back()
+            ->with('error', 'Error al guardar los datos. Revisa la información ingresada.')
+            ->withInput();
+            
+    } catch (\Exception $e) {
+        // Cualquier otro error
+        return redirect()->back()
+            ->with('error', 'Ocurrió un error inesperado. Intenta nuevamente.')
+            ->withInput();
     }
-
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -122,24 +142,23 @@ class EgresadosAdminController extends BaseController
     /**
      * Remove the specified resource from storage.
      */
-        public function destroy($id)
-{
-    $inscripto = Egresado::findOrFail($id);
+    public function destroy($id)
+    {
+        $inscripto = Egresado::findOrFail($id);
 
-    //verificar que no tenga mesas futuras
-    if(Examen::where('id_alumno',$inscripto->id_alumno)->where('fecha','>',date('Y-m-d'))->exists()) {
-        return redirect()->route('admin.inscriptos.index')
-            ->with('error', 'No se pudo eliminar la inscripción porque el alumno tiene mesas de examen futuras.');
+        //verificar que no tenga mesas futuras
+        if (Examen::where('id_alumno', $inscripto->id_alumno)->where('fecha', '>', date('Y-m-d'))->exists()) {
+            return redirect()->route('admin.inscriptos.index')
+                ->with('error', 'No se pudo eliminar la inscripción porque el alumno tiene mesas de examen futuras.');
+        }
+        $inscripto->delete();
+
+
+        return redirect()->route('admin.inscriptos.index')->with([
+            'mensaje' => [
+                'Se ha eliminado la inscripción',
+                'Recuerda que puedes volver a crearla en el apartado "crear inscripción".'
+            ]
+        ]);
     }
-    $inscripto->delete();
-
-
-    return redirect()->route('admin.inscriptos.index')->with([
-        'mensaje' => [
-            'Se ha eliminado la inscripción',
-            'Recuerda que puedes volver a crearla en el apartado "crear inscripción".'
-        ]
-    ]);
 }
-
-    }

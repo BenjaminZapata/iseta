@@ -6,6 +6,7 @@ use App\Services\TextFormatService;
 use App\Traits\ModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Profesor extends Authenticatable
@@ -37,39 +38,43 @@ class Profesor extends Authenticatable
         'codigo_postal',
         'password',
         'lugar_nacimiento',
-        
+
     ];
 
     protected $casts = [
         'fecha_nacimiento' => 'datetime',
     ];
 
-  public function asignaturas(): BelongsToMany
+public function asignaturas(): BelongsToMany
 {
     return $this->belongsToMany(
-        Asignatura::class,                 // Modelo relacionado
-        'carrera_asignatura_profesor',     // Nombre de la tabla pivote
-        'id_profesor',                     // FK hacia este modelo en la pivote
-        'id_asignatura'                    // FK hacia el modelo relacionado
+        Asignatura::class,
+        'carrera_asignatura_profesor',
+        'id_profesor',
+        'id_asignatura'
     )
-    ->using(CarreraAsignaturaProfesor::class) // Modelo de pivote
-    ->withPivot('id_carrera')                   // Campos adicionales en la pivote
+    ->using(CarreraAsignaturaProfesor::class)
+    ->withPivot('id_carrera', 'anio', 'tipo_modulo', 'carga_horaria')
     ->withTimestamps();
 }
-    public function profesor_mesa(): BelongsToMany
+
+
+    public function profesor_mesa(): HasMany
     {
-        return $this->belongsToMany(Mesa::class, 'id', 'prof_presidente');
+        return $this->hasMany(Mesa::class, 'prof_presidente', 'id');
     }
 
-    public function profesor_mesa_vocal(): BelongsToMany
+    public function profesor_mesa_vocal(): HasMany
     {
-        return $this->belongsToMany(Mesa::class, 'id', 'prof_vocal_1');
+        return $this->hasMany(Mesa::class, 'prof_vocal_1', 'id');
     }
-    public function profesor_mesa_vocal2(): BelongsToMany
+
+    public function profesor_mesa_vocal2(): HasMany
     {
-        return $this->belongsToMany(Mesa::class, 'id', 'prof_vocal_2');
+        return $this->hasMany(Mesa::class, 'prof_vocal_2', 'id');
     }
-    function firstItemsForSelect()
+
+    public function firstItemsForSelect()
     {
         return ['0' => 'Vacio/A confirmar'];
     }

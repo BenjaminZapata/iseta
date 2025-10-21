@@ -22,11 +22,26 @@ class CrearAsignaturaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => ['required','regex:/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/u', 'min:5','max:50'],
-            'tipo_modulo' => ['nullable'],
-            'carga_horaria' => ['required', 'integer'],
-            'anio' => ['required', 'integer', 'min:1', 'max:6'],
-            'observaciones' => ['nullable'],
+            'nombre' => ['required', 'regex:/^[a-zA-Z0-9\s]+$/u', 'max:50'],
+            'observaciones' => ['nullable', 'max:150'],
+            'carga_horaria' => ['required', 'integer', 'between:1,12'],
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.regex' => 'El nombre solo puede contener letras y números.',
+            'nombre.max' => 'El nombre no puede tener más de 50 caracteres.',
+
+
+            'carga_horaria.required' => 'La cantidad de modulos es obligatoria.',
+            'carga_horaria.integer' => 'La cantidad de modulos debe ser un número entero.',
+            'carga_horaria.between' => 'La cantidad de modulos debe estar entre 1 y 12.',
+
+
+            'observaciones.max' => 'Las observaciones no pueden tener más de 150 caracteres.',
         ];
     }
 }

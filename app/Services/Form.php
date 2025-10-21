@@ -128,4 +128,21 @@ class Form
         ])->render();
     }
 
+    function file($name, $label, $class, $item = null, $options = [])
+{
+    if (!isset($options['inputclass'])) {
+        $options['inputclass'] = 'p-1';
+    }
+
+    return view('Componentes.form.file-input', [
+        'type' => 'file',
+        'name' => $name,
+        'item' => $item,
+        'class' => $class,
+        'label' => $label,
+        'options' => $options
+    ])->render();
+}
+
+
 }

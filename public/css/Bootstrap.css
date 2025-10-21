@@ -4195,6 +4195,7 @@ fieldset:disabled .btn {
 .accordion-button {
   position: relative;
   display: flex;
+  font-weight: 500;
   align-items: center;
   width: 100%;
   padding: 1rem 1.25rem;
@@ -4215,7 +4216,7 @@ fieldset:disabled .btn {
   }
 }
 .accordion-button:not(.collapsed) {
-  color: #0c63e4;
+  color: #0c57c7;
   background-color: #e7f1ff;
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.125);
 }

@@ -1,20 +1,24 @@
-/* resources/css/sidebar.css */
-
-#sidebar {
+/* === Sidebar base === */
+.sidebar {
     position: fixed;
     top: 0;
     left: 0;
     height: 100vh;
     width: 4rem;
-    background-color: white;
+    background-color: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     z-index: 50;
-    transition: width 0.5s ease;
+    transition: width 0.4s ease;
 }
 
-/* Expansión con JS inline ya está manejada, solo CSS visual */
-#sidebar .sidebar-header {
+/* Expandido */
+.sidebar.is-expanded {
+    width: 16rem;
+}
+
+/* === Header con logos === */
+.sidebar__header {
     height: 5rem;
     background-color: #140b5c;
     display: flex;
@@ -23,8 +27,7 @@
     position: relative;
 }
 
-/* Logos */
-#sidebar .logo-mini {
+.sidebar__logo--mini {
     width: 3.5rem;
     position: absolute;
     left: 50%;
@@ -32,68 +35,81 @@
     transition: opacity 0.3s ease;
 }
 
-#sidebar:hover .logo-mini {
-    opacity: 0;
-}
-
-#sidebar .logo-full {
+.sidebar__logo--full {
     width: 12rem;
     max-width: 100%;
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
-#sidebar:hover .logo-full {
+/* Mostrar/ocultar logos */
+.sidebar.is-expanded .sidebar__logo--mini {
+    opacity: 0;
+}
+
+.sidebar.is-expanded .sidebar__logo--full {
     opacity: 1;
 }
 
-/* Lista del menú */
-#sidebar ul {
+/* === Lista === */
+.sidebar__list {
     list-style: none;
+    /* elimina bullets */
     margin: 0;
     padding: 0;
 }
 
-#sidebar ul li {
+.sidebar__item {
     margin: 0;
 }
 
-/* Links del menú */
-#sidebar ul li a {
+/* === Links === */
+.sidebar__link {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1rem;
     color: #140b5c;
-    /* similar a Tailwind blue-600 */
     text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-#sidebar ul li a:hover {
-    background-color: #f3f4f6;
-    /* similar a Tailwind gray-100 */
+.sidebar__link:hover {
+    background-color: #6854fb59;
+    color: #140b5c;
+    font-weight: bold;
+    /* gris claro */
 }
 
-/* Íconos */
-#sidebar ul li a i {
+.sidebar__icon {
     font-size: 1.25rem;
 }
 
-/* Texto del link */
-#sidebar ul li a span {
+/* Texto oculto cuando colapsado */
+.sidebar__text {
     opacity: 0;
     white-space: nowrap;
     transition: opacity 0.3s ease;
 }
 
-#sidebar:hover ul li a span {
+.sidebar.is-expanded .sidebar__text {
     opacity: 1;
 }
 
-/* Separador <hr> */
-#sidebar hr {
-    margin: 0.5rem 1rem;
-    border: none;
-    border-top: 1px solid #e5e7eb;
+/* === Ítem activo === */
+.sidebar__item.is-active {
+    border-left: 6px solid #432fdb;
+    /* Indigo-600 */
+    background-color: #211483;
+    /* Indigo-100 */
+}
+
+.sidebar__item.is-active>.sidebar__link {
+    color: #ffffff;
+    /* Indigo-800 */
+    font-weight: 600;
+}
+
+.sidebar__item.is-active>.sidebar__link .sidebar__icon {
+    color: #ffffff;
 }

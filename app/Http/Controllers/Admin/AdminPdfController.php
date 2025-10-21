@@ -15,6 +15,7 @@ use function Spatie\LaravelPdf\Support\pdf;
 use App\Services\Admin\CursadaRegularService;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use PSpell\Config;
 
 class AdminPdfController extends Controller
@@ -38,7 +39,7 @@ class AdminPdfController extends Controller
             });
 
         return pdf()
-            ->view('pdf.acta-volante', [
+            ->view('Pdf.acta-volante', [
                 'examenes' => $examenes,
                 'mesa' => $mesa,
                 'condicion' => 'REGULAR',
@@ -50,22 +51,21 @@ class AdminPdfController extends Controller
     {
         $alumnos = [];
 
-        $examenes = Examen::where('id_mesa', $mesa->id)->get();
-
-        foreach ($examenes as $examen) {
-            $cursadas = Cursada::where('id_alumno', $examen->id_alumno)
-                ->where('id_asignatura', $examen->id_asignatura)
-                ->get();
-
-            foreach ($cursadas as $cursada) {
-                if ($cursada->condicion == 2) {
-                    $alumnos[] = Alumno::find($examen->id_alumno);
-                }
-            }
-        }
-
+        $examenes = $mesa->examenes()
+            ->whereRelation('alumno.cursadas', function ($query) use ($mesa) {
+                $query->where('id_asignatura', $mesa->id_asignatura)
+                    ->where('id_carrera', $mesa->id_carrera)
+                    ->where('condicion', 2);
+            })
+            ->with(['alumno.cursadas' => function ($query) use ($mesa) {
+                $query->where('id_asignatura', $mesa->id_asignatura)
+                    ->where('id_carrera', $mesa->id_carrera)
+                    ->where('condicion', 2);
+            }])
+            ->get();
+            Log::info($examenes);
         return pdf()
-            ->view('pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'PROMOCION'])
+            ->view('Pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'PROMOCION'])
             ->name('acta-volante-promocion.pdf');
     }
 
@@ -74,25 +74,21 @@ class AdminPdfController extends Controller
         $alumnos = [];
 
         // Todos los registros de alumnos en esa mesa
-        $examenes = Examen::where('id_mesa', $mesa->id)->get();
-
+        $examenes = $mesa->examenes()
+            ->whereRelation('alumno.cursadas', function ($query) use ($mesa) {
+                $query->where('id_asignatura', $mesa->id_asignatura)
+                    ->where('id_carrera', $mesa->id_carrera)
+                    ->where('condicion', 0);
+            })
+            ->with(['alumno.cursadas' => function ($query) use ($mesa) {
+                $query->where('id_asignatura', $mesa->id_asignatura)
+                    ->where('id_carrera', $mesa->id_carrera)
+                    ->where('condicion', 0);
+            }])
+            ->get();
         // para cada registro
-        foreach ($examenes as $examen) {
-
-            // Buscar cursadas de ese alumno y de la materia de la mesa
-            $cursadas = Cursada::where('id_alumno', $examen->id_alumno)
-                ->where('id_asignatura', $examen->id_asignatura)
-                ->get();
-
-            // si la cursada figura como libre, se muestra.
-            foreach ($cursadas as $cursada) {
-                if ($cursada->condicion == 0) {
-                    $alumnos[] = Alumno::find($examen->id_alumno);
-                }
-            }
-        }
         return pdf()
-            ->view('pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'LIBRE'])
+            ->view('Pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'LIBRE'])
             ->name('acta-volante-libre.pdf');
     }
     public function constanciaRegular(Alumno $alumno, Carrera $carrera, Configuracion $config)

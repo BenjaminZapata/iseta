@@ -1,68 +1,152 @@
 <?php
 
+use App\Http\Controllers\Preceptor\PreceptorDiasHabiles;
 use App\Http\Controllers\Preceptor\InscripcionPreceptorController;
 use App\Http\Controllers\Preceptor\CursadasPreceptorController;
 use App\Http\Controllers\Preceptor\AlumnoPreceptorController;
-use App\Http\Controllers\RematriculacionController;
+use App\Http\Controllers\Preceptor\PreceptorMatriculacionController;
 use App\Http\Controllers\Preceptor\ExamenPreceptorController;
 use App\Http\Controllers\Preceptor\MesaPreceptorController;
 use App\Http\Controllers\Admin\AdminPdfController;
 use App\Http\Controllers\Preceptor\AsignaturasPreceptorController;
 use App\Http\Controllers\Preceptor\CarrerasPreceptorController;
+use App\Http\Controllers\Preceptor\PreceptorCursadasLotes;
+use App\Http\Controllers\Preceptor\PreceptorMesasLotes;
+use App\Http\Controllers\Preceptor\PreceptorConfigController;
+use Illuminate\Support\Facades\Route;
+
 
 Route::prefix('preceptor')
- ->middleware(['auth:admin'])
- ->name('preceptor.')
- ->group(function () {
+    ->middleware(['auth:admin'])
+    ->name('preceptor.')
+    ->group(function () {
 
-  // Dashboard
-  Route::get('/dashboard', [AlumnoPreceptorController::class, 'dashboard'])->name('dashboard');
+        // Alumnos
+  Route::get('alumnos/verificar/{alumno}', [AlumnoPreceptorController::class, 'verificar'])
+        ->name('alumnos.verificar')->middleware('auth:admin');
 
-  // Alumnos
-  Route::get('/alumnos', [AlumnoPreceptorController::class, 'index'])->name('alumnos.index');
-  Route::get('/alumnos/create', [AlumnoPreceptorController::class, 'create'])->name('alumnos.create');
-  Route::get('/alumnos/{alumno}/edit', [AlumnoPreceptorController::class, 'edit'])->name('alumnos.edit');
-  Route::put('/alumnos/{alumno}', [AlumnoPreceptorController::class, 'update'])->name('alumnos.update');
-  Route::post('/alumnos', [AlumnoPreceptorController::class, 'store'])->name('alumnos.store');
-  Route::get('/alumnos/{alumno}/verificar', [AlumnoPreceptorController::class, 'verificar'])->name('alumnos.verificar');
-  Route::post('/alumno/{alumno}/rematricular', [RematriculacionController::class, 'rematricular'])->name('alumno.rematricular');
-  Route::delete('/alumno/{alumno}/destroy', [AlumnoPreceptorController::class,'destroy'])->name('alumnos.destroy');
+    Route::resource('alumnos', AlumnoPreceptorController::class, )
+        ->middleware('auth:admin')
+        ->missing(function () {
+            return redirect()->route('preceptor.alumnos.index')->with('aviso', 'El alumno no existe o ha sido eliminado');
+        })->except('show');
 
-  // Inscriptos
-  Route::get('/inscriptos/create', [InscripcionPreceptorController::class, 'create'])->name('inscriptos.create');
+    Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
+        ->name('preceptor.alumnos.analitico.pdf');
 
-  // Cursadas
-  Route::get('/cursadas', [CursadasPreceptorController::class, 'index'])->name('cursadas.index');
-  Route::get('/cursadas/create', [CursadasPreceptorController::class, 'create'])->name('cursadas.create');
-  Route::get('/cursadas/{cursada}/edit', [CursadasPreceptorController::class, 'edit'])->name('cursadas.edit');
-  Route::post('/cursadas', [CursadasPreceptorController::class, 'store'])->name('cursadas.store');
+    Route::get('/alumnos/regular/{alumno}', [AdminPdfController::class, 'constanciaRegular'])
+        ->name('preceptor.alumnos.regular');
 
-  // Exámenes
-  Route::get('/examenes/{examen}/edit', [ExamenPreceptorController::class, 'edit'])->name('examenes.edit');
-  Route::post('/examenes', [ExamenPreceptorController::class, 'store'])->name('examenes.store');
-  Route::put('/examenes/{examen}', [ExamenPreceptorController::class, 'update'])->name('examenes.update');
-  Route::post('/examenes/{examen}/nota', [ExamenPreceptorController::class, 'modificarNota'])->name('examenes.nota');
-  Route::delete('/examenes/{examen}', [ExamenPreceptorController::class, 'destroy'])->name('examenes.destroy');
+    Route::get('matricular/{alumno}', [PreceptorMatriculacionController::class, 'rematriculacion_vista'])
+        ->name('alumno.rematricular');
+    Route::post('matricular/{alumno}/{carrera}', [PreceptorMatriculacionController::class, 'rematriculacion'])
+        ->name('alumno.matricular.post');
 
-  // Mesas
-  Route::get('/mesas', [MesaPreceptorController::class, 'index'])->name('mesas.index');
-  Route::get('/mesas/create', [MesaPreceptorController::class, 'create'])->name('mesas.create');
-  Route::post('/mesas', [MesaPreceptorController::class, 'store'])->name('mesas.store');
-  Route::get('/mesas/{mesa}/edit', [MesaPreceptorController::class, 'edit'])->name('mesas.edit');
-  Route::put('/mesas/{mesa}', [MesaPreceptorController::class, 'update'])->name('mesas.update');
-  Route::delete('/mesas/{mesa}', [MesaPreceptorController::class, 'destroy'])->name('mesas.destroy');
 
-  // Actas PDF
-  Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('mesas.acta');
-  Route::get('/mesas/acta-volante-prom/{mesa}', [AdminPdfController::class, 'actaVolantePromocion'])->name('mesas.actaprom');
-  Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('mesas.actalibre');
+        // Inscriptos
+        Route::get('/inscriptos/create', [InscripcionPreceptorController::class, 'create'])->name('inscriptos.create');
 
-  // Asignaturas
-  Route::get('/asignaturas/{asignatura}/edit', [AsignaturasPreceptorController::class, 'edit'])->name('asignaturas.edit');
-  Route::put('/asignaturas/{asignatura}', [AsignaturasPreceptorController::class, 'update'])->name('asignaturas.update');
+        // Cursadas
+        Route::get('cursadas', [CursadasPreceptorController::class, 'index'])->name('cursadas.index');
+        Route::get('cursadas/create', [CursadasPreceptorController::class, 'create'])->name('cursadas.create');
+        Route::post('cursadas/create', [CursadasPreceptorController::class, 'store'])->name('cursadas.store');
+        Route::get('cursadas/{cursada}/edit', [CursadasPreceptorController::class, 'edit'])->name('cursadas.edit');
+        Route::put('cursadas/{cursada}/edit', [CursadasPreceptorController::class, 'update'])->name('cursadas.update');
+        Route::delete('cursadas/{cursada}', [CursadasPreceptorController::class, 'destroy'])->name('cursadas.destroy');
 
-  // Carreras
-  Route::get('/carreras/{carrera}/edit', [CarrerasPreceptorController::class, 'edit'])->name('carreras.edit');
-  Route::put('/carreras/{carrera}', [CarrerasPreceptorController::class, 'update'])->name('carreras.update');
+        Route::get('cursadas/masivo/{asignatura}', [PreceptorCursadasLotes::class, 'vista'])
+            ->name('cursadas.masivo');
 
- });
+        Route::post('masivo/cursadas', [PreceptorCursadasLotes::class, 'cargar'])->name('cursadas.masivo.post');
+
+        // mesas y examen
+        Route::resource('mesas', MesaPreceptorController::class)->middleware('auth:admin')->except('show');
+
+        Route::get('mesas-dual/{carrera}/{asignatura}', [PreceptorMesasLotes::class, 'vista'])->name('mesas.dual');
+        Route::post('mesas-dual/{carrera}/{asignatura}', [PreceptorMesasLotes::class, 'store'])->name('mesas.dualpost');
+
+        Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('mesas.acta');
+        Route::get('/mesas/acta-volante-prom/{mesa}', [AdminPdfController::class, 'actaVolantePromocion'])->name('mesas.actaprom');
+        Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('mesas.actalibre');
+
+        Route::resource('examenes', ExamenPreceptorController::class, [
+            'parameters' => ['examenes' => 'examen']
+        ])->only('store', 'edit', 'update', 'destroy');
+        Route::post('examenes/{examen}/nota', [ExamenPreceptorController::class, 'modificarNota'])->name('examenes.nota');
+
+
+        // Actas PDF
+        Route::get('/mesas/acta-volante/{mesa}', [AdminPdfController::class, 'acta_volante'])->name('mesas.acta');
+        Route::get('/mesas/acta-volante-prom/{mesa}', [AdminPdfController::class, 'actaVolantePromocion'])->name('mesas.actaprom');
+        Route::get('/mesas/acta-volante-libre/{mesa}', [AdminPdfController::class, 'actaVolanteLibre'])->name('mesas.actalibre');
+
+        // Asignaturas
+        Route::resource('asignaturas', AsignaturasPreceptorController::class)
+            ->missing(function () {
+                return redirect()->route('asignaturas.index')->with('aviso', 'La asignatura no existe o ha sido eliminada');
+            })->except('show');
+
+        Route::get('/asignaturas', [AsignaturasPreceptorController::class, 'index'])->name('asignaturas.index');
+        Route::get('/asignaturas/create', [AsignaturasPreceptorController::class, 'create'])->name('asignaturas.create');
+        Route::get('/asignaturas/{asignatura}/edit', [AsignaturasPreceptorController::class, 'edit'])->name('asignaturas.edit');
+        Route::post('/asignaturas', [AsignaturasPreceptorController::class, 'store'])->name('asignaturas.store');
+        Route::put('/asignaturas/{asignatura}', [AsignaturasPreceptorController::class, 'update'])->name('asignaturas.update');
+        Route::delete('/asignaturas/{asignatura}', [AsignaturasPreceptorController::class, 'destroy'])->name('asignaturas.destroy');
+        Route::post(
+            '/asignaturas/{asignatura}/desvincular/{carrera}',
+            [AsignaturasPreceptorController::class, 'Desvincular']
+        )
+            ->name('asignaturas.desvincular');
+
+        // Carreras
+        Route::resource('carreras', CarrerasPreceptorController::class, )
+        ->middleware('auth:admin')
+        ->missing(function () {
+            return redirect()->route('preceptor.carreras.index')->with('aviso', 'La carrera no existe o ha sido eliminada');
+        })->except('show');
+
+    Route::post('carreras/add_asignatura/{carrera}', [CarrerasPreceptorController::class, 'addAsignatura'])
+        ->name('admin.carreras.addAsignatura');
+    Route::get  ('carreras/add_asignatura/{carrera}', [CarrerasPreceptorController::class, 'addAsignaturaView'])
+        ->name('admin.carreras.addAsignaturaView');
+
+    Route::get('carreras/create_asignatura/{carrera}', [CarrerasPreceptorController::class, 'createAsignaturaView'])
+        ->name('admin.carreras.createAsignaturaView');
+    Route::post('carreras/create_asignatura/{carrera}', [CarrerasPreceptorController::class, 'createAsignatura'])
+        ->name('admin.carreras.createAsignatura');
+
+    Route::delete('carreras/{carrera}', [CarrerasPreceptorController::class, 'destroy'])->name('admin.carreras.destroy');
+    Route::post('carreras/{carrera}/desactivar', [CarrerasPreceptorController::class, 'desactivar'])->name('admin.carreras.desactivar');
+    Route::post('carreras/{carrera}/reactivar', [CarrerasPreceptorController::class, 'reactivar'])->name('admin.carreras.reactivar');
+
+    Route::get('carreras/resolucion/{carrera}', function (Request $request, Carrera $carrera) {
+        return Storage::download($carrera->resolucion_archivo);
+    })->name('admin.carreras.resolucion');
+
+    Route::get('carreras/resolucion-delete/{carrera}', function (Request $request, Carrera $carrera) {
+        Storage::delete($carrera->resolucion_archivo);
+        $carrera->resolucion_archivo = '';
+        $carrera->save();
+
+        return redirect()->back();
+    })->name('admin.carreras.resolucion.borrar');
+
+    //inscriptos
+     Route::resource('inscriptos', InscripcionPreceptorController::class,)
+        ->missing(function () {
+                return redirect()->route('preceptor.inscriptos.index')->with('aviso', 'La inscripcion no existe o ha sido eliminada');
+         })->except('show');
+
+        // Dias habiles
+    Route::get('dias-habiles', [PreceptorDiasHabiles::class, 'index'])->name('habiles.index');
+    Route::post('dias-habiles', [PreceptorDiasHabiles::class, 'store'])->name('habiles.store');
+    Route::delete('dias-habiles/{habil}', [PreceptorDiasHabiles::class, 'destroy'])->name('habiles.destroy');
+
+     // -----------------------------
+    // CONFIGURACION
+    // -----------------------------
+    Route::get('config', [PreceptorConfigController::class, 'index'])->name('config.index');
+    Route::post('config', [PreceptorConfigController::class, 'setear'])->name('config.set');
+    Route::post('config/one', [PreceptorConfigController::class, 'setOnly'])->name('config.setone');
+    Route::get('config/modoseguro', [PreceptorConfigController::class, 'modoSeguro'])->name('config.modoseguro');
+    });

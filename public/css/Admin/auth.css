@@ -105,3 +105,20 @@
         text-align: center;
         margin-bottom: 15px;
     }
+
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+        width: 100%;
+    }
+
+    .logo-full {
+        max-width: 100%;
+        /* nunca supera el ancho del contenedor */
+        height: auto;
+        /* mantiene proporción */
+        object-fit: contain;
+        /* asegura que no se deforme */
+    }

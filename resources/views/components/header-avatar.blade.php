@@ -8,7 +8,7 @@
     </div>
     <!-- DERECHA: Bienvenida + Avatar -->
     <div style="display: flex; align-items: center; gap: 1rem; position: relative; padding-right: 30px;">
-        <span style="font-size: 1rem; text-transform: none;">¡Bienvenido, {{ auth()->user()->rol()}}! </span>
+        <span style="font-size: 1rem; text-transform: none;">¡Bienvenido, {{ auth()->user()->rol() }}! </span>
         <!-- Notificaciones -->
         <div>
             <livewire:notificaciones />
@@ -20,7 +20,7 @@
                 onclick="toggleUserMenu()">
                 <img src="{{ asset('img/user-icon.png') }}" alt="Regente" title="Usuario"
                     style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid white; background-color: white;" />
-                <span>{{auth()->user()->username}}</span>
+                <span>{{ auth()->user()->username }}</span>
                 <i id="avatar-arrow" class="ti ti-chevron-down"
                     style="color: white; font-size: 1rem; position: relative; top: -2px; transition: transform 0.2s ease;"></i>
             </div>
@@ -31,7 +31,8 @@
                     <li>
                         <a href="{{ route('admin.config.modoseguro') }}" class="header-avatar-lista">
                             <i class="ti ti-shield-lock" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            <span>{{ $config['modo_seguro'] ? 'Desactivar modo seguro' : 'Activar modo seguro' }}</span>
+                            <span
+                                title="Oculta los botones de eliminación para evitar borrado accidental.">{{ $config['modo_seguro'] ? 'Desactivar modo seguro' : 'Activar modo seguro' }}</span>
                         </a>
                     </li>
                     <li>

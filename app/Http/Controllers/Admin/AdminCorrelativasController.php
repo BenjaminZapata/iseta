@@ -4,50 +4,45 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Asignatura;
+use App\Models\Carrera;
 use App\Models\Correlativa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Psy\Readline\Hoa\Console;
+use App\Services\Admin\AdminCorrelativasService;
 
 class AdminCorrelativasController extends Controller
 {
-
-    public function __construct()
+    public function __construct(protected AdminCorrelativasService $adminCorrelativas)
     {
-        $this -> middleware('auth:admin');
+        $this->middleware('auth:admin');
     }
 
-    public function agregar(Request $request, Asignatura $asignatura){
-
+    public function agregar(Request $request, Carrera $carrera, Asignatura $asignatura)
+    {
+        $data = $request->all();
+        $data = json_decode($data['correlativas'], true);
         /**
          * $asignatura = asignatura a la que se le agrega la correlativa, ej, Ingles 2.
          * $asigCorrelativa = la asignatura que se agrega como correlativa, ej, Ingles 1.
          */
+        if ($this->adminCorrelativas->agregar($data,$carrera,$asignatura)) {
+            return redirect()->back()->with('error', 'No se pudieron agregar las correlativas');
+        }
 
-        $asigCorrelativa = Asignatura::find($request->input('id_asignatura'));
-
-        if($asignatura->anio == 1) // las asignaturas del primer año no tienen correlativas
-            return redirect()->back()->with('error', 'No puedes añadir correlativas en asignaturas del primer año');
-
-        if($asignatura->anio < $asigCorrelativa->anio) // una asig del 2do año, no puede tener una correlativa de 1er año ni 2do
-            return \redirect()->back()->with('error','El año de la correlativa debe ser menor al de la asignatura');
-
-        if($asignatura->tieneLaCorrelativa($asigCorrelativa->id))  // Comprobar si ya tienes esa correlativa
-            return \redirect()->back()->with('error','Esta asignatura ya tiene esta correlativa');
-
-        Correlativa::create([
-            'id_asignatura' => $asignatura->id,
-            'asignatura_correlativa' => $asigCorrelativa->id
-        ]);
-
-        return redirect()->back()->with('mensaje','Se agrego la correlativa');
+        return redirect()->back()->with('mensaje', 'Se agregaron las correlativas');
     }
 
-    public function eliminar(Request $request, Asignatura $asignatura){
-
-        $correlativa = Correlativa::where('id_asignatura', $asignatura->id)
-            ->where('asignatura_correlativa', $request->asignatura_correlativa)
-            ->first();
-
-        $correlativa->delete();
-        return redirect()->back()->with('mensaje','Se elimino la correlativa');
+    public function eliminar(Request $request)
+    {
+        $data = $request->all();
+        $asignatura = new Asignatura($data['asignatura']);
+        $carrera = new Carrera($data['carrera']);
+        $response = $asignatura->correlativas()
+            ->wherePivot('id_asignatura_correlativa', $data['correlativa'])
+            ->wherePivot('id_carrera', $carrera->id)
+            ->detach($data['correlativa']);
+        Log::debug("algo diferente");
+        Log::debug($response);
     }
 }

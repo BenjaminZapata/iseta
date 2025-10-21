@@ -10,44 +10,42 @@
         }
     </style>
 
-
     {{-- CONTENT --}}
 
     <div class="table" data-name="tablaAlumnos">
 
-        @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
+        @include('Preceptor.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
 
         {{-- BOTON CREAR --}}
-
         <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
             <a href="{{ route('preceptor.alumnos.create') }}">
                 <button class="btn_blue">
-                    <i class="ti ti-circle-plus"></i>Agregar alumno</button>
+                    <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>Agregar alumno
+                </button>
             </a>
+
             {{-- FILTROS --}}
             <?= $filtergen->generate('preceptor.alumnos.index', $filters, [
-        'dropdowns' => [
-            $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas']]),
-            $form->select('filter_ciudad', 'Ciudad:', 'label-input-y-100', $filters, $alumnoM->ciudades()),
-            $form->select( 'filter_titulo',
-    'Estado del título:',
-    'label-input-y-100',
-    $filters->filter_titulo ?? 0,
-    [
-        0 => 'Todos',
-        1 => 'Fotocopia del título original secundario',
-        2 => 'Certificado de constancia de título en trámite',
-        3 => 'Constancia de alumno del último año del nivel secundario',
-        4 => 'No entregado',
-    ])],
+                    'dropdowns' => [
+                        $form->select('filter_titulo', 'Estado del título:', 'label-input-y-100', old('filter_titulo', $filters->filter_titulo ?? null), [
+                            null => 'Todos',
+                            0 => 'No entregado',
+                            1 => 'Certificado de constancia de título en trámite',
+                            2 => 'Constancia de alumno del último año del nivel secundario',
+                            3 => 'Fotocopia del título original secundario',
+                        ]),
 
-        'fields' => [
-            'alumno' => 'Alumno',
-            'dni' => 'Dni',
-            'ciudad' => 'Ciudad',
-            'titulo_secundario' => 'Titulo' 
-        ],
-    ]) ?>
+                        $form->select('filter_vencido', 'Plazo de entrega del título:', 'label-input-y-100', old('filter_vencido', $filters->filter_vencido ?? 'null'), [
+                            null => 'Todos',
+                            1 => 'Vencido',
+                        ]),
+                    ],
+                    'fields' => [
+                        'nombre' => 'Nombre',
+                        'apellido' => 'Apellido',
+                        'dni' => 'Dni',
+                    ],
+                ]) ?>
         </div>
 
         {{-- TABLA --}}
@@ -59,10 +57,10 @@
                     <th>Alumno</th>
                     <th>Contacto</th>
                     <th>Dirección</th>
+                    <th>Academico</th>
                     <th class="center">Acción</th>
                 </tr>
             </thead>
-
 
             {{-- TBODY --}}
             <tbody>
@@ -90,22 +88,43 @@
                             <p>{{ $alumno->ciudad }}</p>
                             <p>{{ $alumno->calle }} {{ $alumno->casa_numero ? $alumno->casa_numero : '' }}</p>
                         </td>
+                        <td>
+                            @php
+                                $titulo = [
+                                    'No entregado',
+                                    'Fotocopia del título original secundario',
+                                    'Certificado de constancia de título en trámite',
+                                    'Constancia de alumno del último año del nivel secundario',
+                                ];
+                            @endphp
+                            <p class="bold" style="text-transform: uppercase;">titulo:
+                                {{ $titulo[$alumno->titulo_secundario] }}</p>
+                            <p>estado: {{ $alumno->egresado?->estado_texto ?? 'Sin inscripción' }}</p>
+
+
+
+                        </td>
                         <td class="flex just-center">
-                            <a href="{{ route('preceptor.alumnos.edit', ['alumno' => $alumno->id]) }}">
-                                <button class="btn_blue"><i class="ti ti-file-info"
-                                        style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
-                            </a>
-                            <form id="form-eliminar-{{ $alumno->id }}"
-                                action="{{ route('preceptor.alumnos.destroy', $alumno->id) }}" method="POST"
-                                style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button"
-                                    onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}', '¿Estás seguro de que querés eliminar al alumno {{ $alumno->nombre }}? Esta acción no se puede deshacer.')"
-                                    class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
-                                    <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                                </button>
-                            </form>
+                            <div style="display: flex; justify-content: center;">
+                                <a href="{{ route('preceptor.alumnos.edit', ['alumno' => $alumno->id]) }}">
+                                    <button class="btn_blue"><i class="ti ti-file-info"
+                                            style="font-size: 1.3em; margin-right: 8px;"></i>Modificar</button>
+                                </a>
+                                @if (!$config['modo_seguro'])
+                                    <form id="form-eliminar-{{ $alumno->id }}"
+                                        action="{{ route('preceptor.alumnos.destroy', $alumno->id) }}" method="POST"
+                                        style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                            onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}',
+                                    '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido) }} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                            class="btn_icon-danger" style="background-color: red; margin-left: 10px;">
+                                            <i class="ti ti-trash" style="font-size: 1.3em"></i>
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
                         </td>
                     </tr>
                 @endforeach
@@ -113,10 +132,8 @@
         </table>
     </div>
 
-
-
-
-    <div class="w-1/2 mx-auto p-5 pagination">
+    {{-- PAGINACIÓN --}}
+    <div class="w-full flex justify-center p-5 pagination">
         {{ $alumnos->appends(request()->query())->links('Componentes.pagination') }}
     </div>
 @endsection

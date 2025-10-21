@@ -6,22 +6,28 @@ use App\Models\Alumno;
 use App\Models\Carrera;
 use App\Models\Configuracion;
 use App\Models\Profesor;
+use App\Services\Admin\AdminCorrelativasService;
 use App\Services\Fecha;
 use App\Services\Filter;
 use App\Services\Form;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
-use Monolog\Logger;
-use Monolog\Handler\SocketHandler;
-use Monolog\Formatter\JsonFormatter;
+use Livewire\Livewire;
+use Illuminate\Contracts\Foundation\Application;
+
 
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
      */
-    public function register(): void {}
+    public function register(): void
+    {
+        $this->app->singletonIf(AdminCorrelativasService::class, function  (Application $app) {
+            return new AdminCorrelativasService();
+        });
+    }
 
     /**
      * Bootstrap any application services.
@@ -39,5 +45,6 @@ class AppServiceProvider extends ServiceProvider
         View::share('carreraM', new Carrera());
         // View::share('profesorM', new Profesor());
         // View::share('profesorM', new Profesor());
+        Livewire::component('correlativas-manager', \App\Livewire\CorrelativasManager::class);
     }
 }

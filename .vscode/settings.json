@@ -47,5 +47,6 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": false
   },
-  "explorerExclude.backup": {}
+  "explorerExclude.backup": {},
+  "php.version": "8.4"
 }

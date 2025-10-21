@@ -726,6 +726,16 @@ table {
   cursor: pointer;
 }
 
+.campo_info_exa {
+  border: 1px solid black;
+  outline: none;
+  width: 100%;
+  margin: 5px 0 5px 10px;
+  padding: 10px 0 10px 5px;
+  background-color: white;
+  cursor: pointer;
+}
+
 .campo_info-noinput {
   border: none;
   outline: none;
@@ -759,6 +769,7 @@ table {
   padding: 10px 0;
   margin: 5px 0 5px 10px;
   height: 40px;
+  border: 1px solid black
 }
 
 .campo_info4 {
@@ -978,6 +989,43 @@ ul .campo_info {
   justify-content: right;
   align-items: right;
   padding: 0 27px 15px 1.5em;
+}
+
+/*------------------  ACTA VOLANTE ------------------------*/
+
+.input-nota {
+  width: 200px;
+  /* suficiente para 2–3 caracteres */
+  padding: 4px 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+
+.boton-nota {
+  background-color: #150a5c;
+  /* mismo color que btn_blue */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.boton-nota:hover {
+  background-color: #0056b3;
+  /* tono más oscuro al pasar el mouse */
+}
+
+.boton-nota i {
+  font-size: 1.1em;
 }
 
 /*------------------  boton exportar ------------------------*/
@@ -1220,4 +1268,8 @@ input:checked+.slider:before {
 
 input:checked+.slider::after {
   transform: translateX(24px);
+}
+
+.input-error {
+  border-color: #e3342f !important;
 }

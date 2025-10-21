@@ -1,4 +1,3 @@
-
 services:
   db-iseta:
     image: mysql:8.0
@@ -22,7 +21,7 @@ services:
       PMA_PASSWORD: root
       UPLOAD_LIMIT: 300M
     ports:
-      - "8081:80"
+      - "8080:80"
     depends_on:
       - db-iseta
     networks:
@@ -30,6 +29,7 @@ services:
 
 volumes:
   db_data:
+
 
 networks:
   app-network:

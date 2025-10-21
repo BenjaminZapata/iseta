@@ -18,11 +18,13 @@ class Asignatura extends Model
     public $timestamps = false;
 
     protected $fillable =  [
+        'id',
         'nombre',
         'tipo_modulo',
         'carga_horaria',
         'anio',
-        'observaciones'
+        'observaciones',
+        'cantidad_modulo'
     ];
 
     public function cursadas(): HasMany{
@@ -37,21 +39,42 @@ class Asignatura extends Model
     }
 
    public function carrera(): BelongsToMany
-{
-    return $this->belongsToMany(
-        Carrera::class,
-        'carrera_asignatura_profesor',
-        'id_asignatura',              
-        'id_carrera'                   
-    )
-    ->withPivot('id_profesor','tipo_modulo','carga_horaria','anio')
-    ->using(CarreraAsignaturaProfesor::class)
-    ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(
+            Carrera::class,
+            'carrera_asignatura_profesor',
+            'id_asignatura',
+            'id_carrera'
+        )
+        ->withPivot('id_profesor','tipo_modulo','carga_horaria','anio')
+        ->using(CarreraAsignaturaProfesor::class)
+        ->withTimestamps();
+    }
 
+    public function correlativasReverse()
+    {
+        return $this->belongsToMany(
+            Asignatura::class,          // Modelo relacionado (a sí mismo)
+            'correlatividades',             // Tabla pivote
+            'id_asignatura_correlativa', // FK en pivote que apunta a la correlativa
+            'id_asignatura'           // FK en pivote que apunta a esta asignatura
+        )
+            ->withPivot('tipo_correlativa')
+            ->using(Correlativa::class);
+    }
 
-
-    public function correlativas(): HasMany{
+    public function correlativas()
+    {
+        return $this->belongsToMany(
+            Asignatura::class,          // Modelo relacionado (a sí mismo)
+            'correlatividades',             // Tabla pivote
+            'id_asignatura',            // FK en pivote que apunta a esta asignatura
+            'id_asignatura_correlativa' // FK en pivote que apunta a la correlativa
+        )
+            ->withPivot('tipo_correlativa')
+            ->using(Correlativa::class);
+    }
+    public function correlativasPivot(): HasMany{
         return $this -> hasMany(Correlativa::class, 'id_asignatura');
     }
 
@@ -72,10 +95,14 @@ class Asignatura extends Model
     }
 
     public function aproboExamen($alumno): ?Examen{
-        $examen = Examen::where(column: 'id_alumno',operator: $alumno->id)
-            -> where(column: 'id_asignatura', operator: $this->id)
-            -> where(column: 'nota',operator: '>=',value: 4)
-            -> first();
+         if (!$alumno || !$alumno->id) {
+        throw new \InvalidArgumentException('No se recibió un alumno válido para verificar si aprobó el examen.');
+    }
+
+    return Examen::where('id_alumno', $alumno->id)
+        ->where('id_asignatura', $this->id)
+        ->where('nota', '>=', 4)
+        ->first();
 
         if ($examen) {
             return $examen;
@@ -142,4 +169,3 @@ class Asignatura extends Model
 
 
 }
-

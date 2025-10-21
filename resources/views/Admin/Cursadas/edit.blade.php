@@ -28,58 +28,73 @@
                     </div>
                     <div class="perfil_dataname">
                         <label>Año de cursada:</label>
-                        <input class="campo_info rounded" value="{{ $cursada->anio_cursada }}" name="anio_cursada">
+                       <input class="campo_info rounded" value="{{$cursada->anio_cursada}}" name="anio_cursada">
                     </div>
-                    <div class="perfil_dataname">
-                        <label>Condicion:</label>
-                        @php
-                            $condiciones = [
-                                0 => 'Libre',
-                                1 => 'Regular',
-                                2 => 'Promocion',
-                                3 => 'Equivalencia',
-                                4 => 'Desertor',
-                                5 => 'Itinerante',
-                                6 => 'Oyente',
-                            ];
+                    <div x-data="{
+                            condicion: '{{ (string) $cursada->condicion }}',
+                            aprobada: '{{ (string) $cursada->aprobada }}'
+                        }"
+                        x-init="$watch('condicion', value => { if (value === '6') aprobada = null })">
 
-                            // Valores que NO deben mostrarse en el dropdown
-                            $condicionesExcluidas = [2, 3, 4]; // Promocion, Equivalencia, Desertor
+                        <div class="perfil_dataname">
+                            <label>Condicion:</label>
+                            @php
+                                $condiciones = [
+                                    0 => 'Libre',
+                                    1 => 'Regular',
+                                    2 => 'Promocion',
+                                    3 => 'Equivalencia',
+                                    4 => 'Desertor',
+                                    5 => 'Itinerante',
+                                    6 => 'Oyente',
+                                ];
 
-                            $condicionActual = $cursada->condicion;
-                        @endphp
+                                $condicionesExcluidas = [2, 3, 4];
+                                $condicionActual = $cursada->condicion;
+                            @endphp
 
-                        <select class="campo_info rounded" name="condicion">
-                            {{-- Mostrar la condición actual si está entre las excluidas --}}
-                            @if (in_array($condicionActual, $condicionesExcluidas))
-                                <option value="{{ $condicionActual }}" selected hidden>{{ $condiciones[$condicionActual] }}
-                                </option>
-                            @endif
-
-                            {{-- Mostrar las condiciones que NO están en las excluidas --}}
-                            @foreach ($condiciones as $valor => $texto)
-                                @if (!in_array($valor, $condicionesExcluidas))
-                                    <option value="{{ $valor }}" @selected($condicionActual == $valor)>{{ $texto }}
+                            <select class="campo_info rounded" name="condicion" x-model="condicion">
+                                @if (in_array($condicionActual, $condicionesExcluidas))
+                                    <option value="{{ $condicionActual }}" selected hidden>
+                                        {{ $condiciones[$condicionActual] }}
                                     </option>
                                 @endif
-                            @endforeach
-                        </select>
-                    </div>
-                    <div x-data="{ aprobada: '{{ (string) $cursada->aprobada }}' }">
-                        <div class="perfil_dataname">
-                            <label>Estado:</label>
-                            <select class="campo_info rounded" name="aprobada" x-model="aprobada">
-                                <option value="1">Aprobada</option>
-                                <option value="2">Desaprobada</option>
-                                <option value="3">Cursando</option>
-                                <option value="4">Promocionada</option>
-                                <option value="5">Equivalencia</option>
+
+                                @foreach ($condiciones as $valor => $texto)
+                                    @if (!in_array($valor, $condicionesExcluidas))
+                                        <option value="{{ $valor }}" @selected($condicionActual == $valor)>
+                                            {{ $texto }}
+                                        </option>
+                                    @endif
+                                @endforeach
                             </select>
                         </div>
-                        <div class="perfil_dataname" x-show="aprobada === '5'" x-transition>
-                            <label>Nota:</label>
-                            <input class="campo_info rounded" value="{{ $nota }}" name="nota" type="number" />
-                        </div>
+
+                        {{-- Estado (solo aparece si no es Oyente) --}}
+                        <template x-if="condicion !== '6'">
+                            <div x-transition>
+                                <div class="perfil_dataname">
+                                    <label>Estado:</label>
+                                    <select class="campo_info rounded" name="aprobada" x-model="aprobada">
+                                        <option value="1">Aprobada</option>
+                                        <option value="2">Desaprobada</option>
+                                        <option value="3">Cursando</option>
+                                        <option value="4">Promocionada</option>
+                                        <option value="5">Equivalencia</option>
+                                    </select>
+                                </div>
+
+                                <div class="perfil_dataname" x-show="aprobada === '5'" x-transition>
+                                    <label>Nota:</label>
+                                    <input class="campo_info rounded" value="{{ $nota }}" name="nota" type="number" />
+                                </div>
+                            </div>
+                    </template>
+
+                        {{-- Hidden para mandar null si condicion es Oyente --}}
+                        <template x-if="condicion === '6'">
+                            <input type="hidden" name="aprobada" :value="null">
+                        </template>
                     </div>
                     <input type="hidden" value="{{ url()->previous() }}" name="redirect">
 
@@ -92,20 +107,25 @@
                         </button>
                     </div>
                 </form>
-                @if (!$config['modo_seguro'])
-                    <div class="boton-eliminar">
-                        <form class="form-eliminar" method="post"
-                            action="{{ route('admin.cursadas.destroy', ['cursada' => $cursada->id]) }}">
-                            @csrf
-                            @method('delete')
-                            <button class="btn_red_outline"
-                                onclick="openGeneralModal('form-eliminar-{{ $cursada->id }}', '¿Estás seguro de que querés eliminar la cursada: {{ strtoupper($cursada->asignatura->nombre) }} del alumno: {{ strtoupper($cursada->alumno->apellido) }} {{ strtoupper($cursada->alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                class="btn_icon-danger" style="margin-left: 10px;">
-                                <i class="ti ti-trash" style="font-size: 1.3em;"></i>Eliminar cursada
-                            </button>
-                        </form>
-                    </div>
-                @endif
+                <div class="botones-derecha">
+                    @if (!$config['modo_seguro'])
+                        <div>
+                            <form id="form-eliminar-{{ $cursada->id }}"
+                                action="{{ route('admin.cursadas.destroy', $cursada->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button"
+                                    onclick="openGeneralModal('form-eliminar-{{ $cursada->id }}',
+                                    '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre) }} de la carrera {{ strtoupper($cursada->carrera->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                    class="btn_red_outline">
+                                    <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar
+                                    cursada
+                                </button>
+                            </form>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
 

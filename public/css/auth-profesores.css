@@ -1,0 +1,219 @@
+/* ===== RESET GENERAL ===== */
+* {
+ box-sizing: border-box;
+ margin: 0;
+ padding: 0;
+}
+
+/* ===== BASE GENERAL ===== */
+body#logeo-profes {
+ min-height: 100vh;
+ background: #042d78;
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ color: #ffffff;
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+/* ===== LOGIN BOX ===== */
+.login-profes {
+ background: #063b9c;
+ padding: 40px 32px;
+ border-radius: 12px;
+ box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+ width: 360px;
+ max-width: 90vw;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+/* ===== LOGO ===== */
+.logo-container-profes {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ margin-bottom: 24px;
+ width: 100%;
+}
+
+.logo-full-profes {
+ max-width: 100%;
+ height: auto;
+ object-fit: contain;
+}
+
+/* ===== TÍTULOS ===== */
+.titulo-login-profes h1 {
+ font-size: 20px;
+ font-weight: bold;
+ margin-bottom: 8px;
+ color: #ffffff;
+ text-align: center;
+}
+
+.titulo-login-profes p {
+ font-size: 14px;
+ color: #d1d1ff;
+ text-align: center;
+ margin-bottom: 24px;
+}
+
+/* ===== SELECTOR DE ROL ===== */
+.who-profes {
+ display: flex;
+ justify-content: center;
+ margin-bottom: 24px;
+ gap: 10px;
+ flex-wrap: wrap;
+}
+
+.who-profes a {
+ padding: 6px 14px;
+ border-radius: 20px;
+ font-size: 14px;
+ text-decoration: none;
+ background: #0845b3;
+ color: #dcdcff;
+ transition: background-color 0.3s;
+}
+
+.who-profes a:hover {
+ background: #0a57d1;
+ color: #fff;
+}
+
+.who-profes a.act-profes {
+ background: #1a6cff;
+ color: #fff;
+}
+
+/* ===== FORMULARIO ===== */
+form {
+ width: 100%;
+ display: flex;
+ flex-direction: column;
+}
+
+.input-box-profes {
+ margin-bottom: 20px;
+ width: 100%;
+}
+
+.input-box-profes label {
+ display: block;
+ margin-bottom: 6px;
+ font-size: 0.95rem;
+ color: #d1d1ff;
+ font-weight: 500;
+}
+
+.input-wrapper-profes,
+.password-wrapper-profes {
+ position: relative;
+ width: 100%;
+}
+
+/* ===== CAMPOS DE FORMULARIO: ESTILO ADMIN PERO CON COLORES PROFES ===== */
+input[type="email"],
+input[type="password"],
+input[type="text"] {
+ width: 100%;
+ padding: 12px;
+ border: none;
+ /* sin borde por defecto */
+ border-radius: 6px;
+ background-color: #114dbe;
+ /* fondo más claro que el contenedor */
+ color: #ffffff;
+ font-size: 1rem;
+ transition: border 0.3s, background-color 0.3s;
+}
+
+/* Al enfocar el campo */
+input:focus {
+ border: 1px solid #5fa8f6;
+ /* aparece el borde */
+ background-color: #0a57d1;
+ /* un poquito más brillante */
+ outline: none;
+}
+
+/* Placeholder */
+::placeholder {
+ color: #d1d1ff;
+}
+
+
+
+/* ===== TOGGLE PASSWORD BUTTON ===== */
+.toggle-password-profes {
+ position: absolute;
+ right: 12px;
+ top: 50%;
+ transform: translateY(-50%);
+ background: none;
+ border: none;
+ color: #bcbcf5;
+ font-size: 18px;
+ cursor: pointer;
+}
+
+/* ===== BOTÓN PRINCIPAL ===== */
+.input-box-profes.button-profes {
+ width: 100%;
+ display: flex;
+ justify-content: center;
+ /* Centra horizontalmente */
+}
+
+.input-box-profes.button-profes input[type="submit"] {
+ background-color: #1a6cff;
+ border: none;
+ padding: 12px;
+ font-size: 1rem;
+ font-weight: bold;
+ border-radius: 6px;
+ cursor: pointer;
+ color: #ffffff;
+ transition: background-color 0.3s;
+ width: 100%;
+ /* 🔥 Asegura que ocupe todo el ancho disponible */
+ max-width: 100%;
+}
+
+.input-box-profes.button-profes input[type="submit"]:hover {
+ background-color: #0f4ec7;
+ outline: none;
+ /* color más oscuro al hacer hover */
+}
+
+
+/* ===== OLVIDÓ CONTRASEÑA / REGISTRO ===== */
+.etiquetas-profes {
+ margin-top: 12px;
+ text-align: center;
+}
+
+.etiquetas-profes a {
+ color: #b8b8ff;
+ font-size: 0.9rem;
+ text-decoration: none;
+}
+
+.etiquetas-profes a:hover {
+ text-decoration: underline;
+}
+
+/* ===== ERRORES ===== */
+.campo-alert-profes {
+ color: #e74c3c;
+ background: rgba(255, 0, 0, 0.1);
+ padding: 10px;
+ border-radius: 6px;
+ font-weight: 600;
+ text-align: center;
+ margin-bottom: 15px;
+ font-size: 14px;
+}
