@@ -455,6 +455,141 @@ table td {
   color: white;
 }
 
+.btn_desvincular {
+  position: relative;
+  z-index: 1;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  background-color: #150a5c;
+  /* Fondo rojo predeterminado */
+  color: white;
+  transition: background 0.35s;
+}
+
+/* Efecto hover con overlay más oscuro */
+.btn_desvincular::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  right: 100%;
+  transition: all 0.35s;
+  background-color: black;
+  /* Un rojo más oscuro para el hover */
+}
+
+.btn_desvincular:hover::after {
+  left: 0;
+  right: 0;
+}
+
+/* Íconos centrados y visibles */
+.btn_desvincular i,
+.btn_desvincular svg {
+  font-size: 18px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.btn_desvincular2 {
+  position: relative;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  background-color: #150a5cc5;
+  /* Fondo rojo predeterminado */
+  color: white;
+  transition: background 0.35s;
+}
+
+/* Efecto hover con overlay más oscuro */
+.btn_desvincular2::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: -100%;
+  right: 100%;
+  transition: all 0.35s;
+  background-color: black;
+  /* Un rojo más oscuro para el hover */
+}
+
+.btn_desvincular2:hover::after {
+  left: 0;
+  right: 0;
+}
+
+/* Íconos centrados y visibles */
+.btn_desvincular2 i,
+.btn_desvincular2 svg {
+  font-size: 18px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+
+/* BOTON CONTRAIBLE-EXPANDIBLE */
+
+/* Botón expandible con ícono */
+/* --- BOTÓN CONTRAÍBLE (complementario) --- */
+.btn_contraible {
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Cuando se hace hover, el botón se expande */
+.btn_contraible:hover {
+  border-radius: 5px;
+  width: auto;
+  padding: 10px 16px;
+}
+
+/* Oculta el texto por defecto */
+.btn_contraible .btn-text {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* Muestra el texto en hover */
+.btn_contraible:hover .btn-text {
+  max-width: 200px;
+  opacity: 1;
+  margin-left: 6px;
+}
+
+
+
 
 /*---------------------------------------------- E  D  I  T  ,   C  R  E  A  T  E    y    R  E  M  A  T  ---------------------------------------------------------------*/
 
