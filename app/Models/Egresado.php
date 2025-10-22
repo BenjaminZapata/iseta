@@ -21,10 +21,11 @@ class Egresado extends Model
         return $this->hasOne(Alumno::class, 'id', 'id_alumno');
     }
 
-    public function carrera()
-    {
-        return $this->hasOne(Carrera::class, 'id', 'id_carrera');
-    }
+public function carrera()
+{
+    return $this->belongsTo(Carrera::class, 'carrera_id', 'id');
+}
+
 
     public static function estaInscripto($carrera, $alumno = null)
     {
