@@ -6,9 +6,9 @@ use Livewire\Component;
 use Livewire\Attributes\Url;
 use App\Models\Alumno;
 use App\Models\Carrera;
-use App\Models\Asignatura;
 use App\Models\Cursada;
 use App\Models\Egresado;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class RegistrarCursada extends Component
@@ -26,6 +26,7 @@ class RegistrarCursada extends Component
     // --- SELECCIÓN ---
     public $alumnoSeleccionado = null;
     public $carreraSeleccionada = null;
+    public $materiasCarrera = [];
     public $asignaturasSeleccionadas = [];
     public $condiciones = [];
     public $erroresValidacion = [];
@@ -44,36 +45,47 @@ class RegistrarCursada extends Component
                 ->get();
         }
 
-        $carreras = collect();
-        $asignaturas = collect();
-
+        // Obtener carreras del alumno seleccionado
+        $carreras = [];
         if ($this->alumnoSeleccionado) {
-            
             $carreras = Egresado::where('id_alumno', $this->alumnoSeleccionado->id)
                 ->with('carrera')
                 ->get()
                 ->pluck('carrera')
                 ->filter()
                 ->values();
-
-            // Obtener asignaturas si hay una carrera seleccionada
-            if ($this->carreraSeleccionada) {
-                $asignaturas = Asignatura::where('id_carrera', $this->carreraSeleccionada)->get();
-            }
         }
 
         return view('livewire.registrar-cursada', [
             'alumnos' => $alumnos,
             'carreras' => $carreras,
-            'asignaturas' => $asignaturas,
         ]);
     }
 
     public function seleccionarAlumno($id)
     {
         $this->alumnoSeleccionado = Alumno::find($id);
-        $this->reset(['nombre', 'apellido', 'dni', 'carreraSeleccionada', 'asignaturasSeleccionadas', 'condiciones']);
+        $this->reset([
+            'nombre', 'apellido', 'dni',
+            'carreraSeleccionada', 'materiasCarrera',
+            'asignaturasSeleccionadas', 'condiciones'
+        ]);
     }
+
+public function cargarMaterias()
+{
+    if ($this->carreraSeleccionada) {
+        $this->materiasCarrera = collect(
+            DB::table('carrera_asignatura_profesor')
+                ->join('asignaturas', 'carrera_asignatura_profesor.id_asignatura', '=', 'asignaturas.id')
+                ->where('carrera_asignatura_profesor.id_carrera', $this->carreraSeleccionada)
+                ->select('asignaturas.id as id', 'asignaturas.nombre')
+                ->distinct()
+                ->get()
+        );
+    }
+}
+
 
     public function registrar()
     {
@@ -91,13 +103,13 @@ class RegistrarCursada extends Component
                 continue;
             }
 
-            // Validar correlatividades (ejemplo simbólico)
+            // Validar correlatividades
             if (!$this->cumpleCorrelativas($this->alumnoSeleccionado->id, $asignaturaId)) {
                 $this->erroresValidacion[] = "El alumno no cumple correlatividades para la asignatura ID $asignaturaId.";
                 continue;
             }
 
-            // Validar plazos de inscripción (ejemplo simbólico)
+            // Validar plazos de inscripción
             if (!$this->dentroDePlazo()) {
                 $this->erroresValidacion[] = "El plazo de inscripción está vencido.";
                 continue;
@@ -114,7 +126,7 @@ class RegistrarCursada extends Component
 
         if (empty($this->erroresValidacion)) {
             session()->flash('success', 'Inscripción realizada con éxito.');
-            $this->reset(['asignaturasSeleccionadas', 'condiciones']);
+            $this->reset(['materiasCarrera', 'asignaturasSeleccionadas', 'condiciones']);
         }
     }
 
@@ -126,7 +138,7 @@ class RegistrarCursada extends Component
 
     private function dentroDePlazo()
     {
-        // Implementar validación de fechas
+        // Implementar validación de fechas aquí
         return true;
     }
 }
