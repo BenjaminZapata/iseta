@@ -105,11 +105,11 @@
 
 
                 </td>
-                <td class="flex just-center" style="min-width: 120px;">
+                <td class="flex just-center" style="min-width: 170px;">
                     <div style="display: flex; justify-content: center; gap: 10px;">
                         <a href="{{ route('admin.alumnos.edit', ['alumno' => $alumno->id]) }}">
-                            <button class="btn_blue btn_contraible"><i class="ti ti-pencil"
-                                    style="font-size: 1.3em;"></i>
+                            <button class="btn_blue btn_contraible">
+                                <i class="ti ti-pencil" style="font-size: 1.3em;"></i>
                                 <span class="btn-text">Editar</span>
                             </button>
                         </a>

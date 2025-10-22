@@ -74,7 +74,7 @@
                 <td>
                     {{ $cursada->aprobado() }}
                 </td>
-                <td class="flex just-center" style="min-width: 120px; ">
+                <td class="flex just-center" style="min-width: 170px; ">
                     <div style="display: flex; justify-content: center; gap: 10px;">
                         <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}">
                             <button class="btn_blue btn_contraible">

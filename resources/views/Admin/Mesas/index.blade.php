@@ -73,7 +73,7 @@
                     <p>{{ $mesa->asignatura->carreraDirecta?->nombre }}</p>
                     <p>{{ $mesa->asignatura->anio }}° año</p>
                 </td>
-                <td class="center" style="min-width: 120px;">
+                <td class="center" style="min-width: 180px;">
                     <div style="display: flex; justify-content: center; gap:10px;">
                         <a href="{{ route('admin.mesas.edit', ['mesa' => $mesa->id]) }}">
                             <button class="btn_blue btn_contraible">

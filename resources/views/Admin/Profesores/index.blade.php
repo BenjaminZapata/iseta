@@ -51,8 +51,8 @@
                     <p>{{ $profesor->ciudad }}</p>
                     <p>{{ $profesor->calle }} {{ $profesor->casa_numero ? $profesor->casa_numero : '' }}</p>
                 </td>
-                <td class="flex just-center" style="min-width: 120px;">
-                    <div style="display: flex; justify-content: center;">
+                <td class="flex just-center" style="min-width: 170px;">
+                    <div style="display: flex; justify-content: center; gap: 10px;">
                         <a href="{{ route('admin.profesores.edit', ['profesor' => $profesor->id]) }}">
                             <button class="btn_blue btn_contraible">
                                 <i class="ti ti-pencil" style="font-size: 1.3em;"></i>
@@ -60,17 +60,18 @@
                             </button>
                         </a>
                         @if (!$config['modo_seguro'])
-                        <form method="POST" id="form-eliminar-{{ $profesor->id }}"
-                            action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}">
+                        <form id="form-eliminar-{{ $profesor->id }}"
+                            action="{{ route('admin.profesores.destroy', ['profesor' => $profesor->id]) }}" method="POST"
+                            style="display: inline;">
                             @csrf
                             @method('delete')
-                            <button type="button" class="btn_icon-danger btn_contraible"
+                            <button type="button"
                                 onclick="openGeneralModal(
                 'form-eliminar-{{ $profesor->id }}',
                 '¿Estás seguro de que querés eliminar al profesor: {{ mb_strtoupper($profesor->apellido, 'UTF-8') }} {{ mb_strtoupper($profesor->nombre, 'UTF-8') }}? \n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
             )"
-                                style="background-color: red; margin-left: 10px;">
-                                <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                class="btn_icon-danger btn_contraible" style="background-color: red;">
+                                <i class="ti ti-trash"></i>
                                 <span class="btn-text">Eliminar</span>
                             </button>
                         </form>

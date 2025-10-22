@@ -79,7 +79,7 @@
                 <th class="center">Apertura</th>
                 <th class="center">Cierre</th>
                 <th class="center">Estado</th>
-                <th class="center">Acción</th>
+                <th class="center" style="width: 100px;">Acción</th>
             </tr>
         </thead>
         <tbody>
@@ -90,8 +90,8 @@
                 <td class="center">{{ $carrera->anio_apertura }}</td>
                 <td class="center">{{ $carrera->anio_fin ?? '-' }}</td>
                 <td class="center">{{ $carrera->vigente == 1 ? 'Vigente' : 'No vigente' }}</td>
-                <td class="flex just-center">
-                    <div class="min-width: 120px">
+                <td class="flex just-center" class="min-width: 150px">
+                    <div>
                         <a href="{{ route('admin.carreras.edit', ['carrera' => $carrera]) }}">
                             <button class="btn_blue btn_contraible">
                                 <i class="ti ti-pencil"
