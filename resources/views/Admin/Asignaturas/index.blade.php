@@ -44,9 +44,9 @@
                     @endforeach
                 </td>
                 <td>
-               <div style="display: flex; justify-content: center;">
-    {{ $asignatura->anioStr($asignatura->carrera->first()->id ?? 0) }}
-</div>
+                    <div style="display: flex; justify-content: center;">
+                        {{ $asignatura->anioStr($asignatura->carrera->first()->id ?? 0) }}
+                    </div>
 
                 </td>
                 <td>
@@ -55,7 +55,7 @@
                     </div>
                 </td>
                 <td>
-                    <div style=" display:flex; align-items: center; justify-content: center;">
+                    <div style=" display:flex; align-items: center; justify-content: center; min-width: 120px;">
                         <div style="display:flex; align-items: center; justify-content: center;">
                             @if (!$config['modo_seguro'])
                             <form id="form-eliminar-{{ $asignatura->id }}"
@@ -69,8 +69,9 @@
         {{ isset($asignatura->cantidad_modulo) && $asignatura->cantidad_modulo ? 'Módulos: ' . $asignatura->cantidad_modulo : 'Carga horaria: ' . $asignatura->carga_horaria }}\n
          Año: {{ $asignatura->anio }}\n\n
          ESTA ACCIÓN NO SE PUEDE DESHACER.`)"
-                                    class="btn_icon-danger" style="background-color: red;">
+                                    class="btn_icon-danger btn_contraible" style="background-color: red;">
                                     <i class="ti ti-trash" style="font-size: 1.3em;"></i>
+                                    <span class="btn-text">Eliminar</span>
                                 </button>
                             </form>
                             @endif

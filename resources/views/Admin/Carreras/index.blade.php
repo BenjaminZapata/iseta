@@ -91,11 +91,12 @@
                 <td class="center">{{ $carrera->anio_fin ?? '-' }}</td>
                 <td class="center">{{ $carrera->vigente == 1 ? 'Vigente' : 'No vigente' }}</td>
                 <td class="flex just-center">
-                    <div>
+                    <div class="min-width: 120px">
                         <a href="{{ route('admin.carreras.edit', ['carrera' => $carrera]) }}">
-                            <button class="btn_blue">
-                                <i class="ti ti-file-info"
-                                    style="font-size: 1.3em; margin-right: 8px;"></i>Modificar
+                            <button class="btn_blue btn_contraible">
+                                <i class="ti ti-pencil"
+                                    style="font-size: 1.3em;"></i>
+                                <span class="btn-text">Editar</span>
                             </button>
                         </a>
                     </div>
