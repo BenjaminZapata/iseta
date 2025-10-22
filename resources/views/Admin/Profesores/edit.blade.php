@@ -181,7 +181,7 @@
                                                 data-bs-target="#collapse{{ $idCarrera }}-{{ $anio }}"
                                                 aria-expanded="false"
                                                 aria-controls="collapse{{ $idCarrera }}-{{ $anio }}">
-                                                {{ is_numeric($anio) ? $anio +1 . '° año' : $anio }}
+                                                {{ is_numeric($anio) ? $anio  . '° año' : $anio }}
                                             </button>
                                         </h2>
                                         <div id="collapse{{ $idCarrera }}-{{ $anio }}"
