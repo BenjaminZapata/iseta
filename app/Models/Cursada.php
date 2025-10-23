@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Cursada extends Model
 {
     protected $table = 'cursadas';
+
     use HasFactory;
 
     protected $fillable = [
@@ -17,7 +18,10 @@ class Cursada extends Model
         'id_alumno',
         'id_asignatura',
         'id_carrera',
-        'condicion'
+        'condicion',
+        'primer_cuatrimestre_nota',
+        'segundo_cuatrimestre_nota',
+        'observaciones',
     ];
 
     public function alumno()
