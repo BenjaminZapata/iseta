@@ -1,7 +1,7 @@
 /* Variables */
 :root {
-    --color-principal: #003366;
-    --color-accent: #1175da;
+    --color-principal: #140b5c;
+    --color-accent: #140b5c;
     --border-radius: 0.5rem;
     --shadow-sm: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
     --shadow-md: 0 0.5rem 1rem rgba(0,0,0,0.15);
