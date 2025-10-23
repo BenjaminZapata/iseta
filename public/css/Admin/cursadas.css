@@ -1,0 +1,67 @@
+/* Variables */
+:root {
+    --color-principal: #003366;
+    --color-accent: #1175da;
+    --border-radius: 0.5rem;
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    --shadow-md: 0 0.5rem 1rem rgba(0,0,0,0.15);
+    --transition: all 0.3s ease;
+}
+
+/* Botón Modificar */
+.btn-modificar {
+    background: linear-gradient(135deg, var(--color-principal) 0%, #00264d 100%);
+    color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+.btn-modificar:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.btn-modificar:active { transform: translateY(0); }
+
+/* Tabla scroll */
+.tabla-scroll {
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+.tabla-scroll thead th {
+    position: sticky;
+    top: 0;
+    background: var(--color-accent);
+    color: white;
+}
+
+/* Alumno seleccionado */
+.alumno-seleccionado .nombre-alumno {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-principal);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--border-radius);
+    border: 1px solid #dee2e6;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+.alumno-seleccionado .nombre-alumno:hover {
+    border-color: var(--color-accent);
+    transform: translateX(5px);
+}
+
+/* Alertas */
+.alert { border-radius: var(--border-radius); box-shadow: var(--shadow-sm); }
+
+/* Select alumno */
+.carrera-select { border-radius: var(--border-radius); transition: var(--transition); }
+
+/* Responsive */
+@media(max-width:768px){
+    .tabla-scroll { max-height: 250px; }
+    .btn-modificar { font-size: 0.85rem; padding: 0.5rem 1rem; }
+}

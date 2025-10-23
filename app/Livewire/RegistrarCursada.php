@@ -3,27 +3,16 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Livewire\Attributes\Url;
 use App\Models\Alumno;
-use App\Models\Carrera;
 use App\Models\Cursada;
-use App\Models\Egresado;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
 class RegistrarCursada extends Component
 {
-    // --- FILTROS DE BÚSQUEDA ---
-    #[Url(except: '')]
     public $nombre = '';
-
-    #[Url(except: '')]
     public $apellido = '';
-
-    #[Url(except: '')]
     public $dni = '';
 
-    // --- SELECCIÓN ---
     public $alumnoSeleccionado = null;
     public $carreraSeleccionada = null;
     public $materiasCarrera = [];
@@ -31,114 +20,128 @@ class RegistrarCursada extends Component
     public $condiciones = [];
     public $erroresValidacion = [];
 
+    public $mostrarBoton = false;
+    public $mensaje = null;
+
+    private $mapCondicion = [
+        'Libre'      => 0,
+        'Regular'    => 1,
+        'Promocion'  => 2,
+        'Equivalencia'=>3,
+        'Desertor'   => 4,
+        'Itinerante' => 5,
+        'Oyente'     => 6,
+    ];
+
     public function render()
     {
         $alumnos = [];
 
-        // Solo busca si hay filtros válidos (nombre+apellido o DNI)
-        if (($this->apellido && $this->nombre) || $this->dni) {
+        if ($this->nombre || $this->apellido || $this->dni) {
             $alumnos = Alumno::query()
-                ->when($this->nombre, fn($q) => $q->where('nombre', 'like', '%' . $this->nombre . '%'))
-                ->when($this->apellido, fn($q) => $q->where('apellido', 'like', '%' . $this->apellido . '%'))
-                ->when($this->dni, fn($q) => $q->where('dni', 'like', '%' . $this->dni . '%'))
+                ->when($this->nombre, fn($q) => $q->where('nombre', 'like', "%{$this->nombre}%"))
+                ->when($this->apellido, fn($q) => $q->where('apellido', 'like', "%{$this->apellido}%"))
+                ->when($this->dni, fn($q) => $q->where('dni', 'like', "%{$this->dni}%"))
                 ->take(10)
                 ->get();
         }
 
-        // Obtener carreras del alumno seleccionado
-        $carreras = [];
-        if ($this->alumnoSeleccionado) {
-            $carreras = Egresado::where('id_alumno', $this->alumnoSeleccionado->id)
-                ->with('carrera')
-                ->get()
-                ->pluck('carrera')
-                ->filter()
-                ->values();
-        }
-
         return view('livewire.registrar-cursada', [
             'alumnos' => $alumnos,
-            'carreras' => $carreras,
         ]);
     }
 
     public function seleccionarAlumno($id)
     {
         $this->alumnoSeleccionado = Alumno::find($id);
-        $this->reset([
-            'nombre', 'apellido', 'dni',
-            'carreraSeleccionada', 'materiasCarrera',
-            'asignaturasSeleccionadas', 'condiciones'
-        ]);
+        $this->carreraSeleccionada = null;
+        $this->materiasCarrera = [];
+        $this->asignaturasSeleccionadas = [];
+        $this->condiciones = [];
+        $this->mostrarBoton = false;
+        $this->mensaje = null;
+        $this->erroresValidacion = [];
     }
 
-public function cargarMaterias()
-{
-    if ($this->carreraSeleccionada) {
-        $this->materiasCarrera = collect(
-            DB::table('carrera_asignatura_profesor')
+    public function activarBoton()
+    {
+        $this->mostrarBoton = !is_null($this->carreraSeleccionada);
+    }
+
+    public function verMaterias()
+    {
+        if ($this->carreraSeleccionada) {
+            $this->materiasCarrera = DB::table('carrera_asignatura_profesor')
                 ->join('asignaturas', 'carrera_asignatura_profesor.id_asignatura', '=', 'asignaturas.id')
                 ->where('carrera_asignatura_profesor.id_carrera', $this->carreraSeleccionada)
                 ->select('asignaturas.id as id', 'asignaturas.nombre')
                 ->distinct()
-                ->get()
-        );
+                ->get();
+
+            foreach ($this->materiasCarrera as $asig) {
+                if (!isset($this->condiciones[$asig->id])) {
+                    $this->condiciones[$asig->id] = 'Regular'; // default
+                }
+            }
+        }
     }
-}
 
-
-    public function registrar()
+    public function guardarCursada()
     {
         $this->erroresValidacion = [];
+        $this->mensaje = null;
 
-        if (!$this->alumnoSeleccionado || !$this->carreraSeleccionada || empty($this->asignaturasSeleccionadas)) {
-            $this->erroresValidacion[] = 'Debe seleccionar alumno, carrera y al menos una asignatura.';
+        if (!$this->alumnoSeleccionado) {
+            $this->erroresValidacion[] = 'Debe seleccionar un alumno.';
             return;
         }
 
-        foreach ($this->asignaturasSeleccionadas as $asignaturaId) {
-            $condicion = $this->condiciones[$asignaturaId] ?? null;
-            if (is_null($condicion)) {
-                $this->erroresValidacion[] = "Debe seleccionar la condición para la asignatura ID $asignaturaId.";
+        if (!$this->carreraSeleccionada) {
+            $this->erroresValidacion[] = 'Debe seleccionar una carrera.';
+            return;
+        }
+
+        if (count($this->asignaturasSeleccionadas) === 0) {
+            $this->erroresValidacion[] = 'Debe seleccionar al menos una asignatura.';
+            return;
+        }
+
+        foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
+            $condicionStr = $this->condiciones[$idAsignatura] ?? null;
+
+            if (!$condicionStr || !isset($this->mapCondicion[$condicionStr])) {
+                $this->erroresValidacion[] = "Debe elegir una condición válida para la asignatura ID {$idAsignatura}.";
                 continue;
             }
 
-            // Validar correlatividades
-            if (!$this->cumpleCorrelativas($this->alumnoSeleccionado->id, $asignaturaId)) {
-                $this->erroresValidacion[] = "El alumno no cumple correlatividades para la asignatura ID $asignaturaId.";
+            $condicion = $this->mapCondicion[$condicionStr];
+
+            // Evitar duplicados
+            $existe = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
+                ->where('id_asignatura', $idAsignatura)
+                ->where('id_carrera', $this->carreraSeleccionada)
+                ->where('anio_cursada', now()->year)
+                ->exists();
+
+            if ($existe) {
+                $this->erroresValidacion[] = "La cursada de la asignatura ID {$idAsignatura} ya existe para este alumno.";
                 continue;
             }
 
-            // Validar plazos de inscripción
-            if (!$this->dentroDePlazo()) {
-                $this->erroresValidacion[] = "El plazo de inscripción está vencido.";
-                continue;
-            }
-
-            // Registrar cursada
             Cursada::create([
-                'alumno_id' => $this->alumnoSeleccionado->id,
-                'carrera_id' => $this->carreraSeleccionada,
-                'asignatura_id' => $asignaturaId,
+                'anio_cursada' => now()->year,
+                'aprobada' => 0,
+                'id_alumno' => $this->alumnoSeleccionado->id,
+                'id_asignatura' => $idAsignatura,
+                'id_carrera' => $this->carreraSeleccionada,
                 'condicion' => $condicion,
             ]);
         }
 
         if (empty($this->erroresValidacion)) {
-            session()->flash('success', 'Inscripción realizada con éxito.');
-            $this->reset(['materiasCarrera', 'asignaturasSeleccionadas', 'condiciones']);
+            $this->mensaje = 'Cursadas registradas correctamente.';
+            $this->asignaturasSeleccionadas = [];
+            $this->condiciones = [];
         }
-    }
-
-    private function cumpleCorrelativas($alumnoId, $asignaturaId)
-    {
-        // Implementar tu validación real de correlatividades aquí
-        return true;
-    }
-
-    private function dentroDePlazo()
-    {
-        // Implementar validación de fechas aquí
-        return true;
     }
 }

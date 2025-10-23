@@ -71,10 +71,11 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'fecha_nacimiento' => 'datetime',
     ];
 
-    public function egresado()
+       public function egresadoinscripto()
     {
-        return $this->hasMany(Egresado::class, 'alumno_id');
+        return $this->hasMany(\App\Models\Egresado::class, 'id_alumno', 'id');
     }
+
 
     public function carreraDefault()
     {
