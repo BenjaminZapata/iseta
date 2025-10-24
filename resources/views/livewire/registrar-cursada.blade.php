@@ -33,7 +33,7 @@
     {{-- 📋 Resultados de búsqueda con scroll --}}
     @if ($nombre || $apellido || $dni)
         <div class="card shadow-sm mb-4 resultados-card">
-            <div class="card-header text-white fw-bold d-flex justify-content-between align-items-center" style="background-color:#140b5c;">
+            <div class="card-header text-white fw-bold d-flex justify-content-between align-items-center">
                 <span>Lista de alumnos</span>
                 <span class="badge bg-light text-dark">{{ count($alumnos) }} {{ count($alumnos)==1 ? 'resultado' : 'resultados' }}</span>
             </div>
@@ -73,9 +73,6 @@
     {{-- 🎓 Alumno seleccionado --}}
     @if ($alumnoSeleccionado)
         <div class="card shadow-sm mb-4 alumno-seleccionado">
-            <div class="card-header text-white fw-bold" style="background-color:#140b5c;">
-                Alumno seleccionado
-            </div>
             <div class="card-body">
                 <div class="datos-alumno mb-3">
                     <strong>Nombre completo:</strong> {{ $alumnoSeleccionado->apellido }}, {{ $alumnoSeleccionado->nombre }}
@@ -108,7 +105,7 @@
             $asignaturasPorAno = $materiasCarrera->groupBy('anio');
         @endphp
         <div class="card shadow-sm mb-4">
-            <div class="card-header text-white fw-bold" style="background-color:#140b5c;">
+            <div class="card-header text-white fw-bold">
                 Asignaturas disponibles
             </div>
             <div class="card-body">
