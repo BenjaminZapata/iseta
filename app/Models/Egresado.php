@@ -16,15 +16,15 @@ class Egresado extends Model
 
     protected $fillable = ['id_alumno', 'id_carrera', 'anio_inscripcion', 'indice_libro_matriz', 'anio_finalizacion', 'estado'];
 
-    public function alumno()
-    {
-        return $this->hasOne(Alumno::class, 'id', 'id_alumno');
-    }
+   public function carrera()
+{
+    return $this->belongsTo(Carrera::class, 'id_carrera', 'id');
+}
 
-    public function carrera()
-    {
-        return $this->hasOne(Carrera::class, 'id', 'id_carrera');
-    }
+public function alumno()
+{
+    return $this->belongsTo(Alumno::class, 'id_alumno', 'id');
+}
 
     public static function estaInscripto($carrera, $alumno = null)
     {
