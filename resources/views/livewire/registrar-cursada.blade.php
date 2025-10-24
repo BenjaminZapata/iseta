@@ -103,7 +103,10 @@
 @if ($materiasCarrera && count($materiasCarrera))
     @php
         // Agrupamos por año obtenido desde la tabla pivote carrera_asignatura_profesores
-        $materiasPorAnio = collect($materiasCarrera)->groupBy(fn($m) => $m->pivot->anio +1);
+       $materiasPorAnio = collect($materiasCarrera)->groupBy(function($m) {
+    return isset($m->pivot) && isset($m->pivot->anio) ? $m->pivot->anio + 1 : 'Sin año';
+});
+
     @endphp
 
     <div class="card shadow-sm mb-4">
