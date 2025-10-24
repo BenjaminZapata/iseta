@@ -189,15 +189,14 @@ class RegistrarCursada extends Component
                 continue;
             }
 
-            Cursada::create([
-                'anio_cursada' => now()->year,
-                'aprobada' => 0,
-                'id_alumno' => $this->alumnoSeleccionado->id,
-                'id_asignatura' => $idAsignatura,
-                'id_carrera' => $this->carreraSeleccionada,
-                'condicion' => $condicion,
-            ]);
-
+           Cursada::create([
+    'anio_cursada' => now()->year,
+    'aprobada' => 3, // 
+    'id_alumno' => $this->alumnoSeleccionado->id,
+    'id_asignatura' => $idAsignatura,
+    'id_carrera' => $this->carreraSeleccionada,
+    'condicion' => $condicion,
+]);
             $asignaturasCursadas[] = $idAsignatura;
         }
 
