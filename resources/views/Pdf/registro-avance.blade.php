@@ -1,71 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<style>
+h3 { text-align: center; font-weight: bold; }
+td, th { border: 1px solid #000; font-size: 9px; padding: 2px; }
+table { border-collapse: collapse; width: 100%; }
+</style>
 
-    @vite('resources/css/app.css')
-    <title>Alumno Regular</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-        }
+<table border="0" cellspacing="0" cellpadding="2">
+<tr>
+    <td width="50%">
+        <b>Dirección General de Cultura y Educación</b><br>
+        Gobierno de la Provincia de Buenos Aires<br>
+        Subsecretaría de Educación
+    </td>
+    <td width="50%" align="right">
+        <b>DIRECCIÓN DE EDUCACIÓN SUPERIOR</b><br>
+        INSTITUTO SUPERIOR DE FORMACIÓN<br>
+        DOCENTE y/o TÉCNICA Nº ........<br><br>
+        <b>A17a</b>
+    </td>
+</tr>
+</table>
 
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-    </style>
-</head>
-<body>
-    <div>
-        <div class="static">
-            @php $logo = public_path('img/logo-pba-mobile.svg'); @endphp
-            <div class="inline-flex justify-between items-center w-full py-2">
-                <div class="flex">
-                    <img class="pl-2 ml-8 transform scale-x-950 scale-150" src="{{$logo}}" alt="Logo ISETA" style="width: 100px; height: 150px">
-                    <p class="text-left pl-3 py-2"><strong> Dirección General de
-                        <br>cultura y Educacion</br>
-                        </strong>
-                        Gobierno de la Provincia
-                        <br>de Buenos Aires</br>
-                        <br>Subsecretaría de Educación</br>
-                    </p>
-                </div>
-                <div class="flex flex-col items-center pr-10 pt-2">
-                    @php $logopdf = public_path('img/iseta-pdf.png'); @endphp
-                    <img class="" src="{{$logopdf}}" alt="Logo ISETA" style="width: 320px; height: 100px">
-                    <p>
-                        <strong> INSTITUTO SUPERIOR EXPERIMENTAL DE <br>TECNOLOGIA ALIMENTARIA</br>
-                            <br>
-                                <span class="underline underline-offset-8">DIRECCIÓN DE EDUCACIÓN SUPERIOR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                            </br>
-                        </strong>
-                    </p>
-                </div>
-            </div>
-            <div class="px-3 pt-4">
-                <h1><strong> CONSTANCIA DE ALUMNO @if ($inscripto) INSCRIPTO @else REGULAR @endif</strong></h1>
-                <p class="pt-3">Se deja constancia de que, a la fecha,
-                    <strong> {{Str::upper($alumno->apellido)}} {{Str::upper($alumno->nombre)}} </strong>
-                    DNI <strong> {{$alumno->dni}} es alumno regular </strong> del <strong> Instituto Superior Experimental de Tecnologia Alimentaria, </strong>
-                    de la Carrera <strong> {{$cursada->carrera->nombre}} </strong>, curso <strong> {{$cursada->asignatura->anio}} </strong>
-                </p>
-                <p>
-                    <br>
-                        A pedido del interesado/a y para ser presentada ante quien corresponda, se extiende la presente constancia en la ciudad de 9 de Julio a los
-                        {{$fecha->format('d')}} días del mes {{Str::upper($fecha->translatedFormat('F'))}} de {{$fecha->format('Y')}}.
-                    </br>
-                </p>
-            </div>
-            <div class="inline-flex justify-between items-center w-full py-30 px-20">
-                <p class="text-center">
-                    Sello del establecimiento
-                </p>
-                <p class="text-center">
-                    Firma y sello aclaratoria del <br>Director / Secretario</br>
-                </p>
-            </div>
-        </div>
-    </div>
-</body>
-</html>
+<h3>REGISTRO DE AVANCE ACADÉMICO DE LOS ALUMNOS</h3>
+
+<table border="1" cellpadding="4">
+<tr>
+    <td width="15%"><b>Carrera:</b> .......................................................</td>
+    <td width="50%"><b>Asignatura:</b> .......................................................</td>
+    <td width="35%"><b>Profesor/a:</b> .......................................................</td>
+</tr>
+</table>
+<br>
+
+<table border="1" cellpadding="2">
+<thead>
+<tr align="center" style="background-color:#f0f0f0;">
+    <th width="4%">N°<br>de<br>Orden</th>
+    <th width="20%">Apellido y nombres</th>
+    <th width="10%">Información<br>cualitativa</th>
+    <th colspan="3" width="18%">PRIMER CUATRIMESTRE</th>
+    <th colspan="3" width="18%">SEGUNDO CUATRIMESTRE</th>
+    <th width="5%">ASISTENCIA</th>
+    <th colspan="2" width="10%">RECUPERATORIOS</th>
+    <th colspan="2" width="8%">Situación FINAL</th>
+    <th width="7%">OBSERVACIONES</th>
+</tr>
+<tr align="center">
+    <th></th>
+    <th></th>
+    <th></th>
+    <th width="5%">Parciales</th>
+    <th width="5%">Asist.</th>
+    <th width="8%">Nota Final<br>1° Cuat.</th>
+    <th width="5%">Parciales</th>
+    <th width="5%">Asist.</th>
+    <th width="8%">Nota Final<br>2° Cuat.</th>
+    <th></th>
+    <th width="5%">Parciales</th>
+    <th width="5%">Asist.</th>
+    <th width="4%">a FINAL</th>
+    <th width="4%">RECURSA</th>
+    <th></th>
+</tr>
+</thead>
+<tbody>
+@for ($i = 1; $i <= 10; $i++)
+<tr>
+    <td align="center">{{ $i }}</td>
+    <td></td><td></td><td></td><td></td><td></td>
+    <td></td><td></td><td></td><td></td>
+    <td></td><td></td><td></td><td></td><td></td>
+</tr>
+@endfor
+</tbody>
+</table>

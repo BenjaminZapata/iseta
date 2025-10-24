@@ -14,6 +14,7 @@ use App\Services\Admin\CursadaRegularService;
 use Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use TCPDF;
 
 use function Spatie\LaravelPdf\Support\pdf;
 
@@ -167,12 +168,18 @@ class AdminPdfController extends Controller
 
     public function registroDeAvance(Cursada $cursada)
     {
-        $alumno = $cursada->alumno;
+        $pdf = new TCPDF('L', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->SetCreator('Laravel');
+        $pdf->SetAuthor('Dirección General de Cultura y Educación');
+        $pdf->SetTitle('Registro de Avance Académico - A17a');
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->AddPage();
 
-        return pdf()
-            ->view('Pdf.alumno-regular', compact('alumno') + ['cursada' => $cursada, 'alumno' => $alumno])
-            ->format('a4')
-            ->name('registro-de-avance.pdf');
-        // ->download();
+        $html = view('Pdf.registro-avance')->render();
+
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        return response($pdf->Output('registro.pdf', 'S'))
+            ->header('Content-Type', 'application/pdf');
     }
 }
