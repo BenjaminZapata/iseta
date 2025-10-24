@@ -157,10 +157,10 @@ class RegistrarCursada extends Component
 
         $mapAsignaturaNombre = $this->materiasCarrera->pluck('nombre', 'id')->toArray();
 
-        $correlativas = DB::table('correlativas')
-            ->whereIn('id_asignatura', $this->asignaturasSeleccionadas)
-            ->get()
-            ->groupBy('id_asignatura');
+ $correlativas = DB::table('correlatividades')
+    ->whereIn('id_asignatura', $this->asignaturasSeleccionadas)
+    ->get()
+    ->groupBy('id_asignatura');
 
         foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
             $nombreAsignatura = $mapAsignaturaNombre[$idAsignatura] ?? "ID {$idAsignatura}";
@@ -207,5 +207,8 @@ class RegistrarCursada extends Component
             $this->condiciones = [];
             $this->calcularAsignaturasBloqueadas();
         }
+
+        // Redirigir a admin.cursadas.index
+    return redirect()->route('admin.cursadas.index');
     }
 }
