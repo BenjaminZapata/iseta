@@ -47,8 +47,8 @@
     <script src="{{ asset('js/ocultar-mensaje.js') }}"></script>
     <script src="{{ asset('js/confirmacion.js') }}"></script>
     <script src="{{ asset('js/filters.js') }}"></script>
+    <script src="{{ asset('js/Admin/btn-contraible.js') }}"></script>
     <script defer src="{{ asset('js/header-avatar.js') }}?v={{ time() }}"></script>
-    <script defer src="{{ asset('js/Admin/btn-contraible.js') }}?v={{ time() }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
     </script>

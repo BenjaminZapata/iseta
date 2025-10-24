@@ -555,39 +555,43 @@ table td {
 .btn_contraible {
   border-radius: 50%;
   width: 42px;
+  /* ancho inicial fijo */
   height: 42px;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
   transition: all 0.3s ease;
   overflow: hidden;
   white-space: nowrap;
 }
 
-/* Cuando se hace hover, el botón se expande */
+/* al hacer hover, solo cambia el borde y permite crecer */
 .btn_contraible:hover {
-  border-radius: 20px;
+  border-radius: 5px;
   width: auto;
-  padding: 10px 16px;
+  min-width: 42px;
+  min-height: 42px;
+  /* ahora sí puede expandirse */
+  padding: 0 12px;
+  /* espacio lateral */
 }
 
-/* Oculta el texto por defecto */
 .btn_contraible .btn-text {
   max-width: 0;
   opacity: 0;
+  margin-left: 0;
   overflow: hidden;
-  white-space: nowrap;
   transition: all 0.3s ease;
 }
 
-/* Muestra el texto en hover */
 .btn_contraible:hover .btn-text {
   max-width: 200px;
+  /* suficiente para el texto */
   opacity: 1;
   margin-left: 6px;
 }
+
 
 
 

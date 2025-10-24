@@ -6,3 +6,5 @@ document.addEventListener('DOMContentLoaded', () => {
   btn.setAttribute('title', btn.textContent.trim()); // Accesibilidad mínima
  });
 });
+
+

@@ -1,9 +1,7 @@
 <?php
 
-use Monolog\Handler\NullHandler;
 use App\Logging\LokiHandler;
-
-use function Laravel\Prompts\error;
+use Monolog\Handler\NullHandler;
 
 return [
 
@@ -77,6 +75,7 @@ return [
         'trace' => [
             'driver' => 'single',
             'path' => storage_path('logs/stacktrace.log'),
+            'days' => 14,
             'level' => 'warning',
             'replace_placeholders' => true,
         ],
@@ -86,7 +85,8 @@ return [
             'path' => storage_path('logs/nostack.log'),
             'level' => 'debug', // o el nivel mínimo que quieras
             'tap' => [App\Logging\NoStacktraceFormatter::class],
-            'bubble' => true
+            'bubble' => true,
+            'days' => 14,
         ],
 
         'daily' => [
@@ -106,7 +106,7 @@ return [
             'replace_placeholders' => true,
         ],*/
 
-       /* 'papertrail' => [
+        /* 'papertrail' => [
             'driver' => 'monolog',
             'level' => env('LOG_LEVEL', 'debug'),
             'handler' => env('LOG_PAPERTRAIL_HANDLER', SyslogUdpHandler::class),
