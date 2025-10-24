@@ -65,3 +65,11 @@
     .tabla-scroll { max-height: 250px; }
     .btn-modificar { font-size: 0.85rem; padding: 0.5rem 1rem; }
 }
+.tooltip-correlativa {
+    font-size: 0.85rem;
+    color: #b00020;
+    margin-top: 5px;
+    padding: 3px 6px;
+    background-color: #ffe6e6;
+    border-radius: 5px;
+}

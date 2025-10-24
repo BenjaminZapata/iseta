@@ -99,65 +99,94 @@
         </div>
     @endif
 
-    {{-- 📚 Asignaturas con acordeón por año --}}
-    @if ($materiasCarrera && count($materiasCarrera))
-        @php
-            $asignaturasPorAno = $materiasCarrera->groupBy('anio');
-        @endphp
-        <div class="card shadow-sm mb-4">
-            <div class="card-header text-white fw-bold">
-                Asignaturas disponibles
-            </div>
-            <div class="card-body">
-                <div class="accordion" id="accordionMaterias">
-                    @foreach ($asignaturasPorAno as $anio => $asignaturas)
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="heading{{ $anio }}">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse{{ $anio }}" aria-expanded="false"
-                                    aria-controls="collapse{{ $anio }}">
-                                    {{ $anio }}° año
-                                </button>
-                            </h2>
-                            <div id="collapse{{ $anio }}" class="accordion-collapse collapse"
-                                aria-labelledby="heading{{ $anio }}" data-bs-parent="#accordionMaterias">
-                                <div class="accordion-body p-0">
-                                    <table class="table table-bordered table-hover mb-0 table-asignaturas">
-                                        <thead class="table-light" style="background-color:#140b5c; color:white;">
+{{-- 📚 Asignaturas disponibles (agrupadas por año desde carrera_asignatura_profesores) --}}
+@if ($materiasCarrera && count($materiasCarrera))
+    @php
+        // Agrupamos por año obtenido desde la tabla pivote carrera_asignatura_profesores
+        $materiasPorAnio = collect($materiasCarrera)->groupBy(fn($m) => $m->pivot->anio +1);
+    @endphp
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header text-white fw-bold" style="background-color: #140b5c;">
+            <i class="bi bi-journal-bookmark-fill"></i> Asignaturas disponibles
+        </div>
+
+        <div class="card-body">
+            <div class="accordion" id="accordionMaterias">
+                @foreach ($materiasPorAnio as $anio => $lista)
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-{{ $anio }}">
+                            <button class="accordion-button collapsed fw-semibold"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#collapse-{{ $anio }}"
+                                aria-expanded="false"
+                                aria-controls="collapse-{{ $anio }}"
+                                style="background-color: #f4f5f9; color: #140b5c;">
+                                {{ is_numeric($anio) ? $anio . '° Año' : $anio }}
+                            </button>
+                        </h2>
+
+                        <div id="collapse-{{ $anio }}" class="accordion-collapse collapse"
+                            aria-labelledby="heading-{{ $anio }}"
+                            data-bs-parent="#accordionMaterias">
+                            <div class="accordion-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover mb-0">
+                                        <thead style="background-color: #140b5c; color: white;">
                                             <tr>
-                                                <th>Asignatura</th>
-                                                <th class="text-center">Seleccionar</th>
-                                                <th>Condición</th>
+                                                <th><i class="bi bi-book me-2"></i>Asignatura</th>
+                                                <th class="text-center" style="width: 120px;">
+                                                    <i class="bi bi-check-square me-2"></i>Seleccionar
+                                                </th>
+                                                <th style="width: 200px;">
+                                                    <i class="bi bi-clipboard-check me-2 center"></i>Condición
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($asignaturas as $asignatura)
-                                                <tr wire:key="asignatura-{{ $asignatura->id }}">
-                                                    <td>{{ $asignatura->nombre }}</td>
-                                                    <td class="text-center">
-                                                        <input type="checkbox" wire:model="asignaturasSeleccionadas" value="{{ $asignatura->id }}">
-                                                    </td>
-                                                    <td>
-                                                        <select wire:model="condiciones.{{ $asignatura->id }}" class="form-select form-select-sm">
-                                                            <option value="">Seleccionar...</option>
-                                                            <option value="1">Regular</option>
-                                                            <option value="0">Libre</option>
-                                                            <option value="2">Itinerante</option>
-                                                            <option value="3">Oyente</option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
+                                          @foreach ($lista as $asignatura)
+<tr wire:key="asignatura-{{ $asignatura->id }}"
+    @if(isset($asignaturasBloqueadas[$asignatura->id])) class="table-warning" @endif>
+    <td class="fw-semibold">{{ $asignatura->nombre }}</td>
+    <td class="text-center">
+        <input type="checkbox"
+            wire:model="asignaturasSeleccionadas"
+            value="{{ (int) $asignatura->id }}"
+            @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
+            title="{{ $asignaturasBloqueadas[$asignatura->id] ?? '' }}">
+    </td>
+    <td>
+    <select wire:model="condiciones.{{ $asignatura->id }}"
+        class="form-select form-select-sm"
+        @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif>
+        <option value="">Seleccionar condición...</option>
+        <option value="1">Regular</option>
+        <option value="0">Libre</option>
+        <option value="2">Itinerante</option>
+        <option value="3">Oyente</option>
+    </select>
+
+    @if(isset($asignaturasBloqueadas[$asignatura->id]))
+        <div class="tooltip-correlativa">
+            <strong>Correlativas faltantes:</strong> {{ $asignaturasBloqueadas[$asignatura->id] }}
+        </div>
+    @endif
+</td>
+</tr>
+@endforeach
+
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
-                </div>
+                    </div>
+                @endforeach
             </div>
         </div>
-    @endif
+    </div>
+@endif
 
     {{-- 🔘 Botones --}}
     <div class="botones-derecha mt-3 d-flex justify-content-end gap-2">
