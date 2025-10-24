@@ -553,7 +553,7 @@ table td {
 /* Botón expandible con ícono */
 /* --- BOTÓN CONTRAÍBLE (complementario) --- */
 .btn_contraible {
-  border-radius: 50%;
+  border-radius: 5px;
   width: 42px;
   /* ancho inicial fijo */
   height: 42px;
