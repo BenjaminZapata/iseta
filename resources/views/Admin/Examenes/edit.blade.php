@@ -5,9 +5,7 @@
     <div class="edit-form-container">
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR FICHA DE EXAMEN'])
-            <div class="perfil__header">
-                <h2>Ficha examen</h2>
-            </div>
+
             <div class="perfil_one br">
                 <form method="post" action="{{ route('admin.examenes.update', ['examen' => $examen->id]) }}">
                     @csrf
@@ -154,7 +152,7 @@
                     Actualizar
                 </button>
             </div>
-        </form>
+            </form>
             <div class="boton-eliminar">
                 @if (!$config['modo_seguro'])
                     <div>
