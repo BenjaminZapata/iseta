@@ -1,5 +1,7 @@
 @extends('Admin.template')
 
+<link rel="stylesheet" href="{{ asset('css/Admin/Examenes/edit-examen.css') }}">
+
 @section('content')
 
     <div class="edit-form-container">
@@ -16,13 +18,15 @@
                     <div class="perfil__info">
                         <div class="perfil_dataname">
                             <label>Nombre:</label>
-                            <span class="campo_info2" title="Modificar alumno">
-                                <a class="capitalize flex items-center"
-                                    href="{{ route('admin.alumnos.edit', ['alumno' => $examen->alumno->id]) }}">
-                                    {{ $examen->alumno->apellidoNombre() }} <i class="ti ti-info-circle"></i>
+                            <span class="campo_info2 flex items-center gap-1">
+                                <span class="capitalize">{{ $examen->alumno->apellidoNombre() }}</span>
+                                <a href="{{ route('admin.alumnos.edit', ['alumno' => $examen->alumno->id]) }}"
+                                    class="icon-link" data-tooltip="Ver o editar alumno">
+                                    <i class="ti ti-external-link"></i>
                                 </a>
                             </span>
                         </div>
+
                         <div class="perfil_dataname border-none">
                             <label>DNI:</label>
                             <span class="campo_info2">{{ $examen->alumno->dniPuntos() }}</span>
@@ -34,19 +38,21 @@
                     <div class="perfil__info">
                         <div class="perfil_dataname">
                             <label>Materia:</label>
-                            <span class="campo_info2" title="Modificar asignatura">
-                                <a class="capitalize flex items-center"
-                                    href="{{ route('admin.asignaturas.edit', ['asignatura' => $examen->asignatura->id]) }}">
-                                    {{ $examen->asignatura->nombre }} <i class="ti ti-info-circle"></i>
+                            <span class="campo_info2 flex items-center gap-1">
+                                <span class="capitalize">{{ $examen->asignatura->nombre }}</span>
+                                <a href="{{ route('admin.asignaturas.edit', ['asignatura' => $examen->asignatura->id]) }}"
+                                    class="icon-link" data-tooltip="Ver o editar asignatura">
+                                    <i class="ti ti-external-link"></i>
                                 </a>
                             </span>
                         </div>
                         <div class="perfil_dataname">
                             <label>Carrera:</label>
-                            <span class="campo_info2" title="Modificar carrera">
-                                <a class="flex items-center"
-                                    href="{{ route('admin.carreras.edit', ['carrera' => $examen->asignatura->carrera->first()->id]) }}">
-                                    {{ $examen->asignatura->carrera->first()->nombre }} <i class="ti ti-info-circle"></i>
+                            <span class="campo_info2 flex items-center gap-1">
+                                <span>{{ $examen->asignatura->carrera->first()->nombre }}</span>
+                                <a href="{{ route('admin.carreras.edit', ['carrera' => $examen->asignatura->carrera->first()->id]) }}"
+                                    class="icon-link" data-tooltip="Ver o editar carrera">
+                                    <i class="ti ti-external-link"></i>
                                 </a>
                             </span>
                         </div>
@@ -176,5 +182,15 @@
     </div>
 
     <script src="{{ asset('js/confirmacion.js') }}"></script>
+    <script>
+        window.addEventListener('beforeunload', function(e) {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            const formChanged = Array.from(inputs).some(i => i.value !== i.defaultValue);
+            if (formChanged) {
+                e.preventDefault();
+                e.returnValue = 'Tenés cambios sin guardar. ¿Seguro que querés salir?';
+            }
+        });
+    </script>
 
 @endsection
