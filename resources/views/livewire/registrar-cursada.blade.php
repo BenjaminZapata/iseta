@@ -2,6 +2,28 @@
 
     <link rel="stylesheet" href="{{ asset('css/Admin/cursadas.css') }}">
 
+    {{-- ✅ Mensaje de éxito --}}
+    @if ($mensaje)
+        <div class="alert alert-success alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert" style="z-index: 1050;">
+            {{ $mensaje }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    @endif
+
+    {{-- ✅ Errores de validación --}}
+    @if (!empty($erroresValidacion))
+        <div class="alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3" role="alert" style="z-index: 1050;">
+            <ul class="mb-0">
+                @foreach ($erroresValidacion as $error)
+                    @if(is_string($error))
+                        <li>{{ $error }}</li>
+                    @endif
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+    @endif
+
     {{-- 🔍 Buscar alumno --}}
     <div class="card shadow-sm mb-4 buscador-card">
         <div class="card-body">
@@ -102,11 +124,9 @@
 {{-- 📚 Asignaturas disponibles (agrupadas por año desde carrera_asignatura_profesores) --}}
 @if ($materiasCarrera && count($materiasCarrera))
     @php
-        // Agrupamos por año obtenido desde la tabla pivote carrera_asignatura_profesores
        $materiasPorAnio = collect($materiasCarrera)->groupBy(function($m) {
-    return isset($m->pivot) && isset($m->pivot->anio) ? $m->pivot->anio + 1 : 'Sin año';
-});
-
+           return isset($m->pivot) && isset($m->pivot->anio) ? $m->pivot->anio + 1 : 'Sin año';
+       });
     @endphp
 
     <div class="card shadow-sm mb-4">
@@ -159,7 +179,7 @@
             @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
             title="{{ $asignaturasBloqueadas[$asignatura->id] ?? '' }}">
     </td>
-    <td>
+<td>
     <select wire:model="condiciones.{{ $asignatura->id }}"
         class="form-select form-select-sm"
         @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif>
@@ -170,12 +190,26 @@
         <option value="3">Oyente</option>
     </select>
 
+    {{-- ⚠️ Error de condición al guardar --}}
+    @php
+        $errorAsignatura = collect($erroresValidacion)
+            ->filter(fn($e) => is_string($e))
+            ->first(fn($e) => str_contains($e, $asignatura->nombre));
+    @endphp
+
+    @if ($errorAsignatura)
+        <div class="text-danger small mt-1">
+            {{ $errorAsignatura }}
+        </div>
+    @endif
+
     @if(isset($asignaturasBloqueadas[$asignatura->id]))
-        <div class="tooltip-correlativa">
+        <div class="tooltip-correlativa mt-1">
             <strong>Correlativas faltantes:</strong> {{ $asignaturasBloqueadas[$asignatura->id] }}
         </div>
     @endif
 </td>
+
 </tr>
 @endforeach
 

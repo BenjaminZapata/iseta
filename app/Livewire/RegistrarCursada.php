@@ -131,83 +131,88 @@ class RegistrarCursada extends Component
 }
 
 
-    public function guardarCursada()
-    {
-        $this->erroresValidacion = [];
-        $this->mensaje = null;
+public function guardarCursada()
+{
+    $this->erroresValidacion = [];
+    $this->mensaje = null;
 
-        if (!$this->alumnoSeleccionado) {
-            $this->erroresValidacion[] = 'Debe seleccionar un alumno.';
-            return;
-        }
-
-        if (!$this->carreraSeleccionada) {
-            $this->erroresValidacion[] = 'Debe seleccionar una carrera.';
-            return;
-        }
-
-        if (count($this->asignaturasSeleccionadas) === 0) {
-            $this->erroresValidacion[] = 'Debe seleccionar al menos una asignatura.';
-            return;
-        }
-
-        $asignaturasCursadas = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
-            ->pluck('id_asignatura')
-            ->toArray();
-
-        $mapAsignaturaNombre = $this->materiasCarrera->pluck('nombre', 'id')->toArray();
-
- $correlativas = DB::table('correlatividades')
-    ->whereIn('id_asignatura', $this->asignaturasSeleccionadas)
-    ->get()
-    ->groupBy('id_asignatura');
-
-        foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
-            $nombreAsignatura = $mapAsignaturaNombre[$idAsignatura] ?? "ID {$idAsignatura}";
-            $condicionStr = $this->condiciones[$idAsignatura] ?? null;
-
-            if (!$condicionStr || !isset($this->mapCondicion[$condicionStr])) {
-                $this->erroresValidacion[] = "Debe elegir una condición válida para la asignatura {$nombreAsignatura}.";
-                continue;
-            }
-
-            if (isset($this->asignaturasBloqueadas[$idAsignatura])) {
-                $this->erroresValidacion[] = "No se puede registrar {$nombreAsignatura} porque faltan las correlativas: {$this->asignaturasBloqueadas[$idAsignatura]}";
-                continue;
-            }
-
-            $condicion = $this->mapCondicion[$condicionStr];
-
-            $existe = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
-                ->where('id_asignatura', $idAsignatura)
-                ->where('id_carrera', $this->carreraSeleccionada)
-                ->where('anio_cursada', now()->year)
-                ->exists();
-
-            if ($existe) {
-                $this->erroresValidacion[] = "La cursada de {$nombreAsignatura} ya existe para este alumno este año.";
-                continue;
-            }
-
-           Cursada::create([
-    'anio_cursada' => now()->year,
-    'aprobada' => 3, // 
-    'id_alumno' => $this->alumnoSeleccionado->id,
-    'id_asignatura' => $idAsignatura,
-    'id_carrera' => $this->carreraSeleccionada,
-    'condicion' => $condicion,
-]);
-            $asignaturasCursadas[] = $idAsignatura;
-        }
-
-        if (empty($this->erroresValidacion)) {
-            $this->mensaje = 'Cursadas registradas correctamente.';
-            $this->asignaturasSeleccionadas = [];
-            $this->condiciones = [];
-            $this->calcularAsignaturasBloqueadas();
-        }
-
-        // Redirigir a admin.cursadas.index
-    return redirect()->route('admin.cursadas.index');
+    if (!$this->alumnoSeleccionado) {
+        $this->erroresValidacion[] = 'Debe seleccionar un alumno.';
+        return;
     }
+
+    if (!$this->carreraSeleccionada) {
+        $this->erroresValidacion[] = 'Debe seleccionar una carrera.';
+        return;
+    }
+
+    if (count($this->asignaturasSeleccionadas) === 0) {
+        $this->erroresValidacion[] = 'Debe seleccionar al menos una asignatura.';
+        return;
+    }
+
+    $asignaturasCursadas = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
+        ->pluck('id_asignatura')
+        ->toArray();
+
+    $mapAsignaturaNombre = $this->materiasCarrera->pluck('nombre', 'id')->toArray();
+
+    foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
+        $nombreAsignatura = $mapAsignaturaNombre[$idAsignatura] ?? "ID {$idAsignatura}";
+        $condicionStr = $this->condiciones[$idAsignatura] ?? null;
+
+        // ✅ Validar condición
+        if (!isset($this->condiciones[$idAsignatura]) || $this->condiciones[$idAsignatura] === '') {
+            $this->erroresValidacion[] = "Debe elegir una condición válida para la asignatura {$nombreAsignatura}.";
+            continue;
+        }
+
+        // ✅ Validar correlativas
+        if (isset($this->asignaturasBloqueadas[$idAsignatura])) {
+            $this->erroresValidacion[] = "No se puede registrar {$nombreAsignatura} porque faltan las correlativas: {$this->asignaturasBloqueadas[$idAsignatura]}";
+            continue;
+        }
+
+        $condicion = $this->mapCondicion[$condicionStr];
+
+        // ✅ Verificar si ya existe la cursada
+        $existe = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
+            ->where('id_asignatura', $idAsignatura)
+            ->where('id_carrera', $this->carreraSeleccionada)
+            ->where('anio_cursada', now()->year)
+            ->exists();
+
+        if ($existe) {
+            $this->erroresValidacion[] = "La cursada de {$nombreAsignatura} ya existe para este alumno este año.";
+            continue;
+        }
+
+        // ✅ Crear cursada
+        Cursada::create([
+            'anio_cursada' => now()->year,
+            'aprobada' => 3,
+            'id_alumno' => $this->alumnoSeleccionado->id,
+            'id_asignatura' => $idAsignatura,
+            'id_carrera' => $this->carreraSeleccionada,
+            'condicion' => $condicion,
+        ]);
+
+        $asignaturasCursadas[] = $idAsignatura;
+    }
+
+    // ✅ Solo redirigir si no hay errores
+    if (!empty($this->erroresValidacion)) {
+        $this->mensaje = null; // no mostrar mensaje de éxito
+        return; // Livewire se queda en la vista mostrando errores
+    }
+
+    // Guardado exitoso
+    $this->mensaje = 'Cursadas registradas correctamente.';
+    $this->asignaturasSeleccionadas = [];
+    $this->condiciones = [];
+    $this->calcularAsignaturasBloqueadas();
+
+    return redirect()->route('admin.cursadas.index');
+}
+
 }
