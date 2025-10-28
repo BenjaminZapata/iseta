@@ -11,6 +11,7 @@ class Cursada extends Model
     protected $table = 'cursadas';
 
     use HasFactory;
+    use \Awobaz\Compoships\Compoships;
 
     protected $fillable = [
         'anio_cursada',
@@ -28,6 +29,12 @@ class Cursada extends Model
     {
         return $this->hasOne(Alumno::class, 'id', 'id_alumno');
     }
+
+    public function cursadas()
+    {
+        return $this->hasMany(Cursada::class, ['id_carrera', 'id_asignatura', 'anio_cursada'], ['id_carrera', 'id_asignatura', 'anio_cursada']);
+    }
+
 
     public function carrera(): BelongsTo
     {

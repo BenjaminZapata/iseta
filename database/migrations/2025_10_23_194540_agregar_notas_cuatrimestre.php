@@ -15,6 +15,7 @@ return new class extends Migration
             $table->tinyInteger('primer_cuatrimestre_nota')->nullable(true);
             $table->tinyInteger('segundo_cuatrimestre_nota')->nullable(true);
             $table->tinyText('observaciones')->nullable(true);
+            $table->index(['anio_cursada']);
         });
     }
 
