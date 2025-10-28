@@ -71,10 +71,11 @@ class Alumno extends Authenticatable implements MustVerifyEmail
         'fecha_nacimiento' => 'datetime',
     ];
 
-    public function egresado()
+       public function egresadoinscripto()
     {
-        return $this->hasOne(Egresado::class, 'id_alumno', 'id');
+        return $this->hasMany(\App\Models\Egresado::class, 'id_alumno', 'id');
     }
+
 
     public function carreraDefault()
     {
@@ -113,9 +114,14 @@ class Alumno extends Authenticatable implements MustVerifyEmail
     }
 
     public function carreras()
-    {
-        return $this->hasMany(Egresado::class, 'id_alumno')->with('carrera');
-    }
+{
+    return $this->belongsToMany(
+        Carrera::class,
+        'egresadoinscripto',    // nombre exacto de la tabla pivot
+        'id_alumno',             // FK en la pivot hacia alumno
+        'id_carrera'             // FK en la pivot hacia carrera
+    );
+}
 
     public function carrerasIncriptas()
     {
