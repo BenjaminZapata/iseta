@@ -1,7 +1,21 @@
 <style>
 h3 { text-align: center; font-weight: bold; }
-td, th { border: 1px solid #000; font-size: 9px; padding: 2px; }
-table { border-collapse: collapse; width: 100%; }
+th, td {
+  text-align: center;      /* 🔹 centra horizontalmente */
+  vertical-align: middle;  /* 🔹 centra verticalmente */
+  padding: 6px;            /* 🔹 controla espacio interno sin cambiar fuente */
+  font-size: 14px;         /* 🔹 tamaño fijo de fuente */
+  height: 35px;            /* 🔹 altura fija o ajustable de celda */
+  overflow-wrap: break-word; /* 🔹 permite que el texto se ajuste dentro */
+}
+th {
+  background-color: #f0f0f0;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed; /* 🔹 hace que el ancho se distribuya sin afectar el texto */
+}
 </style>
 
 <table border="0" cellspacing="0" cellpadding="2">
@@ -33,28 +47,27 @@ table { border-collapse: collapse; width: 100%; }
 
 <table border="1" cellpadding="2">
 <thead>
-<tr align="center" style="background-color:#f0f0f0;">
-    <th width="4%">N°<br>de<br>Orden</th>
-    <th width="20%">Apellido y nombres</th>
-    <th width="10%">Información<br>cualitativa</th>
+<tr>
+    <th rowspan="2" width="2%">N°<br>de<br>Orden</th>
+    <th rowspan="2" width="20%" style="text-align: center;">
+        <div style="font-size:40pt">&nbsp;</div>
+        Apellido y nombres
+    </th>
+    <th rowspan="2" width="10%">Información<br>cualitativa</th>
     <th colspan="3" width="18%">PRIMER CUATRIMESTRE</th>
     <th colspan="3" width="18%">SEGUNDO CUATRIMESTRE</th>
-    <th width="5%">ASISTENCIA</th>
+    <th rowspan="2" width="5%">ASISTENCIA</th>
     <th colspan="2" width="10%">RECUPERATORIOS</th>
     <th colspan="2" width="8%">Situación FINAL</th>
     <th width="7%">OBSERVACIONES</th>
 </tr>
 <tr align="center">
-    <th></th>
-    <th></th>
-    <th></th>
     <th width="5%">Parciales</th>
     <th width="5%">Asist.</th>
     <th width="8%">Nota Final<br>1° Cuat.</th>
     <th width="5%">Parciales</th>
     <th width="5%">Asist.</th>
     <th width="8%">Nota Final<br>2° Cuat.</th>
-    <th></th>
     <th width="5%">Parciales</th>
     <th width="5%">Asist.</th>
     <th width="4%">a FINAL</th>
@@ -65,8 +78,10 @@ table { border-collapse: collapse; width: 100%; }
 <tbody>
 @for ($i = 1; $i <= 10; $i++)
 <tr>
-    <td align="center">{{ $i }}</td>
-    <td></td><td></td><td></td><td></td><td></td>
+    <td width="2%"></td>
+    <td>
+    </td>
+    <td></td><td></td><td></td><td></td>
     <td></td><td></td><td></td><td></td>
     <td></td><td></td><td></td><td></td><td></td>
 </tr>
