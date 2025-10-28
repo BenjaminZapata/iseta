@@ -90,38 +90,52 @@ class RegistrarCursada extends Component
         }
     }
 
-    private function calcularAsignaturasBloqueadas()
-    {
-        if (!$this->alumnoSeleccionado) return;
+   private function calcularAsignaturasBloqueadas()
+{
+    if (!$this->alumnoSeleccionado) return;
 
-        $asignaturasCursadas = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
-            ->pluck('id_asignatura')
-            ->toArray();
+    $asignaturasCursadas = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
+        ->pluck('id_asignatura')
+        ->toArray();
 
-        $this->asignaturasBloqueadas = [];
+    $this->asignaturasBloqueadas = [];
 
-        $correlativas = DB::table('correlatividades')
-            ->whereIn('id_asignatura', $this->materiasCarrera->pluck('id'))
-            ->get()
-            ->groupBy('id_asignatura');
+    $correlativas = DB::table('correlatividades')
+        ->whereIn('id_asignatura', $this->materiasCarrera->pluck('id'))
+        ->get()
+        ->groupBy('id_asignatura');
 
-        $mapAsignaturaNombre = $this->materiasCarrera->pluck('nombre', 'id')->toArray();
+    $mapAsignaturaNombre = $this->materiasCarrera->pluck('nombre', 'id')->toArray();
 
-        foreach ($this->materiasCarrera as $asig) {
-            $faltantes = [];
+    // 🔹 Creamos un mapa de año por asignatura (usamos el pivot->anio)
+    $mapAnioAsignatura = $this->materiasCarrera->mapWithKeys(function ($m) {
+        return [$m->id => $m->pivot->anio ?? null];
+    });
 
-            foreach ($correlativas[$asig->id] ?? [] as $c) {
-                $idCorrelativa = $c->id_asignatura_correlativa;
-                if (!in_array($idCorrelativa, $asignaturasCursadas)) {
-                    $faltantes[] = $mapAsignaturaNombre[$idCorrelativa] ?? "ID {$idCorrelativa}";
-                }
+    foreach ($this->materiasCarrera as $asig) {
+        $faltantes = [];
+
+        foreach ($correlativas[$asig->id] ?? [] as $c) {
+            $idCorrelativa = $c->id_asignatura_correlativa;
+
+            // ✅ Si ambas son de primer año, no bloquea
+            $anioAsig = $mapAnioAsignatura[$asig->id] ?? null;
+            $anioCorr = $mapAnioAsignatura[$idCorrelativa] ?? null;
+            if ($anioAsig === 0 && $anioCorr === 0) {
+                continue;
             }
 
-            if (!empty($faltantes)) {
-                $this->asignaturasBloqueadas[$asig->id] = implode(', ', $faltantes);
+            if (!in_array($idCorrelativa, $asignaturasCursadas)) {
+                $faltantes[] = $mapAsignaturaNombre[$idCorrelativa] ?? "ID {$idCorrelativa}";
             }
         }
+
+        if (!empty($faltantes)) {
+            $this->asignaturasBloqueadas[$asig->id] = implode(', ', $faltantes);
+        }
     }
+}
+
 
     public function guardarCursada()
 {
