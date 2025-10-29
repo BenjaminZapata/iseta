@@ -144,3 +144,50 @@ input[type="checkbox"] {
     accent-color: #007bff;
     /* Color personalizado si el navegador lo soporta */
 }
+
+/* Boton ayuda */
+
+.btn-ayuda {
+ position: fixed;
+ bottom: 20px;
+ right: 20px;
+ background-color: #150a5c;
+ color: white;
+ border-radius: 50%;
+ width: 50px;
+ height: 50px;
+ font-size: 1.5rem;
+ border: none;
+ cursor: pointer;
+ box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+ z-index: 1000;
+}
+
+.modal-ayuda {
+ position: fixed;
+ bottom: 80px;
+ right: 20px;
+ width: 300px;
+ background: white;
+ border: 1px solid #ccc;
+ border-radius: 8px;
+ padding: 1rem;
+ box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+ z-index: 1000;
+}
+
+.modal-content h3 {
+ margin-top: 0;
+ font-size: 1.1rem;
+ margin-bottom: 0.5rem;
+}
+
+.btn-close {
+ margin-top: 1rem;
+ background-color: #dc3545;
+ color: white;
+ border: none;
+ padding: 0.5rem 1rem;
+ border-radius: 4px;
+ cursor: pointer;
+}

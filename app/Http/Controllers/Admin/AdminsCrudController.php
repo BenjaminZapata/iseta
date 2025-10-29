@@ -8,6 +8,9 @@ use App\Repositories\Admin\AdminRepository;
 use App\Models\Configuracion;
 use Illuminate\Http\Request;
 use Validator;
+use App\Mail\Admins;
+use Illuminate\Support\Facades\Mail;
+use Log;
 
 class AdminsCrudController extends Controller
 {
@@ -75,6 +78,13 @@ class AdminsCrudController extends Controller
             'username' => 'Usuario'
         ]);
 
+        try {
+            // Enviar mail con las credenciales o aviso
+            Mail::to($validated['email'])->queue(new Admins($validated));
+        } catch (\Throwable $th) {
+            Log::error('Error al enviar mail de creación de usuario: ' . $th->getMessage());
+        }
+
         $validated['password'] = bcrypt($validated['password']);
         $validated['rol'] = $roles[$validated['rol']];
 
@@ -117,6 +127,13 @@ public function update(Request $request, Admin $admin)
     if ($validator->fails()) {
         return response()->json(['success' => false, 'errors' => $validator->errors()]);
     }
+     try {
+    // Enviar mail de modificación de admin
+    $data = $validator->validated();
+    Mail::to($data['email'])->queue(new Admins($data, 'modificado'));
+} catch (\Throwable $th) {
+    Log::error('Error al enviar mail de modificación de admin: ' . $th->getMessage());
+}
 
     $data = $validator->validated();
 
@@ -132,8 +149,6 @@ public function update(Request $request, Admin $admin)
 
     return response()->json(['success' => true, 'message' => 'Administrador modificado correctamente']);
 }
-
-
 
 
     /**
