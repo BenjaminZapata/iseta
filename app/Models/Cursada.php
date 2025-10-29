@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use \Awobaz\Compoships\Compoships;
 
 class Cursada extends Model
 {
     protected $table = 'cursadas';
 
     use HasFactory;
-    use \Awobaz\Compoships\Compoships;
 
     protected $fillable = [
         'anio_cursada',
