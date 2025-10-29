@@ -154,21 +154,35 @@ public function update(Request $request, Admin $admin)
     /**
      * Eliminar administrador
      */
-    public function destroy(Admin $admin)
-    {
-        if (Admin::count() <= 1) {
-            return redirect()->back()->with('error', 'Debe haber como mínimo una cuenta de administrador');
-        }
-
-        $admin->delete();
-
-        return redirect()->back()->with('mensaje', 'Se ha eliminado el administrador');
+ public function destroy(Admin $admin)
+{
+    if (Admin::count() <= 1) {
+        return redirect()->back()->with('error', 'Debe haber como mínimo una cuenta de administrador');
     }
-    public function eliminarMasivo(Request $request)
-    {
-        $ids = explode(',', $request->ids);
-        Admin::whereIn('id', $ids)->delete();
-        
-        return redirect()->back()->with('success', 'Usuarios eliminados correctamente.');
+
+    if ($admin->id === auth()->id()) {
+        return redirect()->back()->with('error', 'No podés eliminar tu propia cuenta mientras estás logueado');
     }
+
+    $admin->delete();
+
+    return redirect()->back()->with('mensaje', 'Se ha eliminado el administrador');
+}
+  public function eliminarMasivo(Request $request)
+{
+    $ids = explode(',', $request->ids);
+    $usuarioActualId = auth()->id();
+
+    // Filtrar el ID del usuario actual
+    $idsFiltrados = array_filter($ids, fn($id) => (int)$id !== $usuarioActualId);
+
+    if (empty($idsFiltrados)) {
+        return redirect()->back()->with('error', 'No se puede eliminar tu propia cuenta');
+    }
+
+    Admin::whereIn('id', $idsFiltrados)->delete();
+
+    return redirect()->back()->with('success', 'Usuarios eliminados correctamente.');
+}
+
 }
