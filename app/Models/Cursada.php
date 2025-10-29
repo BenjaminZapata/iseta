@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use \Awobaz\Compoships\Compoships;
 
 class Cursada extends Model
 {
     protected $table = 'cursadas';
+
     use HasFactory;
 
     protected $fillable = [
@@ -17,13 +19,22 @@ class Cursada extends Model
         'id_alumno',
         'id_asignatura',
         'id_carrera',
-        'condicion'
+        'condicion',
+        'primer_cuatrimestre_nota',
+        'segundo_cuatrimestre_nota',
+        'observaciones',
     ];
 
     public function alumno()
     {
         return $this->hasOne(Alumno::class, 'id', 'id_alumno');
     }
+
+    public function cursadas()
+    {
+        return $this->hasMany(Cursada::class, ['id_carrera', 'id_asignatura', 'anio_cursada'], ['id_carrera', 'id_asignatura', 'anio_cursada']);
+    }
+
 
     public function carrera(): BelongsTo
     {
