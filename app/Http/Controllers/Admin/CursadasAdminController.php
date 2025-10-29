@@ -136,7 +136,7 @@ class CursadasAdminController extends BaseController
 
         $asignatura = Asignatura::where('id', $request->asignatura)->with('correlativas.asignatura')->first();
         $alumno = Alumno::find($request->alumno);
- if (!$asignatura) {
+    if (!$asignatura) {
         return redirect()->back()->with('error', 'La asignatura seleccionada no existe')->withInput();
     }
 

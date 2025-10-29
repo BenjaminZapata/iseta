@@ -35,7 +35,6 @@ class Cursada extends Model
         return $this->hasMany(Cursada::class, ['id_carrera', 'id_asignatura', 'anio_cursada'], ['id_carrera', 'id_asignatura', 'anio_cursada']);
     }
 
-
     public function carrera(): BelongsTo
     {
         return $this->belongsTo(Carrera::class, 'id_carrera', 'id');
