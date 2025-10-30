@@ -2,21 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Controllers\Controller;
-use App\Models\Asignatura;
 use App\Models\Alumno;
+use App\Models\Asignatura;
+use App\Models\Carrera;
+use App\Models\Configuracion;
 use App\Models\Cursada;
 use App\Models\Examen;
 use App\Models\Mesa;
-use App\Models\Carrera;
-use App\Models\Configuracion;
-use Carbon;
-use function Spatie\LaravelPdf\Support\pdf;
 use App\Services\Admin\CursadaRegularService;
-
+use App\Services\Admin\Pdfs\RegistroAvancePdf;
+use Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use PSpell\Config;
+use TCPDF;
+
+use App\Services\Admin\Pdfs;
+use function Spatie\LaravelPdf\Support\pdf;
 
 class AdminPdfController extends Controller
 {
@@ -24,7 +27,8 @@ class AdminPdfController extends Controller
     {
         $this->middleware('auth:admin');
     }
-    function acta_volante(Request $request, Mesa $mesa)
+
+    public function acta_volante(Request $request, Mesa $mesa)
     {
         // Traigo todos los exámenes de esa mesa que cumplan con condicion == 1
         $examenes = Examen::with('alumno')
@@ -47,7 +51,7 @@ class AdminPdfController extends Controller
             ->name('acta-volante-regular.pdf');
     }
 
-    function actaVolantePromocion(Request $request, Mesa $mesa)
+    public function actaVolantePromocion(Request $request, Mesa $mesa)
     {
         $alumnos = [];
 
@@ -63,7 +67,8 @@ class AdminPdfController extends Controller
                     ->where('condicion', 2);
             }])
             ->get();
-            Log::info($examenes);
+        Log::info($examenes);
+
         return pdf()
             ->view('Pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'PROMOCION'])
             ->name('acta-volante-promocion.pdf');
@@ -86,24 +91,27 @@ class AdminPdfController extends Controller
                     ->where('condicion', 0);
             }])
             ->get();
+
         // para cada registro
         return pdf()
             ->view('Pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'LIBRE'])
             ->name('acta-volante-libre.pdf');
     }
+
     public function constanciaRegular(Alumno $alumno, Carrera $carrera, Configuracion $config)
     {
         $checker = new CursadaRegularService($alumno, $config);
         $regular = $checker->esCursadaRegular();
-        if (!$regular) {
+        if (! $regular) {
             return redirect()->back()->with('aviso', 'El alumno no tiene condicion de regular');
         }
         $fecha = Carbon\Carbon::now();
+
         return pdf()
             ->view('Pdf.alumno-regular', compact('alumno') + ['fecha' => $fecha, 'cursada' => $regular['cursada'], 'inscripto' => $regular['inscripto']])
             ->format('a4')
             ->name('constancia-regular.pdf');
-        //->download();
+        // ->download();
     }
 
     public function analitico(Alumno $alumno)
@@ -125,7 +133,7 @@ class AdminPdfController extends Controller
             ->groupBy('examenes.id_asignatura', 'asignaturas.nombre', 'asignaturas.anio', 'examenes.fecha')
             ->get();
 
-        $porcentaje = number_format(count($examenes) / max(count($materias), 1) * 100, 2, '.', '') . '%';
+        $porcentaje = number_format(count($examenes) / max(count($materias), 1) * 100, 2, '.', '').'%';
 
         $materiasExamenes = [];
         foreach ($materias as $materia) {
@@ -145,7 +153,7 @@ class AdminPdfController extends Controller
 
         // Imagen en base64
         $imgPath = public_path('img/pdf.png');
-        $src = 'data:image/png;base64,' . base64_encode(file_get_contents($imgPath));
+        $src = 'data:image/png;base64,'.base64_encode(file_get_contents($imgPath));
 
         // Mostrar el PDF en el navegador
         return pdf()
@@ -159,5 +167,15 @@ class AdminPdfController extends Controller
             ])
             ->format($formato)
             ->name("analitico_{$alumno->apellido}_{$alumno->nombre}.pdf");
+    }
+
+    public function registroDeAvance(Cursada $cursada)
+    {
+        $pdfBuilder = new RegistroAvancePdf();
+        $pdfBuilder->build($cursada);
+        $pdf = $pdfBuilder->getPdf();
+
+        return response($pdf->Output('registro.pdf', 'S'))
+            ->header('Content-Type', 'application/pdf');
     }
 }

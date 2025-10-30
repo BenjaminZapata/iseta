@@ -67,19 +67,19 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     // -----------------------------
     // PRECEPTOR
     // -----------------------------
-/*     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/alumnos/index', [AlumnoPreceptorController::class, 'index'])
-            ->name('preceptor.alumnos.index');
-    }); */
+    /*     Route::middleware(['auth:admin'])->group(function () {
+            Route::get('/alumnos/index', [AlumnoPreceptorController::class, 'index'])
+                ->name('preceptor.alumnos.index');
+        }); */
 
     // -----------------------------
     // SECRETARIO
     // -----------------------------
-/*     Route::middleware(['auth:admin'])->group(function () {
-        Route::get('/alumnos/index', [AlumnoSecretarioController::class, 'index'])
-            ->name('secretario.alumnos.index');
-    });
- */
+    /*     Route::middleware(['auth:admin'])->group(function () {
+            Route::get('/alumnos/index', [AlumnoSecretarioController::class, 'index'])
+                ->name('secretario.alumnos.index');
+        });
+     */
     // -----------------------------
     // EGRESADOS
     // -----------------------------
@@ -98,10 +98,9 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
         return redirect()->route('admin.profesores.index')->with('aviso', 'El profesor no existe o ha sido eliminado');
     });
     Route::post('admin/profesores/{profesor}/vincular-asignaturas', [ProfesoresCrudController::class, 'vincularAsignaturas'])
-    ->name('admin.profesores.vincular-asignaturas');
-Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [ProfesoresCrudController::class, 'desvincularAsignatura'])
-    ->name('admin.profesores.desvincular-asignatura');
-    
+        ->name('admin.profesores.vincular-asignaturas');
+    Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [ProfesoresCrudController::class, 'desvincularAsignatura'])
+        ->name('admin.profesores.desvincular-asignatura');
 
     // -----------------------------
     // CARRERAS
@@ -114,7 +113,7 @@ Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [Profes
 
     Route::post('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignatura'])
         ->name('admin.carreras.addAsignatura');
-    Route::get  ('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
+    Route::get('carreras/add_asignatura/{carrera}', [CarrerasCrudController::class, 'addAsignaturaView'])
         ->name('admin.carreras.addAsignaturaView');
 
     Route::get('carreras/create_asignatura/{carrera}', [CarrerasCrudController::class, 'createAsignaturaView'])
@@ -130,9 +129,8 @@ Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [Profes
         return Storage::download($carrera->resolucion_archivo);
     })->name('admin.carreras.resolucion');
 
-  Route::delete('/admin/carreras/{carrera}/asignaturas/{asignatura}', [CarrerasCrudController::class, 'destroyAsignatura'])
-    ->name('admin.carreras.destroyAsignatura');
-
+    Route::delete('/admin/carreras/{carrera}/asignaturas/{asignatura}', [CarrerasCrudController::class, 'destroyAsignatura'])
+        ->name('admin.carreras.destroyAsignatura');
 
     Route::get('carreras/resolucion-delete/{carrera}', function (Request $request, Carrera $carrera) {
         Storage::delete($carrera->resolucion_archivo);
@@ -170,7 +168,7 @@ Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [Profes
     Route::get('cursadas/{cursada}/edit', [CursadasAdminController::class, 'edit'])->name('admin.cursadas.edit');
     Route::put('cursadas/{cursada}/edit', [CursadasAdminController::class, 'update'])->name('admin.cursadas.update');
     Route::delete('cursadas/{cursada}', [CursadasAdminController::class, 'destroy'])->name('admin.cursadas.destroy');
-
+    Route::get('cursadas/{cursada}/registroAcademico', [AdminPdfController::class, 'registroDeAvance'])->name('admin.cursadas.registroAcademico');
     Route::get('cursadas/{asignatura}', [AdminCursadasLotes::class, 'vista'])->name('admin.cursadas.masivo');
     Route::post('masivo/cursadas', [AdminCursadasLotes::class, 'cargar'])->name('admin.cursadas.masivo.post');
 
@@ -196,9 +194,8 @@ Route::post('profesores/{profesor}/desvincular-asignatura/{asignatura}', [Profes
     // ADMINS
     // -----------------------------
     Route::resource('admins', AdminsCrudController::class, ['as' => 'admin'])->except('show');
-Route::delete('admin/admins/eliminar-masivo', [AdminsCrudController::class, 'eliminarMasivo'])
-    ->name('admin.admins.eliminarMasivo');
-
+    Route::delete('admin/admins/eliminar-masivo', [AdminsCrudController::class, 'eliminarMasivo'])
+        ->name('admin.admins.eliminarMasivo');
 
     // -----------------------------
     // CONFIGURACION
