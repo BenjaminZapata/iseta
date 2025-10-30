@@ -15,29 +15,19 @@
                     </legend>
 
                     <div class="row g-3 align-items-end">
-
                         <div class="col-md-4">
-                            <label for="dni" class="form-label">
-                                DNI
-                            </label>
-                            <input type="text" id="dni" wire:model.live="dni" class="form-control"
-                                placeholder="Ej: 47260126">
+                            <label for="dni" class="form-label">DNI</label>
+                            <input type="text" id="dni" wire:model.live="dni" class="form-control" placeholder="Ej: 47260126">
                         </div>
 
                         <div class="col-md-4">
-                            <label for="nombre" class="form-label">
-                                Nombre
-                            </label>
-                            <input type="text" id="nombre" wire:model.live="nombre" class="form-control"
-                                placeholder="Ej: Javier">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" id="nombre" wire:model.live="nombre" class="form-control" placeholder="Ej: Javier">
                         </div>
 
                         <div class="col-md-4">
-                            <label for="apellido" class="form-label">
-                                Apellido
-                            </label>
-                            <input type="text" id="apellido" wire:model.live="apellido" class="form-control"
-                                placeholder="Ej: Torres">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" id="apellido" wire:model.live="apellido" class="form-control" placeholder="Ej: Torres">
                         </div>
                     </div>
                 </fieldset>
@@ -71,7 +61,7 @@
                             <td>{{ $alumno->apellido }}</td>
                             <td>{{ $alumno->dni }}</td>
                             <td class="text-center">
-                                <button wire:click="seleccionarAlumno({{ $alumno->id }})" class="btn-modificar">
+                                <button type="button" wire:click="seleccionarAlumno({{ $alumno->id }})" class="btn-modificar">
                                     <i class="bi bi-check-circle"></i> Seleccionar
                                 </button>
                             </td>
@@ -118,7 +108,7 @@
 
                 @if ($mostrarBoton)
                 <div class="text-end">
-                    <button wire:click="verMaterias" class="btn_blue">
+                    <button type="button" wire:click="verMaterias" class="btn_blue">
                         <i class="bi bi-book"></i> Ver asignaturas
                     </button>
                 </div>
@@ -130,7 +120,9 @@
         {{-- 📚 Asignaturas disponibles (agrupadas por año) --}}
         @if ($materiasCarrera && count($materiasCarrera))
         @php
-        $materiasPorAnio = collect($materiasCarrera)->groupBy(fn($m) => $m->pivot->anio + 1);
+        $materiasPorAnio = collect($materiasCarrera)->groupBy(function($m) {
+        return isset($m->pivot) && isset($m->pivot->anio) ? $m->pivot->anio + 1 : 'Sin año';
+        });
         @endphp
 
         <div class="card shadow-sm mb-4">
@@ -220,9 +212,10 @@
         <div class="botones-derecha mt-3 d-flex justify-content-end gap-2">
             <x-btn-cancelar />
             @if ($materiasCarrera && count($materiasCarrera))
-            <button wire:click="guardarCursada" class="btn_blue">
+            <button type="submit" class="btn_blue">
                 <i class="bi bi-save"></i> Guardar cursadas
             </button>
             @endif
         </div>
+    </form>
 </div>
