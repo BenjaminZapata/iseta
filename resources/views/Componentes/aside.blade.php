@@ -1,4 +1,5 @@
-<aside id="sidebar" class="sidebar" aria-label="Barra lateral de navegación">
+<aside id="sidebar" class="sidebar" onmouseover="expandSidebar()" onmouseout="handleSidebarMouseOut(event)"
+    aria-label="Barra lateral de navegación">
     <div class="sidebar__header">
         {{-- Logos --}}
         <img src="{{ asset('img/logo-mini.png') }}" alt="Logo Mini" class="sidebar__logo--mini">
@@ -53,24 +54,20 @@
 </aside>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    function expandSidebar() {
         const sidebar = document.getElementById('sidebar');
+        sidebar.classList.add('is-expanded');
+    }
 
-        // Expande y colapsa con hover estable
-        sidebar.addEventListener('mouseenter', () => {
-            sidebar.classList.add('is-expanded');
-        });
+    function handleSidebarMouseOut(event) {
+        const sidebar = document.getElementById('sidebar');
+        const toElement = event.relatedTarget;
+        if (sidebar && toElement && sidebar.contains(toElement)) return;
+        collapseSidebar();
+    }
 
-        sidebar.addEventListener('mouseleave', () => {
-            sidebar.classList.remove('is-expanded');
-        });
-
-        // Evita el parpadeo al hacer clic en los enlaces
-        const links = sidebar.querySelectorAll('.sidebar__link');
-        links.forEach(link => {
-            link.addEventListener('mousedown', () => {
-                sidebar.classList.add('is-expanded');
-            });
-        });
-    });
+    function collapseSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.remove('is-expanded');
+    }
 </script>
