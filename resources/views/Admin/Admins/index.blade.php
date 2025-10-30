@@ -12,10 +12,8 @@
         <div id="ayuda-modal" class="modal-ayuda none">
             <div class="modal-content">
                 <h3>¿Cómo funciona la rematriculación?</h3>
-                <p>Si solo desea registrar que un alumno está inscripto en una carrera sin anotarlo en ninguna cursada, deje
-                    todos los campos con el valor "No matricular" y haga click en enviar.</p>
-                <p>Al hacer esto el alumno podrá visualizar esta carrera en el seleccionador de carreras y podrá inscribirse
-                    a las cursadas manualmente.</p>
+                <p>Formato: La contraseña debe tener mínimo un número, un carácter especial, una letra minúscula y una letra mayúscula. 
+                    [Mínimo 8 caracteres] [Máximo 16 caracteres]</p>
                 <button id="cerrar-ayuda" class="btn-close">Cerrar</button>
             </div>
         </div>
