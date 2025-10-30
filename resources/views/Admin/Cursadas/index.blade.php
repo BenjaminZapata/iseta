@@ -84,8 +84,9 @@
                     <td>                                   
                         <button class="btn_blue">
                             <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            
-                            Registro de Avance
+                            <a href="{{ route('admin.cursadas.registroAcademico', ["cursada_group" => $groupId]) }}">
+                                Registro de Avance
+                            </a>
                         </button>
                     </td>
                 </tr>

@@ -39,22 +39,21 @@ class CursadaRepository
         // Paginamos las filas resumen
         $cursadasSummary = $cursadasSummaryQuery->paginate($this->config['filas_por_tabla']);
 
-        // 2️⃣ Creamos un array de grupos para usar en whereIn multi-column (Compoships)
-        $groupsArray = $cursadasSummary->map(function ($item) {
-            return [
-                'id_carrera' => $item->id_carrera,
-                'id_asignatura' => $item->id_asignatura,
-                'anio_cursada' => $item->anio_cursada,
-            ];
-        })->toArray();
+        // Creamos un array de grupos para usar en whereIn multi-column (Compoships)
+        $groupsArray = $cursadasSummary->map(fn ($item): array => [
+            'id_carrera' => $item->id_carrera,
+            'id_asignatura' => $item->id_asignatura,
+            'anio_cursada' => $item->anio_cursada,
+        ]
+        )->toArray();
 
-        // 3️⃣ Traemos todas las cursadas de los grupos visibles en la página, con sus alumnos
+        // Traemos todas las cursadas de los grupos visibles en la página, con sus alumnos
         $allCursadas = Cursada::with('alumno')
             ->whereIn(['id_carrera', 'id_asignatura', 'anio_cursada'], $groupsArray)
             ->get()
             ->groupBy(['id_carrera', 'id_asignatura', 'anio_cursada']);
 
-        // 4️⃣ Retornamos un array con resumen y cursadas completas
+        // Retornamos un array con resumen y cursadas completas
         return [
             'summary' => $cursadasSummary,
             'allCursadas' => $allCursadas,
