@@ -47,23 +47,31 @@
             <div class="tabla-scroll">
                 <table class="table table-sm table-hover align-middle mb-0">
                     <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-                            <th>DNI</th>
-                            <th class="text-center">Acción</th>
+                        <tr class="tabla-container">
+                            <th class="center">Nombre</th>
+                            <th class="center">Apellido</th>
+                            <th class="center">DNI</th>
+                            <th class="center">Acción</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($alumnos as $alumno)
                         <tr>
-                            <td>{{ $alumno->nombre }}</td>
-                            <td>{{ $alumno->apellido }}</td>
-                            <td>{{ $alumno->dni }}</td>
+                            <td>
+                                <div style="display: flex; align-items: center; justify-content: center;">{{ $alumno->nombre }}</div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; justify-content: center;">{{ $alumno->apellido }}</div>
+                            </td>
+                            <td>
+                                <div style="display: flex; align-items: center; justify-content: center;">{{ $alumno->dni }}</div>
+                            </td>
                             <td class="text-center">
-                                <button type="button" wire:click="seleccionarAlumno({{ $alumno->id }})" class="btn-modificar">
-                                    <i class="bi bi-check-circle"></i> Seleccionar
-                                </button>
+                                <div style="display: flex; align-items: center; justify-content: center;">
+                                    <button type="button" wire:click="seleccionarAlumno({{ $alumno->id }})" class="btn-modificar">
+                                        <i class="bi bi-check-circle"></i> Seleccionar
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                         @empty
@@ -155,44 +163,75 @@
                                     <table class="table table-bordered table-hover mb-0">
                                         <thead style="background-color: #140b5c; color: white;">
                                             <tr>
-                                                <th><i class="bi bi-book me-2"></i>Asignatura</th>
-                                                <th class="text-center" style="width: 120px;">
-                                                    <i class="bi bi-check-square me-2"></i>Seleccionar
+                                                <th>Asignatura</th>
+                                                <th class="centrar">Estado</th>
+                                                <th>
+                                                    <div class="centrar">Seleccionar</div>
                                                 </th>
-                                                <th style="width: 200px;">
-                                                    <i class="bi bi-clipboard-check me-2"></i>Condición
+                                                <th>
+                                                    <div class="centrar">Condición</div>
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($lista as $asignatura)
                                             <tr wire:key="asignatura-{{ $asignatura->id }}"
-                                                @if(isset($asignaturasBloqueadas[$asignatura->id])) class="table-warning" @endif>
-                                                <td class="fw-semibold">{{ $asignatura->nombre }}</td>
-                                                <td class="text-center">
-                                                    <input type="checkbox"
-                                                        wire:model="asignaturasSeleccionadas"
-                                                        value="{{ (int) $asignatura->id }}"
-                                                        @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
-                                                    title="{{ $asignaturasBloqueadas[$asignatura->id] ?? '' }}">
-                                                </td>
-                                                <td>
-                                                    <select wire:model="condiciones.{{ $asignatura->id }}"
-                                                        class="form-select form-select-sm"
-                                                        @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif>
-                                                        <option value="">Seleccionar condición...</option>
-                                                        <option value="1">Regular</option>
-                                                        <option value="0">Libre</option>
-                                                        <option value="2">Itinerante</option>
-                                                        <option value="3">Oyente</option>
-                                                    </select>
+                                                @if(isset($asignaturasBloqueadas[$asignatura->id])) class="table-warning-custom" @endif>
 
+                                                {{-- NOMBRE ASIGNATURA --}}
+                                                <td class="fw-semibold">
                                                     @if(isset($asignaturasBloqueadas[$asignatura->id]))
-                                                    <div class="tooltip-correlativa">
-                                                        <strong>Correlativas faltantes:</strong>
-                                                        {{ $asignaturasBloqueadas[$asignatura->id] }}
+                                                    <div class="grid-correlativa">
+                                                        <div class="tooltip-correlativa">
+                                                            <i class="ti ti-alert-triangle"></i>
+                                                        </div>
+                                                        <div>{{ $asignatura->nombre }}</div>
                                                     </div>
+                                                    @else
+                                                    {{ $asignatura->nombre }}
                                                     @endif
+                                                </td>
+
+                                                {{-- ESTADO --}}
+                                                <td>
+                                                    <div class="centrar">
+                                                        @if(isset($asignaturasBloqueadas[$asignatura->id]))
+
+                                                        <div>
+                                                            <strong>Correlativas faltantes:</strong>
+                                                            {{ $asignaturasBloqueadas[$asignatura->id] }}
+                                                        </div>
+
+                                                        @endif
+                                                    </div>
+                                                </td>
+
+                                                {{-- CHECKBOXS --}}
+
+                                                <td>
+                                                    <div class="centrar">
+                                                        <input type="checkbox"
+                                                            wire:model="asignaturasSeleccionadas"
+                                                            value="{{ (int) $asignatura->id }}"
+                                                            @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
+                                                        title="{{ $asignaturasBloqueadas[$asignatura->id] ?? '' }}">
+                                                    </div>
+                                                </td>
+
+                                                {{-- CONDICION DE CURSADA --}}
+
+                                                <td>
+                                                    <div class="centrar">
+                                                        <select wire:model="condiciones.{{ $asignatura->id }}"
+                                                            class="form-select form-select-sm"
+                                                            @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif>
+                                                            <option value="">Seleccionar condición...</option>
+                                                            <option value="1">Regular</option>
+                                                            <option value="0">Libre</option>
+                                                            <option value="2">Itinerante</option>
+                                                            <option value="3">Oyente</option>
+                                                        </select>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -213,7 +252,7 @@
             <x-btn-cancelar />
             @if ($materiasCarrera && count($materiasCarrera))
             <button type="submit" class="btn_blue">
-                <i class="bi bi-save"></i> Guardar cursadas
+                <i class="ti ti-device-floppy"></i> Guardar cursadas
             </button>
             @endif
         </div>

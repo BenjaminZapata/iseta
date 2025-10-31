@@ -31,14 +31,12 @@ body {
     font-weight: 600;
     color: var(--color-principal);
     font-size: 1.05rem;
-    /* más grande */
     margin-bottom: 0.35rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     transition: color 0.3s ease;
     padding-left: 0.25rem;
-    /* un poco de aire a la izquierda */
 }
 
 .form-label i {
@@ -55,9 +53,7 @@ body {
     transition: var(--transition);
     box-shadow: none;
     padding-left: 0.75rem;
-    /* un poco más de espacio interno */
     font-size: 1rem;
-    /* mejor legibilidad */
 }
 
 .form-control:focus,
@@ -71,7 +67,6 @@ body {
     padding-left: 0.25rem;
     padding-right: 0.25rem;
 }
-
 
 /* === CARDS === */
 .card {
@@ -136,20 +131,36 @@ body {
     transition: var(--transition);
 }
 
-/* === MINI ENCABEZADO ===*/
-
+/* === MINI ENCABEZADO === */
 .mini-encabezado {
     padding-left: 15px;
 }
 
 /* === TOOLTIP CORRELATIVA === */
-.tooltip-correlativa {
-    font-size: 0.85rem;
-    color: #b00020;
-    margin-top: 5px;
-    padding: 3px 6px;
-    background-color: #ffe6e6;
-    border-radius: 5px;
+
+.tooltip-correlativa i {
+    color: #fbc02d;
+    font-size: 1.2rem;
+}
+
+
+
+/* === FILAS CON CORRELATIVAS FALTANTES === */
+.table-warning-custom {
+    background-color: #fff8e1 !important;
+    /* amarillo claro */
+    border-left: 6px solid #fbc02d;
+    /* franja lateral de advertencia */
+    transition: background-color 0.3s ease;
+    box-shadow: inset 4px 0 0 #fbc02d, 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.table-warning-custom:hover {
+    background-color: #fff3c1 !important;
+}
+
+.table-warning-custom i {
+    color: #f9a825;
 }
 
 /* === RESPONSIVE === */
@@ -162,4 +173,48 @@ body {
         font-size: 0.85rem;
         padding: 0.5rem 1rem;
     }
+}
+
+@keyframes pulse-warning {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.table-warning-custom i {
+    animation: pulse-warning 2s infinite;
+}
+
+.grid-correlativa {
+    display: flex;
+    align-items: center;
+    /* 🔹 centra verticalmente ícono y texto */
+    gap: 8px;
+}
+
+.grid-correlativa .tooltip-correlativa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f9a825;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    height: 100%;
+}
+
+.grid-correlativa>div:last-child {
+    flex: 1;
+    word-break: break-word;
+    white-space: normal;
 }
