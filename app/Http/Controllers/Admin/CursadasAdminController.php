@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\CursadaUpdateRequest;
 use App\Models\Alumno;
 use App\Models\Asignatura;
 use App\Models\Carrera;
@@ -57,22 +58,13 @@ class CursadasAdminController extends BaseController
         return view('Admin.Cursadas.edit', compact('cursada') + ['nota' => $nota]);
     }
 
-    public function update(Request $request, Cursada $cursada)
+    public function update(CursadaUpdateRequest $request, Cursada $cursada)
     {
         $mensajes = [];
 
         // Validación de año de cursada
-        $request->validate([
-            'anio_cursada' => ['required', 'integer', 'min:2020', 'max:'.(date('Y') + 5)],
-        ], [
-            'anio_cursada.min' => 'El año de cursada no puede ser menor a 2020',
-            'anio_cursada.max' => 'El año de cursada no puede superar '.(date('Y') + 5),
-            'anio_cursada.required' => 'El año de cursada es obligatorio',
-            'anio_cursada.integer' => 'El año de cursada debe ser un número válido',
-        ]);
-
-        $data = $request->except('_token', '_method');
-
+        $data = $request->validated();
+        \Log::debug('message', ['data' => $data]);
         if (
             $request->input('condicion') == 0 ||
             $request->input('condicion') == 2 ||
@@ -86,11 +78,6 @@ class CursadasAdminController extends BaseController
         }
 
         if ($request->aprobada == 5) {
-            if ($request->nota < 4 || $request->nota > 10) {
-                $mensajes[] = 'La nota debe estar entre 4 y 10';
-
-                return redirect()->back()->with('error', $mensajes)->withInput();
-            }
 
             Examen::updateOrInsert(
                 [
@@ -109,7 +96,13 @@ class CursadasAdminController extends BaseController
             );
         }
 
-        $cursada->update($data);
+        $cursada->update([
+            'condicion' => $request->condicion,
+            'primer_cuatrimestre_nota' => $data['primer_cuatrimestre_nota'],
+            'segundo_cuatrimestre_nota' => $data['segundo_cuatrimestre_nota'],
+            'aprobada' => $data['aprobada'],
+            'observaciones' => $data['observaciones'],
+        ]);
         $mensajes[] = 'Se ha editado correctamente';
 
         return redirect()->back()->with('mensaje', $mensajes);
