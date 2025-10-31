@@ -61,7 +61,7 @@ class RegistroAvancePdf extends BasePdf
             0, 'R', 0, 1, '159.2', '25', true
         );
         $pdf->setFont('helvetica', '', 10);
-        $pdf->MultiCell(0, 0, 'DOCENTE y/o TÉCNICA Nº ISETA', 0, 'C', 0, 1, '117.2', '28.5', true);
+        $pdf->MultiCell(0, 0, 'DOCENTE y/o TÉCNICA Nº ISETA', 0, 'C', 0, 1, '127.4', '28.5', true);
         $pdf->MultiCell(
             184, // ancho restante de la hoja A4 horizontal
             20, // alto aprox del bloque
@@ -81,7 +81,7 @@ class RegistroAvancePdf extends BasePdf
         $pdf->SetFont('helvetica', '', 10);
         $pdf->MultiCell(90, 8, "Carrera: {$cursadas[0]->carrera->nombre}", 0, 'L', 0, 1, '20', '49', true);
         $pdf->MultiCell(90, 8, "Asignatura: {$cursadas[0]->asignatura->nombre}", 0, 'L', 0, 0, '20', '', true);
-        $pdf->MultiCell(90, 8, 'Profesor/a: '.($cursadas[0]->asignatura->profesor()->wherePivot('id_carrera', $cursadas[0]->carrera->id)->first()?->apellido ?? '').' '.($cursadas[0]->asignatura->profesor()->wherePivot('id_carrera', $cursada->carrera->id)->first()?->nombre ?? ''), 0, 'L', 0, 0, '100', '', true);
+        $pdf->MultiCell(90, 8, 'Profesor/a: '.($cursadas[0]->asignatura->profesor()->wherePivot('id_carrera', $cursadas[0]->carrera->id)->first()?->apellido ?? '').' '.($cursadas[0]->asignatura->profesor()->wherePivot('id_carrera', $cursadas[0]->carrera->id)->first()?->nombre ?? ''), 0, 'L', 0, 0, '100', '', true);
         $pdf->Ln(3);
 
         // ---------------------
