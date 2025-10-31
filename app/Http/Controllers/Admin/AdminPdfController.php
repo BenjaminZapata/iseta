@@ -168,12 +168,13 @@ class AdminPdfController extends Controller
 
     public function registroDeAvance(string $cursada_group)
     {
-        [$id_carrera, $id_asignatura, $anio] = explode('-', $cursada_group);
+        [$id_carrera, $anio, $id_asignatura] = explode('-', $cursada_group);
         $cursadas = Cursada::with(['alumno', 'asignatura', 'carrera'])
             ->where('id_carrera', $id_carrera)
-            ->where('id_asignatura', $id_asignatura)
             ->where('anio_cursada', $anio)
+            ->where('id_asignatura', $id_asignatura)
             ->get();
+        Log::info($cursadas);
         $pdfBuilder = new RegistroAvancePdf;
         $pdfBuilder->build($cursadas);
         $pdf = $pdfBuilder->getPdf();

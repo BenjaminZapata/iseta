@@ -65,75 +65,99 @@
     <table class="table">
         <thead>
             <tr>
-                <th>CURSADA</th>
-                <th>AÑO</th>
-                <th>ACCIÓN</th>
+                <th>CURSADAS</th>
             </tr>
         </thead>
         <tbody>
-          @foreach ($cursadas['summary'] as $cursada)
+            @foreach ($cursadas['summary'] as $cursada)
                 @php
-                    $groupId = $cursada->id_carrera.'-'.$cursada->id_asignatura.'-'.$cursada->anio_cursada;
-                    $cursadas_ungrp = $cursadas['allCursadas'][$cursada->id_carrera][$cursada->id_asignatura][$cursada->anio_cursada] ?? collect();
+                    $groupId = $cursada->id_carrera.'-'.$cursada->anio_cursada;
+                    $cursadas_ungrp = $cursadas['allCursadas'][$cursada->id_carrera][$cursada->anio_cursada] ?? collect();
                 @endphp
 
-                <!-- Fila resumen -->
+                <!-- Fila resumen: Carrera + Año -->
                 <tr class="group-summary" data-target="#groupBody{{ $groupId }}">
-                    <td><strong>{{ $cursada->carrera->nombre ?? 'Sin carrera' }}</strong><br>{{ $cursada->asignatura->nombre ?? 'Sin asignatura' }}</td>
-                    <td>{{ $cursada->anio_cursada }}</td>
-                    <td>                                   
-                        <button class="btn_blue">
-                            <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            <a href="{{ route('admin.cursadas.registroAcademico', ["cursada_group" => $groupId]) }}">
-                                Registro de Avance
-                            </a>
-                        </button>
+                    <td>
+                        <strong>{{ $cursada->carrera->nombre ?? 'Sin carrera' }}</strong><br>
+                        Año: {{ $cursada->anio_cursada }}
                     </td>
                 </tr>
 
-                <!-- Fila colapsable -->
+                <!-- Fila colapsable: Carrera + Año -->
                 <tr class="group-body-row hidden" id="groupBody{{ $groupId }}">
                     <td colspan="4">
                         <table class="inner-table">
                             <thead>
                                 <tr>
-                                    <th>ALUMNO</th>
-                                    <th>ESTADO</th>
+                                    <th>ASIGNATURA</th>
+                                    <th>ALUMNOS</th>
                                     <th class="center">ACCION</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($cursadas_ungrp as $sub_cursada)
-                                    <tr>
-                                        <td>{{ $sub_cursada->alumno->apellidoNombre() ?? 'Sin alumno' }}</td>
-                                        <td>{{ $sub_cursada->aprobado() }}</td>
+                                @foreach ($cursadas_ungrp as $idAsignatura => $asignaturaGroup)
+                                    @php
+                                        $subGroupId = $groupId.'-'.$idAsignatura;
+                                    @endphp
+                                    <!-- Fila resumen: Asignatura -->
+                                    <tr class="group-summary" data-target="#subGroupBody{{ $subGroupId }}">
+                                        <td>{{ $asignaturaGroup->first()->asignatura->nombre ?? 'Sin asignatura' }}</td>
+                                        <td>{{ $asignaturaGroup->count() }} alumnos</td>
                                         <td>
-                                            <div style="display: flex; justify-content: center; gap: 10px;">
-                                                <a href="{{ route('admin.cursadas.edit', ['cursada' => $sub_cursada->id]) }}">
-                                                    <button class="btn_blue btn_contraible">
-                                                        <i class="ti ti-pencil"
-                                                            style="font-size: 1.3em;"></i>
-                                                        <span class="btn-text">Editar</span>
-                                                    </button>
-                                                </a>
-                                                @if (!$config['modo_seguro'])
-                                                <div>
-                                                    <form id="form-eliminar-{{ $sub_cursada->id }}"
-                                                        action="{{ route('admin.cursadas.destroy', $sub_cursada->id) }}" method="POST"
-                                                        style="display: inline;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="button"
-                                                            onclick="openGeneralModal('form-eliminar-{{ $sub_cursada->id }}',
-                                                            '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre ?? 'sin asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'sin carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                                            class="btn_icon-danger btn_contraible" style="background-color: red;">
-                                                            <i class="ti ti-trash" style="font-size: 1.3em"></i>
-                                                            <span class="btn-text">Eliminar</span>
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                                @endif
-                                            </div>
+                                            <a href="{{ route('admin.cursadas.registroAcademico', ['cursada_group' => $subGroupId]) }}" class="btn_blue">
+                                                <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                                Registro de Avance
+                                            </a>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Fila colapsable: Alumnos de la asignatura -->
+                                    <tr class="group-body-row hidden" id="subGroupBody{{ $subGroupId }}">
+                                        <td colspan="2">
+                                            <table class="inner-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ALUMNO</th>
+                                                        <th>ESTADO</th>
+                                                        <th class="center">ACCION</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($asignaturaGroup as $sub_cursada)
+                                                        <tr>
+                                                            <td>{{ $sub_cursada->alumno->apellidoNombre() ?? 'Sin alumno' }}</td>
+                                                            <td>{{ $sub_cursada->aprobado() }}</td>
+                                                            <td>
+                                                                <div style="display: flex; justify-content: center; gap: 10px;">
+                                                                    <a href="{{ route('admin.cursadas.edit', ['cursada' => $sub_cursada->id]) }}">
+                                                                        <button class="btn_blue btn_contraible">
+                                                                            <i class="ti ti-pencil" style="font-size: 1.3em;"></i>
+                                                                            <span class="btn-text">Editar</span>
+                                                                        </button>
+                                                                    </a>
+                                                                    @if (!$config['modo_seguro'])
+                                                                        <form id="form-eliminar-{{ $sub_cursada->id }}"
+                                                                            action="{{ route('admin.cursadas.destroy', $sub_cursada->id) }}"
+                                                                            method="POST" style="display: inline;">
+                                                                            @csrf
+                                                                            @method('DELETE')
+                                                                            <button type="button"
+                                                                                onclick="openGeneralModal(
+                                                                                    'form-eliminar-{{ $sub_cursada->id }}',
+                                                                                    '¿Estás seguro de eliminar la cursada de {{ strtoupper($sub_cursada->asignatura->nombre ?? 'sin asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'sin carrera') }}? \n\n ESTA ACCIÓN NO SE PUEDE DESHACER.'
+                                                                                )"
+                                                                                class="btn_icon-danger btn_contraible" style="background-color: red;">
+                                                                                <i class="ti ti-trash" style="font-size: 1.3em"></i>
+                                                                                <span class="btn-text">Eliminar</span>
+                                                                            </button>
+                                                                        </form>
+                                                                    @endif
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </td>
                                     </tr>
                                 @endforeach
