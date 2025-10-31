@@ -31,6 +31,8 @@ Route::get('cursadas/alumnos/{asignatura}',function(Request $request, $asignatur
   Alumno::all();
 
 });
+
+//profesores presidente automatico
 Route::get('/asignatura/{id}/presidente', function ($id) {
     $relacion = \DB::table('carrera_asignatura_profesor')
         ->where('id_asignatura', $id)
@@ -40,3 +42,17 @@ Route::get('/asignatura/{id}/presidente', function ($id) {
         'presidente_id' => $relacion?->id_profesor ?? 0
     ]);
 });
+
+//profesores vocales de la carrera elegida
+Route::get('/carrera/{id}/profesores', function ($id) {
+    $profesores = \DB::table('carrera_asignatura_profesor')
+        ->where('id_carrera', $id)
+        ->join('profesores', 'profesores.id', '=', 'carrera_asignatura_profesor.id_profesor')
+        ->select('profesores.id', 'profesores.nombre', 'profesores.apellido')
+        ->distinct()
+        ->orderBy('apellido')
+        ->get();
+
+    return response()->json($profesores);
+});
+
