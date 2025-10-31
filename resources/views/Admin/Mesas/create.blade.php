@@ -12,9 +12,9 @@
 
                         {!! $form->generate(null, 'post', [
 
-                            'Carrera y Materia' => [
-                            $form->select('carrera', 'Carrera:', 'label-input-y-75', $oldCarrera, $opcionesCarreras),
-                            $form->select('id_asignatura', 'Materia:', 'label-input-y-75', $oldAsignatura, $opcionesAsignaturas, ['id' => 'asignatura_select'])
+                            'Carrera y Asignatura' => [
+                            $form->select('carrera', 'Carrera:', 'label-input-y-75', $oldCarrera, $opcionesCarreras, ['id' => 'carrera_select']),
+                            $form->select('id_asignatura', 'Asignatura:', 'label-input-y-75', $oldAsignatura, $opcionesAsignaturas, ['id' => 'asignatura_select'])
                             ],
 
                             'Profesores' => [
@@ -40,6 +40,12 @@
                                         <input class="campo_info rounded" type="datetime-local" name="fecha_2" value="' . e($oldFecha2) . '">
                                     </div>'),
                             ],
+                             'Otros' => [
+                            $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones'), [
+                                'placeholder' => 'Notas adicionales sobre la mesa de examen',
+                                'maxlength' => 150,
+                            ]),
+                            ]
                         ]) !!}
                     </form>
                 </div>
