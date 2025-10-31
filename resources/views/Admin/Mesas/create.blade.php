@@ -1,129 +1,47 @@
 @extends('Admin.template')
+@php use Illuminate\Support\HtmlString; @endphp
 
 @section('content')
-    @php
-        $carrera_previa = null;
-    @endphp
-
     <div>
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'CREAR MESA'])
-
+            @include('components.header-avatar', ['tituloSeccion' => 'CREAR MESA DE EXAMEN'])
 
             <div class="perfil__info">
                 <form method="post" action="{{ route('admin.mesas.store') }}">
-
-                    <div class="perfil_dataname">
-                        <label>Carrera:</label>
-                        <select class="campo_info rounded" name="carrera" id="carrera_select">
-                            <option value="any">Selecciona una carrera</option>
-
-                            @foreach ($carreras as $carrera)
-                                @php
-                                    $selected =
-                                        $precargados['carrera'] == $carrera->id || old('carrera') == $carrera->id;
-                                    if ($selected) {
-                                        $carrera_previa = $carrera;
-                                    }
-                                @endphp
-
-                                <option @selected($selected) value="{{ $carrera->id }}">
-                                    {{ $carrera->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     @csrf
 
-                    <div class="perfil_dataname">
+                    {!! $form->generate(null, 'post', [
 
-                        @php
-                            $asig = null;
-                            if ($carrera_previa) {
-                                $asig = $carrera_previa->asignaturas->where('id', old('id_asignatura'))->first();
-                            }
-                        @endphp
+                        'Carrera y Materia' => [
+                           $form->select('carrera', 'Carrera:', 'label-input-y-100', $oldCarrera, $opcionesCarreras, ['id' => 'carrera_select']),
+                        $form->select('id_asignatura', 'Materia:', 'label-input-y-75', $oldAsignatura, $opcionesAsignaturas, ['id' => 'asignatura_select'])
+                        ],
 
+                        'Profesores' => [
+                            $form->select('prof_presidente', 'Profesor:', 'label-input-y-75', $oldPresidente, $opcionesProfesores),
+                            $form->select('prof_vocal_1', 'Profesor 1:', 'label-input-y-75', $oldVocal1, $opcionesProfesores),
+                            $form->select('prof_vocal_2', 'Profesor 2:', 'label-input-y-75', $oldVocal2, $opcionesProfesores),
+                        ],
 
-                        <label>Materia:</label>
-                        <select class="campo_info rounded" id="asignatura_select" name="id_asignatura">
+                        'Llamados' => [
+                         $form->select('cantidad_llamados', 'Cantidad de llamados:', 'label-input-y-75', $oldCantidadLlamados, [
+    '1' => '1 llamado',
+    '2' => '2 llamados',
+], ['id' => 'cantidad_llamados']),
+                            new HtmlString('
+                                <div class="label-input-y-75" id="fecha_llamado_1">
+                                    <label for="fecha_1">Fecha llamado 1:</label>
+                                    <input class="campo_info rounded" type="datetime-local" name="fecha_1" value="' . e($oldFecha1) . '">
+                                </div>'),
 
-                            @if ($precargados['asignatura'])
-                                <option selected value="{{ $precargados['asignatura']->id }}">
-                                    {{ $precargados['asignatura']->nombre }}
-                                </option>
-                            @elseif($asig)
-                                <option selected value="{{ $asig->id }}">{{ $asig->nombre }}</option>
-                            @endif
-                            <option value="">Selecciona una carrera</option>
-                        </select>
-                    </div>
-
-                    <div class="perfil_dataname">
-                        <label>Profesor:</label>
-                        <select class="profesor campo_info rounded" name="prof_presidente">
-                            <option selected value="0">Vacio/A confirmar</option>
-                            @foreach ($profesores as $profesor)
-                                <option @selected(old('prof_presidente') == $profesor->id) value="{{ $profesor->id }}">
-                                    {{ $profesor->apellido . ' ' . $profesor->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="perfil_dataname">
-                        <label>Profesor 1:</label>
-                        <select class="profesor campo_info rounded" name="prof_vocal_1">
-                            <option selected value="0">Vacio/A confirmar</option>
-                            @foreach ($profesores as $profesor)
-                                <option @selected(old('prof_vocal_1') == $profesor->id) value="{{ $profesor->id }}">
-                                    {{ $profesor->apellido . ' ' . $profesor->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="perfil_dataname">
-                        <label>Profesor 2:</label>
-                        <select class="profesor campo_info rounded" name="prof_vocal_2">
-                            <option selected value="0">Vacio/A confirmar</option>
-                            @foreach ($profesores as $profesor)
-                                <option @selected(old('prof_vocal_2') == $profesor->id) value="{{ $profesor->id }}">
-                                    {{ $profesor->apellido . ' ' . $profesor->nombre }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="perfil_dataname">
-                        <label>Selecciona la cantidad de llamados:</label>
-                        <select id="cantidad_llamados" name="cantidad_llamados" class="campo_info rounded">
-                            <option value="1" selected>1 llamado</option>
-                            <option value="2">2 llamados</option>
-                        </select>
-                    </div>
-
-                    <div class="perfil_dataname" id="fecha_llamado_1">
-                        <label>Fecha llamado 1:</label>
-                        <input class="campo_info rounded" value="{{ 'fecha_1' ? old('fecha_1') : '' }}"
-                            type="datetime-local" name="fecha_1">
-                    </div>
-
-                    <div class="perfil_dataname" id="fecha_llamado_2" style="display: none;">
-                        <label>Fecha llamado 2:</label>
-                        <input class="campo_info rounded" value="{{ 'fecha_2' ? old('fecha_2') : '' }}"
-                            type="datetime-local" name="fecha_2">
-                    </div>
-
-                    <div class="botones-derecha"
-                        style="margin-right: 27px; padding-top: 10px; padding-bottom: 16px; display: flex; gap: 12px; justify-content: flex-end;">
-                        <x-btn-cancelar />
-                        <button type="submit" class="btn_blue">
-                            <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            Crear
-                        </button>
-                    </div>
+                            new HtmlString('
+                                <div class="label-input-y-75" id="fecha_llamado_2">
+                                    <label for="fecha_2">Fecha llamado 2:</label>
+                                    <input class="campo_info rounded" type="datetime-local" name="fecha_2" value="' . e($oldFecha2) . '">
+                                </div>'),
+                        ],
+                    ]) !!}
                 </form>
-                 
             </div>
         </div>
     </div>
