@@ -31,3 +31,12 @@ Route::get('cursadas/alumnos/{asignatura}',function(Request $request, $asignatur
   Alumno::all();
 
 });
+Route::get('/asignatura/{id}/presidente', function ($id) {
+    $relacion = \DB::table('carrera_asignatura_profesor')
+        ->where('id_asignatura', $id)
+        ->first();
+
+    return response()->json([
+        'presidente_id' => $relacion?->id_profesor ?? 0
+    ]);
+});
