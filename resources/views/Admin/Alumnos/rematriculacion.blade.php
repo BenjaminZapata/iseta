@@ -1,9 +1,6 @@
 @extends('Admin.template')
 @section('content')
     <link rel="stylesheet" href="{{ asset('css/Admin/rematriculacion.css') }}">
-
-
-
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE ALUMNOS'])
         <button id="ayuda-btn" class="btn-ayuda" title="Información">

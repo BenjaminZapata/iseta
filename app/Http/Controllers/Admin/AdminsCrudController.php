@@ -8,6 +8,9 @@ use App\Repositories\Admin\AdminRepository;
 use App\Models\Configuracion;
 use Illuminate\Http\Request;
 use Validator;
+use App\Mail\Admins;
+use Illuminate\Support\Facades\Mail;
+use Log;
 
 class AdminsCrudController extends Controller
 {
@@ -75,6 +78,13 @@ class AdminsCrudController extends Controller
             'username' => 'Usuario'
         ]);
 
+        try {
+            // Enviar mail con las credenciales o aviso
+            Mail::to($validated['email'])->queue(new Admins($validated));
+        } catch (\Throwable $th) {
+            Log::error('Error al enviar mail de creación de usuario: ' . $th->getMessage());
+        }
+
         $validated['password'] = bcrypt($validated['password']);
         $validated['rol'] = $roles[$validated['rol']];
 
@@ -117,6 +127,13 @@ public function update(Request $request, Admin $admin)
     if ($validator->fails()) {
         return response()->json(['success' => false, 'errors' => $validator->errors()]);
     }
+     try {
+    // Enviar mail de modificación de admin
+    $data = $validator->validated();
+    Mail::to($data['email'])->queue(new Admins($data, 'modificado'));
+} catch (\Throwable $th) {
+    Log::error('Error al enviar mail de modificación de admin: ' . $th->getMessage());
+}
 
     $data = $validator->validated();
 
@@ -134,26 +151,38 @@ public function update(Request $request, Admin $admin)
 }
 
 
-
-
     /**
      * Eliminar administrador
      */
-    public function destroy(Admin $admin)
-    {
-        if (Admin::count() <= 1) {
-            return redirect()->back()->with('error', 'Debe haber como mínimo una cuenta de administrador');
-        }
-
-        $admin->delete();
-
-        return redirect()->back()->with('mensaje', 'Se ha eliminado el administrador');
+ public function destroy(Admin $admin)
+{
+    if (Admin::count() <= 1) {
+        return redirect()->back()->with('error', 'Debe haber como mínimo una cuenta de administrador');
     }
-    public function eliminarMasivo(Request $request)
-    {
-        $ids = explode(',', $request->ids);
-        Admin::whereIn('id', $ids)->delete();
-        
-        return redirect()->back()->with('success', 'Usuarios eliminados correctamente.');
+
+    if ($admin->id === auth()->id()) {
+        return redirect()->back()->with('error', 'No podés eliminar tu propia cuenta mientras estás logueado');
     }
+
+    $admin->delete();
+
+    return redirect()->back()->with('mensaje', 'Se ha eliminado el administrador');
+}
+  public function eliminarMasivo(Request $request)
+{
+    $ids = explode(',', $request->ids);
+    $usuarioActualId = auth()->id();
+
+    // Filtrar el ID del usuario actual
+    $idsFiltrados = array_filter($ids, fn($id) => (int)$id !== $usuarioActualId);
+
+    if (empty($idsFiltrados)) {
+        return redirect()->back()->with('error', 'No se puede eliminar tu propia cuenta');
+    }
+
+    Admin::whereIn('id', $idsFiltrados)->delete();
+
+    return redirect()->back()->with('success', 'Usuarios eliminados correctamente.');
+}
+
 }

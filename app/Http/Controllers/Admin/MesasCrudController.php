@@ -59,28 +59,53 @@ class MesasCrudController extends BaseController
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
-    {
+   public function create(Request $request)
+{
+    $precargados = [
+        'carrera' => $request->input('carrera'),
+        'asignatura' => $request->has('asignatura') ? Asignatura::find($request->input('asignatura')) : null,
+    ];
 
-        $precargados = [];
-        if ($request->has('asignatura') && $request->has('carrera')) {
-            $precargados['carrera'] = $request->input('carrera');
-            $precargados['asignatura'] = Asignatura::find($request->input('asignatura'));
-        } else {
-            $precargados['carrera'] = null;
-            $precargados['asignatura'] = null;
-        }
+    $carreras = Carrera::where('vigente', 1)->with('asignaturas')->get();
+    $profesores = Profesor::orderBy('apellido')->orderBy('nombre')->get();
 
-        $carreras = Carrera::where('vigente', 1)->get();
-        $profesores = Profesor::orderBy('apellido', 'asc')->orderBy('apellido', 'asc')->get();
+    // Carrera seleccionada
+    $carrera_previa = $carreras->first(function ($c) use ($precargados) {
+        return $c->id == $precargados['carrera'] || $c->id == old('carrera');
+    });
 
-        return view('Admin.Mesas.create', [
-            'carreras' => $carreras,
-            'profesores' => $profesores,
-            'precargados' => $precargados,
-            'ProfesoresModel' => Profesor::class
-        ]);
+    // Asignatura seleccionada
+    $asignatura_previa = $precargados['asignatura'] ?: (
+        $carrera_previa
+            ? $carrera_previa->asignaturas->firstWhere('id', old('id_asignatura'))
+            : null
+    );
+
+    // Opciones para selects
+    $opcionesCarreras = $carreras->mapWithKeys(fn($c) => [$c->id => $c->nombre])->prepend('Selecciona una carrera', 'any');
+    $opcionesAsignaturas = collect();
+    if ($asignatura_previa) {
+        $opcionesAsignaturas->put($asignatura_previa->id, $asignatura_previa->nombre);
     }
+    $opcionesAsignaturas->put('', 'Selecciona una carrera');
+
+    $opcionesProfesores = $profesores->mapWithKeys(fn($p) => [$p->id => $p->apellido . ' ' . $p->nombre])->prepend('Vacío/A confirmar', 0);
+
+    return view('Admin.Mesas.create', [
+        'opcionesCarreras' => $opcionesCarreras,
+        'opcionesAsignaturas' => $opcionesAsignaturas,
+        'opcionesProfesores' => $opcionesProfesores,
+        'oldCarrera' => old('carrera', $precargados['carrera']),
+        'oldAsignatura' => old('id_asignatura', optional($asignatura_previa)->id),
+        'oldPresidente' => old('prof_presidente', 0),
+        'oldVocal1' => old('prof_vocal_1', 0),
+        'oldVocal2' => old('prof_vocal_2', 0),
+        'oldCantidadLlamados' => old('cantidad_llamados', 1),
+        'oldFecha1' => old('fecha_1'),
+        'oldFecha2' => old('fecha_2'),
+    ]);
+}
+
 
     /**
      * Store a newly created resource in storage.

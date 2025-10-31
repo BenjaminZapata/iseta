@@ -1,11 +1,22 @@
 @extends('Admin.template')
 
-<link rel="stylesheet" href="{{ asset('css/Admin/modificar-Admin.css') }}">
-
 @section('content')
+
+<link rel="stylesheet" href="{{ asset('css/Admin/modificar-Admin.css') }}">
 
 <div class="perfil_one br">
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE USUARIOS ADMINISTRATIVOS'])
+        <button id="ayuda-btn" class="btn-ayuda" title="Información">
+            <i class="ti ti-help-circle"></i>
+        </button>
+        <div id="ayuda-modal" class="modal-ayuda none">
+            <div class="modal-content">
+                <h3>¿Cómo funciona la rematriculación?</h3>
+                <p>Formato: La contraseña debe tener mínimo un número, un carácter especial, una letra minúscula y una letra mayúscula. 
+                    [Mínimo 8 caracteres] [Máximo 16 caracteres]</p>
+                <button id="cerrar-ayuda" class="btn-close">Cerrar</button>
+            </div>
+        </div>
 
     {{-- FORMULARIO CREAR ADMIN --}}
     <div class="perfil_one br p-5">
@@ -191,8 +202,13 @@
 
         updateEliminarButton(); // Inicialización
     });
-</script>
+            const ayudaBtn = document.getElementById('ayuda-btn');
+        const ayudaModal = document.getElementById('ayuda-modal');
+        const cerrarAyuda = document.getElementById('cerrar-ayuda');
 
+        ayudaBtn.onclick = () => ayudaModal.classList.toggle('none');
+        cerrarAyuda.onclick = () => ayudaModal.classList.add('none');
+</script>
 
 <script src="{{ asset('js/usuarios/ModificarUsuarios.js') }}?v={{ time() }}"></script>
 <script src="{{ asset('js/usuarios/EliminarAdmins.js') }}?v={{ time() }}"></script>

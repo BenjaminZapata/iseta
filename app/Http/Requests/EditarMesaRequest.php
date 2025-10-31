@@ -26,7 +26,8 @@ class EditarMesaRequest extends FormRequest
             'prof_vocal_1'=>['required'],
             'prof_vocal_2'=>['required'],
             'llamado'=>['required'],
-            'fecha'=>['required','date']
+            'fecha'=>['required','date'],
+            'observaciones' => ['nullable', 'max:150']
         ];
     }
 }
