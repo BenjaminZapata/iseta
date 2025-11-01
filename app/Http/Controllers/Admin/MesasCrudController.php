@@ -182,55 +182,90 @@ class MesasCrudController extends BaseController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, $mesa)
-    {
-        $mesa = Mesa::where('id', $mesa)->with('asignatura.carrera', 'profesor', 'vocal1', 'vocal2', 'examenes.alumno')->first();
+public function edit($id)
+{
+    // 🔹 Traer la mesa con relaciones necesarias
+    $mesa = Mesa::with([
+        'asignatura.carrera',
+        'profesor',
+        'vocal1',
+        'vocal2',
+        'examenes.alumno'
+    ])->findOrFail($id);
 
-        $inscribibles = $this->mesaRepo->inscribibles($mesa);
+    // 🔹 Todos los profesores
+    $profesores = Profesor::orderBy('apellido')->orderBy('nombre')->get();
+    $opcionesProfesores = $profesores
+        ->mapWithKeys(fn($p) => [(int)$p->id => $p->apellido . ' ' . $p->nombre])
+        ->prepend('Vacío/A confirmar', 0)
+        ->toArray();
 
-        $inscribibles = Alumno::whereHas('cursadas', function ($q) use ($mesa) {
-            $q->where('id_asignatura', $mesa->id_asignatura);
-            $q->where('id_carrera', $mesa->asignatura->carrera->first()->id);
-            $q->where('aprobada', 1); // 1 = aprobada
-        })->get();
+    // 🔹 Profesores de la carrera de la mesa (solo para vocales)
+    $idCarrera = $mesa->asignatura->carrera instanceof \Illuminate\Database\Eloquent\Collection
+        ? $mesa->asignatura->carrera->first()->id
+        : $mesa->asignatura->carrera->id;
 
+    $opcionesVocales = $profesores
+        ->where('id_carrera', $idCarrera)
+        ->mapWithKeys(fn($p) => [(int)$p->id => $p->apellido . ' ' . $p->nombre])
+        ->prepend('Vacío/A confirmar', 0)
+        ->toArray();
 
-        return view('Admin.Mesas.edit', [
-            'mesa' => $mesa,
-            'profesores' => Profesor::orderBy('apellido')->orderBy('nombre')->get(),
-            'inscribibles' => $inscribibles
-        ]);
-    }
+    // 🔹 Valores seleccionados
+    $selectedPresidente = $mesa->prof_presidente ?? optional($mesa->profesor)->id ?? 0;
+    $selectedVocal1     = $mesa->prof_vocal_1 ?? optional($mesa->vocal1)->id ?? 0;
+    $selectedVocal2     = $mesa->prof_vocal_2 ?? optional($mesa->vocal2)->id ?? 0;
+
+    // 🔹 Alumnos inscribibles (aprobados en cursada)
+    $inscribibles = Alumno::whereHas('cursadas', function ($q) use ($mesa, $idCarrera) {
+        $q->where('id_asignatura', $mesa->id_asignatura)
+          ->where('id_carrera', $idCarrera)
+          ->where('aprobada', 1);
+    })->get();
+
+    // 🔹 Pasar todo a la vista
+    return view('Admin.Mesas.edit', [
+        'mesa' => $mesa,
+        'opcionesProfesores' => $opcionesProfesores,
+        'inscribibles' => $inscribibles,
+        'selectedPresidente' => $selectedPresidente,
+        'selectedVocal1' => $selectedVocal1,
+        'selectedVocal2' => $selectedVocal2,
+    ]);
+}
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditarMesaRequest $request, Mesa $mesa)
-    {
-        //CAMIAR REQUEST ALL
-        $data = $request->validated();
+public function update(EditarMesaRequest $request, Mesa $mesa)
+{
+    $data = $request->validated();
 
-        // verificar que no sea sabado ni domingo
-        if (DiasHabiles::esFinDeSemana($data['fecha'])) {
-            return \redirect()->back()->with('error', 'La fecha es fin de semana');
-        }
-
-        // verificar que no sea feriado, o similar
-        if (!DiasHabiles::esDiaHabil($data['fecha'])) {
-            return \redirect()->back()->with('error', 'La fecha es un dia no habil');
-        }
-
-        if (
-            $data['prof_presidente'] == $data['prof_vocal_1'] ||
-            $data['prof_presidente'] == $data['prof_vocal_2'] ||
-            $data['prof_vocal_1'] == $data['prof_vocal_2'] && $data['prof_vocal_1'] != '0'
-        ) {
-            return redirect()->back()->with('error', 'Hay profesores repetidos');
-        }
-
-        $mesa->update($data);
-        return redirect()->back()->with('mensaje', 'Se edito la mesa');
+    // Validaciones de día hábil...
+    if (DiasHabiles::esFinDeSemana($data['fecha'])) {
+        return redirect()->back()->with('error', 'La fecha es fin de semana');
     }
+
+    if (!DiasHabiles::esDiaHabil($data['fecha'])) {
+        return redirect()->back()->with('error', 'La fecha es un día no hábil');
+    }
+
+    if (
+        $data['prof_presidente'] == $data['prof_vocal_1'] ||
+        $data['prof_presidente'] == $data['prof_vocal_2'] ||
+        ($data['prof_vocal_1'] == $data['prof_vocal_2'] && $data['prof_vocal_1'] != '0')
+    ) {
+        return redirect()->back()->with('error', 'Hay profesores repetidos');
+    }
+
+    // 🔹 Actualiza todos los campos validados (incluido llamado)
+    $mesa->update($data);
+
+    return redirect()->back()->with('mensaje', 'Se editó la mesa');
+}
+
+
 
     /**
      * Remove the specified resource from storage.

@@ -23,7 +23,7 @@
                                 $form->select('prof_vocal_2', 'Profesor vocal 2:', 'label-input-y-75', $oldVocal2, $opcionesProfesores),
                             ],
 
-                            'Llamados' => [
+                            'Llamados y fecha' => [
                             $form->select('cantidad_llamados', 'Cantidad de llamados:', 'label-input-y-75', $oldCantidadLlamados, [
                                 '1' => '1 llamado',
                                 '2' => '2 llamados',

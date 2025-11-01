@@ -1,91 +1,81 @@
 @extends('Admin.template')
+@php use Illuminate\Support\HtmlString; @endphp
 
 @section('content')
     <div class="edit-form-container">
         <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR MESA'])
-            <form method="POST" action="{{ route('admin.mesas.update', ['mesa' => $mesa->id]) }}">
+            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR MESA DE EXAMEN'])
+            <div class="perfil__header">
+                <h2>{{ $mesa->asignatura->carrera->first()->nombre }} / {{ $mesa->asignatura->nombre }}</h2>
+            </div>
+             <form method="POST" action="{{ route('admin.mesas.update', ['mesa' => $mesa->id]) }}">
                 @csrf
                 @method('PUT')
-                <div class="perfil__header">
-                    <h2>{{ $mesa->asignatura?->nombre }}</h2>
-                </div>
-                <div class="perfil_dataname">
-                    <label>Llamado:</label>
-                    <select class="campo_info rounded" name="llamado">
-                        <option @selected($mesa->llamado == 1) value="1">Primero</option>
-                        <option @selected($mesa->llamado == 2) value="2">Segundo</option>
-                    </select>
-                </div>
-               <div class="perfil_dataname">
-                    <label>Prof. presidente:</label>
-                    <select class="campo_info rounded" name="prof_presidente">
-                        <option value="0" @selected($mesa->prof_presidente == 0)>Vacio/A confirmar</option>
-                        @foreach ($profesores as $profesor)
-                            <option value="{{ $profesor->id }}"
-                                @selected($mesa->prof_presidente != 0 && $mesa->profesor?->id == $profesor->id)>
-                                {{ $profesor->apellidoNombre() }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                {!! $form->generate(null, 'put', [
+                'Profesores' => [
+                    new HtmlString('
+                        <div class="label-input-y-75">
+                        <label>Presidente de mesa:</label>
+                        <select name="prof_presidente" class="campo_info rounded">
+                        <option value="0" ' . ($selectedPresidente == 0 ? 'selected' : '') . '>Vacío/A confirmar</option>
+                        ' . implode('', array_map(fn($id, $nombre) => '<option value="' . $id . '" ' . ($selectedPresidente == $id ? 'selected' : '') . '>' . $nombre . '</option>', array_keys($opcionesProfesores), array_values($opcionesProfesores))) . '
+                        </select>
+                        </div>
+                        '),
 
-                <div class="perfil_dataname">
-                    <label>Fecha:</label>
-                    <input type="datetime-local" class="campo_info rounded" value="{{ $mesa->fecha }}" name="fecha">
-                </div>
-                <div class="perfil_dataname">
-                    <label>Llamado:</label>
-                    <select class="campo_info rounded" name="llamado">
-                        <option @selected($mesa->llamado == 1) value="1">Primero</option>
-                        <option @selected($mesa->llamado == 2) value="2">Segundo</option>
-                    </select>
-                </div>
-                <div class="perfil_dataname">
-                    <label>Prof. presidente:</label>
-                    <select class="campo_info rounded" name="prof_presidente">
-                        <option value="0" @selected($mesa->prof_presidente == 0)>Vacio/A confirmar</option>
-                        @foreach ($profesores as $profesor)
-                            <option value="{{ $profesor->id }}" @selected($mesa->prof_presidente != 0 && $mesa->profesor?->id == $profesor->id)>
-                                {{ $profesor->apellidoNombre() }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+                    new HtmlString('
+                        <div class="label-input-y-75">
+                        <label>Vocal 1:</label>
+                        <select name="prof_vocal_1" class="campo_info rounded">
+                <option value="0" ' . ($selectedVocal1 == 0 ? 'selected' : '') . '>Vacío/A confirmar</option>
+                ' . implode('', array_map(fn($id, $nombre) => '<option value="' . $id . '" ' . ($selectedVocal1 == $id ? 'selected' : '') . '>' . $nombre . '</option>', array_keys($opcionesProfesores), array_values($opcionesProfesores))) . '
+                </select>
+        </div>
+    '),
 
-                <div class="perfil_dataname">
-                    <label>Prof. vocal 1:</label>
-                    <select class="campo_info rounded" name="prof_vocal_1">
-                        <option value="0" @selected($mesa->prof_vocal_1 == 0)>Vacio/A confirmar</option>
-                        @foreach ($profesores as $profesor)
-                            <option value="{{ $profesor->id }}" @selected($mesa->prof_vocal_1 != 0 && $mesa->vocal1?->id == $profesor->id)>
-                                {{ $profesor->apellidoNombre() }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
+    new HtmlString('
+        <div class="label-input-y-75">
+            <label>Vocal 2:</label>
+            <select name="prof_vocal_2" class="campo_info rounded">
+                <option value="0" ' . ($selectedVocal2 == 0 ? 'selected' : '') . '>Vacío/A confirmar</option>
+                ' . implode('', array_map(fn($id, $nombre) => '<option value="' . $id . '" ' . ($selectedVocal2 == $id ? 'selected' : '') . '>' . $nombre . '</option>', array_keys($opcionesProfesores), array_values($opcionesProfesores))) . '
+            </select>
+        </div>
+    '),
+],
+    'Llamado y Fecha' => [
+      new HtmlString('
+    <div class="label-input-y-75">
+        <label for="llamado">Llamado:</label>
+        <select class="campo_info rounded" name="llamado" id="llamado">
+            <option value="1" ' . (old('llamado', $mesa->llamado) == 1 ? 'selected' : '') . '>Primero</option>
+            <option value="2" ' . (old('llamado', $mesa->llamado) == 2 ? 'selected' : '') . '>Segundo</option>
+        </select>
+    </div>
+'),
 
-                <div class="perfil_dataname">
-                    <label>Prof. vocal 2:</label>
-                    <select class="campo_info rounded" name="prof_vocal_2">
-                        <option value="0" @selected($mesa->prof_vocal_2 == 0)>Vacio/A confirmar</option>
-                        @foreach ($profesores as $profesor)
-                            <option value="{{ $profesor->id }}" @selected($mesa->prof_vocal_2 != 0 && $mesa->vocal2?->id == $profesor->id)>
-                                {{ $profesor->apellidoNombre() }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
 
-                    <div class="botones-derecha"
-                        style="margin-right: 27px; padding-top: 10px; display: flex; gap: 12px; justify-content: flex-end;">
-                        <x-btn-cancelar />
-                        <button type="submit" class="btn_blue">
-                            <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            Actualizar
-                        </button>
-                    </div>
-            </form>
+        new HtmlString('
+            <div class="label-input-y-75">
+                <label for="fecha">Fecha del llamado:</label>
+                <input class="campo_info rounded" type="datetime-local" name="fecha"
+                    value="' . e(\Carbon\Carbon::parse($mesa->fecha)->format('Y-m-d\TH:i')) . '">
+            </div>
+        '),
+    ],
+
+    'Otros' => [
+        $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75',
+            old('observaciones', $mesa->observaciones ?? ''),
+            ['placeholder' => 'Notas adicionales', 'maxlength' => 150]
+        ),
+    ],
+
+]) !!}
+
+</form>
+
+
             <div class="boton-eliminar">
                 @if (!$config['modo_seguro'])
                     <div>
@@ -218,4 +208,7 @@
         </table>
     </div>
     </div>
+    
+        <script src="{{ asset('js/obtener-materias.js') }}"></script>
+        <script src="{{ asset('js/llamados.js') }}"></script>
 @endsection
