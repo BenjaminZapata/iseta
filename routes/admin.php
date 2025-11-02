@@ -168,7 +168,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
     Route::get('cursadas/{cursada}/edit', [CursadasAdminController::class, 'edit'])->name('admin.cursadas.edit');
     Route::put('cursadas/{cursada}/edit', [CursadasAdminController::class, 'update'])->name('admin.cursadas.update');
     Route::delete('cursadas/{cursada}', [CursadasAdminController::class, 'destroy'])->name('admin.cursadas.destroy');
-    Route::get('cursadas/{cursada}/registroAcademico', [AdminPdfController::class, 'registroDeAvance'])->name('admin.cursadas.registroAcademico');
+    Route::get('cursadas/{cursada_group}/registroAcademico', [AdminPdfController::class, 'registroDeAvance'])->name('admin.cursadas.registroAcademico');
     Route::get('cursadas/{asignatura}', [AdminCursadasLotes::class, 'vista'])->name('admin.cursadas.masivo');
     Route::post('masivo/cursadas', [AdminCursadasLotes::class, 'cargar'])->name('admin.cursadas.masivo.post');
 
