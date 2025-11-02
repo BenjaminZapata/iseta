@@ -27,29 +27,25 @@
             'dropdowns' => [
                 $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
                 $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', $filters, ['Seleccione una carrera'], ['id' => 'asignatura_select']),
+                $profesorM->dropdown('filter_presidente', 'Presidente:', 'label-input-y-100', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
                 $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-100', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']),
-                $form->select('filter_llamado', 'Llamado: ', 'label-input-y-100', $filters, ['Cualquiera', 'Primer llamado', 'Segundo llamado']),
                 $form->date('filter_from', 'Desde:', 'label-input-y-100', $filters),
                 $form->date('filter_to', 'Hasta:', 'label-input-y-100', $filters),
-                $profesorM->dropdown('filter_presidente', 'Presidente:', 'label-input-y-100', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
-                $profesorM->dropdown('filter_vocal1', 'Vocal 1:', 'label-input-y-100', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
-                $profesorM->dropdown('filter_vocal2', 'Vocal 2:', 'label-input-y-100', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
-            ],
+ ],
             'fields' => [
-                'alumno' => 'Alumno',
                 'carrera' => 'Carrera',
                 'asignatura' => 'Asignatura',
                 'profesor' => 'Presidente',
+                'alumno' => 'Alumno',
             ],
         ]) ?>
     </div>
     <table class="table__body">
         <thead>
             <tr>
-
-                <th>Materia</th>
-                <th>Llamado</th>
-                <th>Año</th>
+                <th>Carrera y Asignatura</th>
+                <th>fecha y Llamado</th>
+                <th>Profesores</th>
                 <th class="center">Acción</th>
             </tr>
         </thead>
@@ -57,21 +53,23 @@
             @foreach ($mesas as $mesa)
             <tr>
                 <td>
-                    <p class="bold">{{ $mesa->asignatura->nombre }}</p>
+                    <p class="bold">{{ $mesa->asignatura->carrera->first()->nombre ?? 'Sin carrera asignada' }}</p>
+                    <p>{{ $mesa->asignatura->nombre }}</p>
                 </td>
-                <td class="w-25p">
+                <td>
                     <p>
                         @if ($mesa->llamado == 1 || $mesa->llamado == 0)
-                        Primero
+                        Primer Llamado
                         @else
-                        Segundo
+                        Segundo Llamado
                         @endif
                     </p>
                     <p>{{ $formatoFecha->dmahm($mesa->fecha) }}</p>
                 </td>
                 <td>
-                    <p>{{ $mesa->asignatura->carreraDirecta?->nombre }}</p>
-                    <p>{{ $mesa->asignatura->anio }}° año</p>
+                    <p><span class="bold">Presidente:</span> {{ $mesa->profesor?->apellidoNombre() ?? 'No asignado' }}</p>
+                    <p><span class="bold">Vocal 1:</span> {{ $mesa->vocal1?->apellidoNombre() ?? 'No asignado' }}</p>
+                    <p><span class="bold">Vocal 2:</span> {{ $mesa->vocal2?->apellidoNombre() ?? 'No asignado' }}</p>
                 </td>
                 <td class="center" style="min-width: 180px;">
                     <div style="display: flex; justify-content: center; gap:10px;">
