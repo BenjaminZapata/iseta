@@ -59,52 +59,52 @@ class MesasCrudController extends BaseController
     /**
      * Show the form for creating a new resource.
      */
-   public function create(Request $request)
-{
-    $precargados = [
-        'carrera' => $request->input('carrera'),
-        'asignatura' => $request->has('asignatura') ? Asignatura::find($request->input('asignatura')) : null,
-    ];
+    public function create(Request $request)
+    {
+        $precargados = [
+            'carrera' => $request->input('carrera'),
+            'asignatura' => $request->has('asignatura') ? Asignatura::find($request->input('asignatura')) : null,
+        ];
 
-    $carreras = Carrera::where('vigente', 1)->with('asignaturas')->get();
-    $profesores = Profesor::orderBy('apellido')->orderBy('nombre')->get();
+        $carreras = Carrera::where('vigente', 1)->with('asignaturas')->get();
+        $profesores = Profesor::orderBy('apellido')->orderBy('nombre')->get();
 
-    // Carrera seleccionada
-    $carrera_previa = $carreras->first(function ($c) use ($precargados) {
-        return $c->id == $precargados['carrera'] || $c->id == old('carrera');
-    });
+        // Carrera seleccionada
+        $carrera_previa = $carreras->first(function ($c) use ($precargados) {
+            return $c->id == $precargados['carrera'] || $c->id == old('carrera');
+        });
 
-    // Asignatura seleccionada
-    $asignatura_previa = $precargados['asignatura'] ?: (
-        $carrera_previa
-            ? $carrera_previa->asignaturas->firstWhere('id', old('id_asignatura'))
-            : null
-    );
+        // Asignatura seleccionada
+        $asignatura_previa = $precargados['asignatura'] ?: (
+            $carrera_previa
+                ? $carrera_previa->asignaturas->firstWhere('id', old('id_asignatura'))
+                : null
+        );
 
-    // Opciones para selects
-    $opcionesCarreras = $carreras->mapWithKeys(fn($c) => [$c->id => $c->nombre])->prepend('Selecciona una carrera', 'any');
-    $opcionesAsignaturas = collect();
-    if ($asignatura_previa) {
-        $opcionesAsignaturas->put($asignatura_previa->id, $asignatura_previa->nombre);
+        // Opciones para selects
+        $opcionesCarreras = $carreras->mapWithKeys(fn($c) => [$c->id => $c->nombre])->prepend('Selecciona una carrera', 'any');
+        $opcionesAsignaturas = collect();
+        if ($asignatura_previa) {
+            $opcionesAsignaturas->put($asignatura_previa->id, $asignatura_previa->nombre);
+        }
+        $opcionesAsignaturas->put('', 'Selecciona una carrera');
+
+        $opcionesProfesores = $profesores->mapWithKeys(fn($p) => [$p->id => $p->apellido . ' ' . $p->nombre])->prepend('Vacío/A confirmar', 0);
+
+        return view('Admin.Mesas.create', [
+            'opcionesCarreras' => $opcionesCarreras,
+            'opcionesAsignaturas' => $opcionesAsignaturas,
+            'opcionesProfesores' => $opcionesProfesores,
+            'oldCarrera' => old('carrera', $precargados['carrera']),
+            'oldAsignatura' => old('id_asignatura', optional($asignatura_previa)->id),
+            'oldPresidente' => old('prof_presidente', 0),
+            'oldVocal1' => old('prof_vocal_1', 0),
+            'oldVocal2' => old('prof_vocal_2', 0),
+            'oldCantidadLlamados' => old('cantidad_llamados', 1),
+            'oldFecha1' => old('fecha_1'),
+            'oldFecha2' => old('fecha_2'),
+        ]);
     }
-    $opcionesAsignaturas->put('', 'Selecciona una carrera');
-
-    $opcionesProfesores = $profesores->mapWithKeys(fn($p) => [$p->id => $p->apellido . ' ' . $p->nombre])->prepend('Vacío/A confirmar', 0);
-
-    return view('Admin.Mesas.create', [
-        'opcionesCarreras' => $opcionesCarreras,
-        'opcionesAsignaturas' => $opcionesAsignaturas,
-        'opcionesProfesores' => $opcionesProfesores,
-        'oldCarrera' => old('carrera', $precargados['carrera']),
-        'oldAsignatura' => old('id_asignatura', optional($asignatura_previa)->id),
-        'oldPresidente' => old('prof_presidente', 0),
-        'oldVocal1' => old('prof_vocal_1', 0),
-        'oldVocal2' => old('prof_vocal_2', 0),
-        'oldCantidadLlamados' => old('cantidad_llamados', 1),
-        'oldFecha1' => old('fecha_1'),
-        'oldFecha2' => old('fecha_2'),
-    ]);
-}
 
 
     /**
@@ -200,26 +200,20 @@ public function edit($id)
         ->prepend('Vacío/A confirmar', 0)
         ->toArray();
 
-    // 🔹 Profesores de la carrera de la mesa (solo para vocales)
-    $idCarrera = $mesa->asignatura->carrera instanceof \Illuminate\Database\Eloquent\Collection
-        ? $mesa->asignatura->carrera->first()->id
-        : $mesa->asignatura->carrera->id;
-
-    $opcionesVocales = $profesores
-        ->where('id_carrera', $idCarrera)
-        ->mapWithKeys(fn($p) => [(int)$p->id => $p->apellido . ' ' . $p->nombre])
-        ->prepend('Vacío/A confirmar', 0)
-        ->toArray();
-
     // 🔹 Valores seleccionados
     $selectedPresidente = $mesa->prof_presidente ?? optional($mesa->profesor)->id ?? 0;
     $selectedVocal1     = $mesa->prof_vocal_1 ?? optional($mesa->vocal1)->id ?? 0;
     $selectedVocal2     = $mesa->prof_vocal_2 ?? optional($mesa->vocal2)->id ?? 0;
 
+    // 🔹 ID de carrera (para el JS)
+    $carrera_id = $mesa->asignatura->carrera instanceof \Illuminate\Database\Eloquent\Collection
+        ? $mesa->asignatura->carrera->first()->id
+        : $mesa->asignatura->carrera->id;
+
     // 🔹 Alumnos inscribibles (aprobados en cursada)
-    $inscribibles = Alumno::whereHas('cursadas', function ($q) use ($mesa, $idCarrera) {
+    $inscribibles = Alumno::whereHas('cursadas', function ($q) use ($mesa, $carrera_id) {
         $q->where('id_asignatura', $mesa->id_asignatura)
-          ->where('id_carrera', $idCarrera)
+          ->where('id_carrera', $carrera_id)
           ->where('aprobada', 1);
     })->get();
 
@@ -227,10 +221,11 @@ public function edit($id)
     return view('Admin.Mesas.edit', [
         'mesa' => $mesa,
         'opcionesProfesores' => $opcionesProfesores,
-        'inscribibles' => $inscribibles,
         'selectedPresidente' => $selectedPresidente,
         'selectedVocal1' => $selectedVocal1,
         'selectedVocal2' => $selectedVocal2,
+        'inscribibles' => $inscribibles,
+        'carrera_id' => $carrera_id,
     ]);
 }
 

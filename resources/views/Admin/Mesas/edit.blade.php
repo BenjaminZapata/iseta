@@ -1,103 +1,119 @@
 @extends('Admin.template')
-@php use Illuminate\Support\HtmlString; @endphp
+@php
+use Illuminate\Support\HtmlString;
+
+// Ensure selected professor variables are defined to avoid "use of unassigned variable" errors
+$selectedPresidente = $selectedPresidente ?? 0;
+$selectedVocal1 = $selectedVocal1;
+$selectedVocal2 = $selectedVocal2;
+@endphp
 
 @section('content')
-    <div class="edit-form-container">
-        <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR MESA DE EXAMEN'])
-            <div class="perfil__header">
-                <h2>{{ $mesa->asignatura->carrera->first()->nombre }} / {{ $mesa->asignatura->nombre }}</h2>
-            </div>
-             <form method="POST" action="{{ route('admin.mesas.update', ['mesa' => $mesa->id]) }}">
-                @csrf
-                @method('PUT')
-                {!! $form->generate(null, 'put', [
+<div class="edit-form-container">
+    <div class="perfil_one br">
+        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR MESA DE EXAMEN'])
+
+        <div class="perfil__header">
+            <h2>{{ $mesa->asignatura->carrera->first()->nombre ?? $mesa->asignatura->carrera->nombre }} / {{ $mesa->asignatura->nombre }}</h2>
+        </div>
+
+        {{-- Meta para pasar el ID de carrera al JS --}}
+        <meta name="carrera-id" content="{{ $carrera_id }}">
+
+        <form method="POST" action="{{ route('admin.mesas.update', ['mesa' => $mesa->id]) }}">
+            @csrf
+            @method('PUT')
+
+            {!! $form->generate(null, 'put', [
+
                 'Profesores' => [
+
+                    // Presidente
                     new HtmlString('
                         <div class="label-input-y-75">
-                        <label>Presidente de mesa:</label>
-                        <select name="prof_presidente" class="campo_info rounded">
-                        <option value="0" ' . ($selectedPresidente == 0 ? 'selected' : '') . '>Vacío/A confirmar</option>
-                        ' . implode('', array_map(fn($id, $nombre) => '<option value="' . $id . '" ' . ($selectedPresidente == $id ? 'selected' : '') . '>' . $nombre . '</option>', array_keys($opcionesProfesores), array_values($opcionesProfesores))) . '
-                        </select>
+                            <label>Presidente de mesa:</label>
+                            <select name="prof_presidente" class="campo_info rounded">
+                                <option value="0" ' . ($selectedPresidente == 0 ? 'selected' : '') . '>Vacío/A confirmar</option>
+                                ' . implode('', array_map(fn($id, $nombre) => '<option value="' . $id . '" ' . ($selectedPresidente == $id ? 'selected' : '') . '>' . $nombre . '</option>', array_keys($opcionesProfesores), array_values($opcionesProfesores))) . '
+                            </select>
                         </div>
-                        '),
+                    '),
 
-                    new HtmlString('
-                        <div class="label-input-y-75">
-                        <label>Vocal 1:</label>
-                        <select name="prof_vocal_1" class="campo_info rounded">
-                <option value="0" ' . ($selectedVocal1 == 0 ? 'selected' : '') . '>Vacío/A confirmar</option>
-                ' . implode('', array_map(fn($id, $nombre) => '<option value="' . $id . '" ' . ($selectedVocal1 == $id ? 'selected' : '') . '>' . $nombre . '</option>', array_keys($opcionesProfesores), array_values($opcionesProfesores))) . '
-                </select>
-        </div>
-    '),
-
-    new HtmlString('
-        <div class="label-input-y-75">
-            <label>Vocal 2:</label>
-            <select name="prof_vocal_2" class="campo_info rounded">
-                <option value="0" ' . ($selectedVocal2 == 0 ? 'selected' : '') . '>Vacío/A confirmar</option>
-                ' . implode('', array_map(fn($id, $nombre) => '<option value="' . $id . '" ' . ($selectedVocal2 == $id ? 'selected' : '') . '>' . $nombre . '</option>', array_keys($opcionesProfesores), array_values($opcionesProfesores))) . '
-            </select>
-        </div>
-    '),
-],
-    'Llamado y Fecha' => [
-      new HtmlString('
+                  // Vocal 1
+new HtmlString('
     <div class="label-input-y-75">
-        <label for="llamado">Llamado:</label>
-        <select class="campo_info rounded" name="llamado" id="llamado">
-            <option value="1" ' . (old('llamado', $mesa->llamado) == 1 ? 'selected' : '') . '>Primero</option>
-            <option value="2" ' . (old('llamado', $mesa->llamado) == 2 ? 'selected' : '') . '>Segundo</option>
+        <label>Vocal 1:</label>
+        <select name="prof_vocal_1" class="campo_info rounded"
+                data-selected="' . $selectedVocal1 . '"
+                data-selected-nombre="' . ($mesa->vocal1->apellido ?? '') . ' ' . ($mesa->vocal1->nombre ?? '') . '">
         </select>
     </div>
 '),
 
+// Vocal 2
+new HtmlString('
+    <div class="label-input-y-75">
+        <label>Vocal 2:</label>
+        <select name="prof_vocal_2" class="campo_info rounded"
+                data-selected="' . $selectedVocal2 . '"
+                data-selected-nombre="' . ($mesa->vocal2->apellido ?? '') . ' ' . ($mesa->vocal2->nombre ?? '') . '">
+        </select>
+    </div>
+'),
 
-        new HtmlString('
-            <div class="label-input-y-75">
-                <label for="fecha">Fecha del llamado:</label>
-                <input class="campo_info rounded" type="datetime-local" name="fecha"
-                    value="' . e(\Carbon\Carbon::parse($mesa->fecha)->format('Y-m-d\TH:i')) . '">
-            </div>
-        '),
-    ],
+                ],
 
-    'Otros' => [
-        $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75',
-            old('observaciones', $mesa->observaciones ?? ''),
-            ['placeholder' => 'Notas adicionales', 'maxlength' => 150]
-        ),
-    ],
+                // Llamado y fecha
+                'Llamado y Fecha' => [
+                    new HtmlString('
+                        <div class="label-input-y-75">
+                            <label for="llamado">Llamado:</label>
+                            <select class="campo_info rounded" name="llamado" id="llamado">
+                                <option value="1" ' . (old('llamado', $mesa->llamado) == 1 ? 'selected' : '') . '>Primero</option>
+                                <option value="2" ' . (old('llamado', $mesa->llamado) == 2 ? 'selected' : '') . '>Segundo</option>
+                            </select>
+                        </div>
+                    '),
 
-]) !!}
+                    new HtmlString('
+                        <div class="label-input-y-75">
+                            <label for="fecha">Fecha del llamado:</label>
+                            <input class="campo_info rounded" type="datetime-local" name="fecha" value="' . e(\Carbon\Carbon::parse($mesa->fecha)->format('Y-m-d\TH:i')) . '">
+                        </div>
+                    '),
+                ],
 
-</form>
+                // Observaciones
+                'Otros' => [
+                    $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75',
+                        old('observaciones', $mesa->observaciones ?? ''),
+                        ['placeholder' => 'Notas adicionales', 'maxlength' => 150]
+                    ),
+                ],
 
+            ]) !!}
+        </form>
 
-            <div class="boton-eliminar">
-                @if (!$config['modo_seguro'])
-                    <div>
-                        <form id="form-eliminar-{{ $mesa->id }}"
-                            action="{{ route('admin.mesas.destroy', ['mesa' => $mesa->id]) }}" method="POST"
-                            style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button"
+        <div class="boton-eliminar">
+            @if (!$config['modo_seguro'])
+                <div>
+                    <form id="form-eliminar-{{ $mesa->id }}"
+                          action="{{ route('admin.mesas.destroy', ['mesa' => $mesa->id]) }}" method="POST"
+                          style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button"
                                 onclick="openGeneralModal('form-eliminar-{{ $mesa->id }}',
                                     '¿Estás seguro de que querés eliminar la mesa de la asignatura:  {{ strtoupper($mesa->asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                                 class="btn_red_outline">
-                                <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar mesa
-                            </button>
-                        </form>
-                    </div>
-                @endif
-            </div>
+                            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar mesa
+                        </button>
+                    </form>
+                </div>
+            @endif
         </div>
     </div>
-
-
+</div>
 
     <div class="perfil_one br">
         {{-- <p>La funcion de agregar alumnos se elimino hasta que se arreglen algunos errores</p> --}}
@@ -208,7 +224,5 @@
         </table>
     </div>
     </div>
-    
-        <script src="{{ asset('js/obtener-materias.js') }}"></script>
-        <script src="{{ asset('js/llamados.js') }}"></script>
+       <script src="{{ asset('js/mesa-edit.js') }}"></script>
 @endsection
