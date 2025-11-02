@@ -94,18 +94,26 @@ new HtmlString('
             ]) !!}
         </form>
 
-        <div class="boton-eliminar">
+       <div class="boton-eliminar">
             @if (!$config['modo_seguro'])
                 <div>
                     <form id="form-eliminar-{{ $mesa->id }}"
-                          action="{{ route('admin.mesas.destroy', ['mesa' => $mesa->id]) }}" method="POST"
-                          style="display: inline;">
+                        action="{{ route('admin.mesas.destroy', ['mesa' => $mesa->id]) }}" method="POST"
+                        style="display: inline;">
                         @csrf
                         @method('DELETE')
                         <button type="button"
-                                onclick="openGeneralModal('form-eliminar-{{ $mesa->id }}',
-                                    '¿Estás seguro de que querés eliminar la mesa de la asignatura:  {{ strtoupper($mesa->asignatura->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                class="btn_red_outline">
+                            onclick="openGeneralModal(
+                            'form-eliminar-{{ $mesa->id }}',
+                            '¿Estás seguro de que querés eliminar la mesa?\n\n' +
+                            'Carrera: {{ $mesa->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
+                            'Asignatura: {{ $mesa->asignatura?->nombre ?? "No asignada" }}\n' +
+                            'Fecha: {{ $mesa->fecha ? \Carbon\Carbon::parse($mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
+                            'Presidente: {{ $mesa->profesor?->apellidoNombre() ?? "No asignado" }}\n' +
+                            'Vocal 1: {{ $mesa->vocal1?->apellidoNombre() ?? "No asignado" }}\n' +
+                            'Vocal 2: {{ $mesa->vocal2?->apellidoNombre() ?? "No asignado" }}\n\n' +
+                            'ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                            class="btn_red_outline">
                             <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar mesa
                         </button>
                     </form>
