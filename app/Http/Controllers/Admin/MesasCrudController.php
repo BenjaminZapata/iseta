@@ -50,6 +50,10 @@ class MesasCrudController extends BaseController
      */
     public function index(Request $request)
     {
+
+        Mesa::where('fecha', '<', now()->toDateString())
+        ->where('estado', 0)
+        ->update(['estado' => 1]);
         $this->setFilters($request);
         $this->data['mesas'] = $this->mesaRepo->index($request);
 
@@ -162,7 +166,8 @@ class MesasCrudController extends BaseController
                 'llamado' => 2,
                 'prof_presidente' => $data['prof_vocal_1'],
                 'prof_vocal_1' => $data['prof_vocal_2'],
-                'prof_vocal_2' => $data['prof_presidente']
+                'prof_vocal_2' => $data['prof_presidente'],
+                'estado' => 0 
             ]);
         }
 
@@ -173,7 +178,8 @@ class MesasCrudController extends BaseController
             'llamado' => 1,
             'prof_presidente' => $data['prof_presidente'],
             'prof_vocal_1' => $data['prof_vocal_1'],
-            'prof_vocal_2' => $data['prof_vocal_2']
+            'prof_vocal_2' => $data['prof_vocal_2'],
+            'estado' => 0
         ]);
         return \redirect()->back()->with('mensaje', 'Se creo la mesa');
     }

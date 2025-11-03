@@ -112,6 +112,7 @@ new HtmlString('
                             'Presidente: {{ $mesa->profesor?->apellidoNombre() ?? "No asignado" }}\n' +
                             'Vocal 1: {{ $mesa->vocal1?->apellidoNombre() ?? "No asignado" }}\n' +
                             'Vocal 2: {{ $mesa->vocal2?->apellidoNombre() ?? "No asignado" }}\n\n' +
+                            'estado: {{ $mesa->estado()[$mesa->estado] }}\n\n' +
                             'ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                             class="btn_red_outline">
                             <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar mesa

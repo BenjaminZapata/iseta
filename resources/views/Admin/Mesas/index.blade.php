@@ -57,6 +57,7 @@
                     <p>{{ $mesa->asignatura->nombre }}</p>
                 </td>
                 <td>
+                    <p class="bold">{{ $mesa->estado()[$mesa->estado]}}</p>
                     <p>
                         @if ($mesa->llamado == 1 || $mesa->llamado == 0)
                         Primer Llamado
@@ -98,6 +99,7 @@
                                     'Presidente: {{ $mesa->profesor?->apellidoNombre() ?? "No asignado" }}\n' +
                                     'Vocal 1: {{ $mesa->vocal1?->apellidoNombre() ?? "No asignado" }}\n' +
                                     'Vocal 2: {{ $mesa->vocal2?->apellidoNombre() ?? "No asignado" }}\n\n' +
+                                    'estado: {{ $mesa->estado()[$mesa->estado] }}\n\n' +
                                     'ESTA ACCIÓN NO SE PUEDE DESHACER.')">
                                     <i class="ti ti-trash" style="font-size: 1.3em"></i>
                                     <span class="btn-text">Eliminar</span>
