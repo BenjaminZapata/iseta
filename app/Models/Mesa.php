@@ -21,7 +21,9 @@ class Mesa extends Model
         'prof_vocal_1',
         'prof_vocal_2',
         'llamado',
-        'fecha'
+        'fecha',
+        'observaciones',
+        'estado'
     ];
 
 
@@ -79,5 +81,13 @@ class Mesa extends Model
     public function vocal2()
     {
         return $this->hasOne(Profesor::class, 'id', 'prof_vocal_2');
+    }
+
+    public function estado()
+    {
+        return [
+            0 => 'por rendir',
+            1 => 'rendida',
+        ];
     }
 }

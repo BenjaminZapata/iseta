@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-
 use App\Http\Controllers\Controller;
 use App\Models\Alumno;
 use App\Models\Asignatura;
@@ -16,9 +15,7 @@ use App\Services\Admin\Pdfs\RegistroAvancePdf;
 use Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use TCPDF;
 
-use App\Services\Admin\Pdfs;
 use function Spatie\LaravelPdf\Support\pdf;
 
 class AdminPdfController extends Controller
@@ -169,10 +166,16 @@ class AdminPdfController extends Controller
             ->name("analitico_{$alumno->apellido}_{$alumno->nombre}.pdf");
     }
 
-    public function registroDeAvance(Cursada $cursada)
+    public function registroDeAvance(string $cursada_group)
     {
-        $pdfBuilder = new RegistroAvancePdf();
-        $pdfBuilder->build($cursada);
+        [$id_carrera, $id_asignatura, $anio] = explode('-', $cursada_group);
+        $cursadas = Cursada::with(['alumno', 'asignatura', 'carrera'])
+            ->where('id_carrera', $id_carrera)
+            ->where('id_asignatura', $id_asignatura)
+            ->where('anio_cursada', $anio)
+            ->get();
+        $pdfBuilder = new RegistroAvancePdf;
+        $pdfBuilder->build($cursadas);
         $pdf = $pdfBuilder->getPdf();
 
         return response($pdf->Output('registro.pdf', 'S'))

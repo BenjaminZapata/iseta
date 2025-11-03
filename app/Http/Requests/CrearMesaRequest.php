@@ -29,7 +29,8 @@ class CrearMesaRequest extends FormRequest
             'prof_vocal_2' => ['required'],
             'cantidad_llamados' => ['required'],
             'fecha_1' => ['required', 'date'],
-            'fecha_2' => ['exclude_if:cantidad_llamados,1', 'required', 'date']
+            'fecha_2' => ['exclude_if:cantidad_llamados,1', 'required', 'date'],
+            'observaciones' => ['nullable', 'max:150'],
         ];
     }
 }

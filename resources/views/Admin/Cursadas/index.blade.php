@@ -8,7 +8,16 @@
         width: 100%;
         padding-top: 15px;
     }
+    /* Fila clickeable */
+    .group-summary {
+        cursor: pointer;
+    }
+        /* Inicialmente oculto */
+    .hidden {
+        display: none;
+    }
 </style>
+<link rel="stylesheet" href="{{ asset('css/Admin/cursadas.css') }}">
 
 <div class="table" data-name="tablaCursadas">
 
@@ -51,25 +60,91 @@
             ],
         ]) ?>
     </div>
-    <table class="table__body">
+    {{-- @dd($cursadas) --}}
+
+    <table class="table">
         <thead>
             <tr>
-                <th>Materia</td>
-                <th>Alumno/a</td>
-                <th>Estado</td>
-                <th class="center">Acción</th>
+                <th>CURSADA</th>
+                <th>AÑO</th>
+                <th>ACCIÓN</th>
             </tr>
         </thead>
-
         <tbody>
-            {{-- @dd($cursadas) --}}
-            @foreach ($cursadas as $cursada)
-            <tr>
-                <td class="bold">{{ $cursada->asignatura?->nombre ?? 'Sin asignatura' }}</td>
+          @foreach ($cursadas['summary'] as $cursada)
+                @php
+                    $groupId = $cursada->id_carrera.'-'.$cursada->id_asignatura.'-'.$cursada->anio_cursada;
+                    $cursadas_ungrp = $cursadas['allCursadas'][$cursada->id_carrera][$cursada->id_asignatura][$cursada->anio_cursada] ?? collect();
+                @endphp
 
+                <!-- Fila resumen -->
+                <tr class="group-summary" data-target="#groupBody{{ $groupId }}">
+                    <td><strong>{{ $cursada->carrera->nombre ?? 'Sin carrera' }}</strong><br>{{ $cursada->asignatura->nombre ?? 'Sin asignatura' }}</td>
+                    <td>{{ $cursada->anio_cursada }}</td>
+                    <td>                                   
+                        <button class="btn_blue">
+                            <i class="ti ti-file-export" style="font-size: 1.3em; margin-right: 8px;"></i>
+                            <a href="{{ route('admin.cursadas.registroAcademico', ["cursada_group" => $groupId]) }}">
+                                Registro de Avance
+                            </a>
+                        </button>
+                    </td>
+                </tr>
 
-                <td>
-                    {{ $cursada->alumno?->apellidoNombre() ?? 'Sin alumno asignado' }}
+                <!-- Fila colapsable -->
+                <tr class="group-body-row hidden" id="groupBody{{ $groupId }}">
+                    <td colspan="4">
+                        <table class="inner-table">
+                            <thead>
+                                <tr>
+                                    <th>ALUMNO</th>
+                                    <th>ESTADO</th>
+                                    <th class="center">ACCION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($cursadas_ungrp as $sub_cursada)
+                                    <tr>
+                                        <td>{{ $sub_cursada->alumno->apellidoNombre() ?? 'Sin alumno' }}</td>
+                                        <td>{{ $sub_cursada->aprobado() }}</td>
+                                        <td>
+                                            <div style="display: flex; justify-content: center; gap: 10px;">
+                                                <a href="{{ route('admin.cursadas.edit', ['cursada' => $sub_cursada->id]) }}">
+                                                    <button class="btn_blue btn_contraible">
+                                                        <i class="ti ti-pencil"
+                                                            style="font-size: 1.3em;"></i>
+                                                        <span class="btn-text">Editar</span>
+                                                    </button>
+                                                </a>
+                                                @if (!$config['modo_seguro'])
+                                                <div>
+                                                    <form id="form-eliminar-{{ $sub_cursada->id }}"
+                                                        action="{{ route('admin.cursadas.destroy', $sub_cursada->id) }}" method="POST"
+                                                        style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            onclick="openGeneralModal('form-eliminar-{{ $sub_cursada->id }}',
+                                                            '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre ?? 'sin asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'sin carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                                            class="btn_icon-danger btn_contraible" style="background-color: red;">
+                                                            <i class="ti ti-trash" style="font-size: 1.3em"></i>
+                                                            <span class="btn-text">Eliminar</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+                    {{-- {{ $cursada->alumno?->apellidoNombre() ?? 'Sin alumno asignado' }}
                 </td>
                 <td>
                     {{ $cursada->aprobado() }}
@@ -107,11 +182,24 @@
             @endforeach
         </tbody>
     </table>
+</div> --}}
 </div>
 
 {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
-    {{ $cursadas->appends(request()->query())->links('Componentes.pagination') }}
+    {{ $cursadas['summary']->appends(request()->query())->links('Componentes.pagination') }}
 </div>
 <script src="{{ asset('js/obtener-materias.js') }}"></script>
+<script>
+    document.addEventListener('click', function(e) {
+        const row = e.target.closest('.group-summary');
+        if (!row) return;
+
+        const targetSelector = row.dataset.target;
+        const target = document.querySelector(targetSelector);
+        if (!target) return;
+
+        target.classList.toggle('hidden');
+    });
+</script>
 @endsection

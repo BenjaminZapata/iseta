@@ -6,6 +6,53 @@
     <a href="/admin/alumnos/{{$cursada->alumno->id}}/edit">{{$cursada->alumno->id}}</a>/ Cursada/
 <a>{{$cursada->asignatura->nombre}}</a>
 </p> --}}
+<style>
+    .hidden {
+        display: none;
+    }
+
+    .detalle-cursada {
+        margin-top: 10px;
+        padding: 15px;
+        border-radius: 8px;
+        background: #f5f8ff;
+        border: 1px solid #cdd8ff;
+        transition: all 0.2s ease;
+    }
+
+    .detalle-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .detalle-item:last-child {
+        border-bottom: none;
+    }
+
+    .botonera {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+    }
+
+    .btn_blue {
+        color: white;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        transition: 0.2s;
+    }
+
+    .btn_blue i {
+        margin-right: 6px;
+    }
+</style>
     <div class="edit-form-container">
         <div class="perfil_one br">
             @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR CURSADA'])
@@ -70,34 +117,55 @@
                             </select>
                         </div>
 
-                        {{-- Estado (solo aparece si no es Oyente) --}}
-                        <template x-if="condicion !== '6'">
-                            <div x-transition>
-                                <div class="perfil_dataname">
-                                    <label>Estado:</label>
-                                    <select class="campo_info rounded" name="aprobada" x-model="aprobada">
-                                        <option value="1">Aprobada</option>
-                                        <option value="2">Desaprobada</option>
-                                        <option value="3">Cursando</option>
-                                        <option value="4">Promocionada</option>
-                                        <option value="5">Equivalencia</option>
-                                    </select>
-                                </div>
-
-                                <div class="perfil_dataname" x-show="aprobada === '5'" x-transition>
-                                    <label>Nota:</label>
-                                    <input class="campo_info rounded" value="{{ $nota }}" name="nota" type="number" />
-                                </div>
-                            </div>
-                    </template>
-
                         {{-- Hidden para mandar null si condicion es Oyente --}}
                         <template x-if="condicion === '6'">
                             <input type="hidden" name="aprobada" :value="null">
                         </template>
+                        <div class="botonera">
+                            <!-- Botón acordeón -->
+                            <div>
+                                <button type="button" class="btn_blue resumen-btn" data-target="#detalleCursada">
+                                    <i class="ti ti-help"></i> Ficha de cursada
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contenido oculto con <div> -->
+                        <div id="detalleCursada" class="hidden detalle-cursada">
+                            <template x-if="condicion !== '6'">
+                                <div x-transition>
+                                    <div class="detalle-item perfil_dataname">
+                                        <label>Estado:</label>
+                                        <select class="campo_info rounded" name="aprobada" x-model="aprobada">
+                                            <option value="1">Aprobada</option>
+                                            <option value="2">Desaprobada</option>
+                                            <option value="3">Cursando</option>
+                                            <option value="4">Promocionada</option>
+                                            <option value="5">Equivalencia</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="perfil_dataname" x-show="aprobada === '5'" x-transition>
+                                        <label>Nota:</label>
+                                        <input class="campo_info rounded" value="{{ $nota }}" name="nota" type="number" />
+                                    </div>
+                                </div>
+                            </template>
+                            <div class="detalle-item perfil_dataname">
+                                <label>Nota 1.er Cuatrimestre:</label>
+                                <input class="campo_info rounded" value="{{old('primer_cuatrimestre_nota') ?? $cursada->primer_cuatrimestre_nota}}" name="primer_cuatrimestre_nota">
+                            </div>
+                            <div class="detalle-item perfil_dataname">
+                                <label>Nota 2.do Cuatrimestre:</label>
+                                <input class="campo_info rounded" value="{{old('segundo_cuatrimestre_nota') ?? $cursada->segundo_cuatrimestre_nota}}" name="segundo_cuatrimestre_nota">
+                            </div>
+                            <div class="detalle-item perfil_dataname">
+                                <label>Observaciones:</label>
+                                <input class="campo_info rounded" value="{{old('observaciones') ?? $cursada->observaciones}}" name="observaciones">
+                            </div>
+                        </div>
                     </div>
                     <input type="hidden" value="{{ url()->previous() }}" name="redirect">
-
                     <div class="botones-derecha"
                         style="margin-right: 27px; padding-top: 10px; display: flex; gap: 12px; justify-content: flex-end;">
                         <x-btn-cancelar />
@@ -130,4 +198,15 @@
         </div>
 
     </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.resumen-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const target = document.querySelector(btn.dataset.target);
+                if (target) target.classList.toggle('hidden');
+            });
+        });
+    });
+</script>
 @endsection
