@@ -202,15 +202,42 @@ $selectedVocal2 = $selectedVocal2;
                                     </a>
                                 </div>
                             </td>
-                            <td>
-                                <div style="display:flex; align-items: center; justify-content: center;">
-                                    <a href="{{ route('admin.examenes.edit', ['examen' => $examen->id]) }}">
-                                        <button class="btn_blue">
-                                            <i class="ti ti-edit" style="font-size: 1.3em; margin-right: 8px;"></i>Editar
-                                        </button>
-                                    </a>
-                                </div>
-                            </td>
+                           <td class="center" style="min-width: 180px;">
+                    <div style="display: flex; justify-content: center; gap:10px;">
+                        <a href="{{ route('admin.examenes.edit', ['examen' => $examen->id]) }}">
+    <button class="btn_blue btn_contraible">
+        <i class="ti ti-pencil" style="font-size: 1.3em;"></i>
+        <span class="btn-text">Editar</span>
+    </button>
+</a>
+                        @if (!$config['modo_seguro'])
+                        <div>
+                            <form id="form-eliminar-{{ $mesa->id }}"
+                                action="{{ route('admin.mesas.destroy', $mesa->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button"
+                                    class="btn_icon-danger btn_contraible" style="background-color: red;"
+                                    onclick="openGeneralModal(
+                                    'form-eliminar-{{ $mesa->id }}',
+                                    '¿Estás seguro de que querés eliminar la mesa?\n\n' +
+                                    'Carrera: {{ $mesa->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
+                                    'Asignatura: {{ $mesa->asignatura?->nombre ?? "No asignada" }}\n' +
+                                    'Fecha: {{ $mesa->fecha ? \Carbon\Carbon::parse($mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
+                                    'Presidente: {{ $mesa->profesor?->apellidoNombre() ?? "No asignado" }}\n' +
+                                    'Vocal 1: {{ $mesa->vocal1?->apellidoNombre() ?? "No asignado" }}\n' +
+                                    'Vocal 2: {{ $mesa->vocal2?->apellidoNombre() ?? "No asignado" }}\n\n' +
+                                    'estado: {{ $mesa->estado()[$mesa->estado] }}\n\n' +
+                                    'ESTA ACCIÓN NO SE PUEDE DESHACER.')">
+                                    <i class="ti ti-trash" style="font-size: 1.3em"></i>
+                                    <span class="btn-text">Eliminar</span>
+                                </button>
+                            </form>
+                        </div>
+                        @endif
+                    </div>
+                </td>
                         </tr>
                     @endforeach
                 </tbody>

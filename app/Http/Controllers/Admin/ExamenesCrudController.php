@@ -37,10 +37,11 @@ class ExamenesCrudController extends Controller
         return redirect()->back()->with('error', 'El alumno seleccionado no existe o no se pudo cargar correctamente.');
     }
 
-    $comprobacion = $inscripcionService->puedeInscribirse($mesa, $alumno);
-    if (!$comprobacion['success']) {
-        return redirect()->back()->with('error', $comprobacion['mensaje']);
-    }
+    // <-- Aquí opcionalmente podés comentar la verificación de inscripción
+    // $comprobacion = $inscripcionService->puedeInscribirse($mesa, $alumno);
+    // if (!$comprobacion['success']) {
+    //     return redirect()->back()->with('error', $comprobacion['mensaje']);
+    // }
 
     Examen::create([
         'id_alumno' => $alumno->id,
@@ -51,8 +52,9 @@ class ExamenesCrudController extends Controller
         'fecha' => now()
     ]);
 
-    return redirect()->back()->with('mensaje', 'Se ha inscrito al alumno');
+    return redirect()->back()->with('mensaje', 'Se ha inscrito al alumno aunque ya haya rendido');
 }
+
 
 
 
@@ -137,4 +139,20 @@ class ExamenesCrudController extends Controller
         $examen->save();
         return \redirect()->back()->with('mensaje', 'Se ha actualizado la nota');
     }
+
+   public function BorrarInscripcionMesa(Examen $examen)
+{
+    $fechaMesa = $examen->mesa->fecha; // asumimos que es un campo tipo datetime
+    $ahora = now();
+
+    // Verificar si faltan al menos 24 horas
+    if ($ahora->diffInHours($fechaMesa, false) < 24) {
+        return redirect()->back()->with('error', 'No se puede eliminar la inscripción: faltan menos de 24 horas para la mesa.');
+    }
+
+    $examen->delete();
+
+    return redirect()->back()->with('mensaje', 'Inscripción eliminada correctamente.');
+}
+
 }
