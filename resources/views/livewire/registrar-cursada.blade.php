@@ -1,7 +1,17 @@
 <div class="p-3">
 
-    <link rel="stylesheet" href="{{ asset('css/Admin/cursadas.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_circle" />
 
+    <link rel="stylesheet" href="{{ asset('css/Admin/cursadas.css') }}">
+    <style>
+    .material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+    }
+    </style>
     {{-- Formulario de selección y guardado --}}
     <form wire:submit.prevent="guardarCursada" class="space-y-4">
 
@@ -14,15 +24,15 @@
                     </legend>
                     <div class="row g-3 align-items-end">
                         <div class="col-md-4">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" id="nombre" wire:model.live="nombre" class="form-control" placeholder="Ej: Javier">
+                            <label for="nombre" class="form-label">Nombre y Apellido</label>
+                            <input type="text" id="nombre" wire:model.live="nombre_apellido" class="form-control" placeholder="Ej: Javier Torres o Torres">
                             @error('nombre') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <label for="apellido" class="form-label">Apellido</label>
                             <input type="text" id="apellido" wire:model.live="apellido" class="form-control" placeholder="Ej: Torres">
                             @error('apellido') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                        </div>
+                        </div> --}}
                         <div class="col-md-4">
                             <label for="dni" class="form-label">DNI</label>
                             <input type="text" id="dni" wire:model.live="dni" class="form-control" placeholder="Ej: 47260126">
@@ -34,7 +44,7 @@
         </div>
 
         {{-- 📋 Resultados de búsqueda --}}
-        @if ($nombre || $apellido || $dni)
+        @if ($nombre_apellido || $dni)
             <div class="card shadow-sm mb-4 resultados-card">
                 <div class="card-header text-white fw-bold d-flex justify-content-between align-items-center">
                     <span>Lista de alumnos</span>
@@ -141,55 +151,59 @@
                                                 <thead style="background-color: #140b5c; color: white;">
                                                     <tr>
                                                         <th>Asignatura</th>
-                                                        <th class="text-center" style="width: 120px;">Seleccionar</th>
-                                                        <th style="width: 200px;">Condición</th>
+                                                        <th colspan="0" style="padding-right: 400px;">Condición</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                  @foreach ($lista as $asignatura)
-<tr wire:key="asignatura-{{ $asignatura->id }}"
-    @if(isset($asignaturasBloqueadas[$asignatura->id])) class="table-warning" @endif>
-    <td class="fw-semibold">{{ $asignatura->nombre }}</td>
-    <td class="text-center">
-        <input type="checkbox"
-            wire:model="asignaturasSeleccionadas"
-            value="{{ (int) $asignatura->id }}"
-            @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
-            title="{{ $asignaturasBloqueadas[$asignatura->id] ?? '' }}">
-    </td>
-<td class="px-4 py-2 align-top">
-    <div class="space-y-1">
- 
+                                                    @foreach ($lista as $asignatura)
+                                                        <tr wire:key="asignatura-{{ $asignatura->id }}"
+                                                            x-data="{ checked: false }"
+                                                            x-on:click="$el.querySelector('input[type=checkbox]').click()"
+                                                            style="cursor: pointer;"
+                                                            @if(isset($asignaturasBloqueadas[$asignatura->id])) class="table-warning" @endif>
+                                                            <td class="fw-semibold">
+                                                                <i x-show="checked" class="uil uil-minus" style="color: #140b5c;"></i>
+                                                                <i x-show="!checked" class="uil uil-plus" style="color: #140b5c;"></i>
+                                                                {{ $asignatura->nombre }}
+                                                                <input type="checkbox"
+                                                                    x-model="checked"
+                                                                    wire:model="asignaturasSeleccionadas"
+                                                                    value="{{ (int) $asignatura->id }}"
+                                                                    @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
+                                                                    title="{{ $asignaturasBloqueadas[$asignatura->id] ?? '' }}"
+                                                                >
+                                                            </td>
+                                                            <td class="px-4 py-2 align-top" colspan="0">
+                                                                <div class="space-y-1" x-show="checked">
+                                                                    <select
+                                                                        @click.stop
+                                                                        id="condicion_{{ $asignatura->id }}"
+                                                                        wire:model="condiciones.{{ $asignatura->id }}"
+                                                                        class="mt-1 block w-auto rounded-md border-gray-300 campo_info rounded shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 text-sm
+                                                                        @if(isset($asignaturasBloqueadas[$asignatura->id])) bg-gray-100 cursor-not-allowed @endif"
+                                                                        @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
+                                                                    >
+                                                                        <option value="">Seleccionar condición...</option>
+                                                                        <option value="1">Regular</option>
+                                                                        <option value="0">Libre</option>
+                                                                        <option value="2">Itinerante</option>
+                                                                        <option value="3">Oyente</option>
+                                                                    </select>
 
-        <select
-            id="condicion_{{ $asignatura->id }}"
-            wire:model="condiciones.{{ $asignatura->id }}"
-            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 text-sm
-            @if(isset($asignaturasBloqueadas[$asignatura->id])) bg-gray-100 cursor-not-allowed @endif"
-            @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
-        >
-            <option value="">Seleccionar condición...</option>
-            <option value="1">Regular</option>
-            <option value="0">Libre</option>
-            <option value="2">Itinerante</option>
-            <option value="3">Oyente</option>
-        </select>
-
-        @if ($errors->has('condiciones.' . $asignatura->id))
-            <span class="text-red-500 text-xs">
-                {{ $errors->first('condiciones.' . $asignatura->id) }}
-            </span>
-        @endif
-          @if(isset($asignaturasBloqueadas[$asignatura->id]))
-        <div class="tooltip-correlativa mt-1">
-            <strong>Correlativas faltantes:</strong> {{ $asignaturasBloqueadas[$asignatura->id] }}
-        </div>
-    @endif
-    </div>
-</td>
-</tr>
-@endforeach
-
+                                                                        @if ($errors->has('condiciones.' . $asignatura->id))
+                                                                            <span class="text-red-500 text-xs">
+                                                                                {{ $errors->first('condiciones.' . $asignatura->id) }}
+                                                                            </span>
+                                                                        @endif
+                                                                        @if(isset($asignaturasBloqueadas[$asignatura->id]))
+                                                                        <div class="tooltip-correlativa mt-1">
+                                                                            <strong>Correlativas faltantes:</strong> {{ $asignaturasBloqueadas[$asignatura->id] }}
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -213,3 +227,4 @@
         </div>
     </form>
 </div>
+
