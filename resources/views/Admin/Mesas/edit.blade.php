@@ -179,7 +179,7 @@ $selectedVocal2 = $selectedVocal2;
                                         @csrf
                                         <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                                             <input name="nota" placeholder="0 = sin rendir, a = ausente" class="input-nota"
-                                                value="{{ $examen->nota() }}">
+                                                value="{{ $examen->notaTexto() }}">
                                             <button class="boton-nota">
                                                 <i class="ti ti-check" style="font-size: 1.3em;"></i>
                                             </button>

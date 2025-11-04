@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Examen extends Model
 {
+    use HasFactory;
+
     protected $table = "examenes";
+
     protected $fillable = [
         'id_mesa',
         'id_asignatura',
@@ -17,11 +20,17 @@ class Examen extends Model
         'acta',
         'nota',
         'fecha',
-        'aprobado',
-        'tipo_final'
+        'aprobado',     // 0 = Desaprobado, 1 = Aprobado
+        'tipo_final',
+        'estado',
+        'asistencia'    // 0 = Ausente, 1 = Presente
     ];
+
     public $timestamps = false;
-    use HasFactory;
+
+    /* ===========================
+       Relaciones
+    ============================*/
 
     public function mesa()
     {
@@ -43,22 +52,20 @@ class Examen extends Model
         return $this->belongsTo(Asignatura::class, 'id_asignatura');
     }
 
-    public function fecha()
+    /* ===========================
+       Atributos y Métodos
+    ============================*/
+
+    public function getFecha()
     {
         if ($this->fecha) {
             return $this->fecha;
         }
 
-        $mesa = Mesa::where('id', $this->id_mesa)
-            ->first();
-
-        if (!$mesa)
-            return null;
-
-        return $mesa->fecha;
+        return optional($this->mesa)->fecha;
     }
 
-    public function tipoFinal()
+    public function tipoFinalTexto()
     {
         return match ($this->tipo_final) {
             1 => "Escrito",
@@ -69,14 +76,42 @@ class Examen extends Model
         };
     }
 
-    public function nota()
+    /**
+     * Devuelve una descripción legible de la nota
+     */
+    public function notaTexto()
     {
-        if ($this->aprobado == 3)
+        // Si el alumno estuvo ausente
+        if ($this->asistencia === 0) {
             return 'Ausente';
-        else if ($this->nota <= 0)
-            return 'Aun no rendido';
-        else
-            return $this->nota;
+        }
+
+        // Si no tiene nota cargada
+        if (is_null($this->nota) || $this->nota === 0) {
+            return 'Sin calificar';
+        }
+
+        // Mostrar nota y estado
+        $estado = $this->aprobado === 1 ? 'Aprobado' : 'Desaprobado';
+        return "{$this->nota} ({$estado})";
     }
 
+
+    public function asistenciaTexto()
+    {
+        return match ($this->asistencia) {
+            0 => "Ausente",
+            1 => "Presente",
+            default => "Desconocido"
+        };
+    }
+
+    public function aprobadoTexto()
+    {
+        return match ($this->aprobado) {
+            0 => "Desaprobado",
+            1 => "Aprobado",
+            default => "Desconocido"
+        };
+    }
 }
