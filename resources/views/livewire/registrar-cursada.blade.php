@@ -166,7 +166,11 @@
                                                                 >
                                                                 @if(isset($asignaturasBloqueadas[$asignatura->id]))
                                                                     <div class="tooltip-correlativa mt-1">
-                                                                        <strong>Correlativas faltantes:</strong> {{ $asignaturasBloqueadas[$asignatura->id] }}
+                                                                        <strong>Correlativas faltantes:</strong> 
+                                                                        @foreach ($asignaturasBloqueadas[$asignatura->id] as $correlativa )
+                                                                            {{ $correlativa }}
+                                                                        @endforeach
+                                                                        
                                                                     </div>
                                                                 @endif
                                                             </td>

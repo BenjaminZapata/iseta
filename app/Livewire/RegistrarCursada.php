@@ -133,7 +133,7 @@ class RegistrarCursada extends Component
         foreach ($this->materiasCarrera as $asignatura) {
             $correlativas = Correlativa::debeCursadasCorrelativas($asignatura, $this->carreraSeleccionada, $this->alumnoSeleccionado);
             if ($correlativas) {
-                $this->asignaturasBloqueadas[$asignatura->id] = count($correlativas);
+                $this->asignaturasBloqueadas[$asignatura->id] = $correlativas->pluck('nombre')->implode(', ');
                 Log::debug($this->asignaturasBloqueadas[$asignatura->id]);
             }
         }
