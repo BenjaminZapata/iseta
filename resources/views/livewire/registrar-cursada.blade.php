@@ -93,7 +93,7 @@
 
                     <div class="bloque-carrera mb-3">
                         <label class="form-label">Carrera</label>
-                        <select wire:model="carreraSeleccionada" wire:change="activarBoton" class="form-select">
+                        <select wire:model="carreraSeleccionada" wire:change="verMaterias" class="form-select">
                             <option value="">Seleccionar una carrera...</option>
                             @foreach ($alumnoSeleccionado->egresadoinscripto as $egresado)
                                 <option value="{{ $egresado->id_carrera }}">{{ $egresado->carrera->nombre }}</option>
@@ -101,14 +101,6 @@
                         </select>
                         @error('carreraSeleccionada') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
-
-                    @if ($mostrarBoton)
-                        <div class="text-end mb-3">
-                            <button type="button" wire:click="verMaterias" class="btn_blue" style="background-color:#140b5c;">
-                                Ver asignaturas
-                            </button>
-                        </div>
-                    @endif
                 </div>
             </div>
         @endif

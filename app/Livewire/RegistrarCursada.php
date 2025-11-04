@@ -51,10 +51,12 @@ class RegistrarCursada extends Component
     {
         Log::debug('puede ser que aca entre?');
         if ($this->nombre_apellido || $this->dni) {
-            if (! ($this->dni || ($this->nombre_apellido))) {
+            if (! ($this->dni || $this->nombre_apellido)) {
                 $this->erroresValidacion[] = 'Debe ingresar al menos DNI o nombre y apellido.';
             } else {
                 $this->alumnos = Alumno::query()
+                    ->join('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id') // -> ajustá 'egresados' si tu tabla tiene otro nombre
+                    ->select('alumnos.*')
                     ->when($this->nombre_apellido, fn ($q) => $q->where('nombre', 'like', "%{$this->nombre_apellido}%")
                         ->orWhere('apellido', 'like', "%{$this->nombre_apellido}%")
                     )
@@ -93,11 +95,6 @@ class RegistrarCursada extends Component
         }
         $this->asignaturasSeleccionadas[] = $id;
 
-    }
-
-    public function activarBoton()
-    {
-        $this->mostrarBoton = ! is_null($this->carreraSeleccionada);
     }
 
     public function verMaterias()
@@ -191,7 +188,7 @@ class RegistrarCursada extends Component
 
             if (isset($this->asignaturasBloqueadas[$idAsignatura])) {
                 $errores[] = "No se puede registrar {$nombreAsignatura} porque faltan las correlativas:
-        {$this->asignaturasBloqueadas[$idAsignatura]}";
+                {$this->asignaturasBloqueadas[$idAsignatura]}";
             }
 
             $existe = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
@@ -217,6 +214,7 @@ class RegistrarCursada extends Component
             return;
         }
 
+        $this->authorize('createAdmin');
         // ✅ Guardar cursadas
         foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
             Cursada::create([
