@@ -3,14 +3,18 @@
 namespace App\Livewire;
 
 use App\Models\Alumno;
+use App\Models\Carrera;
+use App\Models\Correlativa;
 use App\Models\Cursada;
 use Flasher\Laravel\Facade\Flasher as FlasherFacade;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 use Log;
 
 class RegistrarCursada extends Component
 {
+    use AuthorizesRequests;
+
     public $nombre_apellido = '';
 
     public $dni = '';
@@ -100,8 +104,13 @@ class RegistrarCursada extends Component
     public function verMaterias()
     {
         if ($this->carreraSeleccionada) {
-            $this->materiasCarrera = \App\Models\Carrera::find($this->carreraSeleccionada)
+            $this->materiasCarrera = Carrera::find($this->carreraSeleccionada)
                 ?->asignaturas()
+                ->whereDoesntHave('cursadas', function ($q) {
+                    $q->where('id_carrera', $this->carreraSeleccionada)
+                        ->where('id_alumno', $this->alumnoSeleccionado->id)
+                        ->where('aprobada', '!=', 2);
+                })
                 ->withPivot('anio')
                 ->orderBy('pivot_anio')
                 ->get() ?? collect();
@@ -120,47 +129,15 @@ class RegistrarCursada extends Component
         if (! $this->alumnoSeleccionado) {
             return;
         }
-
-        $asignaturasCursadas = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
-            ->pluck('id_asignatura')
-            ->toArray();
-
         $this->asignaturasBloqueadas = [];
-
-        $correlativas = DB::table('correlatividades')
-            ->whereIn('id_asignatura', $this->materiasCarrera->pluck('id'))
-            ->get()
-            ->groupBy('id_asignatura');
-
-        $mapAsignaturaNombre = $this->materiasCarrera->pluck('nombre', 'id')->toArray();
-
-        // 🔹 Creamos un mapa de año por asignatura (usamos el pivot->anio)
-        $mapAnioAsignatura = $this->materiasCarrera->mapWithKeys(function ($m) {
-            return [$m->id => $m->pivot->anio ?? null];
-        });
-
-        foreach ($this->materiasCarrera as $asig) {
-            $faltantes = [];
-
-            foreach ($correlativas[$asig->id] ?? [] as $c) {
-                $idCorrelativa = $c->id_asignatura_correlativa;
-
-                // ✅ Si ambas son de primer año, no bloquea
-                $anioAsig = $mapAnioAsignatura[$asig->id] ?? null;
-                $anioCorr = $mapAnioAsignatura[$idCorrelativa] ?? null;
-                if ($anioAsig === 0 && $anioCorr === 0) {
-                    continue;
-                }
-
-                if (! in_array($idCorrelativa, $asignaturasCursadas)) {
-                    $faltantes[] = $mapAsignaturaNombre[$idCorrelativa] ?? "ID {$idCorrelativa}";
-                }
-            }
-
-            if (! empty($faltantes)) {
-                $this->asignaturasBloqueadas[$asig->id] = implode(', ', $faltantes);
+        foreach ($this->materiasCarrera as $asignatura) {
+            $correlativas = Correlativa::debeCursadasCorrelativas($asignatura, $this->carreraSeleccionada, $this->alumnoSeleccionado);
+            if ($correlativas) {
+                $this->asignaturasBloqueadas[$asignatura->id] = count($correlativas);
+                Log::debug($this->asignaturasBloqueadas[$asignatura->id]);
             }
         }
+
     }
 
     public function guardarCursada()
@@ -214,7 +191,8 @@ class RegistrarCursada extends Component
             return;
         }
 
-        $this->authorize('createAdmin');
+        $this->authorize('createAdmin', Cursada::class);
+
         // ✅ Guardar cursadas
         foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
             Cursada::create([

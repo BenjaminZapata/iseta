@@ -164,6 +164,11 @@
                                                                     @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
                                                                     title="{{ $asignaturasBloqueadas[$asignatura->id] ?? '' }}"
                                                                 >
+                                                                @if(isset($asignaturasBloqueadas[$asignatura->id]))
+                                                                    <div class="tooltip-correlativa mt-1">
+                                                                        <strong>Correlativas faltantes:</strong> {{ $asignaturasBloqueadas[$asignatura->id] }}
+                                                                    </div>
+                                                                @endif
                                                             </td>
                                                             <td class="px-4 py-2 align-top" colspan="0">
                                                                 <div class="space-y-1" x-show="checked">
@@ -182,15 +187,10 @@
                                                                         <option value="3">Oyente</option>
                                                                     </select>
 
-                                                                        @if ($errors->has('condiciones.' . $asignatura->id))
-                                                                            <span class="text-red-500 text-xs">
-                                                                                {{ $errors->first('condiciones.' . $asignatura->id) }}
-                                                                            </span>
-                                                                        @endif
-                                                                        @if(isset($asignaturasBloqueadas[$asignatura->id]))
-                                                                        <div class="tooltip-correlativa mt-1">
-                                                                            <strong>Correlativas faltantes:</strong> {{ $asignaturasBloqueadas[$asignatura->id] }}
-                                                                        </div>
+                                                                    @if ($errors->has('condiciones.' . $asignatura->id))
+                                                                        <span class="text-red-500 text-xs">
+                                                                            {{ $errors->first('condiciones.' . $asignatura->id) }}
+                                                                        </span>
                                                                     @endif
                                                                 </div>
                                                             </td>
@@ -210,7 +210,7 @@
 
         {{-- 🔘 Botones --}}
         <div class="botones-derecha mt-3 d-flex justify-content-end gap-2">
-            <x-btn-cancelar />
+            <x-btn-cancelar :url="route('admin.cursadas.index')"/>
             @if ($materiasCarrera && count($materiasCarrera))
                 <button type="submit" class="btn_blue" style="background-color:#140b5c;">
                     Guardar cursadas

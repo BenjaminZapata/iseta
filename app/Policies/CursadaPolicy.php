@@ -33,9 +33,11 @@ class CursadaPolicy
         return false;
     }
 
-    public function createAdmin(?Admin $admin): Response
+    public function createAdmin(Admin $admin): Response
     {
-        return $admin?->rol === 0 || $admin?->rol === 0 ? Response::allow() : Response::deny('No autorizado.');
+        return in_array($admin->rol, [0, 1]) ?
+            Response::allow() :
+            Response::deny('No autorizado.');
     }
 
     /**

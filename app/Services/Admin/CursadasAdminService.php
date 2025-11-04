@@ -56,17 +56,17 @@ class CursadasAdminService
         }
 
         // ✅ Guardar cursadas
-        foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
-            Cursada::create([
-                'anio_cursada' => now()->year,
-                'aprobada' => 3,
-                'id_alumno' => $this->alumnoSeleccionado->id,
-                'id_asignatura' => $idAsignatura,
-                'id_carrera' => $this->carreraSeleccionada,
-                'condicion' => $this->mapCondicion[array_search((int) $this->condiciones[$idAsignatura], $this->mapCondicion) ??
-                'Regular'] ?? 1,
-            ]);
-        }
+        // foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
+        //     Cursada::create([
+        //         'anio_cursada' => now()->year,
+        //         'aprobada' => 3,
+        //         'id_alumno' => $this->alumnoSeleccionado->id,
+        //         'id_asignatura' => $idAsignatura,
+        //         'id_carrera' => $this->carreraSeleccionada,
+        //         'condicion' => $this->mapCondicion[array_search((int) $this->condiciones[$idAsignatura], $this->mapCondicion) ??
+        //         'Regular'] ?? 1,
+        //     ]);
+        // }
 
         FlasherFacade::addSuccess('Cursadas registradas correctamente.');
 
