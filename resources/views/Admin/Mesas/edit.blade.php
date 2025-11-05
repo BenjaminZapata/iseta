@@ -211,31 +211,33 @@ $selectedVocal2 = $selectedVocal2;
     </button>
 </a>
                         @if (!$config['modo_seguro'])
-                        <div>
-                            <form id="form-eliminar-{{ $mesa->id }}"
-                                action="{{ route('admin.mesas.destroy', $mesa->id) }}" method="POST"
-                                style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button"
-                                    class="btn_icon-danger btn_contraible" style="background-color: red;"
-                                    onclick="openGeneralModal(
-                                    'form-eliminar-{{ $mesa->id }}',
-                                    '¿Estás seguro de que querés eliminar la mesa?\n\n' +
-                                    'Carrera: {{ $mesa->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
-                                    'Asignatura: {{ $mesa->asignatura?->nombre ?? "No asignada" }}\n' +
-                                    'Fecha: {{ $mesa->fecha ? \Carbon\Carbon::parse($mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
-                                    'Presidente: {{ $mesa->profesor?->apellidoNombre() ?? "No asignado" }}\n' +
-                                    'Vocal 1: {{ $mesa->vocal1?->apellidoNombre() ?? "No asignado" }}\n' +
-                                    'Vocal 2: {{ $mesa->vocal2?->apellidoNombre() ?? "No asignado" }}\n\n' +
-                                    'estado: {{ $mesa->estado()[$mesa->estado] }}\n\n' +
-                                    'ESTA ACCIÓN NO SE PUEDE DESHACER.')">
-                                    <i class="ti ti-trash" style="font-size: 1.3em"></i>
-                                    <span class="btn-text">Eliminar</span>
-                                </button>
-                            </form>
-                        </div>
-                        @endif
+    <div>
+        <form id="form-eliminar-{{ $examen->id }}"
+            action="{{ route('admin.examenes.destroy', $examen->id) }}" method="POST"
+            style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button"
+                class="btn_icon-danger btn_contraible"
+                style="background-color: red;"
+                onclick="openGeneralModal(
+                    'form-eliminar-{{ $examen->id }}',
+                    '¿Estás seguro de que querés eliminar este examen?\n\n' +
+                    'Alumno: {{ $examen->alumno?->apellidoNombre() ?? "No asignado" }}\n' +
+                    'Carrera: {{ $examen->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
+                    'Asignatura: {{ $examen->asignatura?->nombre ?? "No asignada" }}\n' +
+                    'Fecha de Mesa: {{ $examen->mesa?->fecha ? \Carbon\Carbon::parse($examen->mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
+                    'Nota: {{ $examen->nota ?? "Sin nota" }}\n' +
+                    'Asistencia: {{ $examen->asistenciaTexto() ?? "Sin datos" }}\n\n' +
+                    'ESTA ACCIÓN NO SE PUEDE DESHACER.'
+                )">
+                <i class="ti ti-trash" style="font-size: 1.3em"></i>
+                <span class="btn-text">Eliminar</span>
+            </button>
+        </form>
+    </div>
+@endif
+
                     </div>
                 </td>
                         </tr>

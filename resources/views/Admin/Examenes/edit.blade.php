@@ -85,18 +85,6 @@
                             ['type' => 'number', 'step' => '0.01', 'min' => '0', 'max' => '10']
                         ),
 
-                        // Aprobado (solo dos valores)
-                        $form->select(
-                            'aprobado',
-                            'Resultado:',
-                            'label-input-y-75',
-                            old('aprobado', $examen->aprobado),
-                            [
-                                1 => 'Aprobado',
-                                0 => 'Desaprobado'
-                            ]
-                        ),
-
                         // Tipo de final
                         $form->select(
                             'tipo_final',
@@ -144,10 +132,17 @@
                     @method('delete')
 
                     <button class="btn_red_outline"
-                        onclick="openGeneralModal(
-                            'form-eliminar-{{ $examen->id }}',
-                            '¿Estás seguro de que querés eliminar la ficha de examen de: {{ strtoupper($examen->alumno->apellido) }} {{ strtoupper($examen->alumno->nombre) }}? \n\nESTA ACCIÓN NO SE PUEDE DESHACER.'
-                        )"
+                         onclick="openGeneralModal(
+                    'form-eliminar-{{ $examen->id }}',
+                    '¿Estás seguro de que querés eliminar este examen?\n\n' +
+                    'Alumno: {{ $examen->alumno?->apellidoNombre() ?? "No asignado" }}\n' +
+                    'Carrera: {{ $examen->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
+                    'Asignatura: {{ $examen->asignatura?->nombre ?? "No asignada" }}\n' +
+                    'Fecha de Mesa: {{ $examen->mesa?->fecha ? \Carbon\Carbon::parse($examen->mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
+                    'Nota: {{ $examen->nota ?? "Sin nota" }}\n' +
+                    'Asistencia: {{ $examen->asistenciaTexto() ?? "Sin datos" }}\n\n' +
+                    'ESTA ACCIÓN NO SE PUEDE DESHACER.'
+                )"
                         type="button">
                         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                         Eliminar ficha de examen
