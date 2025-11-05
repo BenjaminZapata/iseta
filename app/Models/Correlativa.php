@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class Correlativa extends Pivot
 {
@@ -27,19 +26,19 @@ class Correlativa extends Pivot
         return $this->BelongsTo(Asignatura::class, 'id_asignatura');
     }
 
-    public static function debeExamenesCorrelativos($asignatura, $carrera, $alumno)
+    public static function debeExamenesCorrelativos($asignatura, $id_carrera, $alumno)
     {
         if (! $alumno) {
             $alumno = Auth::user();
         }
-        $asignatura = Asignatura::with('correlativas.asignatura')
-            ->where('id', $asignatura->id)
+
+        $asignatura->with('correlativas')
             ->first();
 
         $sinAprobar = [];
 
-        foreach ($asignatura->correlativas as $correlativa) {
-            $asigCorr = $correlativa->asignatura;
+        foreach ($asignatura->correlativas->wherePivot('id_carrera', $id_carrera)->get() as $correlativa) {
+            $asigCorr = $correlativa;
             if (! $asigCorr) {
                 return false;
             }
@@ -57,25 +56,19 @@ class Correlativa extends Pivot
         }
     }
 
-    public static function debeCursadasCorrelativos($asignatura, $carrera, $alumno)
+    public static function debeCursadasCorrelativas($asignatura, $id_carrera, $alumno): array|bool
     {
         if (! $alumno) {
             $alumno = Auth::user();
         }
-        $asignatura = Asignatura::with('correlativas')
-            ->where('id', $asignatura->id)
-            ->first();
 
         $sinAprobar = [];
-
-        foreach ($asignatura->correlativas()->wherePivot('id_carrera', $carrera->id)->get() as $correlativa) {
-            $asigCorr = $correlativa->asignatura;
-            if (is_null($asigCorr)) {
+        foreach ($asignatura->correlativas as $correlativa) {
+            if ($correlativa === null) {
                 return false;
             }
-            Log::debug($asigCorr->aproboCursada($alumno));
-            if (! $asigCorr->aproboCursada($alumno)) {
-                $sinAprobar[] = $asigCorr;
+            if (! $correlativa->aproboCursada($alumno)) {
+                $sinAprobar[] = $correlativa->toArray();
             }
         }
 

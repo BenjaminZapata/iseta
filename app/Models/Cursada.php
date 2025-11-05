@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use Awobaz\Compoships\Compoships;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use \Awobaz\Compoships\Compoships;
 
 class Cursada extends Model
 {
     protected $table = 'cursadas';
 
+    use Compoships;
     use HasFactory;
 
     protected $fillable = [

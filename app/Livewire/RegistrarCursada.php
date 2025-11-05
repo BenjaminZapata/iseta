@@ -2,60 +2,83 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Alumno;
+use App\Models\Carrera;
+use App\Models\Correlativa;
 use App\Models\Cursada;
-use Illuminate\Support\Facades\DB;
 use Flasher\Laravel\Facade\Flasher as FlasherFacade;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Component;
+use Log;
 
 class RegistrarCursada extends Component
 {
-    public $nombre = '';
-    public $apellido = '';
+    use AuthorizesRequests;
+
+    public $nombre_apellido = '';
+
     public $dni = '';
 
     public $alumnoSeleccionado = null;
+
     public $carreraSeleccionada = null;
+
     public $materiasCarrera = [];
+
     public $asignaturasSeleccionadas = [];
+
     public $condiciones = [];
+
     public $erroresValidacion = [];
+
     public $mensaje = null;
+
     public $mostrarBoton = false;
+
     public $asignaturasBloqueadas = [];
 
+    public $alumnos;
+
     private $mapCondicion = [
-        'Libre'      => 0,
-        'Regular'    => 1,
+        'Libre' => 0,
+        'Regular' => 1,
         'Itinerante' => 2,
-        'Oyente'     => 3,
+        'Oyente' => 3,
     ];
+
+    public function mount()
+    {
+        $this->alumnos = collect();
+    }
 
     public function render()
     {
-        $alumnos = collect();
-
-        if ($this->nombre || $this->apellido || $this->dni) {
-            if (!($this->dni || ($this->nombre && $this->apellido))) {
-                $this->erroresValidacion[] = "Debe ingresar al menos DNI o nombre y apellido.";
+        Log::debug('puede ser que aca entre?');
+        if ($this->nombre_apellido || $this->dni) {
+            if (! ($this->dni || $this->nombre_apellido)) {
+                $this->erroresValidacion[] = 'Debe ingresar al menos DNI o nombre y apellido.';
             } else {
-                $alumnos = Alumno::query()
-                    ->when($this->nombre, fn($q) => $q->where('nombre', 'like', "%{$this->nombre}%"))
-                    ->when($this->apellido, fn($q) => $q->where('apellido', 'like', "%{$this->apellido}%"))
-                    ->when($this->dni, fn($q) => $q->where('dni', 'like', "%{$this->dni}%"))
+                $this->alumnos = Alumno::query()
+                    ->join('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id') // -> ajustá 'egresados' si tu tabla tiene otro nombre
+                    ->select('alumnos.*')
+                    ->when($this->nombre_apellido, fn ($q) => $q->where('nombre', 'like', "%{$this->nombre_apellido}%")
+                        ->orWhere('apellido', 'like', "%{$this->nombre_apellido}%")
+                    )
+                    ->when($this->dni, fn ($q) => $q->where('dni', 'like', "%{$this->dni}%"))
                     ->take(10)
                     ->get();
             }
         }
 
         return view('livewire.registrar-cursada', [
-            'alumnos' => $alumnos,
-            'mostrarBoton' => $this->mostrarBoton
+            'alumnos' => $this->alumnos,
+            'mostrarBoton' => $this->mostrarBoton,
         ]);
     }
 
     public function seleccionarAlumno($id)
     {
+        Log::debug('paso 1 vez');
         $this->alumnoSeleccionado = Alumno::find($id);
         $this->carreraSeleccionada = null;
         $this->materiasCarrera = [];
@@ -67,139 +90,132 @@ class RegistrarCursada extends Component
         $this->asignaturasBloqueadas = [];
     }
 
-    public function activarBoton()
+    public function asignaturaCheck($id)
     {
-        $this->mostrarBoton = !is_null($this->carreraSeleccionada);
+        if (in_array($id, $this->asignaturasSeleccionadas)) {
+            $this->asignaturasSeleccionadas = array_diff($this->asignaturasSeleccionadas, [$id]);
+
+            return;
+        }
+        $this->asignaturasSeleccionadas[] = $id;
+
     }
 
     public function verMaterias()
     {
         if ($this->carreraSeleccionada) {
-            $this->materiasCarrera = \App\Models\Carrera::find($this->carreraSeleccionada)
+            $id_carrera = $this->carreraSeleccionada;
+            $this->materiasCarrera = Carrera::find($this->carreraSeleccionada)
                 ?->asignaturas()
+                ->with(['correlativas' => function ($query) use ($id_carrera) {
+                    $query->where('id_carrera', $id_carrera);
+                }])
+                ->whereDoesntHave('cursadas', function ($q) {
+                    $q->where('id_carrera', $this->carreraSeleccionada)
+                        ->where('id_alumno', $this->alumnoSeleccionado->id)
+                        ->where('aprobada', '!=', 2);
+                })
                 ->withPivot('anio')
                 ->orderBy('pivot_anio')
                 ->get() ?? collect();
 
             // 🔹 Ahora las condiciones empiezan vacías
             foreach ($this->materiasCarrera as $asig) {
-                $this->condiciones[$asig->id] = ''; 
+                $this->condiciones[$asig->id] = '';
             }
 
             $this->calcularAsignaturasBloqueadas();
         }
     }
 
-   private function calcularAsignaturasBloqueadas()
-{
-    if (!$this->alumnoSeleccionado) return;
-
-    $asignaturasCursadas = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
-        ->pluck('id_asignatura')
-        ->toArray();
-
-    $this->asignaturasBloqueadas = [];
-
-    $correlativas = DB::table('correlatividades')
-        ->whereIn('id_asignatura', $this->materiasCarrera->pluck('id'))
-        ->get()
-        ->groupBy('id_asignatura');
-
-    $mapAsignaturaNombre = $this->materiasCarrera->pluck('nombre', 'id')->toArray();
-
-    // 🔹 Creamos un mapa de año por asignatura (usamos el pivot->anio)
-    $mapAnioAsignatura = $this->materiasCarrera->mapWithKeys(function ($m) {
-        return [$m->id => $m->pivot->anio ?? null];
-    });
-
-    foreach ($this->materiasCarrera as $asig) {
-        $faltantes = [];
-
-        foreach ($correlativas[$asig->id] ?? [] as $c) {
-            $idCorrelativa = $c->id_asignatura_correlativa;
-
-            // ✅ Si ambas son de primer año, no bloquea
-            $anioAsig = $mapAnioAsignatura[$asig->id] ?? null;
-            $anioCorr = $mapAnioAsignatura[$idCorrelativa] ?? null;
-            if ($anioAsig === 0 && $anioCorr === 0) {
-                continue;
-            }
-
-            if (!in_array($idCorrelativa, $asignaturasCursadas)) {
-                $faltantes[] = $mapAsignaturaNombre[$idCorrelativa] ?? "ID {$idCorrelativa}";
+    private function calcularAsignaturasBloqueadas()
+    {
+        if (! $this->alumnoSeleccionado) {
+            return;
+        }
+        $this->asignaturasBloqueadas = [];
+        foreach ($this->materiasCarrera as $asignatura) {
+            $correlativas = Correlativa::debeCursadasCorrelativas($asignatura, $this->carreraSeleccionada, $this->alumnoSeleccionado);
+            if ($correlativas) {
+                $this->asignaturasBloqueadas[$asignatura->id] = array_column($correlativas, 'nombre');
             }
         }
 
-        if (!empty($faltantes)) {
-            $this->asignaturasBloqueadas[$asig->id] = implode(', ', $faltantes);
-        }
     }
-}
-
 
     public function guardarCursada()
-{
-    $errores = [];
+    {
+        $errores = [];
 
-    if (!$this->alumnoSeleccionado) $errores[] = 'Debe seleccionar un alumno.';
-    if (!$this->carreraSeleccionada) $errores[] = 'Debe seleccionar una carrera.';
-    if (count($this->asignaturasSeleccionadas) === 0) $errores[] = 'Debe seleccionar al menos una asignatura.';
-
-    $mapAsignaturaNombre = $this->materiasCarrera->pluck('nombre', 'id')->toArray();
-
-    foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
-        $nombreAsignatura = $mapAsignaturaNombre[$idAsignatura] ?? "ID {$idAsignatura}";
-
-        if (!isset($this->condiciones[$idAsignatura]) || $this->condiciones[$idAsignatura] === '') {
-            $errores[] = "Debe elegir una condición para {$nombreAsignatura}.";
+        if (! $this->alumnoSeleccionado) {
+            $errores[] = 'Debe seleccionar un alumno.';
+        }
+        if (! $this->carreraSeleccionada) {
+            $errores[] = 'Debe seleccionar una carrera.';
+        }
+        if (count($this->asignaturasSeleccionadas) === 0) {
+            $errores[] = 'Debe seleccionar al menos una asignatura.';
         }
 
-        if (isset($this->asignaturasBloqueadas[$idAsignatura])) {
-            $errores[] = "No se puede registrar {$nombreAsignatura} porque faltan las correlativas: {$this->asignaturasBloqueadas[$idAsignatura]}";
+        $mapAsignaturaNombre = $this->materiasCarrera->pluck('nombre', 'id')->toArray();
+
+        foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
+            $nombreAsignatura = $mapAsignaturaNombre[$idAsignatura] ?? "ID {$idAsignatura}";
+
+            if (! isset($this->condiciones[$idAsignatura]) || $this->condiciones[$idAsignatura] === '') {
+                $errores[] = "Debe elegir una condición para {$nombreAsignatura}.";
+            }
+
+            if (isset($this->asignaturasBloqueadas[$idAsignatura])) {
+                $errores[] = "No se puede registrar {$nombreAsignatura} porque faltan las correlativas:
+                {$this->asignaturasBloqueadas[$idAsignatura]}";
+            }
+
+            $existe = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
+                ->where('id_asignatura', $idAsignatura)
+                ->where('id_carrera', $this->carreraSeleccionada)
+                ->where('anio_cursada', now()->year)
+                ->exists();
+
+            if ($existe) {
+                $errores[] = "La cursada de {$nombreAsignatura} ya existe para este alumno este año.";
+            }
         }
 
-        $existe = Cursada::where('id_alumno', $this->alumnoSeleccionado->id)
-            ->where('id_asignatura', $idAsignatura)
-            ->where('id_carrera', $this->carreraSeleccionada)
-            ->where('anio_cursada', now()->year)
-            ->exists();
+        // ⚠️ Si hay errores, mostramos y recargamos materias
+        if (! empty($errores)) {
+            foreach ($errores as $msg) {
+                FlasherFacade::addError($msg);
+            }
 
-        if ($existe) {
-            $errores[] = "La cursada de {$nombreAsignatura} ya existe para este alumno este año.";
-        }
-    }
+            // 🔹 Evita que se rompa la tabla
+            $this->verMaterias();
 
-    // ⚠️ Si hay errores, mostramos y recargamos materias
-    if (!empty($errores)) {
-        foreach ($errores as $msg) {
-            FlasherFacade::addError($msg);
+            return;
         }
 
-        // 🔹 Evita que se rompa la tabla
+        $this->authorize('createAdmin', Cursada::class);
+
+        // ✅ Guardar cursadas
+        foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
+            Cursada::create([
+                'anio_cursada' => now()->year,
+                'aprobada' => 3,
+                'id_alumno' => $this->alumnoSeleccionado->id,
+                'id_asignatura' => $idAsignatura,
+                'id_carrera' => $this->carreraSeleccionada,
+                'condicion' => $this->mapCondicion[array_search((int) $this->condiciones[$idAsignatura], $this->mapCondicion) ??
+                'Regular'] ?? 1,
+            ]);
+        }
+
+        FlasherFacade::addSuccess('Cursadas registradas correctamente.');
+
+        // 🔹 Refresca materias y evita que se rompa la vista
         $this->verMaterias();
-        return;
+
+        // 🔹 Limpia selección
+        $this->asignaturasSeleccionadas = [];
+        $this->condiciones = [];
     }
-
-    // ✅ Guardar cursadas
-    foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
-        Cursada::create([
-            'anio_cursada' => now()->year,
-            'aprobada' => 3,
-            'id_alumno' => $this->alumnoSeleccionado->id,
-            'id_asignatura' => $idAsignatura,
-            'id_carrera' => $this->carreraSeleccionada,
-            'condicion' => $this->mapCondicion[array_search((int)$this->condiciones[$idAsignatura], $this->mapCondicion) ?? 'Regular'] ?? 1,
-        ]);
-    }
-
-    FlasherFacade::addSuccess('Cursadas registradas correctamente.');
-
-    // 🔹 Refresca materias y evita que se rompa la vista
-    $this->verMaterias();
-
-    // 🔹 Limpia selección
-    $this->asignaturasSeleccionadas = [];
-    $this->condiciones = [];
-}
-
 }
