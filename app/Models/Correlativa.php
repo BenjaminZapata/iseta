@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Auth;
+use Log;
 
 class Correlativa extends Pivot
 {
@@ -61,17 +62,15 @@ class Correlativa extends Pivot
         if (! $alumno) {
             $alumno = Auth::user();
         }
-        $asignatura->with('correlativas')
-            ->first();
-        $sinAprobar = [];
 
-        foreach ($asignatura->correlativas()->wherePivot('id_carrera', $id_carrera)->get() as $correlativa) {
-            $asigCorr = $correlativa;
-            if ($asigCorr === null) {
+        $sinAprobar = [];
+        foreach ($asignatura->correlativas as $correlativa) {
+            Log::debug($correlativa);
+            if ($correlativa === null) {
                 return false;
             }
-            if (! $asigCorr->aproboCursada($alumno)) {
-                $sinAprobar[] = $asigCorr;
+            if (! $correlativa->aproboCursada($alumno)) {
+                $sinAprobar[] = $correlativa;
             }
         }
 

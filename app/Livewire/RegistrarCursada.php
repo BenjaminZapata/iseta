@@ -104,8 +104,12 @@ class RegistrarCursada extends Component
     public function verMaterias()
     {
         if ($this->carreraSeleccionada) {
+            $id_carrera = $this->carreraSeleccionada;
             $this->materiasCarrera = Carrera::find($this->carreraSeleccionada)
                 ?->asignaturas()
+                ->with(['correlativas' => function ($query) use ($id_carrera) {
+                    $query->where('id_carrera', $id_carrera);
+                }])
                 ->whereDoesntHave('cursadas', function ($q) {
                     $q->where('id_carrera', $this->carreraSeleccionada)
                         ->where('id_alumno', $this->alumnoSeleccionado->id)
@@ -132,9 +136,9 @@ class RegistrarCursada extends Component
         $this->asignaturasBloqueadas = [];
         foreach ($this->materiasCarrera as $asignatura) {
             $correlativas = Correlativa::debeCursadasCorrelativas($asignatura, $this->carreraSeleccionada, $this->alumnoSeleccionado);
+            Log::debug($correlativas);
             if ($correlativas) {
-                $this->asignaturasBloqueadas[$asignatura->id] = $correlativas->pluck('nombre')->implode(', ');
-                Log::debug($this->asignaturasBloqueadas[$asignatura->id]);
+                $this->asignaturasBloqueadas[$asignatura->id] = $correlativas['nombre'];
             }
         }
 
