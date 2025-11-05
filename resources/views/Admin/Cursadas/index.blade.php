@@ -144,45 +144,6 @@
             @endforeach
         </tbody>
     </table>
-                    {{-- {{ $cursada->alumno?->apellidoNombre() ?? 'Sin alumno asignado' }}
-                </td>
-                <td>
-                    {{ $cursada->aprobado() }}
-                </td>
-                <td class="flex just-center" style="min-width: 170px; ">
-                    <div style="display: flex; justify-content: center; gap: 10px;">
-                        <a href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id]) }}">
-                            <button class="btn_blue btn_contraible">
-                                <i class="ti ti-pencil"
-                                    style="font-size: 1.3em;"></i>
-                                <span class="btn-text">Editar</span>
-                            </button>
-                        </a>
-                        @if (!$config['modo_seguro'])
-                        <div>
-                            <form id="form-eliminar-{{ $cursada->id }}"
-                                action="{{ route('admin.cursadas.destroy', $cursada->id) }}" method="POST"
-                                style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button"
-                                    onclick="openGeneralModal('form-eliminar-{{ $cursada->id }}',
-                                    '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre ?? 'sin asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'sin carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                    class="btn_icon-danger btn_contraible" style="background-color: red;">
-                                    <i class="ti ti-trash" style="font-size: 1.3em"></i>
-                                    <span class="btn-text">Eliminar</span>
-                                </button>
-                            </form>
-                        </div>
-                        @endif
-                    </div>
-                </td>
-
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div> --}}
 </div>
 
 {{-- PAGINACIÓN --}}

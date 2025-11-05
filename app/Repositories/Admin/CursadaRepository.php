@@ -19,10 +19,13 @@ class CursadaRepository
     public function index($request)
     {
         // 1️⃣ Traemos solo las filas resumen (una por grupo) con filtros aplicados
-        $cursadasSummaryQuery = Cursada::select('id_carrera', 'id_asignatura', 'anio_cursada')
+        $cursadasSummaryQuery = Cursada::select('id_carrera', 'id_asignatura', 'anio_cursada', 'condicion', 'aprobada', 'id_alumno')
             ->with(['carrera', 'asignatura'])
             ->when($request->filled('filter_carrera_id') && $request->input('filter_carrera_id') != 0, function ($query) use ($request) {
                 $query->where('id_carrera', $request->input('filter_carrera_id'));
+            })
+            ->when($request->filled('filter_alumno_id') && $request->input('filter_alumno_id') != 0, function ($query) use ($request) {
+                $query->where('id_alumno', $request->input('filter_alumno_id'));
             })
             ->when($request->filled('filter_asignatura_id') && $request->input('filter_asignatura_id') != 0, function ($query) use ($request) {
                 $query->where('id_asignatura', $request->input('filter_asignatura_id'));
@@ -49,6 +52,21 @@ class CursadaRepository
 
         // Traemos todas las cursadas de los grupos visibles en la página, con sus alumnos
         $allCursadas = Cursada::with('alumno')
+            ->when($request->filled('filter_carrera_id') && $request->input('filter_carrera_id') != 0, function ($query) use ($request) {
+                $query->where('id_carrera', $request->input('filter_carrera_id'));
+            })
+            ->when($request->filled('filter_asignatura_id') && $request->input('filter_asignatura_id') != 0, function ($query) use ($request) {
+                $query->where('id_asignatura', $request->input('filter_asignatura_id'));
+            })
+            ->when($request->filled('filter_condicion') && $request->input('filter_condicion') != 0, function ($query) use ($request) {
+                $query->where('condicion', $request->input('filter_condicion'));
+            })
+            ->when($request->filled('filter_aprobada') && $request->input('filter_aprobada') != 0, function ($query) use ($request) {
+                $query->where('aprobada', $request->input('filter_aprobada'));
+            })
+            ->when($request->filled('filter_alumno_id') && $request->input('filter_alumno_id') != 0, function ($query) use ($request) {
+                $query->where('id_alumno', $request->input('filter_alumno_id'));
+            })
             ->whereIn(['id_carrera', 'id_asignatura', 'anio_cursada'], $groupsArray)
             ->get()
             ->groupBy(['id_carrera', 'id_asignatura', 'anio_cursada']);
