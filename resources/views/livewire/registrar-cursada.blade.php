@@ -1,8 +1,17 @@
 <div class="p-3">
 
-    {{-- CSS personalizado --}}
-    <link rel="stylesheet" href="{{ asset('css/Admin/cursadas.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=add_circle" />
 
+    <link rel="stylesheet" href="{{ asset('css/Admin/cursadas.css') }}">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 1,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+    </style>
     {{-- Formulario de selección y guardado --}}
     <form wire:submit.prevent="guardarCursada" class="space-y-4">
 
@@ -21,240 +30,207 @@
                         </div>
 
                         <div class="col-md-4">
-                            <label for="nombre" class="form-label">Nombre</label>
-                            <input type="text" id="nombre" wire:model.live="nombre" class="form-control" placeholder="Ej: Javier">
+                            <label for="nombre" class="form-label">Nombre y Apellido</label>
+                            <input type="text" id="nombre" wire:model.live="nombre_apellido" class="form-control" placeholder="Ej: Javier Torres o Torres">
+                            @error('nombre') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                         </div>
-
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <label for="apellido" class="form-label">Apellido</label>
                             <input type="text" id="apellido" wire:model.live="apellido" class="form-control" placeholder="Ej: Torres">
-                        </div>
+                            @error('apellido') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                    </div> --}}
+                    <div class="col-md-4">
+                        <label for="dni" class="form-label">DNI</label>
+                        <input type="text" id="dni" wire:model.live="dni" class="form-control" placeholder="Ej: 47260126">
+                        @error('dni') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                     </div>
-                </fieldset>
+            </div>
+            </fieldset>
+        </div>
+</div>
+
+{{-- 📋 Resultados de búsqueda --}}
+@if ($nombre_apellido || $dni)
+<div class="card shadow-sm mb-4 resultados-card">
+    <div class="card-header text-white fw-bold d-flex justify-content-between align-items-center">
+        <span>Lista de alumnos</span>
+        <span class="badge bg-light text-dark">{{ count($alumnos) }} {{ count($alumnos)==1 ? 'resultado' : 'resultados' }}</span>
+    </div>
+    <div class="tabla-scroll">
+        <table class="table table-sm table-hover align-middle mb-0">
+            <thead class="table-light sticky-top" style="background-color:#140b5c; color:white;">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>DNI</th>
+                    <th class="text-center">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($alumnos as $alumno)
+                <tr>
+                    <td>{{ $alumno->nombre }}</td>
+                    <td>{{ $alumno->apellido }}</td>
+                    <td>{{ $alumno->dni }}</td>
+                    <td class="text-center">
+                        <button type="button" wire:click="seleccionarAlumno({{ $alumno->id }})" class="btn btn-modificar">
+                            Seleccionar
+                        </button>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="4" class="text-center text-muted">No se encontraron resultados</td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+</div>
+@endif
+
+{{-- 🎓 Alumno seleccionado --}}
+@if ($alumnoSeleccionado)
+<div class="card shadow-sm mb-4 alumno-seleccionado">
+    <div class="card-body">
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-person-lines-fill"></i> Alumno seleccionado
+            </label>
+            <div class="nombre-alumno">
+                {{ $alumnoSeleccionado->apellido }}, {{ $alumnoSeleccionado->nombre }}
             </div>
         </div>
 
-        {{-- 📋 Resultados de búsqueda --}}
-        @if ($nombre || $apellido || $dni)
-        <div class="card shadow-sm mb-4 resultados-card">
-            <div class="card-header text-white fw-bold d-flex justify-content-between align-items-center">
-                <span class="mini-encabezado">Lista de alumnos</span>
-                <span class="badge bg-light text-dark mini-encabezado">
-                    {{ count($alumnos) }} {{ count($alumnos)==1 ? 'resultado' : 'resultados' }}
-                </span>
-            </div>
-
-            <div class="tabla-scroll">
-                <table class="table table-sm table-hover align-middle mb-0">
-                    <thead>
-                        <tr class="tabla-container">
-                            <th class="center">Nombre</th>
-                            <th class="center">Apellido</th>
-                            <th class="center">DNI</th>
-                            <th class="center">Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($alumnos as $alumno)
-                        <tr>
-                            <td>
-                                <div style="display: flex; align-items: center; justify-content: center;">{{ $alumno->nombre }}</div>
-                            </td>
-                            <td>
-                                <div style="display: flex; align-items: center; justify-content: center;">{{ $alumno->apellido }}</div>
-                            </td>
-                            <td>
-                                <div style="display: flex; align-items: center; justify-content: center;">{{ $alumno->dni }}</div>
-                            </td>
-                            <td class="text-center">
-                                <div style="display: flex; align-items: center; justify-content: center;">
-                                    <button type="button" wire:click="seleccionarAlumno({{ $alumno->id }})" class="btn-modificar">
-                                        <i class="bi bi-check-circle"></i> Seleccionar
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="4" class="text-center text-muted">
-                                No se encontraron resultados
-                            </td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+        <div class="bloque-carrera mb-3">
+            <label class="form-label">Carrera</label>
+            <select wire:model="carreraSeleccionada" wire:change="verMaterias" class="form-select">
+                <option value="">Seleccionar una carrera...</option>
+                @foreach ($alumnoSeleccionado->egresadoinscripto as $egresado)
+                <option value="{{ $egresado->id_carrera }}">{{ $egresado->carrera->nombre }}</option>
+                @endforeach
+            </select>
+            @error('carreraSeleccionada') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
         </div>
-        @endif
+    </div>
+</div>
+@endif
 
-        {{-- 🎓 Alumno seleccionado --}}
-        @if ($alumnoSeleccionado)
-        <div class="card shadow-sm mb-4 alumno-seleccionado">
-            <div class="card-body">
-                <div class="mb-3">
-                    <label class="form-label">
-                        <i class="bi bi-person-lines-fill"></i> Alumno seleccionado
-                    </label>
-                    <div class="nombre-alumno">
-                        {{ $alumnoSeleccionado->apellido }}, {{ $alumnoSeleccionado->nombre }}
-                    </div>
-                </div>
+{{-- 📚 Asignaturas disponibles (agrupadas por año) --}}
+@if ($materiasCarrera && count($materiasCarrera))
+@php
+$materiasPorAnio = collect($materiasCarrera)->groupBy(function($m) {
+return isset($m->pivot) && isset($m->pivot->anio) ? $m->pivot->anio + 1 : 'Sin año';
+});
+@endphp
 
-                <div class="mb-3">
-                    <label class="form-label">
-                        <i class="bi bi-mortarboard"></i> Carrera
-                    </label>
-                    <select wire:model="carreraSeleccionada" wire:change="activarBoton" class="form-select">
-                        <option value="">Seleccionar una carrera...</option>
-                        @foreach ($alumnoSeleccionado->egresadoinscripto as $egresado)
-                        <option value="{{ $egresado->id_carrera }}">
-                            {{ $egresado->carrera->nombre }}
-                        </option>
-                        @endforeach
-                    </select>
-                </div>
+<div class="card shadow-sm mb-4">
+    <div class="card-header text-white fw-bold">
+        <i class="bi bi-journal-bookmark-fill"></i>
+        <span class="mini-encabezado"> Asignaturas disponibles</span>
+    </div>
 
-                @if ($mostrarBoton)
-                <div class="text-end">
-                    <button type="button" wire:click="verMaterias" class="btn_blue">
-                        <i class="bi bi-book"></i> Ver asignaturas
+    <div class="card-body">
+        <div class="accordion" id="accordionMaterias">
+            @foreach ($materiasPorAnio as $anio => $lista)
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="heading-{{ $anio }}">
+                    <button class="accordion-button collapsed fw-semibold"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse-{{ $anio }}"
+                        aria-expanded="false"
+                        aria-controls="collapse-{{ $anio }}"
+                        style="background-color: #f4f5f9; color: #140b5c;">
+                        {{ is_numeric($anio) ? $anio . '° Año' : $anio }}
                     </button>
-                </div>
-                @endif
-            </div>
-        </div>
-        @endif
+                </h2>
 
-        {{-- 📚 Asignaturas disponibles (agrupadas por año) --}}
-        @if ($materiasCarrera && count($materiasCarrera))
-        @php
-        $materiasPorAnio = collect($materiasCarrera)->groupBy(function($m) {
-        return isset($m->pivot) && isset($m->pivot->anio) ? $m->pivot->anio + 1 : 'Sin año';
-        });
-        @endphp
+                <div id="collapse-{{ $anio }}" class="accordion-collapse collapse"
+                    aria-labelledby="heading-{{ $anio }}"
+                    data-bs-parent="#accordionMaterias">
+                    <div class="accordion-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover mb-0">
+                                <thead style="background-color: #140b5c; color: white;">
+                                    <tr>
+                                        <th>Asignatura</th>
+                                        <th colspan="0" style="padding-right: 400px;">Condición</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($lista as $asignatura)
+                                    <tr wire:key="asignatura-{{ $asignatura->id }}"
+                                        x-data="{ checked: false }"
+                                        x-on:click="$el.querySelector('input[type=checkbox]').click()"
+                                        style="cursor: pointer;"
+                                        @if(isset($asignaturasBloqueadas[$asignatura->id])) class="table-warning" @endif>
+                                        <td class="fw-semibold">
+                                            <i x-show="checked" class="uil uil-minus" style="color: #140b5c;"></i>
+                                            <i x-show="!checked" class="uil uil-plus" style="color: #140b5c;"></i>
+                                            {{ $asignatura->nombre }}
+                                            <input type="checkbox"
+                                                x-model="checked"
+                                                wire:model="asignaturasSeleccionadas"
+                                                value="{{ (int) $asignatura->id }}"
+                                                @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
+                                            >
+                                            @if(isset($asignaturasBloqueadas[$asignatura->id]))
+                                            <div class="tooltip-correlativa mt-1">
+                                                <strong>Correlativas faltantes:</strong>
+                                                @foreach ($asignaturasBloqueadas[$asignatura->id] as $correlativa )
+                                                <br>{{ $correlativa }}
+                                                @endforeach
 
-        <div class="card shadow-sm mb-4">
-            <div class="card-header text-white fw-bold">
-                <i class="bi bi-journal-bookmark-fill"></i>
-                <span class="mini-encabezado"> Asignaturas disponibles</span>
-            </div>
+                                            </div>
+                                            @endif
+                                        </td>
+                                        <td class="px-4 py-2 align-top" colspan="0">
+                                            <div class="space-y-1" x-show="checked">
+                                                <select
+                                                    @click.stop
+                                                    id="condicion_{{ $asignatura->id }}"
+                                                    wire:model="condiciones.{{ $asignatura->id }}"
+                                                    class="mt-1 block w-auto rounded-md border-gray-300 campo_info rounded shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 text-sm
+                                                                        @if(isset($asignaturasBloqueadas[$asignatura->id])) bg-gray-100 cursor-not-allowed @endif"
+                                                    @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
+                                                    >
+                                                    <option value="">Seleccionar condición...</option>
+                                                    <option value="1">Regular</option>
+                                                    <option value="0">Libre</option>
+                                                    <option value="2">Itinerante</option>
+                                                    <option value="3">Oyente</option>
+                                                </select>
 
-            <div class="card-body">
-                <div class="accordion" id="accordionMaterias">
-                    @foreach ($materiasPorAnio as $anio => $lista)
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading-{{ $anio }}">
-                            <button class="accordion-button collapsed fw-semibold"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#collapse-{{ $anio }}"
-                                aria-expanded="false"
-                                aria-controls="collapse-{{ $anio }}"
-                                style="background-color: #f4f5f9; color: #140b5c;">
-                                {{ is_numeric($anio) ? $anio . '° Año' : $anio }}
-                            </button>
-                        </h2>
-
-                        <div id="collapse-{{ $anio }}" class="accordion-collapse collapse"
-                            aria-labelledby="heading-{{ $anio }}"
-                            data-bs-parent="#accordionMaterias">
-                            <div class="accordion-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover mb-0">
-                                        <thead style="background-color: #140b5c; color: white;">
-                                            <tr>
-                                                <th>Asignatura</th>
-                                                <th class="centrar">Estado</th>
-                                                <th>
-                                                    <div class="centrar">Seleccionar</div>
-                                                </th>
-                                                <th>
-                                                    <div class="centrar">Condición</div>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($lista as $asignatura)
-                                            <tr wire:key="asignatura-{{ $asignatura->id }}"
-                                                @if(isset($asignaturasBloqueadas[$asignatura->id])) class="table-warning-custom" @endif>
-
-                                                {{-- NOMBRE ASIGNATURA --}}
-                                                <td class="fw-semibold">
-                                                    @if(isset($asignaturasBloqueadas[$asignatura->id]))
-                                                    <div class="grid-correlativa">
-                                                        <div class="tooltip-correlativa">
-                                                            <i class="ti ti-alert-triangle"></i>
-                                                        </div>
-                                                        <div>{{ $asignatura->nombre }}</div>
-                                                    </div>
-                                                    @else
-                                                    {{ $asignatura->nombre }}
-                                                    @endif
-                                                </td>
-
-                                                {{-- ESTADO --}}
-                                                <td>
-                                                    <div class="centrar">
-                                                        @if(isset($asignaturasBloqueadas[$asignatura->id]))
-
-                                                        <div>
-                                                            <strong>Correlativas faltantes:</strong>
-                                                            {{ $asignaturasBloqueadas[$asignatura->id] }}
-                                                        </div>
-
-                                                        @endif
-                                                    </div>
-                                                </td>
-
-                                                {{-- CHECKBOXS --}}
-
-                                                <td>
-                                                    <div class="centrar">
-                                                        <input type="checkbox"
-                                                            wire:model="asignaturasSeleccionadas"
-                                                            value="{{ (int) $asignatura->id }}"
-                                                            @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
-                                                        title="{{ $asignaturasBloqueadas[$asignatura->id] ?? '' }}">
-                                                    </div>
-                                                </td>
-
-                                                {{-- CONDICION DE CURSADA --}}
-
-                                                <td>
-                                                    <div class="centrar">
-                                                        <select wire:model="condiciones.{{ $asignatura->id }}"
-                                                            class="form-select form-select-sm"
-                                                            @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif>
-                                                            <option value="">Seleccionar condición...</option>
-                                                            <option value="1">Regular</option>
-                                                            <option value="0">Libre</option>
-                                                            <option value="2">Itinerante</option>
-                                                            <option value="3">Oyente</option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                                @if ($errors->has('condiciones.' . $asignatura->id))
+                                                <span class="text-red-500 text-xs">
+                                                    {{ $errors->first('condiciones.' . $asignatura->id) }}
+                                                </span>
+                                                @endif
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    @endforeach
                 </div>
             </div>
+            @endforeach
         </div>
-        @endif
+    </div>
+</div>
+@endif
 
-        {{-- 🔘 Botones inferiores --}}
-        <div class="botones-derecha mt-3 d-flex justify-content-end gap-2">
-            <x-btn-cancelar />
-            @if ($materiasCarrera && count($materiasCarrera))
-            <button type="submit" class="btn_blue">
-                <i class="ti ti-device-floppy"></i> Guardar cursadas
-            </button>
-            @endif
-        </div>
-    </form>
+{{-- 🔘 Botones inferiores --}}
+<div class="botones-derecha mt-3 d-flex justify-content-end gap-2">
+    <x-btn-cancelar :url="route('admin.cursadas.index')" />
+    @if ($materiasCarrera && count($materiasCarrera))
+    <button type="submit" class="btn_blue">
+        <i class="ti ti-device-floppy"></i> Guardar cursadas
+    </button>
+    @endif
+</div>
+</form>
 </div>

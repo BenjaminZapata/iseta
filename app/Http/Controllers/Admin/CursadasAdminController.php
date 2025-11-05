@@ -13,6 +13,7 @@ use App\Models\Examen;
 use App\Repositories\Admin\CursadaRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\log;
+use Illuminate\Validation\Rule;
 
 class CursadasAdminController extends BaseController
 {
@@ -125,7 +126,9 @@ class CursadasAdminController extends BaseController
             'carrera' => ['required'],
             'asignatura' => ['required'],
             'alumno' => ['required'],
-            'anio_cursada' => ['required', 'integer', 'min:2020', 'max:'.(date('Y') + 5)],
+            'anio_cursada' => ['required', 'integer',
+                Rule::numeric()->exactly(now()->year),
+            ],
         ]);
 
         $asignatura = Asignatura::where('id', $request->asignatura)->with('correlativas.asignatura')->first();
