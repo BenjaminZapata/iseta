@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Support\Facades\Auth;
-use Log;
 
 class Correlativa extends Pivot
 {
@@ -65,12 +64,11 @@ class Correlativa extends Pivot
 
         $sinAprobar = [];
         foreach ($asignatura->correlativas as $correlativa) {
-            Log::debug($correlativa);
             if ($correlativa === null) {
                 return false;
             }
             if (! $correlativa->aproboCursada($alumno)) {
-                $sinAprobar[] = $correlativa;
+                $sinAprobar[] = $correlativa->toArray();
             }
         }
 

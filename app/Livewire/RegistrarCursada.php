@@ -136,9 +136,8 @@ class RegistrarCursada extends Component
         $this->asignaturasBloqueadas = [];
         foreach ($this->materiasCarrera as $asignatura) {
             $correlativas = Correlativa::debeCursadasCorrelativas($asignatura, $this->carreraSeleccionada, $this->alumnoSeleccionado);
-            Log::debug($correlativas);
             if ($correlativas) {
-                $this->asignaturasBloqueadas[$asignatura->id] = $correlativas['nombre'];
+                $this->asignaturasBloqueadas[$asignatura->id] = array_column($correlativas, 'nombre');
             }
         }
 

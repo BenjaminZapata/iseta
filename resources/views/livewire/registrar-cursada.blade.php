@@ -162,13 +162,12 @@
                                                                     wire:model="asignaturasSeleccionadas"
                                                                     value="{{ (int) $asignatura->id }}"
                                                                     @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
-                                                                    title="{{ $asignaturasBloqueadas[$asignatura->id] ?? '' }}"
                                                                 >
                                                                 @if(isset($asignaturasBloqueadas[$asignatura->id]))
                                                                     <div class="tooltip-correlativa mt-1">
                                                                         <strong>Correlativas faltantes:</strong> 
                                                                         @foreach ($asignaturasBloqueadas[$asignatura->id] as $correlativa )
-                                                                            {{ $correlativa }}
+                                                                            <br>{{ $correlativa }}
                                                                         @endforeach
                                                                         
                                                                     </div>
