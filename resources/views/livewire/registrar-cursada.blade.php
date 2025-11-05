@@ -38,12 +38,12 @@
                             <label for="apellido" class="form-label">Apellido</label>
                             <input type="text" id="apellido" wire:model.live="apellido" class="form-control" placeholder="Ej: Torres">
                             @error('apellido') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div> --}}
+                    </div>
                     <div class="col-md-4">
                         <label for="dni" class="form-label">DNI</label>
                         <input type="text" id="dni" wire:model.live="dni" class="form-control" placeholder="Ej: 47260126">
                         @error('dni') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
+                    </div>--}}
             </div>
             </fieldset>
         </div>
@@ -53,7 +53,7 @@
 @if ($nombre_apellido || $dni)
 <div class="card shadow-sm mb-4 resultados-card">
     <div class="card-header text-white fw-bold d-flex justify-content-between align-items-center">
-        <span>Lista de alumnos</span>
+        <span class="mini-encabezado">Lista de alumnos</span>
         <span class="badge bg-light text-dark">{{ count($alumnos) }} {{ count($alumnos)==1 ? 'resultado' : 'resultados' }}</span>
     </div>
     <div class="tabla-scroll">
@@ -155,44 +155,69 @@ return isset($m->pivot) && isset($m->pivot->anio) ? $m->pivot->anio + 1 : 'Sin a
                                 <thead style="background-color: #140b5c; color: white;">
                                     <tr>
                                         <th>Asignatura</th>
-                                        <th colspan="0" style="padding-right: 400px;">Condición</th>
+                                        <th class="center">Estado</th>
+                                        <th class="center" style="min-width: 150px;">Condición</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($lista as $asignatura)
                                     <tr wire:key="asignatura-{{ $asignatura->id }}"
                                         x-data="{ checked: false }"
+                                        x-init="
+            checked = @js(in_array($asignatura->id, $asignaturasSeleccionadas));
+        "
                                         x-on:click="$el.querySelector('input[type=checkbox]').click()"
-                                        style="cursor: pointer;"
-                                        @if(isset($asignaturasBloqueadas[$asignatura->id])) class="table-warning" @endif>
-                                        <td class="fw-semibold">
-                                            <i x-show="checked" class="uil uil-minus" style="color: #140b5c;"></i>
-                                            <i x-show="!checked" class="uil uil-plus" style="color: #140b5c;"></i>
-                                            {{ $asignatura->nombre }}
+                                        x-bind:class="checked ? 'table-selected' : ''"
+                                        style="cursor: pointer; transition: background-color 0.2s;"
+                                        @if(isset($asignaturasBloqueadas[$asignatura->id])) class="table-warning-custom" @endif
+                                        >
+                                        <td class="bold">
+                                            @if(isset($asignaturasBloqueadas[$asignatura->id]))
+                                            <div class="grid-correlativa">
+                                                <div class="tooltip-correlativa">
+                                                    <i class="ti ti-alert-triangle"></i>
+                                                </div>
+                                                <div>
+                                                    {{ $asignatura->nombre }}
+                                                </div>
+                                            </div>
+                                            @else
+                                            <i x-show="checked" class="ti ti-circle-filled" style="color: #140b5c; margin-left: 8px;"></i>
+                                            <i x-show="!checked" class="ti ti-circle" style="color: #140b5c; margin-left: 8px;"></i>
+                                            <span style="margin-left: 8px;">{{ $asignatura->nombre }}</span>
+
+                                            <!-- Checkbox sigue funcionando pero está completamente oculto -->
                                             <input type="checkbox"
                                                 x-model="checked"
                                                 wire:model="asignaturasSeleccionadas"
                                                 value="{{ (int) $asignatura->id }}"
+                                                class="hidden-checkbox"
                                                 @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
                                             >
+                                            @endif
+                                        </td>
+                                        <td>
                                             @if(isset($asignaturasBloqueadas[$asignatura->id]))
                                             <div class="tooltip-correlativa mt-1">
                                                 <strong>Correlativas faltantes:</strong>
-                                                @foreach ($asignaturasBloqueadas[$asignatura->id] as $correlativa )
-                                                <br>{{ $correlativa }}
+                                                @foreach ($asignaturasBloqueadas[$asignatura->id] as $correlativa)
+                                                <br>
+                                                <i class="ti ti-circle-filled" style="font-size: 0.5em; margin-left: 12px; padding-top: 5px;"></i>
+                                                <span style="margin-left: 5px; padding-top: 5px;">{{ $correlativa }}</span>
                                                 @endforeach
-
                                             </div>
+
                                             @endif
                                         </td>
-                                        <td class="px-4 py-2 align-top" colspan="0">
-                                            <div class="space-y-1" x-show="checked">
+
+                                        <td class="px-4 py-2 align-middle" style="min-width: 250px;">
+                                            <div class="space-y-1 centrar" x-show="checked" x-transition.opacity.duration.150ms>
                                                 <select
                                                     @click.stop
                                                     id="condicion_{{ $asignatura->id }}"
                                                     wire:model="condiciones.{{ $asignatura->id }}"
                                                     class="mt-1 block w-auto rounded-md border-gray-300 campo_info rounded shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 text-sm
-                                                                        @if(isset($asignaturasBloqueadas[$asignatura->id])) bg-gray-100 cursor-not-allowed @endif"
+                        @if(isset($asignaturasBloqueadas[$asignatura->id])) bg-gray-100 cursor-not-allowed @endif"
                                                     @if(isset($asignaturasBloqueadas[$asignatura->id])) disabled @endif
                                                     >
                                                     <option value="">Seleccionar condición...</option>
@@ -228,7 +253,7 @@ return isset($m->pivot) && isset($m->pivot->anio) ? $m->pivot->anio + 1 : 'Sin a
     <x-btn-cancelar :url="route('admin.cursadas.index')" />
     @if ($materiasCarrera && count($materiasCarrera))
     <button type="submit" class="btn_blue">
-        <i class="ti ti-device-floppy"></i> Guardar cursadas
+        <i class="ti ti-device-floppy iconos"></i> Guardar cursadas
     </button>
     @endif
 </div>

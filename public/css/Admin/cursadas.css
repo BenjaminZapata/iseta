@@ -218,3 +218,22 @@ body {
     word-break: break-word;
     white-space: normal;
 }
+
+.hidden-checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    height: 0;
+    width: 0;
+}
+
+/* Color de fila seleccionada */
+.table-selected {
+    background-color: #e0dbff !important;
+    /* Lavanda claro */
+    transition: background-color 0.2s ease-in-out;
+}
+
+.table-selected:hover {
+    background-color: #d2c8ff !important;
+}

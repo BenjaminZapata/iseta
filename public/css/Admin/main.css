@@ -1284,3 +1284,8 @@ input:checked+.slider::after {
   align-items: center;
   justify-content: center;
 }
+
+.iconos {
+  font-size: 1.3em;
+  margin-right: 8px;
+}
