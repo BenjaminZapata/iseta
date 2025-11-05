@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table("mesas", function (Blueprint $table) {
             $table->longText("observaciones")->nullable();
+            $table->tinyInteger('estado');
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table("mesas", function (Blueprint $table) {
             $table->dropColumn("observaciones");
+            $table->dropColumn('estado');
         });
     }
 };
