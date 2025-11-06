@@ -13,8 +13,8 @@
                         {!! $form->generate(null, 'post', [
 
                             'Carrera y Asignatura' => [
-                            $form->select('carrera', 'Carrera:', 'label-input-y-75', $oldCarrera, $opcionesCarreras, ['id' => 'carrera_select']),
-                            $form->select('id_asignatura', 'Asignatura:', 'label-input-y-75', $oldAsignatura, $opcionesAsignaturas, ['id' => 'asignatura_select'])
+                            $form->select('carrera', 'Seleccionar carrera:', 'label-input-y-75', $oldCarrera, $opcionesCarreras, ['id' => 'carrera_select']),
+                            $form->select('id_asignatura', 'Seleccionar la asignatura:', 'label-input-y-75', $oldAsignatura, $opcionesAsignaturas, ['id' => 'asignatura_select'])
                             ],
 
                             'Profesores' => [
@@ -23,14 +23,14 @@
                                 $form->select('prof_vocal_2', 'Profesor vocal 2:', 'label-input-y-75', $oldVocal2, $opcionesProfesores),
                             ],
 
-                            'Llamados' => [
+                            'Llamados y fecha' => [
                             $form->select('cantidad_llamados', 'Cantidad de llamados:', 'label-input-y-75', $oldCantidadLlamados, [
                                 '1' => '1 llamado',
                                 '2' => '2 llamados',
                                 ], ['id' => 'cantidad_llamados']),
                                 new HtmlString('
                                     <div class="label-input-y-75" id="fecha_llamado_1">
-                                        <label for="fecha_1">Fecha llamado 1:</label>
+                                        <label for="fecha_1">Fecha:</label>
                                         <input class="campo_info rounded" type="datetime-local" name="fecha_1" value="' . e($oldFecha1) . '">
                                     </div>'),
 
