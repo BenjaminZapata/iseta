@@ -51,9 +51,11 @@
                                 </div>
 
 
-
+                                @php
+                                    $debeCursadasCorrelativas = Correlativa::debeCursadasCorrelativas($asignatura, $alumno);
+                                @endphp
                                 <div>
-                                    @if ($asignatura->debeCorrelativas($alumno, $carrera->id))
+                                    @if ($debeCursadasCorrelativas)
                                         <div class="correlativa-header cursor-pointer flex items-center justify-between"
                                             onclick="toggleEquiv({{ $asignatura->id }})">
                                             <p class="font-semibold text-warning">Debe correlativas</p>
@@ -61,7 +63,7 @@
                                         </div>
 
                                         <ul class="equiv-list id-{{ $asignatura->id }} pl-4 list-disc text-sm">
-                                            @foreach ($asignatura->debeCorrelativas($alumno, $carrera->id) as $equiv)
+                                            @foreach ($asignatura->debeCursadasCorrelativas($alumno, $carrera->id) as $equiv)
                                                 <li><strong>{{ $equiv->anioStr($carrera->id) }}:</strong>
                                                     {{ $equiv->nombre }}</li>
                                             @endforeach
