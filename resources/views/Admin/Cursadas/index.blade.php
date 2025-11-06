@@ -112,15 +112,21 @@
                         <thead>
                             <tr>
                                 <th>ALUMNO</th>
-                                <th>ESTADO</th>
+                                <th class="center">ESTADO</th>
+                                <th class="center">CONDICION</th>
                                 <th class="center" style="min-width: 200px;">ACCION</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($cursadas_ungrp as $sub_cursada)
                             <tr>
-                                <td>{{ $sub_cursada->alumno->apellidoNombre() ?? 'Sin alumno' }}</td>
-                                <td>{{ $sub_cursada->aprobado() }}</td>
+                                <td class="bold">{{ $sub_cursada->alumno->apellidoNombre() ?? 'Sin alumno' }}</td>
+                                <td>
+                                    <div class="centrar">{{ $sub_cursada->aprobado() }}</div>
+                                </td>
+                                <td>
+                                    <div class="centrar">{{ $sub_cursada->condicionString() }}</div>
+                                </td>
                                 <td style="min-width: 200px;">
                                     <div style="display: flex; justify-content: center; gap: 10px;">
                                         <a href="{{ route('admin.cursadas.edit', ['cursada' => $sub_cursada->id]) }}">
