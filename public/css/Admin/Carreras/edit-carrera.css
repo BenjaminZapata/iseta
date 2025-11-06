@@ -1,0 +1,23 @@
+/* ===== NUEVA versión: dos columnas fijas 50/50 ===== */
+.grid-2-fija {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ /* 50% / 50% */
+ gap: 0.5rem;
+ /* igual a gap-2 de Tailwind */
+ width: 100%;
+}
+
+/* Evita que los contenidos ensanchen las columnas */
+.grid-2-fija label {
+ display: block;
+ width: 100%;
+}
+
+/* Asegura quiebre de línea y evita expansión */
+.grid-2-fija p {
+ width: 100%;
+ word-break: break-word;
+ overflow-wrap: anywhere;
+ white-space: normal;
+}

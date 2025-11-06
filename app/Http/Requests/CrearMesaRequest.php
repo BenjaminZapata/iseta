@@ -33,4 +33,21 @@ class CrearMesaRequest extends FormRequest
             'observaciones' => ['nullable', 'max:150'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'carrera.required' => 'La carrera es obligatoria.',
+            'id_asignatura.required' => 'La asignatura es obligatoria.',
+            'prof_presidente.required' => 'El profesor presidente es obligatorio.',
+            'prof_vocal_1.required' => 'El profesor vocal 1 es obligatorio.',
+            'prof_vocal_2.required' => 'El profesor vocal 2 es obligatorio.',
+            'cantidad_llamados.required' => 'La cantidad de llamados es obligatoria.',
+            'fecha_1.required' => 'La fecha del primer llamado es obligatoria.',
+            'fecha_1.date' => 'La fecha del primer llamado no es una fecha válida.',
+            'fecha_2.required' => 'La fecha del segundo llamado es obligatoria cuando la cantidad de llamados es 2.',
+            'fecha_2.date' => 'La fecha del segundo llamado no es una fecha válida.',
+            'observaciones.max' => 'Las observaciones no pueden exceder los 150 caracteres.',
+        ];
+    }
 }

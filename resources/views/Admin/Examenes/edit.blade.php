@@ -1,6 +1,8 @@
 @extends('Admin.template')
 @php use Illuminate\Support\HtmlString; @endphp
 
+<link rel="stylesheet" href="{{ asset('css/Admin/Examenes/edit-examen.css') }}">
+
 @section('content')
 <div class="edit-form-container">
     <div class="perfil_one br">
