@@ -189,13 +189,34 @@ class CursadasAdminController extends BaseController
     public function destroy(Cursada $cursada)
     {
         try {
+            if ($cursada->anio_cursada == now()->year && $cursada->condicion != 4) {
+                flash()->warning('No se puede eliminar una cursada que pertenezca al año lectivo actual, a no ser que el alumno tenga como condicion "Desertor"');
+
+                return back();
+            }
+
+            if ($cursada->aprobada == 5) {
+                Examen::where('id_carrera', $cursada->id_carrera)
+                    ->where('aprobado', 1)
+                    ->where('id_asignatura', $cursada->id_asignatura)
+                    ->where('id_alumno', $cursada->id_alumno)
+                    ->delete();
+            }
+
+            if ($cursada->primer_cuatrimestre_nota != null || $cursada->segundo_cuatrimestre_nota != null) {
+                flash()->warning('No se puede eliminar la cursada porque el alumno cuenta con notas en los cuatrimestres');
+
+                return back();
+            }
+
             $cursada->delete();
 
             return redirect()->route('admin.cursadas.index')
                 ->with('mensaje', 'Se ha eliminado la cursada');
         } catch (\Exception $e) {
-            return redirect()->route('admin.cursadas.index')
-                ->with('error', 'No se pudo eliminar la cursada. Error: '.$e->getMessage());
+            \Log::error($e);
+
+            return flash()->error('No se pudo eliminar la cursada.');
         }
     }
 }

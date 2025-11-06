@@ -119,25 +119,8 @@ $selectedVocal2 = $selectedVocal2;
                 <h2>Alumnos inscriptos</h2>
             </div>
             <div class="matricular">
-                @if (true || strtotime($mesa->fecha) > time())
-                    <p class="py-2">Estos alumnos han aprobado la cursada de esta materia, luego se volvera a validar
-                        sobre correlativas y tiempos</p>
-                    <form method="POST" action="{{ route('admin.examenes.store') }}">
-                        @csrf
-                        <select class="rounded" name="id_alumno">
-                            <option value="">Selecciona un alumno</option>
-                            @foreach ($inscribibles as $inscribible)
-                                <option value="{{ $inscribible->id }}">{{ $inscribible->apellidoNombre() }}</option>
-                            @endforeach
-                        </select>
-                        <input name="id_mesa" value="{{ $mesa->id }}" type="hidden">
-                        <div class="upd"><button class="btn_blue"><i class="ti ti-upload"
-                            style="font-size: 1.3em; margin-right: 8px;"></i>Cargar</button>
-                        </div>
-                    </form>
-                @else
-                    Ya no se pueden agregar alumnos
-                @endif
+             <livewire:mesas-alumnos :mesa="$mesa" :inscribibles="$inscribibles" />
+
             </div>
         </div>
         <div class="table">
@@ -179,7 +162,7 @@ $selectedVocal2 = $selectedVocal2;
                                         @csrf
                                         <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                                             <input name="nota" placeholder="0 = sin rendir, a = ausente" class="input-nota"
-                                                value="{{ $examen->nota() }}">
+                                                value="{{ $examen->notaTexto() }}">
                                             <button class="boton-nota">
                                                 <i class="ti ti-check" style="font-size: 1.3em;"></i>
                                             </button>
@@ -202,15 +185,44 @@ $selectedVocal2 = $selectedVocal2;
                                     </a>
                                 </div>
                             </td>
-                            <td>
-                                <div style="display:flex; align-items: center; justify-content: center;">
-                                    <a href="{{ route('admin.examenes.edit', ['examen' => $examen->id]) }}">
-                                        <button class="btn_blue">
-                                            <i class="ti ti-edit" style="font-size: 1.3em; margin-right: 8px;"></i>Editar
-                                        </button>
-                                    </a>
-                                </div>
-                            </td>
+                           <td class="center" style="min-width: 180px;">
+                    <div style="display: flex; justify-content: center; gap:10px;">
+                        <a href="{{ route('admin.examenes.edit', ['examen' => $examen->id]) }}">
+    <button class="btn_blue btn_contraible">
+        <i class="ti ti-pencil" style="font-size: 1.3em;"></i>
+        <span class="btn-text">Editar</span>
+    </button>
+</a>
+                        @if (!$config['modo_seguro'])
+    <div>
+        <form id="form-eliminar-{{ $examen->id }}"
+            action="{{ route('admin.examenes.destroy', $examen->id) }}" method="POST"
+            style="display: inline;">
+            @csrf
+            @method('DELETE')
+            <button type="button"
+                class="btn_icon-danger btn_contraible"
+                style="background-color: red;"
+                onclick="openGeneralModal(
+                    'form-eliminar-{{ $examen->id }}',
+                    '¿Estás seguro de que querés eliminar este examen?\n\n' +
+                    'Alumno: {{ $examen->alumno?->apellidoNombre() ?? "No asignado" }}\n' +
+                    'Carrera: {{ $examen->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
+                    'Asignatura: {{ $examen->asignatura?->nombre ?? "No asignada" }}\n' +
+                    'Fecha de Mesa: {{ $examen->mesa?->fecha ? \Carbon\Carbon::parse($examen->mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
+                    'Nota: {{ $examen->nota ?? "Sin nota" }}\n' +
+                    'Asistencia: {{ $examen->asistenciaTexto() ?? "Sin datos" }}\n\n' +
+                    'ESTA ACCIÓN NO SE PUEDE DESHACER.'
+                )">
+                <i class="ti ti-trash" style="font-size: 1.3em"></i>
+                <span class="btn-text">Eliminar</span>
+            </button>
+        </form>
+    </div>
+@endif
+
+                    </div>
+                </td>
                         </tr>
                     @endforeach
                 </tbody>
