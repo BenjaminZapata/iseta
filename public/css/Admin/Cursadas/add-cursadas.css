@@ -10,6 +10,14 @@
     --transition: all 0.3s ease;
 }
 
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+}
+
 /* === GENERAL === */
 body {
     font-family: 'Inter', 'Segoe UI', sans-serif;
@@ -74,6 +82,8 @@ body {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-sm);
 }
+
+
 
 .card-header {
     background-color: var(--color-principal) !important;
@@ -236,62 +246,4 @@ body {
 
 .table-selected:hover {
     background-color: #d2c8ff !important;
-}
-
-
-/*======================================== M O D I F I C A R    C U R S A D A S ================================================*/
-
-.hidden {
-    display: none;
-}
-
-.detalle-cursada {
-    margin-top: 10px;
-    padding: 15px;
-    border-radius: 8px;
-    background: #f5f8ff;
-    border: 1px solid #cdd8ff;
-    transition: all 0.2s ease;
-}
-
-.detalle-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 6px 0;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.detalle-item:last-child {
-    border-bottom: none;
-}
-
-.botonera {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-}
-
-.btn_blue {
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: 0.2s;
-}
-
-.btn_blue i {
-    margin-right: 6px;
-}
-
-/* Rotación del icono al abrir */
-.iconos {
-    transition: transform 0.3s ease;
-}
-
-.iconos.rotated {
-    transform: rotate(-90deg);
 }
