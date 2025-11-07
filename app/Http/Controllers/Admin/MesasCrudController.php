@@ -274,29 +274,29 @@ public function update(EditarMesaRequest $request, Mesa $mesa)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Mesa $mesa)
-    {
-        try {
-
-            //verificar que no tenga fecha hoy o futura
-            if ($mesa->fecha >= date('Y-m-d')) {
-                return redirect()->route('admin.mesas.index')
-                    ->with('error', 'No se pudo eliminar la mesa. Tiene fecha hoy o futura.');
-            }
-
-            //Verificar que no tenga alumnos inscriptos
-            if ($mesa->examenes()->exists()) {
-                return redirect()->route('admin.mesas.index')
-                    ->with('error', 'No se pudo eliminar la mesa. Tiene alumnos inscriptos.');
-            }
-
-            //eliminar mesa
-            $mesa->delete();
+  public function destroy(Mesa $mesa)
+{
+    try {
+        // 1️⃣ Verificar que la mesa esté en estado "por rendir"
+        if ($mesa->estado != 0) {
             return redirect()->route('admin.mesas.index')
-                ->with('mensaje', 'Se ha eliminado la mesa');
-        } catch (\Exception $e) {
-            return redirect()->route('admin.mesas.index')
-                ->with('error', 'No se pudo eliminar la mesa. Error: ' . $e->getMessage());
+                ->with('error', 'Solo se pueden eliminar mesas en estado "por rendir".');
         }
+
+        // 3️⃣ Verificar que no tenga alumnos inscriptos
+        if ($mesa->examenes()->exists()) {
+            return redirect()->route('admin.mesas.index')
+                ->with('error', 'No se pudo eliminar la mesa. Tiene alumnos inscriptos.');
+        }
+
+        // 4️⃣ Eliminar mesa
+        $mesa->delete();
+
+        return redirect()->route('admin.mesas.index')
+            ->with('mensaje', 'Se ha eliminado la mesa correctamente.');
+    } catch (\Exception $e) {
+        return redirect()->route('admin.mesas.index')
+            ->with('error', 'No se pudo eliminar la mesa. Error: ' . $e->getMessage());
     }
+}
 }

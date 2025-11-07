@@ -27,7 +27,7 @@
             'dropdowns' => [
                 $carreraM->dropdown('filter_carrera_id', 'Carrera:', 'label-input-y-100', $filters, ['first_items' => ['Todas'], 'id' => 'carrera_select']),
                 $form->select('filter_asignatura_id', 'Asignatura:', 'label-input-y-100', $filters, ['Seleccione una carrera'], ['id' => 'asignatura_select']),
-                $profesorM->dropdown('filter_presidente', 'Presidente:', 'label-input-y-100', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
+                $profesorM->dropdown('filter_presidente', 'Presidente de mesa:', 'label-input-y-100', $filters, ['filter' => 'order', 'first_items' => ['Cualquiera']]),
                 $alumnoM->dropdown('filter_alumno_id', 'Alumno:', 'label-input-y-100', $filters, ['first_items' => ['Todos'], 'filter' => 'orderByApellidoNombre']),
                 $form->date('filter_from', 'Desde:', 'label-input-y-100', $filters),
                 $form->date('filter_to', 'Hasta:', 'label-input-y-100', $filters),
@@ -121,4 +121,5 @@
 </div>
 
 <script src="{{ asset('js/obtener-materias.js') }}"></script>
+<script src="{{ asset('js/indexMesa.js') }}"></script>
 @endsection
