@@ -8,6 +8,7 @@ use App\Models\Configuracion;
 use App\Models\Correlativa;
 use App\Models\Cursada;
 use Illuminate\Support\Carbon;
+use Log;
 
 class AlumnoMatriculacionService
 {
@@ -29,28 +30,32 @@ class AlumnoMatriculacionService
         // todas las materias de esa carrera
         $asignaturas = Asignatura::whereHas('carrera', function ($query) use ($carrera) {
             $query->where('id', $carrera->id);
-        })->get();
+        })
+            ->whereDoesntHave('cursadas', function ($query) use ($alumno, $carrera) {
+                $query->where('id_alumno', $alumno->id)
+                    ->where('id_carrera', $carrera->id)
+                    ->whereIn('aprobada', [3, 1, 4, 5]);
+            })
+            ->with(['carrera' => function ($query) use ($carrera) {
+                $query->wherePivot('id_carrera', $carrera->id);
+            }])
+            ->with(['correlativas.carrera' => function ($query) use ($carrera) {
+                $query->where('id_carrera', $carrera->id);
+            }])
+            ->with(['cursadas' => function ($query) use ($alumno, $carrera) {
+                $query->where('id_alumno', $alumno->id)
+                    ->where('id_carrera', $carrera->id)
+                    ->whereNotIn('aprobada', [3, 1, 4, 5]);
+            }])
+            ->get();
+        Log::debug(print_r($asignaturas, true));
         $anotables = [];
 
         // para cada asignatura
         foreach ($asignaturas as $asignatura) {
 
-            // array para almancenar equivalencias, solo en caso de que deba equivalencias.
-            $asignatura->{'equivalencias_previas'} = [];
-
-            // Chequear que no este ya en la cursada
-            $yaAnotadoEnCursada = $asignatura->estaCursando($alumno);
-            if ($yaAnotadoEnCursada) {
-                continue;
-            }
-
-            $yaAprobo = $asignatura->aproboCursada($alumno);
-            if ($yaAprobo) {
-                continue;
-            }
-
             // Si la materia tiene correlativas
-            $asignatura->equivalencias_previas = Correlativa::debeCursadasCorrelativos($asignatura, $carrera, $alumno);
+            $asignatura->equivalencias_previas = Correlativa::debeCursadasCorrelativas($asignatura, $alumno);
 
             $anotables[] = $asignatura;
         }

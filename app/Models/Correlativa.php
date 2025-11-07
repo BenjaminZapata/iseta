@@ -56,7 +56,7 @@ class Correlativa extends Pivot
         }
     }
 
-    public static function debeCursadasCorrelativas($asignatura, $id_carrera, $alumno): array|bool
+    public static function debeCursadasCorrelativas($asignatura, $alumno): array|bool
     {
         if (! $alumno) {
             $alumno = Auth::user();

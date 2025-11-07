@@ -48,17 +48,20 @@ class MesasCrudController extends BaseController
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-
-        Mesa::where('fecha', '<', now()->toDateString())
+  public function index(Request $request)
+{
+    // 🕒 Actualizar mesas vencidas (solo si fecha ya pasó)
+    Mesa::whereDate('fecha', '<', now())
         ->where('estado', 0)
         ->update(['estado' => 1]);
-        $this->setFilters($request);
-        $this->data['mesas'] = $this->mesaRepo->index($request);
 
-        return view('Admin.Mesas.index', $this->data);
-    }
+    // 🔍 Aplicar filtros y cargar datos
+    $this->setFilters($request);
+    $this->data['mesas'] = $this->mesaRepo->index($request);
+
+    return view('Admin.Mesas.index', $this->data);
+}
+
 
     /**
      * Show the form for creating a new resource.
