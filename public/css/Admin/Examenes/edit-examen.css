@@ -21,3 +21,15 @@
  font-size: 0.75rem;
  white-space: nowrap;
 }
+/* Estilo mínimo para el multi-select de tipo de final */
+select[multiple][name="tipo_final[]"] {
+    width: 100%;
+    min-height: 70px; /* altura suficiente para ver Escrito y Oral */
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+

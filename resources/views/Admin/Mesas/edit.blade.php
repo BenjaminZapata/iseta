@@ -154,22 +154,42 @@ $selectedVocal2 = $selectedVocal2;
                     @foreach ($mesa->examenes as $examen)
                         <tr>
                             <td>{{ $examen->alumno->apellidoNombre() }}</td>
-                            <td>
-                                <div style="display:flex; align-items: center; justify-content: center;"
-                                    title="0 = sin rendir, a = ausente">
-                                    <form action="{{ route('admin.examenes.nota', ['examen' => $examen->id]) }}"
-                                        method="POST">
-                                        @csrf
-                                        <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                                            <input name="nota" placeholder="0 = sin rendir, a = ausente" class="input-nota"
-                                                value="{{ $examen->notaTexto() }}">
-                                            <button class="boton-nota">
-                                                <i class="ti ti-check" style="font-size: 1.3em;"></i>
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </td>
+                           @if($examen->mesa->estado == 1)
+    <td>
+        <div style="display:flex; align-items: center; justify-content: center;">
+            <form action="{{ route('admin.examenes.nota', ['examen' => $examen->id]) }}" method="POST">
+                @csrf
+                <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <input 
+                        type="number" 
+                        name="nota" 
+                        class="input-nota" 
+                        min="1" 
+                        max="10" 
+                        step="1" 
+                        placeholder="1-10"
+                        value="{{ $examen->nota ?? '' }}" 
+                        style="text-align: center; width: 60px;"
+                    >
+                    <button type="submit" class="boton-nota">
+                        <i class="ti ti-check" style="font-size: 1.3em;"></i>
+                    </button>
+                </div>
+                @error('nota')
+                    <p style="color: red; font-size: 0.9em; text-align: center; margin: 4px 0 0;">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </form>
+        </div>
+    </td>
+@else
+    <td style="text-align: center; color: gray;">
+        <em>Disponible cuando la mesa esté rendida</em>
+    </td>
+@endif
+
+
                             <td>
                                 <div style="display:flex; align-items: center; justify-content: center;">
                                     @php
