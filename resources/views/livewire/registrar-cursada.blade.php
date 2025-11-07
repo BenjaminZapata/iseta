@@ -60,22 +60,31 @@
         <table class="table table-sm table-hover align-middle mb-0">
             <thead class="table-light sticky-top" style="background-color:#140b5c; color:white;">
                 <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>DNI</th>
-                    <th class="text-center">Acción</th>
+                    <th class="center">Apellido</th>
+                    <th class="center"> Nombre </th>
+                    <th class="center">DNI</th>
+                    <th class="center">Acción</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($alumnos as $alumno)
                 <tr>
-                    <td>{{ $alumno->nombre }}</td>
-                    <td>{{ $alumno->apellido }}</td>
-                    <td>{{ $alumno->dni }}</td>
-                    <td class="text-center">
-                        <button type="button" wire:click="seleccionarAlumno({{ $alumno->id }})" class="btn btn-modificar">
-                            Seleccionar
-                        </button>
+                    <td class="bold">
+                        <div class="centrar">{{ $alumno->apellido }}</div>
+                    </td>
+                    <td class="bold">
+                        <div class="centrar">{{ $alumno->nombre }}</div>
+                    </td>
+                    <td class="bold">
+                        <div class="centrar">{{ $alumno->dni }}</div>
+                    </td>
+                    <td class="center">
+                        <div class="centrar">
+                            <button type="button" wire:click="seleccionarAlumno({{ $alumno->id }})" class="btn btn-modificar">
+                                Seleccionar
+                            </button>
+                        </div>
+
                     </td>
                 </tr>
                 @empty
@@ -199,12 +208,16 @@ return isset($m->pivot) && isset($m->pivot->anio) ? $m->pivot->anio + 1 : 'Sin a
                                         <td>
                                             @if(isset($asignaturasBloqueadas[$asignatura->id]))
                                             <div class="tooltip-correlativa mt-1">
-                                                <strong>Correlativas faltantes:</strong>
-                                                @foreach ($asignaturasBloqueadas[$asignatura->id] as $correlativa)
-                                                <br>
-                                                <i class="ti ti-circle-filled" style="font-size: 0.5em; margin-left: 12px; padding-top: 5px;"></i>
-                                                <span style="margin-left: 5px; padding-top: 5px;">{{ $correlativa }}</span>
-                                                @endforeach
+                                                <div class="centrar2">
+                                                    <strong>Correlativas faltantes:</strong>
+                                                    @foreach ($asignaturasBloqueadas[$asignatura->id] as $correlativa)
+                                                    <div class="centrar">
+                                                        <i class="ti ti-circle-filled" style="font-size: 0.5em; margin-left: 12px;"></i>
+                                                        <span style="margin-left: 5px;">{{ $correlativa }}</span>
+                                                    </div>
+
+                                                    @endforeach
+                                                </div>
                                             </div>
 
                                             @endif

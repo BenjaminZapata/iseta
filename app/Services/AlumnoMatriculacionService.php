@@ -29,7 +29,11 @@ class AlumnoMatriculacionService
         // todas las materias de esa carrera
         $asignaturas = Asignatura::whereHas('carrera', function ($query) use ($carrera) {
             $query->where('id', $carrera->id);
-        })->get();
+        })
+            ->with(['correlativas' => function ($query) use ($carrera) {
+                $query->where('id_carrera', $carrera->id);
+            }])
+            ->get();
         $anotables = [];
 
         // para cada asignatura
@@ -50,7 +54,7 @@ class AlumnoMatriculacionService
             }
 
             // Si la materia tiene correlativas
-            $asignatura->equivalencias_previas = Correlativa::debeCursadasCorrelativos($asignatura, $carrera, $alumno);
+            $asignatura->equivalencias_previas = Correlativa::debeCursadasCorrelativas($asignatura, $alumno);
 
             $anotables[] = $asignatura;
         }
