@@ -75,7 +75,7 @@
                     </div>
                     <div class="perfil_dataname">
                         <label>Año de cursada:</label>
-                       <input class="campo_info rounded" value="{{$cursada->anio_cursada}}" name="anio_cursada">
+                        <span class="campo_info2">{{$cursada->anio_cursada}}</span>
                     </div>
                     <div x-data="{
                             condicion: '{{ (string) $cursada->condicion }}',

@@ -40,7 +40,7 @@
                                 <div class="grid grid-cols-2 gap-6 mb-2">
                                     <div>
                                         <label class="font-semibold">Año:</label>
-                                        <span>{{ $asignatura->carrera()->wherePivot('id_carrera', $carrera->id)->first()->pivot->anio + 1 }}</span>
+                                        <span>{{ $asignatura->carrera[0]->pivot->anio + 1 }}</span>
                                     </div>
                                     <div>
                                         <label class="font-semibold">Asignatura:</label>
@@ -52,7 +52,8 @@
 
 
                                 @php
-                                    $debeCursadasCorrelativas = Correlativa::debeCursadasCorrelativas($asignatura, $alumno);
+                                    $cursadasCorrelativas = $asignatura->equivalencias_previas;
+                                    $debeCursadasCorrelativas = $cursadasCorrelativas ? collect($cursadasCorrelativas)->mapInto(App\Models\Asignatura::class) : false;
                                 @endphp
                                 <div>
                                     @if ($debeCursadasCorrelativas)
@@ -63,7 +64,10 @@
                                         </div>
 
                                         <ul class="equiv-list id-{{ $asignatura->id }} pl-4 list-disc text-sm">
-                                            @foreach ($asignatura->debeCursadasCorrelativas($alumno, $carrera->id) as $equiv)
+                                            @foreach ($debeCursadasCorrelativas as $equiv)
+                                                @php
+                                                    
+                                                @endphp
                                                 <li><strong>{{ $equiv->anioStr($carrera->id) }}:</strong>
                                                     {{ $equiv->nombre }}</li>
                                             @endforeach
@@ -84,8 +88,8 @@
                         <div class="text-right mt-4"
                             style="display: inline-flex; align-items: center; text-transform: none;">
                             <button class="btn_blue"><i class="ti ti-send" style="margin-right: 8px; font-size: 1.3em;"></i>
-                                Matricular</button>
-
+                                Matricular
+                            </button>
                         </div>
                         <x-btn-cancelar />
                     @endif

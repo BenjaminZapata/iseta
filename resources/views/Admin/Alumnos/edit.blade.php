@@ -322,7 +322,7 @@
                                                                     <td>
                                                                         <div
                                                                             style="display: flex; justify-content: center; gap: 10px;">
-                                                                            {{ $formatoFecha->dma($examen->fecha()) }}
+                                                                            {{ $formatoFecha->dma($examen->getFecha()) }}
                                                                         </div>
                                                                     </td>
                                                                     <td>

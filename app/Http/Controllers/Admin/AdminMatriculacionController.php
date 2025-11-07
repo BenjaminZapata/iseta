@@ -26,29 +26,25 @@ class AdminMatriculacionController extends Controller
      | Vista de rematriculacion
      | ---------------------------------------------
      */
-    function rematriculacion_vista(Request $request, Alumno $alumno, AlumnoMatriculacionService $matriculacionService)
+    public function rematriculacion_vista(Request $request, Alumno $alumno, AlumnoMatriculacionService $matriculacionService)
     {
-$carrera = Carrera::where('id', $request->input('carrera'))->first();
+        $carrera = Carrera::where('id', $request->input('carrera'))->first();
 
-if (!$carrera) {
-    // 🚨 Error: no tiene carreras
-    return redirect()
-        ->route('admin.alumnos.edit', ['alumno' => $alumno->id])
-        ->with('error', "El alumno {$alumno->apellido}, {$alumno->nombre} no tiene ninguna carrera asignada para matricular.");
-}
+        if (! $carrera) {
+            // 🚨 Error: no tiene carreras
+            return redirect()
+                ->route('admin.alumnos.edit', ['alumno' => $alumno->id])
+                ->with('error', "El alumno {$alumno->apellido}, {$alumno->nombre} no tiene ninguna carrera asignada para matricular.");
+        }
 
-$anotables = $matriculacionService->matriculables($alumno, $carrera);
+        $anotables = $matriculacionService->matriculables($alumno, $carrera);
 
-return view('Admin.Alumnos.rematriculacion', [
-    'asignaturas' => $anotables,
-    'carrera' => $carrera,
-    'alumno' => $alumno
-]);
+        return view('Admin.Alumnos.rematriculacion', [
+            'asignaturas' => $anotables,
+            'carrera' => $carrera,
+            'alumno' => $alumno,
+        ]);
     }
-
-
-
-
 
     /*
      | ---------------------------------------------
@@ -56,13 +52,12 @@ return view('Admin.Alumnos.rematriculacion', [
      | ---------------------------------------------
      */
 
-
     // Falta chequear lo mismo que arriba
 
     public function rematriculacion(Request $request, Alumno $alumno, Carrera $carrera, AlumnoMatriculacionService $rematService)
     {
 
-        /// Ver que no haya seleccionado mas de 2 libres
+        // / Ver que no haya seleccionado mas de 2 libres
         $libres = 0;
         foreach ($request->except('_token') as $value) {
             if ($value == 1) {
@@ -74,18 +69,16 @@ return view('Admin.Alumnos.rematriculacion', [
             ->where('id_alumno', $alumno->id)
             ->first();
 
-
-
         $asignaturas = $rematService->validasParaRegistrar($carrera, $request->except('_token'), $alumno);
 
-        if (!$asignaturas['success'])
+        if (! $asignaturas['success']) {
             return redirect()->back()->with('error', $asignaturas['mensaje']);
-        else
+        } else {
             $asignaturas = $asignaturas['mensaje'];
+        }
 
         // Año de la rematriculacion
         $anio_remat = Configuracion::get('anio_remat');
-
 
         // Registrar las cursadas
         foreach ($asignaturas as $asigId => $tipoCursada) {
@@ -100,12 +93,10 @@ return view('Admin.Alumnos.rematriculacion', [
                 'id_alumno' => $alumno->id,
                 'condicion' => $tipoCursada,
                 'aprobada' => $aprobada,
-                'anio_cursada' => $anio_remat
+                'anio_cursada' => $anio_remat,
             ]);
         }
 
-
         return redirect()->back()->with('mensaje', 'Se ha rematriculado correctamente');
     }
-
 }

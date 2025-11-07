@@ -21,14 +21,13 @@ class Asignatura extends Model
         'nombre',
         'tipo_modulo',
         'carga_horaria',
-        'anio',
         'observaciones',
         'cantidad_modulo',
     ];
 
     public function cursadas(): HasMany
     {
-        return $this->hasMany(Cursada::class,   'id_asignatura', 'id');
+        return $this->hasMany(Cursada::class, 'id_asignatura', 'id');
     }
 
     public function profesor(): BelongsToMany
@@ -90,15 +89,6 @@ class Asignatura extends Model
         return $value + 1;
     }
 
-    public function estaCursando($alumno)
-    {
-        return Cursada::where(column: 'id_alumno', operator: $alumno->id)
-            ->where(column: 'id_asignatura', operator: $this->id)
-            ->where(column: 'aprobada', operator: 3)
-            ->where(column: 'condicion', operator: 1)
-            ->first();
-    }
-
     public function aproboExamen($alumno): ?Examen
     {
         if (! $alumno || ! $alumno->id) {
@@ -122,7 +112,7 @@ class Asignatura extends Model
         $cursada = Cursada::where(column: 'id_alumno', operator: $alumno->id)
             ->where(column: 'id_asignatura', operator: $this->id)
             ->where(column: function ($subQuery): void {
-                $subQuery->where('aprobada', 1);
+                $subQuery->where('aprobada', [1, 4, 5]);
             })
             ->first();
 
@@ -153,11 +143,11 @@ class Asignatura extends Model
             ->first();
     }
 
-    public function anioStr(): string
+    public function anioStr($id_carrera): string
     {
         $strings = ['Primer año', 'Segundo año', 'Tercer año', 'Cuarto año', 'Quinto año', 'Sexto año'];
 
-        return $strings[$this->anio - 1];
+        return $strings[$this->carrera()->wherePivot('id_carrera', $id_carrera)->first()->pivot->anio];
     }
 
     public function setNombreAttribute($value): void
