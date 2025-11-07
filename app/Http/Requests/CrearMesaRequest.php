@@ -74,6 +74,8 @@ public function rules(): array
         return [
             'id_asignatura' => 'asignatura',
             'prof_presidente' => 'Presidente de mesa',
+            'prof_vocal_1' => 'Profesor Vocal 1',
+            'prof_vocal_2' => 'Profesor Vocal 2',
         ];
     }
 }
