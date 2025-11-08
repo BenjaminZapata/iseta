@@ -43,10 +43,7 @@
                                         <span>{{ $asignatura->carrera[0]->pivot->anio + 1 }}</span>
                                     </div>
                                     <div>
-                                        <label class="font-semibold">Asignatura:</label>
-                                        <a href="{{ route('admin.asignaturas.edit', ['asignatura' => $asignatura->id]) }}"
-                                            class="asignatura-link text-blue-600 hover:underline"
-                                            title="Editar asignatura">{{ $asignatura->nombre }}</a>
+                                        <label class="font-semibold" title="Editar asignatura">Asignatura: {{ $asignatura->nombre }}</label>
                                     </div>
                                 </div>
 
