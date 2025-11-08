@@ -55,16 +55,18 @@ class RegistrarCursada extends Component
     {
         Log::debug('puede ser que aca entre?');
         if ($this->nombre_apellido || $this->dni) {
-            if (! ($this->dni || $this->nombre_apellido)) {
+            if (!($this->dni || $this->nombre_apellido)) {
                 $this->erroresValidacion[] = 'Debe ingresar al menos DNI o nombre y apellido.';
             } else {
                 $this->alumnos = Alumno::query()
                     ->join('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id') // -> ajustá 'egresados' si tu tabla tiene otro nombre
                     ->select('alumnos.*')
-                    ->when($this->nombre_apellido, fn ($q) => $q->where('nombre', 'like', "%{$this->nombre_apellido}%")
-                        ->orWhere('apellido', 'like', "%{$this->nombre_apellido}%")
+                    ->when(
+                        $this->nombre_apellido,
+                        fn($q) => $q->where('nombre', 'like', "%{$this->nombre_apellido}%")
+                            ->orWhere('apellido', 'like', "%{$this->nombre_apellido}%")
                     )
-                    ->when($this->dni, fn ($q) => $q->where('dni', 'like', "%{$this->dni}%"))
+                    ->when($this->dni, fn($q) => $q->where('dni', 'like', "%{$this->dni}%"))
                     ->take(10)
                     ->get();
             }
@@ -106,10 +108,12 @@ class RegistrarCursada extends Component
         if ($this->carreraSeleccionada) {
             $id_carrera = $this->carreraSeleccionada;
             $this->materiasCarrera = Carrera::find($this->carreraSeleccionada)
-                ?->asignaturas()
-                ->with(['correlativas' => function ($query) use ($id_carrera) {
-                    $query->where('id_carrera', $id_carrera);
-                }])
+                    ?->asignaturas()
+                ->with([
+                    'correlativas' => function ($query) use ($id_carrera) {
+                        $query->where('id_carrera', $id_carrera);
+                    }
+                ])
                 ->whereDoesntHave('cursadas', function ($q) {
                     $q->where('id_carrera', $this->carreraSeleccionada)
                         ->where('id_alumno', $this->alumnoSeleccionado->id)
@@ -130,7 +134,7 @@ class RegistrarCursada extends Component
 
     private function calcularAsignaturasBloqueadas()
     {
-        if (! $this->alumnoSeleccionado) {
+        if (!$this->alumnoSeleccionado) {
             return;
         }
         $this->asignaturasBloqueadas = [];
@@ -143,14 +147,55 @@ class RegistrarCursada extends Component
 
     }
 
+    public function updated($propertyName)
+    {
+        if (in_array($propertyName, ['dni', 'nombre_apellido'])) {
+            $this->resetBusquedaSiVacia();
+        }
+    }
+
+    private function resetBusquedaSiVacia()
+    {
+        // 🧼 Si ambos filtros están vacíos, reseteamos todo
+        if (empty($this->dni) && empty($this->nombre_apellido)) {
+            $this->reset([
+                'alumnos',
+                'alumnoSeleccionado',
+                'carreraSeleccionada',
+                'materiasCarrera',
+                'asignaturasSeleccionadas',
+                'condiciones',
+                'erroresValidacion',
+                'mensaje',
+                'mostrarBoton',
+                'asignaturasBloqueadas',
+            ]);
+            $this->alumnos = collect(); // prevenir error si se itera en Blade
+        } else {
+            // 💡 Si el usuario empieza a escribir de nuevo,
+            // limpiamos solo la selección anterior, pero dejamos que busque de nuevo
+            $this->reset([
+                'alumnoSeleccionado',
+                'carreraSeleccionada',
+                'materiasCarrera',
+                'asignaturasSeleccionadas',
+                'condiciones',
+                'asignaturasBloqueadas',
+                'mostrarBoton',
+                'mensaje',
+            ]);
+        }
+    }
+
+
     public function guardarCursada()
     {
         $errores = [];
 
-        if (! $this->alumnoSeleccionado) {
+        if (!$this->alumnoSeleccionado) {
             $errores[] = 'Debe seleccionar un alumno.';
         }
-        if (! $this->carreraSeleccionada) {
+        if (!$this->carreraSeleccionada) {
             $errores[] = 'Debe seleccionar una carrera.';
         }
         if (count($this->asignaturasSeleccionadas) === 0) {
@@ -162,7 +207,7 @@ class RegistrarCursada extends Component
         foreach ($this->asignaturasSeleccionadas as $idAsignatura) {
             $nombreAsignatura = $mapAsignaturaNombre[$idAsignatura] ?? "ID {$idAsignatura}";
 
-            if (! isset($this->condiciones[$idAsignatura]) || $this->condiciones[$idAsignatura] === '') {
+            if (!isset($this->condiciones[$idAsignatura]) || $this->condiciones[$idAsignatura] === '') {
                 $errores[] = "Debe elegir una condición para {$nombreAsignatura}.";
             }
 
@@ -183,7 +228,7 @@ class RegistrarCursada extends Component
         }
 
         // ⚠️ Si hay errores, mostramos y recargamos materias
-        if (! empty($errores)) {
+        if (!empty($errores)) {
             foreach ($errores as $msg) {
                 FlasherFacade::addError($msg);
             }
@@ -205,7 +250,7 @@ class RegistrarCursada extends Component
                 'id_asignatura' => $idAsignatura,
                 'id_carrera' => $this->carreraSeleccionada,
                 'condicion' => $this->mapCondicion[array_search((int) $this->condiciones[$idAsignatura], $this->mapCondicion) ??
-                'Regular'] ?? 1,
+                    'Regular'] ?? 1,
             ]);
         }
 
