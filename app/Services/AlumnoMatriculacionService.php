@@ -8,7 +8,6 @@ use App\Models\Configuracion;
 use App\Models\Correlativa;
 use App\Models\Cursada;
 use Illuminate\Support\Carbon;
-use Log;
 
 class AlumnoMatriculacionService
 {
@@ -45,10 +44,9 @@ class AlumnoMatriculacionService
             ->with(['cursadas' => function ($query) use ($alumno, $carrera) {
                 $query->where('id_alumno', $alumno->id)
                     ->where('id_carrera', $carrera->id)
-                    ->whereNotIn('aprobada', [3, 1, 4, 5]);
+                    ->whereIn('aprobada', [1, 4, 5]);
             }])
             ->get();
-        Log::debug(print_r($asignaturas, true));
         $anotables = [];
 
         // para cada asignatura

@@ -109,15 +109,11 @@ class Asignatura extends Model
 
     public function aproboCursada($alumno)
     {
-        $cursada = Cursada::where(column: 'id_alumno', operator: $alumno->id)
-            ->where(column: 'id_asignatura', operator: $this->id)
-            ->where(column: function ($subQuery): void {
-                $subQuery->where('aprobada', [1, 4, 5]);
-            })
-            ->first();
-
-        if ($cursada) {
-            return $cursada;
+        if ($this->relationLoaded('cursadas')) {
+            return $this->cursadas
+                ->first(fn ($cursada) => $cursada->id_alumno === $alumno->id &&
+                    in_array($cursada->aprobada, [1, 4, 5])
+                );
         } else {
             return null;
         }
