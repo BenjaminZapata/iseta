@@ -1,4 +1,7 @@
 @extends('Admin.template')
+  @php
+        $admin = Auth::guard('admin')->user();
+    @endphp
 
 @section('content')
 <style>
@@ -18,11 +21,13 @@
 
     {{-- BOTON CREAR --}}
     <div class="perfil__header-alt" style="display: flex; align-items: center; gap: 1rem;">
-        <a href="{{ route('admin.alumnos.create') }}">
-            <button class="btn_blue">
-                <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>Agregar alumno
-            </button>
-        </a>
+        @if (in_array($admin->rol, [0,1]))
+            <a href="{{ route('admin.alumnos.create') }}">
+                <button class="btn_blue">
+                    <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>Agregar alumno
+                </button>
+            </a>
+        @endif
 
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.alumnos.index', $filters, [
@@ -113,20 +118,22 @@
                                 <span class="btn-text">Editar</span>
                             </button>
                         </a>
-                        @if (!$config['modo_seguro'])
-                        <form id="form-eliminar-{{ $alumno->id }}"
-                            action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST"
-                            style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button"
-                                onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}',
-                                    '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido) }} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                class="btn_icon-danger btn_contraible" style="background-color: red;">
-                                <i class="ti ti-trash"></i>
-                                <span class="btn-text">Eliminar</span>
-                            </button>
-                        </form>
+                        @if (in_array($admin->rol, [0,1]))
+                            @if (!$config['modo_seguro'])
+                            <form id="form-eliminar-{{ $alumno->id }}"
+                                action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="button"
+                                    onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}',
+                                        '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido) }} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                    class="btn_icon-danger btn_contraible" style="background-color: red;">
+                                    <i class="ti ti-trash"></i>
+                                    <span class="btn-text">Eliminar</span>
+                                </button>
+                            </form>
+                            @endif
                         @endif
                     </div>
                 </td>
