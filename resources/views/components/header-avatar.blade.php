@@ -1,4 +1,5 @@
 <div class="header-avatar">
+    
   @php
         $admin = Auth::guard('admin')->user();
     @endphp
