@@ -106,20 +106,23 @@ class Form
         ])->render();
     }
 
-    function generate($url, $method, $fieldsets)
-    {
+    function generate($url, $method, $fieldsets, $mostrar_botones = true)
+{
+    $fieldsets = (object) $fieldsets;
 
-        $fieldsets = (object) $fieldsets;
-
-        if (!isset($options['inputclass'])) {
-            $options['inputclass'] = 'p-1';
-        }
-        return view('Componentes.form.edit-form', [
-            'url' => $url,
-            'method' => $method,
-            'fieldsets' => $fieldsets
-        ])->render();
+    if (!isset($options['inputclass'])) {
+        $options['inputclass'] = 'p-1';
     }
+
+    return view('Componentes.form.edit-form', [
+        'url' => $url,
+        'method' => $method,
+        'fieldsets' => $fieldsets,
+        'mostrar_botones' => $mostrar_botones
+    ])->render();
+}
+
+
 
     function texthidden($value)
     {

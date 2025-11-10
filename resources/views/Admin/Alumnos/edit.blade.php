@@ -1,14 +1,15 @@
 @extends('Admin.template')
- @php
+@php
     use Illuminate\Support\Facades\Auth;
-
     $admin = Auth::guard('admin')->user();
-    $disabled = $admin->rol === 2 ? 'disabled' : ''; // 2 = secretario
+    $rol = auth()->user()->rol ?? null;
+    $disabled = $rol === 'secretario' ? 'disabled' : false;
+    $mostrar_botones = $rol !== 'secretario';  // oculta botones si es secretario
 @endphp
 @section(section: 'content')
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUMNO/A'])
-       <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
+   <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
     'Alumno' => [
         $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno, [
             'placeholder' => 'Ej: Juan',
@@ -76,8 +77,9 @@
             'placeholder' => 'Notas o comentarios adicionales',
             $disabled => $disabled
         ]),
-    ],
-]) ?>
+    ]
+], false) ?>
+
 
      @if (in_array($admin->rol, [0,1]))
         <div class="boton-eliminar">

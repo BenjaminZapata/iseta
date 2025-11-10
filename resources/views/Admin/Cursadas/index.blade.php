@@ -1,5 +1,7 @@
 @extends('Admin.template')
-
+  @php
+        $admin = Auth::guard('admin')->user();
+    @endphp
 @section('content')
 <style>
     #filters .label-input-y-100 label {
@@ -28,9 +30,11 @@
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CURSADAS'])
 
     <div class="perfil__header-alt">
-        <a href="{{ route('admin.cursadas.create') }}"><button class="btn_blue"><i class="ti ti-circle-plus"
-                    style="font-size: 1.3em; margin-right: 8px;"></i>Agregar
-                cursada</button></a>
+        @if (in_array($admin->rol, [0,1]))
+            <a href="{{ route('admin.cursadas.create') }}"><button class="btn_blue"><i class="ti ti-circle-plus"
+                style="font-size: 1.3em; margin-right: 8px;"></i>Agregar cursada</button>
+            </a>
+        @endif
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.cursadas.index', $filters, [
             'dropdowns' => [
@@ -136,22 +140,24 @@
                                                 <span class="btn-text">Editar</span>
                                             </button>
                                         </a>
-                                        @if (!$config['modo_seguro'])
-                                        <div>
-                                            <form id="form-eliminar-{{ $sub_cursada->id }}"
-                                                action="{{ route('admin.cursadas.destroy', $sub_cursada->id) }}" method="POST"
-                                                style="display: inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="button"
-                                                    onclick="openGeneralModal('form-eliminar-{{ $sub_cursada->id }}',
-                                                            '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre ?? 'Sin Asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'Sin Carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                                    class="btn_icon-danger btn_contraible" style="background-color: red;">
-                                                    <i class="ti ti-trash" style="font-size: 1.3em"></i>
-                                                    <span class="btn-text">Eliminar</span>
-                                                </button>
-                                            </form>
-                                        </div>
+                                        @if (in_array($admin->rol, [0,1]))
+                                            @if (!$config['modo_seguro'])
+                                                <div>
+                                                    <form id="form-eliminar-{{ $sub_cursada->id }}"
+                                                        action="{{ route('admin.cursadas.destroy', $sub_cursada->id) }}" method="POST"
+                                                        style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="button"
+                                                            onclick="openGeneralModal('form-eliminar-{{ $sub_cursada->id }}',
+                                                                '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre ?? 'Sin Asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'Sin Carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                                            class="btn_icon-danger btn_contraible" style="background-color: red;">
+                                                            <i class="ti ti-trash" style="font-size: 1.3em"></i>
+                                                            <span class="btn-text">Eliminar</span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            @endif
                                         @endif
                                     </div>
                                 </td>
@@ -166,6 +172,7 @@
     </table>
 </div>
 
+//TODO: MODIFICAR LA PAGINACIÓN PARA QUE TOME EN CUENTA LOS GRUPOS DE CURSADAS
 {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
     {{ $cursadas['summary']->appends(request()->query())->links('Componentes.pagination') }}

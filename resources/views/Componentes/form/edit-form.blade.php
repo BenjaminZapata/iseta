@@ -27,10 +27,9 @@
 
 
     <div class="botones-derecha">
-
         <x-botones-alumno />
-        {{-- @if (isset($mostrar_botones) && $mostrar_botones) --}}
         <x-btn-cancelar />
+       @if ($mostrar_botones)
         <button type="submit" class="btn_blue">
             @if ($method == 'put')
                 <i class="ti ti-refresh" style="font-size: 1.3em; margin-right: 8px;"></i>
@@ -39,9 +38,8 @@
                 <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
                 Guardar
             @endif
-            {{-- @endif --}}
         </button>
-
+        @endif
     </div>
 </form>
 
