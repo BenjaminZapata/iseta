@@ -107,17 +107,22 @@ class Asignatura extends Model
         }
     }
 
-    public function aproboCursada($alumno)
-    {
-        if ($this->relationLoaded('cursadas')) {
-            return $this->cursadas
-                ->first(fn ($cursada) => $cursada->id_alumno === $alumno->id &&
-                    in_array($cursada->aprobada, [1, 4, 5])
-                );
-        } else {
-            return null;
-        }
+public function aproboCursada($alumno)
+{
+    if ($this->relationLoaded('cursadas')) {
+        return $this->cursadas
+            ->first(fn($cursada) =>
+                $cursada->id_alumno === $alumno->id &&
+                in_array($cursada->aprobada, [1, 4, 5])
+            );
     }
+
+    return Cursada::where('id_alumno', $alumno->id)
+        ->where('id_asignatura', $this->id)
+        ->whereIn('aprobada', [1, 4, 5])
+        ->first();
+}
+
 
     public function cursantes()
     {
