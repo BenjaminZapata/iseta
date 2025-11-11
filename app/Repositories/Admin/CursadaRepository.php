@@ -4,6 +4,7 @@ namespace App\Repositories\Admin;
 
 use App\Models\Configuracion;
 use App\Models\Cursada;
+use DB;
 
 class CursadaRepository
 {
@@ -19,7 +20,7 @@ class CursadaRepository
     public function index($request)
     {
         // 1️⃣ Traemos solo las filas resumen (una por grupo) con filtros aplicados
-        $cursadasSummaryQuery = Cursada::select('id_carrera', 'id_asignatura', 'anio_cursada', 'condicion', 'aprobada')
+        $cursadasSummaryQuery = Cursada::select('id_carrera', DB::raw('ANY_VALUE(id_asignatura) as id_asignatura'), 'anio_cursada', DB::raw('ANY_VALUE(aprobada) as aprobada'), DB::raw('ANY_VALUE(condicion) as condicion'))
             ->with(['carrera', 'asignatura'])
             ->when($request->filled('filter_carrera_id') && $request->input('filter_carrera_id') != 0, function ($query) use ($request) {
                 $query->where('id_carrera', $request->input('filter_carrera_id'));
@@ -37,15 +38,15 @@ class CursadaRepository
                 $query->where('aprobada', $request->input('filter_aprobada'));
             })
             ->distinct()
-            ->orderBy('anio_cursada', 'DESC');
+            ->orderBy('anio_cursada', 'DESC')
+            ->groupBy('id_carrera', 'anio_cursada');
 
         // Paginamos las filas resumen
-        $cursadasSummary = $cursadasSummaryQuery->paginate($this->config['filas_por_tabla']);
+        $cursadasSummary = $cursadasSummaryQuery->paginate($this->config['filas_por_tabla'] / 2);
 
         // Creamos un array de grupos para usar en whereIn multi-column (Compoships)
         $groupsArray = $cursadasSummary->map(fn ($item): array => [
             'id_carrera' => $item->id_carrera,
-            'id_asignatura' => $item->id_asignatura,
             'anio_cursada' => $item->anio_cursada,
         ]
         )->toArray();
@@ -69,7 +70,7 @@ class CursadaRepository
             })
             ->when(! empty($groupsArray), function ($query) use ($groupsArray) {
                 $query->whereIn(
-                    ['id_carrera', 'id_asignatura', 'anio_cursada'],
+                    ['id_carrera', 'anio_cursada'],
                     $groupsArray
                 );
             })

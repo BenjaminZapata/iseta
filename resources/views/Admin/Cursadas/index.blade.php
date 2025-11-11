@@ -51,6 +51,7 @@
             <tbody>
                 @php
                     // Agrupamos las cursadas por carrera y año (sin modificar la colección original)
+                    Log::debug(print_r($cursadas['summary'], true));
                     $agrupadas = $cursadas['summary']->groupBy(fn($c) => $c->id_carrera . '-' . $c->anio_cursada);
                 @endphp
 
@@ -186,7 +187,7 @@
 
     {{-- PAGINACIÓN --}}
     <div class="w-full flex justify-center p-5 pagination">
-        {{ $cursadas['summary']->appends(request()->query())->links('Componentes.pagination') }}
+        {{ $cursadas['summary']->links('Componentes.pagination') }}
     </div>
     <script src="{{ asset('js/obtener-materias.js') }}"></script>
     <script>
