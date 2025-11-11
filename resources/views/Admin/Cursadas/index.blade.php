@@ -1,5 +1,7 @@
 @extends('Admin.template')
-
+@php
+$admin = Auth::guard('admin')->user();
+@endphp
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/Admin/Cursadas/cursadas.css') }}">
 
@@ -10,9 +12,11 @@
     @include('components.header-avatar', ['tituloSeccion' => 'GESTIÓN DE CURSADAS'])
 
     <div class="perfil__header-alt">
+        @if (in_array($admin->rol, [0,1]))
         <a href="{{ route('admin.cursadas.create') }}"><button class="btn_blue"><i class="ti ti-circle-plus"
-                    style="font-size: 1.3em; margin-right: 8px;"></i>Agregar
-                cursada</button></a>
+                    style="font-size: 1.3em; margin-right: 8px;"></i>Agregar cursada</button>
+        </a>
+        @endif
         {{-- FILTROS --}}
         <?= $filtergen->generate('admin.cursadas.index', $filters, [
             'dropdowns' => [
@@ -185,6 +189,7 @@
     </table>
 </div>
 
+//TODO: MODIFICAR LA PAGINACIÓN PARA QUE TOME EN CUENTA LOS GRUPOS DE CURSADAS
 {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
     {{ $cursadas['summary']->links('Componentes.pagination') }}

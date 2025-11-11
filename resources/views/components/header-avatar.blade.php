@@ -1,5 +1,8 @@
 <div class="header-avatar">
-
+    
+  @php
+        $admin = Auth::guard('admin')->user();
+    @endphp
     <!-- IZQUIERDA: Título -->
     <div>
         <h2 style="font-size: 1.8rem; font-weight: bold; margin: 0;">
@@ -48,10 +51,14 @@
                         </a>
                     </li>
                     <li>
+                        
+                        @if (in_array($admin->rol, [0]))
                         <a href="{{ route('admin.admins.index') }}" class="header-avatar-lista">
                             <i class="ti ti-user-cog" style="font-size: 1.3em; margin-right: 8px;"></i>
                             Administrar usuarios
                         </a>
+                        @endif
+
                     </li>
                     <li>
                         <hr style="margin: 0;">

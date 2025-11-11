@@ -1,47 +1,87 @@
 @extends('Admin.template')
-
+@php
+    use Illuminate\Support\Facades\Auth;
+    $admin = Auth::guard('admin')->user();
+    $rol = auth()->user()->rol ?? null;
+    $disabled = $rol === 'secretario' ? 'disabled' : false;
+    $mostrar_botones = $rol !== 'secretario';  // oculta botones si es secretario
+@endphp
 @section(section: 'content')
     <div class="perfil_one br">
         @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUMNO/A'])
-        <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
-                'Alumno' => [
-                    $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Juan']),
-                    $form->text('apellido', 'Apellido:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Pérez']),
-                    $form->text('dni', 'DNI:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 12345678']),
-                    $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $alumno, [
-                        'default' => $alumno->fecha_nacimiento->format('Y-m-d'),
-                        'inputclass' => 'p-1 w-75p',
-                        'placeholder' => 'Formato: dd/mm/aaaa',
-                    ]),
-                    $form->text('lugar_nacimiento', 'Ciudad de nacimiento:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Córdoba']),
-                    $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, [
-                        '' => 'Seleccione una opción',
-                        'Soltero',
-                        'Casado',
-                        'Divorciado',
-                        'Viudo',
-                        'Conyuge',
-                        'Otro',
-                    ]),
-                ],
-                'Dirección' => [$form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 9 de Julio']), $form->text('codigo_postal', 'Código postal:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 6500']), $form->text('calle', 'Calle:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Av. Eva Perón']), $form->text('casa_numero', 'Altura:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 742']), $form->text('dpto', 'Departamento:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: A']), $form->text('piso', 'Piso:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 3'])],
-                'Contacto' => [$form->text('email', 'Email:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: ejemplo@dominio.com']), $form->text('telefono1', 'Teléfono 1:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2317-876544']), $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2317-876543'])],
-                'Académico' => [
-                    $form->text('titulo_anterior', 'Título anterior:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Técnico en Informática']),
-                    $form->text('becas', 'Cantidad de becas:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2']),
-                    $form->text('nombre_institucion_secundario', 'Nombre de institución Secundaria:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Escuela Nacional N°1']),
-                    $form->select('titulo_secundario', 'Título secundario:', 'label-input-y-75', $alumno, [
-                        '' => 'Seleccione una opción',
-                        'No entregado',
-                        'Certificado de constancia de título en trámite',
-                        'Constancia de alumno del último año del nivel secundario',
-                        'Fotocopia del título original secundario',
-                    ]),
-                ],
-                'Otros' => [$form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno, ['placeholder' => 'Notas o comentarios adicionales'])],
-            ]) ?>
+   <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
+    'Alumno' => [
+        $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno, [
+            'placeholder' => 'Ej: Juan',
+            $disabled => $disabled
+        ]),
+        $form->text('apellido', 'Apellido:', 'label-input-y-75', $alumno, [
+            'placeholder' => 'Ej: Pérez',
+            $disabled => $disabled
+        ]),
+        $form->text('dni', 'DNI:', 'label-input-y-75', $alumno, [
+            'placeholder' => 'Ej: 12345678',
+            $disabled => $disabled
+        ]),
+        $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $alumno, [
+            'default' => $alumno->fecha_nacimiento->format('Y-m-d'),
+            'inputclass' => 'p-1 w-75p',
+            'placeholder' => 'Formato: dd/mm/aaaa',
+            $disabled => $disabled
+        ]),
+        $form->text('lugar_nacimiento', 'Ciudad de nacimiento:', 'label-input-y-75', $alumno, [
+            'placeholder' => 'Ej: Córdoba',
+            $disabled => $disabled
+        ]),
+        $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, [
+            '' => 'Seleccione una opción',
+            'Soltero',
+            'Casado',
+            'Divorciado',
+            'Viudo',
+            'Conyuge',
+            'Otro',
+        ], [
+            $disabled => $disabled
+        ]),
+    ],
+    'Dirección' => [
+        $form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 9 de Julio', $disabled => $disabled]),
+        $form->text('codigo_postal', 'Código postal:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 6500', $disabled => $disabled]),
+        $form->text('calle', 'Calle:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Av. Eva Perón', $disabled => $disabled]),
+        $form->text('casa_numero', 'Altura:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 742', $disabled => $disabled]),
+        $form->text('dpto', 'Departamento:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: A', $disabled => $disabled]),
+        $form->text('piso', 'Piso:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 3', $disabled => $disabled]),
+    ],
+    'Contacto' => [
+        $form->text('email', 'Email:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: ejemplo@dominio.com', $disabled => $disabled]),
+        $form->text('telefono1', 'Teléfono 1:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2317-876544', $disabled => $disabled]),
+        $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2317-876543', $disabled => $disabled]),
+    ],
+    'Académico' => [
+        $form->text('titulo_anterior', 'Título anterior:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Técnico en Informática', $disabled => $disabled]),
+        $form->text('becas', 'Cantidad de becas:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2', $disabled => $disabled]),
+        $form->text('nombre_institucion_secundario', 'Nombre de institución Secundaria:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Escuela Nacional N°1', $disabled => $disabled]),
+        $form->select('titulo_secundario', 'Título secundario:', 'label-input-y-75', $alumno, [
+            '' => 'Seleccione una opción',
+            'No entregado',
+            'Certificado de constancia de título en trámite',
+            'Constancia de alumno del último año del nivel secundario',
+            'Fotocopia del título original secundario',
+        ], [
+            $disabled => $disabled
+        ]),
+    ],
+    'Otros' => [
+        $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno, [
+            'placeholder' => 'Notas o comentarios adicionales',
+            $disabled => $disabled
+        ]),
+    ]
+], false) ?>
 
 
+     @if (in_array($admin->rol, [0,1]))
         <div class="boton-eliminar">
             @if (!$config['modo_seguro'])
                 <div>
@@ -62,6 +102,7 @@
                 </div>
             @endif
         </div>
+    @endif
 
         {{-- HEADER PARA VERIFICAR ALUMNO 
 
@@ -92,8 +133,6 @@
 --}}
 
         {{-- CARRERAS --}}
-
-        {{-- CARRERAS --}}
         <div class="table mb-5">
             <div class="table__header">
                 <h2>CARRERAS</h2>
@@ -121,7 +160,7 @@
                                             <option value="Egresado" {{ $carrera->estado == 'Egresado' ? 'selected' : '' }}>
                                                 Egresado</option>
                                             <option value="Inactivo" {{ $carrera->estado == 'Inactivo' ? 'selected' : '' }}>
-                                                Inactivo</option>
+                                                desertor</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -129,21 +168,21 @@
                         </tbody>
                     </table>
                 </form>
-
-                <div class="text-center" style="margin-top:20px;">
-                    <a href="{{ route('admin.inscriptos.create', ['alumno_id' => $alumno->id]) }}">
-                        <button class="btn_blue">
-                            <i class="ti ti-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            Inscribir a otra carrera
-                        </button>
-                    </a>
-                </div>
-
+                @if (in_array($admin->rol, [0,1]))
+                    <div class="text-center" style="margin-top:20px;">
+                        <a href="{{ route('admin.inscriptos.create', ['alumno_id' => $alumno->id]) }}">
+                            <button class="btn_blue">
+                                <i class="ti ti-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
+                                Inscribir a otra carrera
+                            </button>
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
 
 
-
+@if (in_array($admin->rol, [0,1]))
         {{-- REMATRICULACIÓN MANUAL --}}
         <div class="table mb-5">
             <div class="table__header">
@@ -164,6 +203,7 @@
                         </button>
                     </div>
                 </form>
+                
                 <a href="{{ route('admin.inscriptos.create', ['alumno_id' => $alumno->id]) }}"
                     style="display:block;width:190px">
                     <button class="btn_blue" style="margin-top:-40px"><i class="ti ti-plus"
@@ -171,6 +211,7 @@
                 </a>
             </div>
         </div>
+@endif
         {{-- CURSADAS --}}
         <div class="table mb-5">
             <div class="table__header">

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin;
@@ -8,39 +9,21 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
-use App\Http\Requests\AdminLoginRequest;
-use Illuminate\Support\Facades\Log;
 
 class AdminAuthController extends Controller
 {
-
-    /*
-     | ---------------------------------------------
-     | Middleware de administrador, excepto el login
-     | ---------------------------------------------
-    */
     public function __construct()
     {
         $this->middleware('guest:admin')->except('logout');
         $this->middleware('auth:admin')->only('logout');
     }
 
-    /**
-     * Vista Logueo de administrador
-     * @return \Illuminate\View\View
-     */
     public function loginView(): View
     {
-        return view(view: 'Admin.Auth.login');
+        return view('Admin.Auth.login');
     }
 
-    /**
-     * Valida las credenciales del administrador y loguea al mismo
-     *
-     * @param AdminLoginRequest $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function login(Request $request)
+    public function login(Request $request): RedirectResponse
     {
         $request->validate([
             'username' => 'required',
@@ -54,7 +37,6 @@ class AdminAuthController extends Controller
             return back()->withErrors(['username' => 'El usuario no existe.']);
         }
 
-        // Validar rol seleccionado
         $roles = [
             'regente' => 0,
             'preceptor' => 1,
@@ -67,32 +49,36 @@ class AdminAuthController extends Controller
             return back()->withErrors(['rol' => 'Rol incorrecto para este usuario.']);
         }
 
-        // Validar contraseña
-        if (!\Hash::check($request->password, $admin->password)) {
+        if (!Hash::check($request->password, $admin->password)) {
             return back()->withErrors(['password' => 'Contraseña incorrecta.']);
         }
 
-        // Iniciar sesión con el guard 'admin'
         Auth::guard('admin')->login($admin);
 
-        return match ($request->rol) {
-            'preceptor' => redirect()->route('preceptor.alumnos.index'),
-            'regente' => redirect()->route('admin.alumnos.index'),
-            'secretario' => redirect()->route('secretario.alumnos.index'),
-            default => redirect()->route('admin.alumnos.index'),
-        };
+        // 🔹 Lógica por rol (pero siempre redirige a alumnos.index)
+        if ($request->rol === 'regente') {
+            return redirect()->route('admin.alumnos.index')
+                ->with('success', 'Bienvenido, Regente');
+        }
+
+        if ($request->rol === 'preceptor') {
+            return redirect()->route('admin.alumnos.index')
+                ->with('success', 'Bienvenido, Preceptor');
+        }
+
+        if ($request->rol === 'secretario') {
+            return redirect()->route('admin.alumnos.index')
+                ->with('success', 'Bienvenido, Secretario');
+        }
+
+        // fallback por si acaso
+        return redirect()->route('admin.alumnos.index')
+            ->with('info', 'Sesión iniciada correctamente.');
     }
 
-
-
-    /**
-     * cierra sesion del administrador
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function logout(): RedirectResponse
     {
-        Auth::logout();
+        Auth::guard('admin')->logout();
         return redirect()->route('admin.login');
     }
 }
