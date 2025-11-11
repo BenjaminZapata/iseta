@@ -172,17 +172,14 @@ $selectedVocal2 = $selectedVocal2;
                             </td>
                             <td>
                                 <div style="display:flex; align-items: center; justify-content: center;">
-                                    @php
-                                        $cursada = $mesa->asignatura->aproboCursada($examen->alumno);
-                                    @endphp
-                                    <a class="flex items-center justify-center"
-                                        href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id, 'mesa' => $mesa->id, 'from' => 'mesas']) }}">
-                                        <strong>ESTADO:</strong>
-                                        <button class="btn_blue" style="text-transform: uppercase; margin-left: 8px;">
-                                            {{ $cursada->condicionString() }}
-                                            <i class="ti ti-edit" style="font-size: 1.3em; margin-left: 5px;"></i>
-                                        </button>
-                                    </a>
+    <a class="flex items-center justify-center"
+        href="{{ route('admin.cursadas.edit', ['cursada' => $cursada->id, 'mesa' => $mesa->id, 'from' => 'mesas']) }}">
+        <strong>ESTADO:</strong>
+        <button class="btn_blue" style="text-transform: uppercase; margin-left: 8px;">
+            {{ $cursada->condicionString() }}
+            <i class="ti ti-edit" style="font-size: 1.3em; margin-left: 5px;"></i>
+        </button>
+    </a>
                                 </div>
                             </td>
                            <td class="center" style="min-width: 180px;">
