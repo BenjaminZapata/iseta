@@ -142,41 +142,50 @@
 
                 <form>
                     @csrf
-                    <table class="table table-bordered table-hover mb-0 text-center">
-                        <thead>
-                            <tr>
-                                <th>Nombre de la carrera</th>
-                                <th class="center">Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($carreras as $carrera)
-                                <tr>
-                                    <td class="bold">{{ $carrera->carrera_nombre }}</td>
-                                    <td>
-                                        <select name="estados[{{ $carrera->carrera_id }}]" class="form-select text-center">
-                                            <option value="Cursando" {{ $carrera->estado == 'Cursando' ? 'selected' : '' }}>
-                                                Cursando</option>
-                                            <option value="Egresado" {{ $carrera->estado == 'Egresado' ? 'selected' : '' }}>
-                                                Egresado</option>
-                                            <option value="Inactivo" {{ $carrera->estado == 'Inactivo' ? 'selected' : '' }}>
-                                                desertor</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                   <table class="table table-bordered table-hover mb-0 text-center">
+    <thead>
+        <tr>
+            <th>Nombre de la carrera</th>
+            <th class="center">Estado</th>
+            <th class="center">Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($carreras as $carrera)
+            <tr>
+                <td class="bold">{{ $carrera->carrera_nombre }}</td>
+                <td>
+                    <select name="estados[{{ $carrera->carrera_id }}]" class="form-select text-center">
+                        <option value="Cursando" {{ $carrera->estado == 'Cursando' ? 'selected' : '' }}>Cursando</option>
+                        <option value="Egresado" {{ $carrera->estado == 'Egresado' ? 'selected' : '' }}>Egresado</option>
+                        <option value="Inactivo" {{ $carrera->estado == 'Inactivo' ? 'selected' : '' }}>Desertor</option>
+                    </select>
+                </td>
+                <td>
+                    <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}" method="POST" class="d-inline">
+                        @csrf
+                        <input type="hidden" name="carrera" value="{{ $carrera->carrera_id }}">
+                        <button type="submit" class="btn_blue btn-sm d-inline-flex align-items-center">
+                            <i class="ti ti-paperclip me-2" style="font-size: 1.1em;"></i>
+                            Matricular
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
+
                 </form>
                 @if (in_array($admin->rol, [0,1]))
-                    <div class="text-center" style="margin-top:20px;">
-                        <a href="{{ route('admin.inscriptos.create', ['alumno_id' => $alumno->id]) }}">
-                            <button class="btn_blue">
-                                <i class="ti ti-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                                Inscribir a otra carrera
-                            </button>
-                        </a>
-                    </div>
+                 <div class="text-center mt-5">
+    <a href="{{ route('admin.inscriptos.create', ['alumno_id' => $alumno->id]) }}" 
+       class="btn_blue inline-flex items-center justify-center"
+       style="width: 250px; padding: 10px 0; border-radius: 8px;">
+        <i class="ti ti-plus me-2" style="font-size: 1.3em;"></i>
+        Inscribir a otra carrera
+    </a>
+</div>
                 @endif
             </div>
         </div>
