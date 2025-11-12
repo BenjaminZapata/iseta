@@ -37,6 +37,11 @@ class Asignatura extends Model
             ->withTimestamps();
     }
 
+    public function pivotCarreraAsignaturaProfesor(): HasMany
+    {
+        return $this->hasMany(CarreraAsignaturaProfesor::class, 'id_asignatura', 'id');
+    }
+
     public function carrera(): BelongsToMany
     {
         return $this->belongsToMany(
@@ -107,22 +112,20 @@ class Asignatura extends Model
         }
     }
 
-public function aproboCursada($alumno)
-{
-    if ($this->relationLoaded('cursadas')) {
-        return $this->cursadas
-            ->first(fn($cursada) =>
-                $cursada->id_alumno === $alumno->id &&
-                in_array($cursada->aprobada, [1, 4, 5])
-            );
+    public function aproboCursada($alumno)
+    {
+        if ($this->relationLoaded('cursadas')) {
+            return $this->cursadas
+                ->first(fn ($cursada) => $cursada->id_alumno === $alumno->id &&
+                    in_array($cursada->aprobada, [1, 4, 5])
+                );
+        }
+
+        return Cursada::where('id_alumno', $alumno->id)
+            ->where('id_asignatura', $this->id)
+            ->whereIn('aprobada', [1, 4, 5])
+            ->first();
     }
-
-    return Cursada::where('id_alumno', $alumno->id)
-        ->where('id_asignatura', $this->id)
-        ->whereIn('aprobada', [1, 4, 5])
-        ->first();
-}
-
 
     public function cursantes()
     {
@@ -148,7 +151,7 @@ public function aproboCursada($alumno)
     {
         $strings = ['Primer año', 'Segundo año', 'Tercer año', 'Cuarto año', 'Quinto año', 'Sexto año'];
 
-        return $strings[$this->carrera()->wherePivot('id_carrera', $id_carrera)->first()->pivot->anio];
+        return $strings[$this->carrera->first()->pivot->anio];
     }
 
     public function setNombreAttribute($value): void

@@ -78,7 +78,6 @@ class AlumnoController extends BaseController
 
         // cursadas del alumno de la carrera seleccionada
         $cursadas = $this->alumnoRepository->cursadas($filtro, $campo, $orden);
-
         // lista de examenes aprobados para saber si una cursada tiene rendido su final
         $examenesAprobados = Examen::select('examenes.id_asignatura')
             ->where('examenes.nota', '>=', 4)

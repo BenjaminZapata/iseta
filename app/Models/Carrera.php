@@ -93,7 +93,7 @@ class Carrera extends Model
             return $carrera->carrera()->get();
         }
 
-        $carrera = $alumno->egresado()->first()->carrera()->first();
+        $carrera = $alumno->egresadoinscripto()->first()->carrera()->first();
         /* Egresado::select('id_carrera')
             ->where('id_alumno', $alumno->id)
             ->first();

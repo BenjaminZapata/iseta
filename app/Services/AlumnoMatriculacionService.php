@@ -51,7 +51,6 @@ class AlumnoMatriculacionService
 
         // para cada asignatura
         foreach ($asignaturas as $asignatura) {
-
             // Si la materia tiene correlativas
             $asignatura->equivalencias_previas = Correlativa::debeCursadasCorrelativas($asignatura, $alumno);
 

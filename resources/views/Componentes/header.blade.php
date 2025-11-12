@@ -53,7 +53,7 @@
               </a>
               </li>
 
-            <li class="perfil-lista-item"><a href="/alumno/logout"><i class="ti ti-logout"></i>Cerrar sesion</a></li>
+            <li class="perfil-lista-item"><a href="{{ route('alumno.logout') }}"><i class="ti ti-logout"></i>Cerrar sesion</a></li>
 
           </ul>
 
