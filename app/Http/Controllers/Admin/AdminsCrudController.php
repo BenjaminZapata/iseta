@@ -99,44 +99,35 @@ class AdminsCrudController extends Controller
 public function update(Request $request, Admin $admin)
 {
     $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:50|unique:administradores,username',
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'max:16',
-                'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/'
-            ],
-            'rol' => 'required|in:regente,preceptor,secretario',
-            'email' => 'required|string|email|max:128|unique:administradores,email',
-        ], [
-            'username.required' => 'El campo usuario es obligatorio.',
-            'username.unique' => 'El nombre del usuario ya está en uso.',
-            'email.required' => 'El campo email es obligatorio.',
-            'email.unique' => 'El email ya está en uso.',
-            'username.max' => 'El campo usuario no debe contener mas de 50 caracteres.',
-            'password.required' => 'La contraseña es obligatoria.',
-            'password.regex' => 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.',
-            'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
-            'rol.required' => 'Debes seleccionar un rol.',
-            'rol.in' => 'El rol seleccionado no es válido.',
-        ], [
-            'username' => 'Usuario'
-        ]);
+        'username' => 'required|string|max:55|unique:administradores,username,' . $admin->id,
+        'email' => 'required|string|email|max:128|unique:administradores,email,' . $admin->id,
+     'rol' => 'required|in:0,1,2',
+        'password' => [
+            'nullable', // no obligatoria en edición
+            'string',
+            'min:8',
+            'max:16',
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/'
+        ],
+    ], [
+        'username.required' => 'El campo usuario es obligatorio.',
+        'username.unique' => 'El nombre del usuario ya está en uso.',
+        'username.max' => 'El campo usuario no debe contener más de 55 caracteres.',
+        'email.required' => 'El campo email es obligatorio.',
+        'email.unique' => 'El email ya está en uso.',
+        'password.regex' => 'La contraseña debe contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.',
+        'password.min' => 'La contraseña debe tener al menos 8 caracteres.',
+        'rol.required' => 'Debes seleccionar un rol.',
+        'rol.in' => 'El rol seleccionado no es válido.',
+    ]);
 
     if ($validator->fails()) {
         return response()->json(['success' => false, 'errors' => $validator->errors()]);
     }
-     try {
-    // Enviar mail de modificación de admin
-    $data = $validator->validated();
-    Mail::to($data['email'])->queue(new Admins($data, 'modificado'));
-} catch (\Throwable $th) {
-    Log::error('Error al enviar mail de modificación de admin: ' . $th->getMessage());
-}
 
     $data = $validator->validated();
 
+    // Actualizar campos
     $admin->username = $data['username'];
     $admin->email = $data['email'];
     $admin->rol = $data['rol'];
@@ -147,8 +138,15 @@ public function update(Request $request, Admin $admin)
 
     $admin->save();
 
+    try {
+        Mail::to($data['email'])->queue(new Admins($data, 'modificado'));
+    } catch (\Throwable $th) {
+        Log::error('Error al enviar mail de modificación de admin: ' . $th->getMessage());
+    }
+
     return response()->json(['success' => true, 'message' => 'Administrador modificado correctamente']);
 }
+
 
 
     /**

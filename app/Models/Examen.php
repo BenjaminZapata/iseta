@@ -37,6 +37,11 @@ class Examen extends Model
         return $this->belongsTo(Mesa::class, 'id_mesa');
     }
 
+    public function CarreraAsignaturaProfesor()
+    {
+        return $this->belongsTo(CarreraAsignaturaProfesor::class, 'id_carrera_asignatura_profesor');
+    }
+
     public function carrera()
     {
         return $this->belongsTo(Carrera::class, 'id_carrera');
