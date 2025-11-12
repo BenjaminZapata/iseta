@@ -52,139 +52,20 @@ $admin = Auth::guard('admin')->user();
                 <th class="center">ACCIÓN</th>
             </tr>
         </thead>
-        <tbody>
-            @php
-            // Agrupamos las cursadas por carrera y año (sin modificar la colección original)
-            Log::debug(print_r($cursadas['summary'], true));
-            $agrupadas = $cursadas['summary']->groupBy(fn($c) => $c->id_carrera . '-' . $c->anio_cursada);
-            @endphp
+        @php
+        // Agrupamos las cursadas por carrera y año (sin modificar la colección original)
+            $agrupadas = $cursadas->groupBy(fn($c) => $c->id_carrera . '-' . $c->anio_cursada);
+        @endphp
 
-            @foreach ($agrupadas as $key => $grupo)
+        @foreach ($agrupadas as $key => $grupo)
             @php
             $primera = $grupo->first();
             $idCarreraAnio = $primera->id_carrera . '-' . $primera->anio_cursada;
             @endphp
 
-            <!-- NIVEL 1: Carrera -->
-            <tr>
-                <td><strong>{{ $primera->carrera->nombre ?? 'Sin carrera' }}</strong></td>
-                <td class="center">{{ $primera->anio_cursada }}</td>
-                <td class="center">
-                    <div class="centrar">
-                        <button class="btn_blue career-summary" data-target="#careerBody{{ $idCarreraAnio }}">
-                            <i class="ti ti-folder iconos"></i> Ver asignaturas
-                        </button>
-                    </div>
-
-                </td>
-            </tr>
-
-            <!-- Contenedor de asignaturas -->
-            <tr class="career-body hidden" id="careerBody{{ $idCarreraAnio }}">
-                <td colspan="4">
-                    <table class="inner-table">
-                        <tbody>
-                            @foreach ($grupo as $cursada)
-                            @php
-                            $groupId =
-                            $cursada->id_carrera .
-                            '-' .
-                            $cursada->id_asignatura .
-                            '-' .
-                            $cursada->anio_cursada;
-                            $cursadas_ungrp =
-                            $cursadas['allCursadas'][$cursada->id_carrera][$cursada->id_asignatura][
-                            $cursada->anio_cursada
-                            ] ?? collect();
-                            @endphp
-
-                            <!-- NIVEL 2: Asignatura -->
-                            <tr class="subject-summary">
-                                <td style="padding-left: 40px;">
-                                    {{ $cursada->asignatura->nombre ?? 'Sin asignatura' }}
-                                </td>
-                                <td class="flex just-center" style="min-width: 200px">
-                                    <div class="centrar" style="gap: 10px">
-                                        <div>
-                                            <button class="btn_blue subject-toggle"
-                                                data-target="#subjectBody{{ $groupId }}">
-                                                <i class="ti ti-users iconos"></i> Ver alumnos
-                                            </button>
-                                        </div>
-                                        <a href="{{ route('admin.cursadas.registroAcademico', ['cursada_group' => $groupId]) }}"
-                                            class="btn_blue" onclick="event.stopPropagation();">
-                                            <i class="ti ti-file-export iconos"></i>
-                                            Registro de Avance
-                                        </a>
-                                    </div>
-
-                                </td>
-                            </tr>
-
-                            <!-- NIVEL 3: Alumnos -->
-                            <tr class="subject-body hidden" id="subjectBody{{ $groupId }}">
-                                <td colspan="4">
-                                    <table class="inner-table">
-                                        <thead>
-                                            <tr>
-                                                <th>ALUMNO</th>
-                                                <th class="center">ESTADO</th>
-                                                <th class="center">CONDICIÓN</th>
-                                                <th class="center">ACCIÓN</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($cursadas_ungrp as $sub_cursada)
-                                            <tr>
-                                                <td class="bold">
-                                                    {{ $sub_cursada->alumno->apellidoNombre() ?? 'Sin alumno' }}
-                                                </td>
-                                                <td class="center">{{ $sub_cursada->aprobado() }}</td>
-                                                <td class="center">{{ $sub_cursada->condicionString() }}
-                                                </td>
-                                                <td class="flex just-center" style="min-width: 170px;">
-                                                    <div class="centrar" style=" gap: 10px;">
-                                                        <a
-                                                            href="{{ route('admin.cursadas.edit', ['cursada' => $sub_cursada->id]) }}">
-                                                            <button class="btn_blue btn_contraible">
-                                                                <i class="ti ti-pencil"
-                                                                    style="font-size: 1.3em;"></i>
-                                                                <span class="btn-text">Editar</span>
-                                                            </button>
-                                                        </a>
-
-                                                        @if (!$config['modo_seguro'])
-                                                        <form id="form-eliminar-{{ $sub_cursada->id }}"
-                                                            action="{{ route('admin.cursadas.destroy', $sub_cursada->id) }}"
-                                                            method="POST" style="display:inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="button"
-                                                                onclick="openGeneralModal('form-eliminar-{{ $sub_cursada->id }}',
-                                                                    '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre ?? 'Sin Asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'Sin Carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                                                class="btn_icon-danger btn_contraible"
-                                                                style="background-color: red;">
-                                                                <i class="ti ti-trash"
-                                                                    style="font-size: 1.3em"></i>
-                                                                <span class="btn-text">Eliminar</span>
-                                                            </button>
-                                                        </form>
-                                                        @endif
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
+            <livewire:arbol-cursadas :grupo="$grupo" :idCarreraAnio="$idCarreraAnio" :primera="$primera" :key="$key"/>
+        @endforeach
+        
 
     </table>
 </div>
@@ -192,7 +73,7 @@ $admin = Auth::guard('admin')->user();
 //TODO: MODIFICAR LA PAGINACIÓN PARA QUE TOME EN CUENTA LOS GRUPOS DE CURSADAS
 {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
-    {{ $cursadas['summary']->links('Componentes.pagination') }}
+    {{ $cursadas->links('Componentes.pagination') }}
 </div>
 <script src="{{ asset('js/obtener-materias.js') }}"></script>
 <script>
