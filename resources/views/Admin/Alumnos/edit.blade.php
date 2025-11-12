@@ -162,14 +162,16 @@
                     </select>
                 </td>
                 <td>
-                    <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}" method="POST" class="d-inline">
-                        @csrf
-                        <input type="hidden" name="carrera" value="{{ $carrera->carrera_id }}">
-                        <button type="submit" class="btn_blue btn-sm d-inline-flex align-items-center">
-                            <i class="ti ti-paperclip me-2" style="font-size: 1.1em;"></i>
-                            Matricular
-                        </button>
-                    </form>
+                    @if (in_array($admin->rol, [0,1]))
+                        <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}" method="POST" class="d-inline">
+                            @csrf
+                            <input type="hidden" name="carrera" value="{{ $carrera->carrera_id }}">
+                            <button type="submit" class="btn_blue btn-sm d-inline-flex align-items-center">
+                                <i class="ti ti-paperclip me-2" style="font-size: 1.1em;"></i>
+                                Matricular
+                            </button>
+                        </form>
+                    @endif 
                 </td>
             </tr>
         @endforeach
@@ -190,131 +192,108 @@
             </div>
         </div>
 
-
-@if (in_array($admin->rol, [0,1]))
-        {{-- REMATRICULACIÓN MANUAL --}}
-        <div class="table mb-5">
-            <div class="table__header">
-                <h2>Rematriculación manual</h2>
-            </div>
-
-            <div class="matricular">
-                <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}">
-                    <select name="carrera">
-                        @foreach ($carreras as $carrera)
-                            <option value="{{ $carrera->carrera_id }}">{{ $carrera->carrera_nombre }}</option>
-                        @endforeach
-                    </select>
-                    <div class="upd">
-                        <button class="btn_blue">
-                            <i class="ti ti-paperclip" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            Matricular
-                        </button>
-                    </div>
-                </form>
-                
-                <a href="{{ route('admin.inscriptos.create', ['alumno_id' => $alumno->id]) }}"
-                    style="display:block;width:190px">
-                    <button class="btn_blue" style="margin-top:-40px"><i class="ti ti-plus"
-                            style="font-size: 1.3em; margin-right: 8px;"></i>Inscribir a otra carrera</button>
-                </a>
-            </div>
-        </div>
-@endif
         {{-- CURSADAS --}}
-        <div class="table mb-5">
-            <div class="table__header">
-                <h2>Cursadas</h2>
-            </div>
-            <div class="accordion" id="accordionCursadas">
-                @php
-                    $agrupadasCursadas = collect($cursadas)->groupBy(fn($c) => $c->carrera);
-                @endphp
+{{-- CURSADAS --}}
+<div class="table mb-5">
+    <div class="table__header">
+        <h2>Cursadas</h2>
+    </div>
 
-                @foreach ($agrupadasCursadas as $carrera => $porCarrera)
-                    @php
-                        $porAnio = $porCarrera->groupBy('anio_asig')->sortKeys();
-                    @endphp
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingCarreraCursadas{{ $loop->index }}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseCarreraCursadas{{ $loop->index }}" aria-expanded="false">
-                                {{ $carrera }}
-                            </button>
-                        </h2>
-                        <div id="collapseCarreraCursadas{{ $loop->index }}" class="accordion-collapse collapse"
-                            data-bs-parent="#accordionCursadas">
-                            <div class="accordion-body p-2">
-                                <div class="accordion" id="anioAccordionCursadas{{ $loop->index }}">
-                                    @foreach ($porAnio as $anio => $cursadasDelAnio)
-                                        <div class="accordion-item">
-                                            <h3 class="accordion-header"
-                                                id="headingCursada{{ $loop->parent->index }}-{{ $loop->index }}">
-                                                <button class="accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#collapseCursada{{ $loop->parent->index }}-{{ $loop->index }}"
-                                                    aria-expanded="false">
-                                                    {{ ((int) $anio) + 1 }}° año
-                                                </button>
-                                            </h3>
-                                            <div id="collapseCursada{{ $loop->parent->index }}-{{ $loop->index }}"
-                                                class="accordion-collapse collapse"
-                                                data-bs-parent="#anioAccordionCursadas{{ $loop->parent->index }}">
-                                                <div class="accordion-body p-0">
-                                                    <table class="table table-bordered table-hover mb-0 text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Materia</th>
-                                                                <th class="center">Condición</th>
-                                                                <th class="center">Estado</th>
-                                                                <th class="center">Acción</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($cursadasDelAnio as $cursada)
-                                                                <tr>
-                                                                    <td class="bold">{{ $cursada->asignatura }}</td>
-                                                                    <td>
-                                                                        <div
-                                                                            style="display: flex; justify-content: center;">
-                                                                            {{ $cursada->condicionString() }}
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div
-                                                                            style="display: flex; justify-content: center;">
-                                                                            {{ $cursada->aprobado() }}
-                                                                        </div>
+    <div class="accordion" id="accordionCursadas">
+        @php
+            $agrupadasCursadas = collect($cursadas)->groupBy(fn($c) => $c->carrera);
+        @endphp
 
-                                                                    </td>
-                                                                    <td class="flex just-center" style="min-width: 170px;">
-                                                                        <div
-                                                                            style="display: flex; justify-content: center; gap:10px">
-                                                                            <a
-                                                                                href="{{ route('admin.cursadas.edit', $cursada->id) }}">
-                                                                                <button class="btn_blue btn_contraible">
-                                                                                    <i class="ti ti-pencil"
-                                                                                        style="font-size: 1.3em;"></i>
-                                                                                    <span class="btn-text">Editar</span>
-                                                                                </button>
-                                                                            </a>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div> {{-- Fin año --}}
-                                    @endforeach
-                                </div>
-                            </div>
+        @foreach ($agrupadasCursadas as $carrera => $porCarrera)
+            @php
+                // agrupamos por el año de la asignatura desde carrera_asignatura_profesor
+                $porAnio = $porCarrera->groupBy('anio_asignatura')->sortKeys();
+            @endphp
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingCarreraCursadas{{ $loop->index }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseCarreraCursadas{{ $loop->index }}" aria-expanded="false">
+                        {{ $carrera }}
+                    </button>
+                </h2>
+
+                <div id="collapseCarreraCursadas{{ $loop->index }}" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionCursadas">
+                    <div class="accordion-body p-2">
+                        <div class="accordion" id="anioAccordionCursadas{{ $loop->index }}">
+
+                            @foreach ($porAnio as $anio => $cursadasDelAnio)
+                                <div class="accordion-item">
+                                    <h3 class="accordion-header"
+                                        id="headingCursada{{ $loop->parent->index }}-{{ $loop->index }}">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseCursada{{ $loop->parent->index }}-{{ $loop->index }}"
+                                            aria-expanded="false">
+                                            {{-- Texto del año --}}
+                                            {{ $anio !== null ? ($anio + 1) . '° año' : 'Año no definido' }}
+
+                                        </button>
+                                    </h3>
+
+                                    <div id="collapseCursada{{ $loop->parent->index }}-{{ $loop->index }}"
+                                        class="accordion-collapse collapse"
+                                        data-bs-parent="#anioAccordionCursadas{{ $loop->parent->index }}">
+                                        <div class="accordion-body p-0">
+                                            <table class="table table-bordered table-hover mb-0 text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Materia</th>
+                                                        <th class="center">Condición</th>
+                                                        <th class="center">Estado</th>
+                                                        <th class="center">Acción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($cursadasDelAnio as $cursada)
+                                                        <tr>
+                                                            <td class="bold">{{ $cursada->asignatura }}</td>
+                                                            <td>
+                                                                <div style="display: flex; justify-content: center;">
+                                                                    {{ $cursada->condicionString() }}
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div style="display: flex; justify-content: center;">
+                                                                    {{ $cursada->aprobado() }}
+                                                                </div>
+                                                            </td>
+                                                            <td class="flex just-center" style="min-width: 170px;">
+                                                                <div style="display: flex; justify-content: center; gap:10px">
+                                                                    <a href="{{ route('admin.cursadas.edit', $cursada->id) }}">
+                                                                        <button class="btn_blue btn_contraible">
+                                                                            <i class="ti ti-pencil" style="font-size: 1.3em;"></i>
+                                                                            <span class="btn-text">Editar</span>
+                                                                        </button>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div> {{-- Fin año --}}
+                            @endforeach
+
                         </div>
-                    </div> {{-- Fin carrera --}}
-                @endforeach
-            </div>
-        </div>
+                    </div>
+                </div>
+            </div> {{-- Fin carrera --}}
+        @endforeach
+    </div>
+</div>
+
+
+
+
 
         {{-- EXÁMENES --}}
         <div class="table">

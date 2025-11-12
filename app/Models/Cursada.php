@@ -26,6 +26,11 @@ class Cursada extends Model
         'observaciones',
     ];
 
+    public function carreraAsignaturaProfesor()
+{
+    return $this->belongsTo(CarreraAsignaturaProfesor::class, 'carrera_asignatura_profesor_id');
+}
+
     public function alumno()
     {
         return $this->hasOne(Alumno::class, 'id', 'id_alumno');
