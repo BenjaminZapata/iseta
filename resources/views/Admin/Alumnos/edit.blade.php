@@ -291,121 +291,111 @@
     </div>
 </div>
 
+       {{-- EXÁMENES --}}
+<div class="table">
+    <div class="table__header">
+        <h2>Exámenes</h2>
+    </div>
 
+    <div class="accordion" id="accordionExamenes">
+        @php
+            $agrupadasExamenes = collect($examenes)->groupBy(fn($e) => $e->carrera);
+        @endphp
 
+        @foreach ($agrupadasExamenes as $carrera => $porCarrera)
+            @php
+                // agrupamos por el año de la asignatura (de carrera_asignatura_profesor)
+                $porAnio = $porCarrera
+                    ->groupBy('anio_asignatura')
+                    ->sortKeys()
+                    ->sortBy(fn($grupo, $anio) => $anio === null ? 999 : $anio); // los "sin año" al final
+            @endphp
 
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingCarreraExamenes{{ $loop->index }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseCarreraExamenes{{ $loop->index }}" aria-expanded="false">
+                        {{ $carrera }}
+                    </button>
+                </h2>
 
-        {{-- EXÁMENES --}}
-        <div class="table">
-            <div class="table__header">
-                <h2>Exámenes</h2>
-            </div>
-            <div class="accordion" id="accordionExamenes">
-                @php
-                    $agrupadasExamenes = collect($examenes)->groupBy(fn($e) => $e->carrera);
-                @endphp
+                <div id="collapseCarreraExamenes{{ $loop->index }}" class="accordion-collapse collapse"
+                    data-bs-parent="#accordionExamenes">
+                    <div class="accordion-body p-2">
+                        <div class="accordion" id="anioAccordionExamenes{{ $loop->index }}">
 
-                @foreach ($agrupadasExamenes as $carrera => $porCarrera)
-                    @php
-                        $porAnio = $porCarrera->groupBy('anio_asig')->sortKeys();
-                    @endphp
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingCarreraExamenes{{ $loop->index }}">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseCarreraExamenes{{ $loop->index }}" aria-expanded="false">
-                                {{ $carrera }}
-                            </button>
-                        </h2>
-                        <div id="collapseCarreraExamenes{{ $loop->index }}" class="accordion-collapse collapse"
-                            data-bs-parent="#accordionExamenes">
-                            <div class="accordion-body p-2">
-                                <div class="accordion" id="anioAccordionExamenes{{ $loop->index }}">
-                                    @foreach ($porAnio as $anio => $examenesDelAnio)
-                                        <div class="accordion-item">
-                                            <h3 class="accordion-header"
-                                                id="headingExamen{{ $loop->parent->index }}-{{ $loop->index }}">
-                                                <button class="accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse"
-                                                    data-bs-target="#collapseExamen{{ $loop->parent->index }}-{{ $loop->index }}"
-                                                    aria-expanded="false">
-                                                    {{ ((int) $anio) + 1 }}° año
-                                                </button>
-                                            </h3>
-                                            <div id="collapseExamen{{ $loop->parent->index }}-{{ $loop->index }}"
-                                                class="accordion-collapse collapse"
-                                                data-bs-parent="#anioAccordionExamenes{{ $loop->parent->index }}">
-                                                <div class="accordion-body p-0">
-                                                    <table class="table table-bordered table-hover mb-0 text-center">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Materia</th>
-                                                                <th class="center">Fecha</th>
-                                                                <th class="center">Nota</th>
-                                                                <th class="center">Acción</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach ($examenesDelAnio as $examen)
-                                                                <tr>
-                                                                    <td class="bold">{{ $examen->asignatura }}</td>
-                                                                    <td>
-                                                                        <div
-                                                                            style="display: flex; justify-content: center; gap: 10px;">
-                                                                            {{ $formatoFecha->dma($examen->getFecha()) }}
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        @if ($examen->aprobado == 3)
-                                                                            AUSENTE
-                                                                        @elseif($examen->nota <= 0)
-                                                                            <div
-                                                                                style="display: flex; justify-content: center; gap: 10px;">
-                                                                                <span class="bold"
-                                                                                    style="color: red">SIN NOTA</span>
-                                                                            </div>
-                                                                        @else
-                                                                            @if ($examen->nota >= 4)
-                                                                                <div
-                                                                                    style="display: flex; justify-content: center; gap: 10px;">
-                                                                                    <span class="bold"
-                                                                                        style="color: green;">{{ $examen->nota }}</span>
-                                                                                </div>
-                                                                            @else
-                                                                                <div
-                                                                                    style="display: flex; justify-content: center; gap: 10px;">
-                                                                                    <span class="bold"
-                                                                                        style="color: red;">{{ $examen->nota }}</span>
-                                                                                </div>
-                                                                            @endif
-                                                                        @endif
-                                                                    </td>
-                                                                    <td class="flex just-center"
-                                                                        style="min-width: 170px;">
-                                                                        <div
-                                                                            style="display: flex; justify-content: center; gap: 10px;">
-                                                                            <a
-                                                                                href="{{ route('admin.examenes.edit', $examen->id) }}">
-                                                                                <button class="btn_blue btn_contraible">
-                                                                                    <i class="ti ti-pencil"
-                                                                                        style="font-size: 1.3em;"></i>
-                                                                                    <span class="btn-text">Editar</span>
-                                                                                </button>
-                                                                            </a>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div> {{-- Fin año --}}
-                                    @endforeach
-                                </div>
-                            </div>
+                            @foreach ($porAnio as $anio => $examenesDelAnio)
+                                <div class="accordion-item">
+                                    <h3 class="accordion-header"
+                                        id="headingExamen{{ $loop->parent->index }}-{{ $loop->index }}">
+                                        <button class="accordion-button collapsed" type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#collapseExamen{{ $loop->parent->index }}-{{ $loop->index }}"
+                                            aria-expanded="false">
+                                            {{-- Texto del año --}}
+                                            {{ $anio !== null ? ($anio + 1) . '° año' : 'Año no definido' }}
+                                        </button>
+                                    </h3>
+
+                                    <div id="collapseExamen{{ $loop->parent->index }}-{{ $loop->index }}"
+                                        class="accordion-collapse collapse"
+                                        data-bs-parent="#anioAccordionExamenes{{ $loop->parent->index }}">
+                                        <div class="accordion-body p-0">
+                                            <table class="table table-bordered table-hover mb-0 text-center">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Materia</th>
+                                                        <th class="center">Fecha</th>
+                                                        <th class="center">Nota</th>
+                                                        <th class="center">Acción</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($examenesDelAnio as $examen)
+                                                        <tr>
+                                                            <td class="bold">{{ $examen->asignatura }}</td>
+                                                            <td>
+                                                                <div style="display: flex; justify-content: center;">
+                                                                    {{ $formatoFecha->dma($examen->getFecha()) }}
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                @if ($examen->aprobado == 3)
+                                                                    AUSENTE
+                                                                @elseif($examen->nota <= 0)
+                                                                    <span class="bold" style="color: red">SIN NOTA</span>
+                                                                @else
+                                                                    <span class="bold"
+                                                                        style="color: {{ $examen->nota >= 4 ? 'green' : 'red' }}">
+                                                                        {{ $examen->nota }}
+                                                                    </span>
+                                                                @endif
+                                                            </td>
+                                                            <td style="min-width: 170px;">
+                                                                <div style="display: flex; justify-content: center; gap:10px;">
+                                                                    <a href="{{ route('admin.examenes.edit', $examen->id) }}">
+                                                                        <button class="btn_blue btn_contraible">
+                                                                            <i class="ti ti-pencil" style="font-size: 1.3em;"></i>
+                                                                            <span class="btn-text">Editar</span>
+                                                                        </button>
+                                                                    </a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div> {{-- Fin año --}}
+                            @endforeach
+
                         </div>
-                    </div> {{-- Fin carrera --}}
-                @endforeach
-            </div>
-        </div>
+                    </div>
+                </div>
+            </div> {{-- Fin carrera --}}
+        @endforeach
+    </div>
+</div>
+
     @endsection
