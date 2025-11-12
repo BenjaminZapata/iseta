@@ -118,74 +118,89 @@ class MesasCrudController extends BaseController
      * Store a newly created resource in storage.
      */
     public function store(CrearMesaRequest $request)
-    {
+{
+    // Obtener datos validados
+    $data = $request->validated();
 
-        // obtener datos validados
-        $data = $request->validated();
+    // Validar que los tres profesores estén seleccionados
+    if (
+        empty($data['prof_presidente']) ||
+        empty($data['prof_vocal_1']) 
+    ) {
+        return redirect()->back()
+            ->with('error', 'Debe seleccionar un presidente de mesa y un profesor vocal 1 antes de crear la mesa.')
+            ->withInput();
+    }
 
-        $esDiaValido = $this->mesasService->esDiaHabil($data['fecha_1']);
+    // Validar que la fecha del primer llamado sea hábil
+    $esDiaValido = $this->mesasService->esDiaHabil($data['fecha_1']);
+    if (!$esDiaValido['success']) {
+        return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
+    }
 
+    // Verificar que el primer llamado no exista
+    $llamadoYaExiste = $this->mesasService->llamadoYaExiste([
+        'id_asignatura' => $data['id_asignatura'],
+        'fecha' => $data['fecha_1'],
+        'llamado' => 1
+    ]);
+    if ($llamadoYaExiste['success']) {
+        return redirect()->back()->with('error', $llamadoYaExiste['mensaje'])->withInput();
+    }
+
+    // Verificar que no haya profesores repetidos
+    if (
+        $data['prof_presidente'] == $data['prof_vocal_1'] ||
+        $data['prof_presidente'] == $data['prof_vocal_2'] ||
+        ($data['prof_vocal_1'] == $data['prof_vocal_2'] && $data['prof_vocal_1'] != '0')
+    ) {
+        return redirect()->back()->with('error', 'Hay profesores repetidos')->withInput();
+    }
+
+    // Si hay segundo llamado
+    if ($data['cantidad_llamados'] == 2) {
+        $esDiaValido = $this->mesasService->esDiaHabil($data['fecha_2']);
         if (!$esDiaValido['success']) {
             return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
         }
 
         $llamadoYaExiste = $this->mesasService->llamadoYaExiste([
             'id_asignatura' => $data['id_asignatura'],
-            'fecha' => $data['fecha_1'],
-            'llamado' => 1
+            'fecha' => $data['fecha_2'],
+            'llamado' => 2
         ]);
-
         if ($llamadoYaExiste['success']) {
             return redirect()->back()->with('error', $llamadoYaExiste['mensaje'])->withInput();
         }
 
-        // Que los profes no sean los mismos
-        if (
-            $data['prof_presidente'] == $data['prof_vocal_1'] ||
-            $data['prof_presidente'] == $data['prof_vocal_2'] ||
-            $data['prof_vocal_1'] == $data['prof_vocal_2'] && $data['prof_vocal_1'] != '0'
-        ) {
-            return redirect()->back()->with('error', 'Hay profesores repetidos');
-        }
-        if ($data['cantidad_llamados'] == 2) {
-
-            $esDiaValido = $this->mesasService->esDiaHabil($data['fecha_2']);
-            if (!$esDiaValido['success']) {
-                return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
-            }
-            $llamadoYaExiste = $this->mesasService->llamadoYaExiste([
-                'id_asignatura' => $data['id_asignatura'],
-                'fecha' => $data['fecha_2'],
-                'llamado' => 2
-            ]);
-
-            if ($llamadoYaExiste['success']) {
-                return redirect()->back()->with('error', $llamadoYaExiste['mensaje'])->withInput();
-            }
-            Mesa::create([
-                'id_carrera' => $data['carrera'],
-                'id_asignatura' => $data['id_asignatura'],
-                'fecha' => $data['fecha_2'],
-                'llamado' => 2,
-                'prof_presidente' => $data['prof_vocal_1'],
-                'prof_vocal_1' => $data['prof_vocal_2'],
-                'prof_vocal_2' => $data['prof_presidente'],
-                'estado' => 0 
-            ]);
-        }
-
+        // Crear mesa del segundo llamado rotando los profesores
         Mesa::create([
             'id_carrera' => $data['carrera'],
             'id_asignatura' => $data['id_asignatura'],
-            'fecha' => $data['fecha_1'],
-            'llamado' => 1,
+            'fecha' => $data['fecha_2'],
+            'llamado' => 2,
             'prof_presidente' => $data['prof_presidente'],
             'prof_vocal_1' => $data['prof_vocal_1'],
             'prof_vocal_2' => $data['prof_vocal_2'],
             'estado' => 0
         ]);
-        return \redirect()->back()->with('mensaje', 'Se creo la mesa');
     }
+
+    // Crear mesa del primer llamado
+    Mesa::create([
+        'id_carrera' => $data['carrera'],
+        'id_asignatura' => $data['id_asignatura'],
+        'fecha' => $data['fecha_1'],
+        'llamado' => 1,
+        'prof_presidente' => $data['prof_presidente'],
+        'prof_vocal_1' => $data['prof_vocal_1'],
+        'prof_vocal_2' => $data['prof_vocal_2'],
+        'estado' => 0
+    ]);
+
+    return redirect()->back()->with('mensaje', 'Se creó la mesa correctamente.');
+}
+
 
 
     /**
