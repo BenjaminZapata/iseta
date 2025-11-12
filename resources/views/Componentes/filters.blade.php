@@ -5,30 +5,30 @@
 
       @if ($order)
       <div class="contenedor_ordenar">
-      <span class="categoria">Ordenar</span>
-      <div>
-        <select class="ordenar border-none p-1 shadow" name="orden">
-        @foreach ($order as $key => $value)
-      <option @selected($filters['orden'] == $key) value="{{$key}}">{{$value}}</option>
-      @endforeach
-        </select>
+        <span class="categoria">Ordenar</span>
+        <div>
+          <select class="ordenar border-none p-1 shadow" name="orden">
+            @foreach ($order as $key => $value)
+            <option @selected($filters['orden']==$key) value="{{$key}}">{{$value}}</option>
+            @endforeach
+          </select>
+        </div>
       </div>
-      </div>
-    @endif
+      @endif
 
       @if ($show)
       <div class="contenedor_filtrar">
-      <span class="categoria">Mostrar</span>
-      <div>
-        <select class="filtrar border-none p-1 shadow" name="campo">
+        <span class="categoria">Mostrar</span>
+        <div>
+          <select class="filtrar border-none p-1 shadow" name="campo">
 
-        @foreach ($show as $key => $value)
-      <option @selected($filters['campo'] == $key) value="{{$key}}">{{$value}}</option>
-      @endforeach
-        </select>
+            @foreach ($show as $key => $value)
+            <option @selected($filters['campo']==$key) value="{{$key}}">{{$value}}</option>
+            @endforeach
+          </select>
+        </div>
       </div>
-      </div>
-    @endif
+      @endif
 
       <div class="contenedor_filtrado">
         <input placeholder="{{$searchField['placeholder']}}" class="filtrado-busqueda border-none p-1 shadow"

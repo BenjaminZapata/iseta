@@ -16,11 +16,13 @@ $hasActiveFilters = !empty(array_filter($filtersArray));
             <span class="btn-text">Borrar filtros</span>
         </button>
         @endif
+        <div class="centrar">
+            <button id="show-filters" class="btn_blue btn_contraible" title="Filtrar búsqueda">
+                <i class="ti ti-filter" style="font-size: 1.3em;"></i>
+                <span class="btn-text">Filtrar</span>
+            </button>
+        </div>
 
-        <button id="show-filters" class="btn_blue btn_contraible" title="Filtrar búsqueda">
-            <i class="ti ti-filter" style="font-size: 1.3em;"></i>
-            <span class="btn-text">Filtrar</span>
-        </button>
 
         <form action="{{ route($url) }}" id="filters" class="none w-100p rounded bg-white"
             style="position: absolute; top: 110%; right: 0; align-items:left; z-index: 10; width: 750px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); border: 2px solid #e0e0e0;">
