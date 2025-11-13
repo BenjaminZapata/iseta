@@ -31,16 +31,6 @@
                                 <span class="text-red-500 text-xs">{{ $message }}</span>
                             @enderror
                         </div>
-                        {{-- <div class="col-md-4">
-                            <label for="apellido" class="form-label">Apellido</label>
-                            <input type="text" id="apellido" wire:model.live="apellido" class="form-control" placeholder="Ej: Torres">
-                            @error('apellido') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="col-md-4">
-                        <label for="dni" class="form-label">DNI</label>
-                        <input type="text" id="dni" wire:model.live="dni" class="form-control" placeholder="Ej: 47260126">
-                        @error('dni') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div> --}}
                     </div>
                 </fieldset>
             </div>
@@ -48,54 +38,7 @@
 
         {{-- 📋 Resultados de búsqueda --}}
         @if (!empty($dni) || !empty($nombre_apellido))
-            <div class="card shadow-sm mb-4 resultados-card">
-                <div class="card-header text-white fw-bold d-flex justify-content-between align-items-center">
-                    <span class="mini-encabezado">Lista de alumnos</span>
-                    <span class="badge bg-light text-dark">{{ count($alumnos) }}
-                        {{ count($alumnos) == 1 ? 'resultado' : 'resultados' }}</span>
-                </div>
-                <div class="tabla-scroll">
-                    <table class="table table-sm table-hover align-middle mb-0">
-                        <thead class="table-light sticky-top" style="background-color:#140b5c; color:white;">
-                            <tr>
-                                <th class="center">Apellido</th>
-                                <th class="center"> Nombre </th>
-                                <th class="center">DNI</th>
-                                <th class="center">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($alumnos as $alumno)
-                                <tr>
-                                    <td class="bold">
-                                        <div class="centrar">{{ $alumno->apellido }}</div>
-                                    </td>
-                                    <td class="bold">
-                                        <div class="centrar">{{ $alumno->nombre }}</div>
-                                    </td>
-                                    <td class="bold">
-                                        <div class="centrar">{{ $alumno->dni }}</div>
-                                    </td>
-                                    <td class="center">
-                                        <div class="centrar">
-                                            <button type="button" wire:click="seleccionarAlumno({{ $alumno->id }})"
-                                                class="btn btn-modificar">
-                                                Seleccionar
-                                            </button>
-                                        </div>
-
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center text-muted">No se encontraron resultados</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
+            <livewire:cursada-infinite-scroll :dni="$dni" :nombre_apellido="$nombre_apellido"/>
 
             {{-- 🎓 Alumno seleccionado --}}
             @if ($alumnoSeleccionado)

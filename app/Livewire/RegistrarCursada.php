@@ -8,12 +8,14 @@ use App\Models\Correlativa;
 use App\Models\Cursada;
 use Flasher\Laravel\Facade\Flasher as FlasherFacade;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Attributes\On;
 use Livewire\Component;
-use Log;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
 
 class RegistrarCursada extends Component
 {
-    use AuthorizesRequests;
+    use AuthorizesRequests, WithoutUrlPagination, WithPagination;
 
     public $nombre_apellido = '';
 
@@ -53,24 +55,6 @@ class RegistrarCursada extends Component
 
     public function render()
     {
-        Log::debug('puede ser que aca entre?');
-        if ($this->nombre_apellido || $this->dni) {
-            if (! ($this->dni || $this->nombre_apellido)) {
-                $this->erroresValidacion[] = 'Debe ingresar al menos DNI o nombre y apellido.';
-            } else {
-                $this->alumnos = Alumno::query()
-                    ->join('egresadoinscripto', 'egresadoinscripto.id_alumno', '=', 'alumnos.id') // -> ajustá 'egresados' si tu tabla tiene otro nombre
-                    ->select('alumnos.*')
-                    ->when(
-                        $this->nombre_apellido,
-                        fn ($q) => $q->where('nombre', 'like', "%{$this->nombre_apellido}%")
-                            ->orWhere('apellido', 'like', "%{$this->nombre_apellido}%")
-                    )
-                    ->when($this->dni, fn ($q) => $q->where('dni', 'like', "%{$this->dni}%"))
-                    ->take(10)
-                    ->get();
-            }
-        }
 
         return view('livewire.registrar-cursada', [
             'alumnos' => $this->alumnos,
@@ -78,9 +62,14 @@ class RegistrarCursada extends Component
         ]);
     }
 
+    #[On('alumnos-page')]
+    public function alumnosPage($alumnos)
+    {
+        $this->alumnos = $alumnos;
+    }
+
     public function seleccionarAlumno($id)
     {
-        Log::debug('paso 1 vez');
         $this->alumnoSeleccionado = Alumno::find($id);
         $this->carreraSeleccionada = null;
         $this->materiasCarrera = [];
