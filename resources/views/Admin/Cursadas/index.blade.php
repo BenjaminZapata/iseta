@@ -70,7 +70,7 @@ $admin = Auth::guard('admin')->user();
     </table>
 </div>
 
-//TODO: MODIFICAR LA PAGINACIÓN PARA QUE TOME EN CUENTA LOS GRUPOS DE CURSADAS
+
 {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
     {{ $cursadas->links('Componentes.pagination') }}
