@@ -8,7 +8,6 @@ use App\Models\Configuracion;
 use App\Models\Cursada;
 use App\Models\Examen;
 use Illuminate\Support\Facades\Auth;
-use Log;
 
 class AlumnoDataRepository
 {
@@ -60,11 +59,8 @@ class AlumnoDataRepository
             ->with('asignatura')
 
             // Ordenamiento
-            ->when($orden == 'anio_cursada', fn ($query) => $query->orderBy('cursadas.anio_cursada'))
-            ->when($orden == 'anio_cursada_desc', fn ($query) => $query->orderBy('cursadas.anio_cursada', 'desc'))
-            ->orderBy('asignaturas.id');
-
-        Log::debug($query->get());
+            ->when($orden === 'anio_cursada', fn ($query) => $query->orderBy('anio_cursada'))
+            ->when($orden === 'anio_cursada_desc', fn ($query) => $query->orderBy('anio_cursada', 'desc'));
 
         return $query->get();
 

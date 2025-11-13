@@ -40,6 +40,7 @@ class AlumnoController extends BaseController
     public function info()
     {
         return view('Alumnos.Datos.informacion', [
+            'carreras' => Auth::user()->carreras()->get(),
             'alumno' => Auth::user(),
             'default' => Carrera::getDefault(Auth::user()),
         ]);
@@ -74,7 +75,7 @@ class AlumnoController extends BaseController
     {
         $filtro = $request->filtro ? $request->filtro : '';
         $campo = $request->campo ? $request->campo : '';
-        $orden = $request->orden ? $request->orden : 'fecha';
+        $orden = $request->orden ? $request->orden : '';
 
         // cursadas del alumno de la carrera seleccionada
         $cursadas = $this->alumnoRepository->cursadas($filtro, $campo, $orden);
