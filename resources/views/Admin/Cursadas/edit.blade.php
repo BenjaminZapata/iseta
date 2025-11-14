@@ -34,11 +34,11 @@
 
                     <div class="perfil_dataname">
                         <label>Año de cursada:</label>
-                        @if($soloLectura)
+                        {{-- @if($soloLectura) --}}
                             <span class="campo_info2">{{ $cursada->anio_cursada }}</span>
-                        @else
+                        {{-- @else
                             <input class="campo_info rounded" value="{{ $cursada->anio_cursada }}" name="anio_cursada">
-                        @endif
+                        @endif --}}
                     </div>
 
                     <div x-data="{
@@ -103,9 +103,9 @@
                                             @php
                                                 $estados = [
                                                     1 => 'Aprobada',
-                                                    2 => 'Desaprobada',
+                                                    2 => 'Reprobada',
                                                     3 => 'Cursando',
-                                                    4 => 'Promocionada',
+                                                    4 => 'Promocion',
                                                     5 => 'Equivalencia',
                                                 ];
                                             @endphp
@@ -116,7 +116,7 @@
                                             <option value="1">Aprobada</option>
                                             <option value="2">Desaprobada</option>
                                             <option value="3">Cursando</option>
-                                            <option value="4">Promocionada</option>
+                                            <option value="4">Promocion</option>
                                             <option value="5">Equivalencia</option>
                                         </select>
                                     @endif

@@ -65,18 +65,6 @@ class CursadasAdminController extends BaseController
 
         // Validación de año de cursada
         $data = $request->validated();
-        \Log::debug('message', ['data' => $data]);
-        if (
-            $request->input('condicion') == 0 ||
-            $request->input('condicion') == 2 ||
-            $request->input('condicion') == 3
-        ) {
-            if ($cursada->aprobada == 1 && ($request->aprobada == 2 || $request->aprobada == 3)) {
-                $mensajes[] = 'No puedes desaprobar una cursada libre, promocionada o aprobada por equivalencias';
-            }
-
-            $data['aprobada'] = 1;
-        }
 
         if ($request->aprobada == 5) {
 
