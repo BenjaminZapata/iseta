@@ -6,7 +6,6 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearAlumnoRequest;
 use App\Http\Requests\EditarAlumnoRequest;
 use App\Models\Alumno;
-use App\Models\Cursada;
 use App\Models\Examen;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
@@ -71,33 +70,16 @@ class AlumnoCrudController extends BaseController
      */
     public function edit(Request $request, Alumno $alumno)
     {
-      $cursadas = Cursada::select(
-    'asignaturas.nombre as asignatura',
-    'cursadas.aprobada',
-    'cursadas.condicion',
-    'cursadas.anio_cursada',
-    'cursadas.id',
-    'carreras.nombre as carrera',
-    'cap.anio as anio_asignatura'
-)
+        $alumno = $alumno->load(['carreras', 'cursadas', 'examenes']);
 
-            ->join('asignaturas', 'cursadas.id_asignatura', 'asignaturas.id')
-            ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', 'cap.id_asignatura')
-            ->join('carreras', 'cap.id_carrera', 'carreras.id')
-            ->where('cursadas.id_alumno', $alumno->id)
-            ->orderBy('carreras.id')
-            ->orderBy('asignaturas.id')
-            ->orderBy('cursadas.anio_cursada')
-            ->get();
-
-       $examenes = Examen::select(
-    'examenes.fecha',
-    'asignaturas.nombre as asignatura',
-    'examenes.nota',
-    'examenes.id',
-    'carreras.nombre as carrera',
-    'cap.anio as anio_asignatura' 
-)
+        $examenes = Examen::select(
+            'examenes.fecha',
+            'asignaturas.nombre as asignatura',
+            'examenes.nota',
+            'examenes.id',
+            'carreras.nombre as carrera',
+            'cap.anio as anio_asignatura'
+        )
             ->join('asignaturas', 'examenes.id_asignatura', 'asignaturas.id')
             ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', 'cap.id_asignatura')
             ->join('carreras', 'cap.id_carrera', 'carreras.id')
@@ -108,7 +90,6 @@ class AlumnoCrudController extends BaseController
 
         return view('Admin.Alumnos.edit', [
             'alumno' => $alumno,
-            'cursadas' => $cursadas,
             'examenes' => $examenes,
             'carreras' => $alumno->carrerasIncriptas(),
             'esAlumno' => true,

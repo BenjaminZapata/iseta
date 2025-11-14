@@ -177,7 +177,7 @@ class CursadasAdminController extends BaseController
     public function destroy(Cursada $cursada)
     {
         try {
-            if ($cursada->anio_cursada == now()->year && $cursada->condicion != 4) {
+            if ($cursada->anio_cursada == now()->year && $cursada->alumno->egresadoinscripto()->where('id_carrera', $cursada->id_carrera)->first()->estado != 2) {
                 flash()->warning('No se puede eliminar una cursada que pertenezca al año lectivo actual, a no ser que el alumno tenga como condicion "Desertor"');
 
                 return back();
