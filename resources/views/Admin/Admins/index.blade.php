@@ -212,5 +212,6 @@
 
 <script src="{{ asset('js/usuarios/ModificarUsuarios.js') }}?v={{ time() }}"></script>
 <script src="{{ asset('js/usuarios/EliminarAdmins.js') }}?v={{ time() }}"></script>
+<script src="{{ asset('js/mostrar-contrasenia.js') }}"></script>
 
 @endsection
