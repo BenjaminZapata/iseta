@@ -41,7 +41,13 @@
                         <td colspan="4" class="text-center text-muted">No se encontraron resultados</td>
                     </tr>
                 @endforelse
-                <span x-intersect="$wire.nextPage"> Cargando alumnos </span>
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            <span x-intersect="$wire.nextPage">
+                                Cargando alumnos...
+                            </span>
+                        </td>
+                    </tr>
             </tbody>
         </table>
     </div>

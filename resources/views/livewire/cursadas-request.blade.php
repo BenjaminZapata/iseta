@@ -36,7 +36,7 @@
                                     @method('DELETE')
                                     <button type="button"
                                         onclick="openGeneralModal('form-eliminar-{{ $sub_cursada->id }}',
-                                            '¿Estás seguro de que querés eliminar la cursada de la asignatura:  {{ strtoupper($cursada->asignatura->nombre ?? 'Sin Asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'Sin Carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                            '¿Estás seguro de que querés eliminar la cursada del alumno: {{ strtoupper($sub_cursada->alumno->apellidoNombre()) }} de la asignatura:  {{ strtoupper($sub_cursada->asignatura->nombre ?? 'Sin Asignatura') }} de la carrera {{ strtoupper($sub_cursada->carrera->nombre ?? 'Sin Carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                                         class="btn_icon-danger btn_contraible"
                                         style="background-color: red;">
                                         <i class="ti ti-trash"

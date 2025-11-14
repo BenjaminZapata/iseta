@@ -7,6 +7,7 @@ $disabled = $rol === 'secretario' ? 'disabled' : false;
 $mostrar_botones = $rol !== 'secretario'; // oculta botones si es secretario
 @endphp
 @section(section: 'content')
+<link rel="stylesheet" href="{{ asset('css/Admin/main.css') }}">
 <div class="perfil_one br">
     @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUMNO/A'])
     <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
@@ -78,7 +79,7 @@ $mostrar_botones = $rol !== 'secretario'; // oculta botones si es secretario
                 $disabled => $disabled
             ]),
         ]
-    ]) ?>
+    ], false) ?>
 
 
     @if (in_array($admin->rol, [0,1]))
@@ -163,7 +164,7 @@ $mostrar_botones = $rol !== 'secretario'; // oculta botones si es secretario
                             <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}" method="POST" class="d-inline">
                                 @csrf
                                 <input type="hidden" name="carrera" value="{{ $carrera->carrera_id }}">
-                                <button type="submit" class="btn_blue btn-sm d-inline-flex align-items-center">
+                                <button type="submit" class="btn_blue btn-sm d-inline-flex centrar">
                                     <i class="ti ti-paperclip me-2" style="font-size: 1.1em;"></i>
                                     Matricular
                                 </button>
@@ -197,7 +198,7 @@ $mostrar_botones = $rol !== 'secretario'; // oculta botones si es secretario
 
     <div class="accordion" id="accordionCursadas">
         @php
-        $agrupadasCursadas = collect($cursadas)->groupBy(fn($c) => $c->carrera);
+        $agrupadasCursadas = collect($alumno->cursadas)->groupBy(fn($c) => $c->carrera);
         @endphp
 
         @foreach ($agrupadasCursadas as $carrera => $porCarrera)
