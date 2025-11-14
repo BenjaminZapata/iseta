@@ -63,7 +63,7 @@ $admin = Auth::guard('admin')->user();
         $idCarreraAnio = $primera->id_carrera . '-' . $primera->anio_cursada;
         @endphp
 
-        <livewire:arbol-cursadas :grupo="$grupo" :idCarreraAnio="$idCarreraAnio" :primera="$primera" :key="$key" />
+        <livewire:arbol-cursadas :grupo="$grupo" :idCarreraAnio="$idCarreraAnio" :primera="$primera" :key="$key" :filters="$filters" />
         @endforeach
 
 
