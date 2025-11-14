@@ -19,9 +19,9 @@ class CursadasAdminController extends BaseController
 {
     public $defaultFilters = [
         'filter_carrera_id' => 0,
-        'filter_asignatura' => 0,
+        'filter_asignatura_id' => 0,
         'filter_alumno_id' => 0,
-        'filter_condicion' => 0,
+        'filter_condicion' => null,
         'filter_aprobada' => 0,
     ];
 
