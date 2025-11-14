@@ -16,10 +16,14 @@ class ArbolCursadas extends Component
 
     public $primera;
 
+    public $filters;
+
     public $agrupadas;
 
-    public function mount($grupo, $idCarreraAnio, $primera)
+    public function mount($grupo, $idCarreraAnio, $primera, $filters)
     {
+        $filters = json_decode(json_encode($filters), true);
+        $this->filters = $filters;
         $this->primera = $primera;
         $this->grupo = $grupo;
         $this->idCarreraAnio = $idCarreraAnio;
@@ -33,6 +37,11 @@ class ArbolCursadas extends Component
     #[computed]
     public function Asignaturas()
     {
-        return CursadaRepository::asignaturaCarreraAnio($this->grupo[0]);
+        return CursadaRepository::asignaturaCarreraAnio(
+            $this->grupo[0],
+            $this->filters['filter_asignatura_id'],
+            $this->filters['filter_condicion'],
+            $this->filters['filter_aprobada']
+        );
     }
 }

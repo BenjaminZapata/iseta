@@ -28,15 +28,19 @@
                                 </tr>
                             @else
                                 @foreach ($asignaturas as $asignatura)
+                                    @php
+                                        $cursadasCorrelativas = $asignatura->equivalencias_previas;
+                                        $debeCursadasCorrelativas = $cursadasCorrelativas ? collect($cursadasCorrelativas)->mapInto(App\Models\Asignatura::class) : false;;
+                                    @endphp
                                     <tr @class([
-                                        'gray-600' => $asignatura->debeCorrelativas($alumno, $carrera->id),
+                                        'gray-600' => $debeCursadasCorrelativas,
                                     ])>
 
-                                        <td>{{ $asignatura->anio }}</td>
+                                        <td>{{ $asignatura->carrera->first()->pivot->anio + 1 }}</td>
                                         <td>{{ $asignatura->nombre }}
                                         </td>
                                         <td class="flex just-end">
-                                            @if ($asignatura->debeCorrelativas($alumno, $carrera->id))
+                                            @if ($debeCursadasCorrelativas)
                                                 <div>
                                                     <div class="flex just-end gap-3">
                                                         <p class="font-600 salto">Debes correlativas</p>
@@ -44,7 +48,7 @@
                                                             data-element="{{ $asignatura->id }}">Detalles...</label>
                                                     </div>
                                                     <ul class="none id-{{ $asignatura->id }}">
-                                                        @foreach ($asignatura->debeCorrelativas($alumno, $carrera->id) as $equiv)
+                                                        @foreach ($debeCursadasCorrelativas as $equiv)
                                                             <li class="salto"><span
                                                                     class="font-600">{{ $equiv->anioStr($carrera->id) }}:</span>
                                                                 {{ $equiv->nombre }}</li>

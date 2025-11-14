@@ -37,37 +37,33 @@ class AlumnoDataRepository
 
     public function cursadas($filtro, $campo, $orden)
     {
-
-        $query = Cursada::with('asignatura')->select('cursadas.id_asignatura', 'cursadas.anio_cursada', 'cursadas.id', 'cursadas.aprobada', 'cursadas.condicion', 'asignaturas.nombre')
-            ->where('id_alumno', Auth::id())
-            ->join('asignaturas', 'asignaturas.id', 'cursadas.id_asignatura')
-            ->join('carrera_asignatura_profesor as cap', 'cap.id_asignatura', 'asignaturas.id')
-            ->where('cap.id_carrera', Carrera::getDefault(Auth::user())->id)
+        $query = Cursada::query()
+            ->where('id_alumno', '=', Auth::id())
+            ->join('asignaturas', 'cursadas.id_asignatura', 'asignaturas.id')
             // si tiene un filtro en el campo de texto
             ->when($filtro, fn ($query, $filtro) => $query->where('asignaturas.nombre', 'LIKE', '%'.$filtro.'%'))
 
             // Si se filtra por aprobadas
             ->when($campo == 'aprobadas', function ($query) {
                 $query->where(function ($sub) {
-                    $sub->where('cursadas.aprobada', 1)
-                        ->orWhereIn('cursadas.condicion', [0, 2, 3]);
+                    $sub->where('aprobada', 1)
+                        ->orWhereIn('condicion', [0, 2, 3]);
                 });
             })
 
             // Si se filtra por desaprobadas
             ->when($campo == 'desaprobadas', function ($query) {
-                $query->where('cursadas.aprobada', 2)
-                    ->whereNotIn('cursadas.condicion', [0, 2, 3]);
+                $query->where('aprobada', 2)
+                    ->whereNotIn('condicion', [0, 2, 3]);
             })
+            ->with('asignatura')
 
             // Ordenamiento
-            ->when($orden == 'anio_cursada', fn ($query) => $query->orderBy('cursadas.anio_cursada'))
-            ->when($orden == 'anio_cursada_desc', fn ($query) => $query->orderBy('cursadas.anio_cursada', 'desc'));
-
-        $query->orderBy('asignaturas.id')
-            ->orderBy('cursadas.anio_cursada', 'desc');
+            ->when($orden === 'anio_cursada', fn ($query) => $query->orderBy('anio_cursada'))
+            ->when($orden === 'anio_cursada_desc', fn ($query) => $query->orderBy('anio_cursada', 'desc'));
 
         return $query->get();
+
     }
 
     public function setCarreraDefault($alumno, $carrera)

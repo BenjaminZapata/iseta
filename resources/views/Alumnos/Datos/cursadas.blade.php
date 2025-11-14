@@ -11,9 +11,7 @@
                 <div class="contenedor_ordenar">
                   <span>Ordenar por</span>
                   <select class="ordenar" name="orden">
-                      <option @selected($filtros['orden'] == 'anio') value="anio">Año carrera</option>
                       <option @selected($filtros['orden'] == 'anio_cursada') value="anio_cursada">Año cursada</option>
-                      <option @selected($filtros['orden'] == 'anio_desc') value="anio_desc">Año carrera desc</option>
                       <option @selected($filtros['orden'] == 'anio_cursada_desc') value="anio_cursada_desc">Año cursada desc</option>
                   </select>
                   <i class="ti ti-arrows-down-up i_ordenar"></i>

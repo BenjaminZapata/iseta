@@ -20,23 +20,20 @@
 </head>
     @include('Componentes.mensaje')
     <body id="logeo">
-        
-    <div class="login">
-        <form action="{{route('token.ingreso.post')}}" method="post">
-            @csrf
-            <div class="logo">ISETA</div>
-            <div class="titulo-login">
-                <h1>Verificar correo</h1>
-                <p>Ingresa el código de verificación enviado a su correo</p>
-            </div>
-            <div class="contraseña-token">
-                <input name="token" required/>
-            </div>
-            <div class="crear input-box button"><input type="submit" value="Confirmar"></div>
-        </form>
-        <a href="{{route('token.enviar.mail')}}">reenviar</a>
-
-    </div>
-
+        <div class="login">
+            <form action="{{route('token.ingreso.post')}}" method="post">
+                @csrf
+                <div class="logo">ISETA</div>
+                <div class="titulo-login">
+                    <h1>Verificar correo</h1>
+                    <p>Ingresa el código de verificación enviado a su correo</p>
+                </div>
+                <div class="contraseña-token">
+                    <input name="token" required/>
+                </div>
+                <div class="crear input-box button"><input type="submit" value="Confirmar"></div>
+            </form>
+            <a href="{{route('token.enviar.mail')}}">reenviar</a>
+        </div>
     </body>
 </html>

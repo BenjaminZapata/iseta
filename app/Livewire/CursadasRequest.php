@@ -14,10 +14,19 @@ class CursadasRequest extends Component
 
     public $anio_cursada;
 
+    public $id_alumno;
+
+    public $condicion;
+
+    public $aprobada;
+
     public $groupId;
 
-    public function mount($asignatura, $id_carrera, $anio_cursada, $groupId)
+    public function mount($asignatura, $id_carrera, $anio_cursada, $groupId, ?int $id_alumno, ?int $condicion, ?int $aprobada)
     {
+        $this->condicion = $condicion;
+        $this->aprobada = $aprobada;
+        $this->id_alumno = $id_alumno;
         $this->groupId = $groupId;
         $this->asignatura = $asignatura;
         $this->id_carrera = $id_carrera;
@@ -33,6 +42,14 @@ class CursadasRequest extends Component
     public function Cursadas()
     {
 
-        return CursadaRepository::cursadasAsignatura($this->id_carrera, $this->anio_cursada, $this->asignatura);
+        return CursadaRepository::cursadasAsignatura(
+            $this->id_carrera,
+            $this->anio_cursada,
+            $this->asignatura,
+            $this->id_alumno,
+            $this->condicion,
+            $this->aprobada
+
+        );
     }
 }

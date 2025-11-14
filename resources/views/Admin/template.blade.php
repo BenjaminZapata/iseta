@@ -37,7 +37,7 @@
     @include('Componentes.aside')
     @include('Componentes.confirmacion')
 
-
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
     <div class="admin-main">
         @yield('content')
     </div>
@@ -55,6 +55,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
+    
 
 </body>
 

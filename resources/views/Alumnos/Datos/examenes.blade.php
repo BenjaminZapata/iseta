@@ -111,12 +111,12 @@
               @endif
           </td>
             <td data-label="Nota">
-              {{$examen->nota()}}
+              {{$examen->notaTexto()}}
         
             </td>
-            <td data-label="Tipo de final">{{$examen->tipoFinal()}}</td>
+            <td data-label="Tipo de final">{{$examen->tipoFinalTexto()}}</td>
             <td data-label="Fecha">
-             {{$formatoFecha->dma($examen->fecha())}}
+             {{$formatoFecha->dma($examen->getFecha())}}
             </td>
         </tr>
         

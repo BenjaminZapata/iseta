@@ -19,9 +19,9 @@ class CursadasAdminController extends BaseController
 {
     public $defaultFilters = [
         'filter_carrera_id' => 0,
-        'filter_asignatura' => 0,
+        'filter_asignatura_id' => 0,
         'filter_alumno_id' => 0,
-        'filter_condicion' => 0,
+        'filter_condicion' => null,
         'filter_aprobada' => 0,
     ];
 
@@ -65,18 +65,6 @@ class CursadasAdminController extends BaseController
 
         // Validación de año de cursada
         $data = $request->validated();
-        \Log::debug('message', ['data' => $data]);
-        if (
-            $request->input('condicion') == 0 ||
-            $request->input('condicion') == 2 ||
-            $request->input('condicion') == 3
-        ) {
-            if ($cursada->aprobada == 1 && ($request->aprobada == 2 || $request->aprobada == 3)) {
-                $mensajes[] = 'No puedes desaprobar una cursada libre, promocionada o aprobada por equivalencias';
-            }
-
-            $data['aprobada'] = 1;
-        }
 
         if ($request->aprobada == 5) {
 

@@ -12,9 +12,12 @@
           {{-- <select class="w-50p lg-w-auto select-carrera" name="carrera"> --}}
           <select class="w-50p lg-w-auto border-none p-2 bg-white rounded shadow-sm select-carrera" name="carrera">
 
-            @foreach ($alumno->carreras()->get() as $inscripcion)
-                <option @selected($inscripcion->carrera->id==$default->id) value="{{$inscripcion->carrera->id}}">
-                  {{$inscripcion->carrera->nombre}}
+            @foreach ($carreras as $inscripcion)
+            @php
+              Log::debug($inscripcion);
+            @endphp
+                <option @selected($inscripcion->id == $default->id) value="{{$inscripcion->id}}">
+                  {{$inscripcion->nombre}}
                 </option>
             @endforeach
           </select>
