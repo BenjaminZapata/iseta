@@ -59,44 +59,71 @@ class ExamenesCrudController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Examen $examen)
+     public function update(Request $request, Examen $examen)
     {
+        $mesa = $examen->mesa;
+
+      
+        if ($mesa->estado !== 'rendida') {
+            return back()->with('error', 'La mesa aún no está rendida. No se puede modificar la ficha de examen.');
+        }
+
         $request->validate([
-            'nota'        => 'nullable|numeric|min:0|max:10',
-            'libro'       => 'nullable|integer|max:100|min:0',
-            'acta'        => 'nullable|integer|max:100|min:0',
-            'asistencia'  => 'nullable|boolean',
-            'tipo_final'  => 'nullable|integer|between:0,4',
+            'asistencia' => 'required|in:0,1',
+            'estado'     => 'required|in:0,1,2', // Libre, Regular, Promoción
+            'nota'       => 'nullable|numeric|min:1|max:10',
+            'libro'      => 'required|digits_between:1,4',
+            'acta'       => 'required|digits_between:1,4',
+            'tipo_final' => 'required|in:1,2,3', // Escrito, Oral, Promocionado
         ]);
 
-        // 🔹 Si está ausente (asistencia = 0)
-        if ($request->input('asistencia') == 0) {
-            $examen->asistencia = 0;
-            $examen->nota = 0;
-            $examen->aprobado = null; // No tiene aprobado, porque no rindió
-        }
-        // 🔹 Si asistió (asistencia = 1)
-        else {
-            $examen->asistencia = 1;
+        $asistencia = intval($request->asistencia);
+        $examen->asistencia = $asistencia;
 
+        if ($asistencia === 0) {
+            // AUSENTE ⇒ Nota debe quedar NULL
+            $examen->nota = null;
+            $examen->aprobado = null;
+        }
+
+        $estado = intval($request->estado);
+        $examen->estado = $estado;
+
+        
+        if ($asistencia === 1) {
+
+            
             if ($request->nota === null) {
-                $examen->nota = null;
-                $examen->aprobado = null;
-            } elseif ($request->nota > 4) {
-                $examen->nota = $request->nota;
-                $examen->aprobado = 1; // Aprobado
-            } else {
-                $examen->nota = $request->nota;
-                $examen->aprobado = 0; // Desaprobado
+                return back()->with('error', 'La nota es obligatoria cuando el alumno está presente.')
+                             ->withInput();
             }
+
+            $nota = intval($request->nota);
+            $examen->nota = $nota;
+
+            if ($estado === 2 && $nota < 7) {
+                return back()->with('error', 'Para estado Promoción, la nota debe ser mayor o igual a 7.')
+                             ->withInput();
+            }
+
+         
+            $examen->aprobado = $nota >= 4 ? 1 : 0;
         }
 
-        $examen->tipo_final = $request->tipo_final;
+        $tipo_final = intval($request->tipo_final);
+
+        if ($estado === 0 && !in_array($tipo_final, [1, 2])) {
+            return back()->with('error', 'Para estado Libre solo puede seleccionar Final Escrito u Oral.')
+                         ->withInput();
+        }
+
+        $examen->tipo_final = $tipo_final;
+
         $examen->libro = $request->libro;
-        $examen->acta = $request->acta;
+        $examen->acta  = $request->acta;
         $examen->save();
 
-        return redirect()->back()->with('mensaje', 'Se modificó el examen correctamente.');
+        return back()->with('mensaje', 'La ficha de examen fue modificada correctamente.');
     }
 
     /**
