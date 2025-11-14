@@ -54,23 +54,22 @@ $admin = Auth::guard('admin')->user();
         </thead>
         @php
         // Agrupamos las cursadas por carrera y año (sin modificar la colección original)
-            $agrupadas = $cursadas->groupBy(fn($c) => $c->id_carrera . '-' . $c->anio_cursada);
+        $agrupadas = $cursadas->groupBy(fn($c) => $c->id_carrera . '-' . $c->anio_cursada);
         @endphp
 
         @foreach ($agrupadas as $key => $grupo)
-            @php
-            $primera = $grupo->first();
-            $idCarreraAnio = $primera->id_carrera . '-' . $primera->anio_cursada;
-            @endphp
+        @php
+        $primera = $grupo->first();
+        $idCarreraAnio = $primera->id_carrera . '-' . $primera->anio_cursada;
+        @endphp
 
-            <livewire:arbol-cursadas :grupo="$grupo" :idCarreraAnio="$idCarreraAnio" :primera="$primera" :key="$key"/>
+        <livewire:arbol-cursadas :grupo="$grupo" :idCarreraAnio="$idCarreraAnio" :primera="$primera" :key="$key" />
         @endforeach
-        
+
 
     </table>
 </div>
 
-//TODO: MODIFICAR LA PAGINACIÓN PARA QUE TOME EN CUENTA LOS GRUPOS DE CURSADAS
 {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
     {{ $cursadas->links('Componentes.pagination') }}

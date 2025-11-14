@@ -78,23 +78,25 @@ $mostrar_botones = $rol !== 'secretario'; // oculta botones si es secretario
                 $disabled => $disabled
             ]),
         ]
-    ], false) ?>
+    ]) ?>
 
 
     @if (in_array($admin->rol, [0,1]))
     <div class="boton-eliminar">
         @if (!$config['modo_seguro'])
-        <form id="form-eliminar-{{ $alumno->id }}"
-            action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST" style="display: inline;">
-            @csrf
-            @method('DELETE')
-            <button type="button"
-                onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}',
+        <div>
+            <form id="form-eliminar-{{ $alumno->id }}"
+                action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST" style="display: inline;">
+                @csrf
+                @method('DELETE')
+                <button type="button"
+                    onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}',
                                     '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido) }} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                class="btn_red_outline">
-                <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar alumno
-            </button>
-        </form>
+                    class="btn_red_outline">
+                    <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar alumno
+                </button>
+            </form>
+        </div>
         @endif
     </div>
     @endif
@@ -187,7 +189,6 @@ $mostrar_botones = $rol !== 'secretario'; // oculta botones si es secretario
     </div>
 </div>
 
-{{-- CURSADAS --}}
 {{-- CURSADAS --}}
 <div class="table mb-5">
     <div class="table__header">
