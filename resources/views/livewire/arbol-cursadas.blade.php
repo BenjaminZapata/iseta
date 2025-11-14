@@ -53,7 +53,10 @@
                                     :groupId="$groupId" 
                                     :id_carrera="$grupo[0]->id_carrera" 
                                     :anio_cursada="$grupo[0]->anio_cursada" 
-                                    :asignatura="$asignatura" 
+                                    :asignatura="$asignatura"
+                                    :id_alumno="$filters['filter_alumno_id']"
+                                    :condicion="$filters['filter_condicion']"
+                                    :aprobada="$filters['filter_aprobada']"
                                     lazy />
                             </td>
                         </tr>

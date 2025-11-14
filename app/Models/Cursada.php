@@ -27,9 +27,9 @@ class Cursada extends Model
     ];
 
     public function carreraAsignaturaProfesor()
-{
-    return $this->belongsTo(CarreraAsignaturaProfesor::class, 'carrera_asignatura_profesor_id');
-}
+    {
+        return $this->belongsTo(CarreraAsignaturaProfesor::class, 'carrera_asignatura_profesor_id');
+    }
 
     public function alumno()
     {
@@ -58,9 +58,9 @@ class Cursada extends Model
         return match ($this->condicion) {
             0 => 'Libre',
             1 => 'Regular',
-            2 => 'Promocion',
-            3 => 'Equivalencia',
-            4 => 'Desertor',
+            2 => 'Promocion', // No se usa mas
+            3 => 'Equivalencia', // No se usa mas
+            4 => 'Desertor', // No se usa mas
             5 => 'Itinerante',
             6 => 'Oyente',
             default => 'Otro',

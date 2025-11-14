@@ -32,9 +32,9 @@ $admin = Auth::guard('admin')->user();
                     'filter' => 'orderByApellidoNombre',
                 ]),
 
-                $form->select('filter_condicion', 'Condición:', 'label-input-y-100', old('filter_condicion', $filters->filter_condicion ?? null), ['Cualquiera', 'Libre', 'Regular', 'Promoción', 'Equivalencia', 'Desertor']),
+                $form->select('filter_condicion', 'Condición:', 'label-input-y-100', old('filter_condicion', $filters->filter_condicion ?? null), [ null => 'Cualquiera', 0 => 'Libre', 1 => 'Regular', 5 => 'Itinerante', 6 => 'Oyente']),
 
-                $form->select('filter_aprobada', 'Estado:', 'label-input-y-100', old('filter_aprobada', $filters->filter_aprobada ?? null), ['Cualquiera', 'Aprobada', 'Desaprobada', 'Cursando']),
+                $form->select('filter_aprobada', 'Estado:', 'label-input-y-100', old('filter_aprobada', $filters->filter_aprobada ?? null), ['Cualquiera', 1 => 'Aprobada', 2 => 'Reprobada', 3 => 'Cursando', 4 => 'Promocion', 5 => 'Equivalencia']),
             ],
 
             'fields' => [
@@ -63,14 +63,14 @@ $admin = Auth::guard('admin')->user();
             $idCarreraAnio = $primera->id_carrera . '-' . $primera->anio_cursada;
             @endphp
 
-            <livewire:arbol-cursadas :grupo="$grupo" :idCarreraAnio="$idCarreraAnio" :primera="$primera" :key="$key"/>
+            <livewire:arbol-cursadas :grupo="$grupo" :idCarreraAnio="$idCarreraAnio" :primera="$primera" :filters="$filters" :key="$key"/>
         @endforeach
         
 
     </table>
 </div>
 
-//TODO: MODIFICAR LA PAGINACIÓN PARA QUE TOME EN CUENTA LOS GRUPOS DE CURSADAS
+
 {{-- PAGINACIÓN --}}
 <div class="w-full flex justify-center p-5 pagination">
     {{ $cursadas->links('Componentes.pagination') }}
