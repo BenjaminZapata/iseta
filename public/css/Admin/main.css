@@ -219,6 +219,13 @@ table td {
   font-size: 15px;
 }
 
+
+.asterisco-rojo {
+  color: red !important;
+  font-weight: bold;
+  display: inline;
+}
+
 /*-------------------------------------------------------     B  0  T  0  N  E  S   ------------------------------------------*/
 
 .btn_blue,

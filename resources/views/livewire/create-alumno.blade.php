@@ -13,39 +13,56 @@
         <fieldset class="p-2" style="margin: 10px">
             <legend class="font-600 font-7">Alumno</legend>
             <div class="grid-2 gap-2 p-0">
-                <label class="label-input-y-75">Nombre:*
+                <label class="label-input-y-75">
+                    <div>
+                        <span>Nombre:</span>
+                        <span style="color:red; display: inline">*</span>
+                    </div>
+
                     <input type="text" wire:model="form.nombre" placeholder="Ej: Juan"
                         class="@error('form.nombre') input-error border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.nombre')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Apellido:*
+                <label class="label-input-y-75">
+                    <div>
+                        <span>Apellido:</span>
+                        <span style="color:red; display: inline">*</span>
+                    </div>
                     <input type="text" wire:model="form.apellido" placeholder="Ej: Pérez"
                         class="@error('form.apellido') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.apellido')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">DNI:*
+                <label class="label-input-y-75">
+                    <div>
+                        <span>dni:</span>
+                        <span style="color:red; display: inline">*</span>
+                    </div>
                     <input type="text" wire:model="form.dni" placeholder="Ej: 12345678"
                         class="@error('form.dni') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.dni')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Fecha de nacimiento:*
+                <label class="label-input-y-75">
+                    <div>
+                        <span>Fecha de nacimiento:</span>
+                        <span style="color:red; display: inline">*</span>
+                    </div>
                     <input type="date" wire:model="form.fecha_nacimiento" placeholder="Formato: dd/mm/aaaa"
                         class="p-1 w-75p @error('form.fecha_nacimiento') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.fecha_nacimiento')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -54,7 +71,7 @@
                         class="@error('form.lugar_nacimiento') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.lugar_nacimiento')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -70,7 +87,7 @@
                     </select>
                     <div class="campo-alert">
                         @error('form.estado_civil')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -83,7 +100,7 @@
                     </select>
                     <div class="campo-alert">
                         @error('form.genero')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -99,7 +116,7 @@
                         class="@error('form.ciudad') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.ciudad')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -108,7 +125,7 @@
                         class="@error('form.codigo_postal') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.codigo_postal')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -117,7 +134,7 @@
                         class="@error('form.calle') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.calle')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -126,7 +143,7 @@
                         class="@error('form.casa_numero') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.casa_numero')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -135,7 +152,7 @@
                         class="@error('form.dpto') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.dpto')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -144,7 +161,7 @@
                         class="@error('form.piso') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.piso')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -155,21 +172,29 @@
         <fieldset class="p-2" style="margin: 10px">
             <legend class="font-600 font-7">Contacto</legend>
             <div class="grid-2 gap-2 p-0">
-                <label class="label-input-y-75">Email:*
+                <label class="label-input-y-75">
+                    <div>
+                        <span>Email:</span>
+                        <span style="color:red; display: inline">*</span>
+                    </div>
                     <input type="email" wire:model="form.email" placeholder="Ej: ejemplo@dominio.com"
                         class="@error('form.email') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.email')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Teléfono 1:*
+                <label class="label-input-y-75">
+                    <div>
+                        <span>Teléfono 1:</span>
+                        <span style="color:red; display: inline">*</span>
+                    </div>
                     <input type="text" wire:model="form.telefono1" placeholder="Ej: 2317-876544"
                         class="@error('form.telefono1') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.telefono1')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -178,7 +203,7 @@
                         class="@error('form.telefono2') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.telefono2')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -194,7 +219,7 @@
                         class="@error('form.titulo_anterior') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.titulo_anterior')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -203,7 +228,7 @@
                         class="@error('form.becas') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.becas')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -213,11 +238,15 @@
                         class="@error('form.nombre_institucion_secundario') border-red-500 @enderror">
                     <div class="campo-alert">
                         @error('form.nombre_institucion_secundario')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
-                <label class="label-input-y-75">Título secundario:*
+                <label class="label-input-y-75">
+                    <div>
+                        <span>Titulo secundario:</span>
+                        <span style="color:red; display: inline">*</span>
+                    </div>
                     <select wire:model="form.titulo_secundario"
                         class="@error('form.titulo_secundario') border-red-500 @enderror">
                         <option value="">Seleccione una opción</option>
@@ -228,7 +257,7 @@
                     </select>
                     <div class="campo-alert">
                         @error('form.titulo_secundario')
-                            {{ $message }}
+                        {{ $message }}
                         @enderror
                     </div>
                 </label>
@@ -257,9 +286,9 @@
                         <select x-on:change="$wire.agregarInscripcion($event.target.value)" class="input">
                             <option value="">Seleccione...</option>
                             @foreach ($todasCarreras as $carrera)
-                                @if (!in_array($carrera->id, $idCarreras))
-                                    <option value="{{ $carrera }}">{{ $carrera->nombre }}</option>
-                                @endif
+                            @if (!in_array($carrera->id, $idCarreras))
+                            <option value="{{ $carrera }}">{{ $carrera->nombre }}</option>
+                            @endif
                             @endforeach
                         </select>
                     </label>
@@ -267,13 +296,13 @@
 
                 <ul class="carreras-list">
                     @foreach ($carrerasSeleccionadas as $c)
-                        <li>
-                            {{ $c['carrera_nombre'] }}
-                            <button class="btn_red_outline" type="button"
-                                wire:click="eliminarCarrera({{ $c['id_carrera'] }})">
-                                <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
-                            </button>
-                        </li>
+                    <li>
+                        {{ $c['carrera_nombre'] }}
+                        <button class="btn_red_outline" type="button"
+                            wire:click="eliminarCarrera({{ $c['id_carrera'] }})">
+                            <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i>Eliminar
+                        </button>
+                    </li>
                     @endforeach
                 </ul>
             </fieldset>
@@ -290,7 +319,7 @@
                         Índice libro matriz:
                         <input type="text" wire:model="iForm.indice_libro_matriz" class="input">
                         @error('iForm.indice_libro_matriz')
-                            <div class="campo-alert">{{ $message }}</div>
+                        <div class="campo-alert">{{ $message }}</div>
                         @enderror
                     </label>
                     <input type="hidden" wire:model="iForm.estado">
@@ -316,7 +345,7 @@
             <p><strong>Carreras seleccionadas:</strong></p>
             <ul class="carreras-list">
                 @foreach ($carrerasSeleccionadas as $c)
-                    <li>{{ $c['carrera_nombre'] }}</li>
+                <li>{{ $c['carrera_nombre'] }}</li>
                 @endforeach
             </ul>
         </fieldset>
