@@ -53,6 +53,7 @@ Route::middleware(['web'])->prefix('admin')->group(function () {
             return redirect()->route('admin.alumnos.index')->with('aviso', 'El alumno no existe o ha sido eliminado');
         })->except('show');
 
+    Route::post('/admin/alumnos/{alumno}/{carrera}', [AlumnoCrudController::class, 'cambiarEstadoInscripcion'])->name('admin.alumno.estadoinscripcion.post');
     Route::get('/admin/alumnos/{alumno}/analitico-pdf', [AdminPdfController::class, 'analitico'])
         ->name('admin.alumnos.analitico.pdf');
 

@@ -14,7 +14,6 @@ use App\Services\Admin\CursadaRegularService;
 use App\Services\Admin\Pdfs\RegistroAvancePdf;
 use Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 use function Spatie\LaravelPdf\Support\pdf;
 
@@ -64,7 +63,6 @@ class AdminPdfController extends Controller
                     ->where('condicion', 2);
             }])
             ->get();
-        Log::info($examenes);
 
         return pdf()
             ->view('Pdf.acta-volante', compact('alumnos', 'examenes') + ['mesa' => $mesa, 'condicion' => 'PROMOCION'])
@@ -113,21 +111,21 @@ class AdminPdfController extends Controller
 
     public function analitico(Alumno $alumno)
     {
-        $carrera = Carrera::getDefault($alumno->id);
+        $carrera = Carrera::getDefault($alumno);
         $id_carrera = $carrera?->id;
 
         $materias = Asignatura::whereHas('carrera', function ($query) use ($id_carrera) {
             $query->where('id', $id_carrera);
         })->get();
 
-        $examenes = Examen::selectRaw('examenes.id_asignatura, asignaturas.nombre, MAX(examenes.nota) as nota, asignaturas.anio, examenes.fecha')
+        $examenes = Examen::selectRaw('examenes.id_asignatura, asignaturas.nombre, MAX(examenes.nota) as nota, examenes.fecha')
             ->from('asignaturas')
             ->join('examenes', 'examenes.id_asignatura', '=', 'asignaturas.id')
             ->where('examenes.id_alumno', $alumno->id)
             ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', '=', 'cap.id_asignatura')
             ->where('cap.id_carrera', $id_carrera)
             ->where('examenes.nota', '>=', 4)
-            ->groupBy('examenes.id_asignatura', 'asignaturas.nombre', 'asignaturas.anio', 'examenes.fecha')
+            ->groupBy('examenes.id_asignatura', 'asignaturas.nombre', 'cap.anio', 'examenes.fecha')
             ->get();
 
         $porcentaje = number_format(count($examenes) / max(count($materias), 1) * 100, 2, '.', '').'%';

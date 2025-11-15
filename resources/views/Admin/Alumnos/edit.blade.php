@@ -133,67 +133,67 @@
 
 --}}
 
-        {{-- CARRERAS --}}
-        <div class="table mb-5">
-            <div class="table__header">
-                <h2>CARRERAS</h2>
+    {{-- CARRERAS --}}
+<div class="table mb-5">
+    <div class="table__header">
+        <h2>CARRERAS</h2>
+    </div>
+    <div class="matricular">
+            <table class="table table-bordered table-hover mb-0 text-center">
+            <thead>
+                <tr>
+                    <th>Nombre de la carrera</th>
+                    <th class="center">Estado</th>
+                    <th class="center">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($carreras as $carrera)
+                    <tr>
+                        <td class="bold">{{ $carrera->carrera_nombre }}</td>
+                        <td>
+                            <form action="{{ route('admin.alumno.estadoinscripcion.post', ['alumno' => $alumno->id, 'carrera' => $carrera->carrera_id]) }}" method="POST">
+                                @csrf
+                                <select name="estados[{{ $carrera->carrera_id }}]" class="form-select text-center">
+                                    <option value=0 {{ $carrera->estado == 'Cursando' ? 'selected' : '' }}>Cursando</option>
+                                    <option value=1 {{ $carrera->estado == 'Egresado' ? 'selected' : '' }}>Egresado</option>
+                                    <option value=2 {{ $carrera->estado == 'Inactivo' ? 'selected' : '' }}>Desertor</option>
+                                </select>
+                                <button type="submit" class="btn_blue btn-sm d-inline-flex">
+                                    <i class="ti ti-refresh me-2" style="font-size: 1.1em;"></i>
+                                    Actualizar
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            @if (in_array($admin->rol, [0,1]))
+                                <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}" method="GET" class="d-inline centrar">
+                                    @csrf
+                                    <input type="hidden" name="carrera" value="{{ $carrera->carrera_id }}">
+                                    <button type="submit" class="btn_blue btn-sm d-inline-flex">
+                                        <i class="ti ti-paperclip me-2" style="font-size: 1.1em;"></i>
+                                        Matricular
+                                    </button>
+                                </form>
+                            @endif 
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        @if (in_array($admin->rol, [0,1]))
+            <div class="text-center mt-5">
+                <a href="{{ route('admin.inscriptos.create', ['alumno_id' => $alumno->id]) }}" 
+                class="btn_blue inline-flex items-center justify-center"
+                style="width: 250px; padding: 10px 0; border-radius: 8px;">
+                    <i class="ti ti-plus me-2" style="font-size: 1.3em;"></i>
+                    Inscribir a otra carrera
+                </a>
             </div>
+        @endif
+    </div>
 
-            <div class="matricular">
-
-                <form>
-                    @csrf
-                   <table class="table table-bordered table-hover mb-0 text-center">
-    <thead>
-        <tr>
-            <th>Nombre de la carrera</th>
-            <th class="center">Estado</th>
-            <th class="center">Acción</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($carreras as $carrera)
-            <tr>
-                <td class="bold">{{ $carrera->carrera_nombre }}</td>
-                <td>
-                    <select name="estados[{{ $carrera->carrera_id }}]" class="form-select text-center">
-                        <option value="Cursando" {{ $carrera->estado == 'Cursando' ? 'selected' : '' }}>Cursando</option>
-                        <option value="Egresado" {{ $carrera->estado == 'Egresado' ? 'selected' : '' }}>Egresado</option>
-                        <option value="Inactivo" {{ $carrera->estado == 'Inactivo' ? 'selected' : '' }}>Desertor</option>
-                    </select>
-                </td>
-                <td>
-                    @if (in_array($admin->rol, [0,1]))
-                        <form action="{{ route('admin.alumno.rematricular', ['alumno' => $alumno->id]) }}" method="POST" class="d-inline">
-                            @csrf
-                            <input type="hidden" name="carrera" value="{{ $carrera->carrera_id }}">
-                            <button type="submit" class="btn_blue btn-sm d-inline-flex centrar">
-                                <i class="ti ti-paperclip me-2" style="font-size: 1.1em;"></i>
-                                Matricular
-                            </button>
-                        </form>
-                    @endif 
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
-
-                </form>
-                @if (in_array($admin->rol, [0,1]))
-                 <div class="text-center mt-5">
-    <a href="{{ route('admin.inscriptos.create', ['alumno_id' => $alumno->id]) }}" 
-       class="btn_blue inline-flex items-center justify-center"
-       style="width: 250px; padding: 10px 0; border-radius: 8px;">
-        <i class="ti ti-plus me-2" style="font-size: 1.3em;"></i>
-        Inscribir a otra carrera
-    </a>
-</div>
-                @endif
-            </div>
-        </div>
-
-        {{-- CURSADAS --}}
+       
 {{-- CURSADAS --}}
 <div class="table mb-5">
     <div class="table__header">
@@ -215,7 +215,7 @@
                 <h2 class="accordion-header" id="headingCarreraCursadas{{ $loop->index }}">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapseCarreraCursadas{{ $loop->index }}" aria-expanded="false">
-                        {{ $carrera }}
+                        {{ json_decode($carrera)->nombre }}
                     </button>
                 </h2>
 
@@ -233,7 +233,7 @@
                                             data-bs-target="#collapseCursada{{ $loop->parent->index }}-{{ $loop->index }}"
                                             aria-expanded="false">
                                             {{-- Texto del año --}}
-                                            {{ $anio !== null ? ($anio + 1) . '° año' : 'Año no definido' }}
+                                            {{ $anio !== null ? (intval($anio) + 1) . '° año' : 'Año no definido' }}
 
                                         </button>
                                     </h3>
@@ -254,7 +254,7 @@
                                                 <tbody>
                                                     @foreach ($cursadasDelAnio as $cursada)
                                                         <tr>
-                                                            <td class="bold">{{ $cursada->asignatura }}</td>
+                                                            <td class="bold">{{ $cursada->asignatura->nombre }}</td>
                                                             <td>
                                                                 <div style="display: flex; justify-content: center;">
                                                                     {{ $cursada->condicionString() }}
@@ -300,7 +300,7 @@
 
     <div class="accordion" id="accordionExamenes">
         @php
-            $agrupadasExamenes = collect($examenes)->groupBy(fn($e) => $e->carrera);
+            $agrupadasExamenes = collect($alumno->examenes)->groupBy(fn($e) => $e->carrera);
         @endphp
 
         @foreach ($agrupadasExamenes as $carrera => $porCarrera)
@@ -316,7 +316,7 @@
                 <h2 class="accordion-header" id="headingCarreraExamenes{{ $loop->index }}">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                         data-bs-target="#collapseCarreraExamenes{{ $loop->index }}" aria-expanded="false">
-                        {{ $carrera }}
+                        {{ json_decode($carrera)->nombre }}
                     </button>
                 </h2>
 
@@ -334,7 +334,7 @@
                                             data-bs-target="#collapseExamen{{ $loop->parent->index }}-{{ $loop->index }}"
                                             aria-expanded="false">
                                             {{-- Texto del año --}}
-                                            {{ $anio !== null ? ($anio + 1) . '° año' : 'Año no definido' }}
+                                            {{ $anio !== null ? (intval($anio) + 1) . '° año' : 'Año no definido' }}
                                         </button>
                                     </h3>
 
@@ -354,7 +354,7 @@
                                                 <tbody>
                                                     @foreach ($examenesDelAnio as $examen)
                                                         <tr>
-                                                            <td class="bold">{{ $examen->asignatura }}</td>
+                                                            <td class="bold">{{ $examen->asignatura->nombre }}</td>
                                                             <td>
                                                                 <div style="display: flex; justify-content: center;">
                                                                     {{ $formatoFecha->dma($examen->getFecha()) }}

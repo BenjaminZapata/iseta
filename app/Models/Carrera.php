@@ -86,7 +86,6 @@ class Carrera extends Model
 
     public static function getDefault($alumno)
     {
-
         $carrera = $alumno->carreraDefault()->first();
 
         if ($carrera) {
