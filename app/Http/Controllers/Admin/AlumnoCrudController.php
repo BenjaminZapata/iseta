@@ -9,7 +9,6 @@ use App\Models\Alumno;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Log;
 
 class AlumnoCrudController extends BaseController
 {
@@ -110,12 +109,14 @@ class AlumnoCrudController extends BaseController
 
     public function cambiarEstadoInscripcion(Request $request, Alumno $alumno, int $id_carrera)
     {
+        if ($request->estados[$id_carrera] != 0 && $request->estados[$id_carrera] != 1 && $request->estados[$id_carrera] != 2) {
+            return redirect()->route('admin.alumnos.edit', $alumno)->with('error', 'No se pudo actualizar el estado de inscripcion');
+        }
         $inscripto = $alumno->egresadoinscripto()->where('id_carrera', $id_carrera)->first();
-        Log::debug($request->estados[$id_carrera]);
-        $inscripto->estado = $request->estado;
-        $inscripto->save();
+        $inscripto->estado = $request->estados[$id_carrera];
+        $inscripto->update();
 
-        return redirect()->route('admin.alumnos.edit', $alumno);
+        return redirect()->route('admin.alumnos.edit', $alumno)->with('mensaje', 'Se actualizo el estado de inscripcion');
     }
 
     /**
