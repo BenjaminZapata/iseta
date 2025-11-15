@@ -59,66 +59,66 @@
         {{-- ===============================
              FORMULARIO DE EDICIÓN
         ================================ --}}
-        <div class="perfil__info">
+        <div class="perfil__info" style="margin:10px;">
             <form method="POST" action="{{ route('admin.examenes.update', $examen->id) }}">
                 @csrf
                 @method('PUT')
 
                 {!! $form->generate($examen, 'put', [
-                    'Datos del examen' => [
-                        // Asistencia
-                        $form->select(
-                            'asistencia',
-                            'Asistencia:',
-                            'label-input-y-75',
-                            old('asistencia', $examen->asistencia),
-                            [
-                                1 => 'Presente',
-                                0 => 'Ausente'
-                            ]
-                        ),
+                'Datos del examen' => [
+                // Asistencia
+                $form->select(
+                'asistencia',
+                'Asistencia:',
+                'label-input-y-75',
+                old('asistencia', $examen->asistencia),
+                [
+                1 => 'Presente',
+                0 => 'Ausente'
+                ]
+                ),
 
-                        // Nota
-                        $form->text(
-                            'nota',
-                            'Nota:',
-                            'label-input-y-75',
-                            old('nota', $examen->nota),
-                            ['type' => 'number', 'step' => '0.01', 'min' => '0', 'max' => '10']
-                        ),
+                // Nota
+                $form->text(
+                'nota',
+                'Nota:',
+                'label-input-y-75',
+                old('nota', $examen->nota),
+                ['type' => 'number', 'step' => '0.01', 'min' => '0', 'max' => '10']
+                ),
 
-                        // Tipo de final
-                        $form->select(
-                            'tipo_final',
-                            'Tipo de final:',
-                            'label-input-y-75',
-                            old('tipo_final', $examen->tipo_final),
-                            [
-                                1 => 'Escrito',
-                                2 => 'Oral',
-                                3 => 'Promocionado',
-                                4 => 'Equivalencia'
-                            ]
-                        ),
+                // Tipo de final
+                $form->select(
+                'tipo_final',
+                'Tipo de final:',
+                'label-input-y-75',
+                old('tipo_final', $examen->tipo_final),
+                [
+                1 => 'Escrito',
+                2 => 'Oral',
+                3 => 'Promocionado',
+                4 => 'Equivalencia'
+                ]
+                ),
 
-                        // Libro
-                        $form->text(
-                            'libro',
-                            'Libro:',
-                            'label-input-y-75',
-                            old('libro', $examen->libro),
-                            ['type' => 'text', 'maxlength' => 20]
-                        ),
+                // Libro
+                $form->text(
+                'libro',
+                'Libro:',
+                'label-input-y-75',
+                old('libro', $examen->libro),
+                ['type' => 'text', 'maxlength' => 20]
+                ),
 
-                        // Acta
-                        $form->text(
-                            'acta',
-                            'Acta:',
-                            'label-input-y-75',
-                            old('acta', $examen->acta),
-                            ['type' => 'text', 'maxlength' => 20]
-                        ),
-                    ],
+                // Acta
+                $form->text(
+                'acta',
+                'Acta:',
+                'label-input-y-75',
+                old('acta', $examen->acta),
+                ['type' => 'text', 'maxlength' => 20]
+                ),
+                ],
                 ]) !!}
             </form>
         </div>
@@ -126,15 +126,16 @@
         {{-- ===============================
              ELIMINAR EXAMEN
         ================================ --}}
-        <div class="boton-eliminar mt-4">
+        <div class="boton-eliminar">
+
             @if (!$config['modo_seguro'])
-                <form method="POST" class="form-eliminar"
-                      action="{{ route('admin.examenes.destroy', ['examen' => $examen->id]) }}">
+            <div>
+                <form method="POST" id="form-eliminar-{{ $examen->id }}"
+                    action="{{ route('admin.examenes.destroy', ['examen' => $examen->id]) }}">
                     @csrf
                     @method('delete')
 
-                    <button class="btn_red_outline"
-                         onclick="openGeneralModal(
+                    <button type="button" onclick="openGeneralModal(
                     'form-eliminar-{{ $examen->id }}',
                     '¿Estás seguro de que querés eliminar este examen?\n\n' +
                     'Alumno: {{ $examen->alumno?->apellidoNombre() ?? "No asignado" }}\n' +
@@ -143,16 +144,18 @@
                     'Fecha de Mesa: {{ $examen->mesa?->fecha ? \Carbon\Carbon::parse($examen->mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
                     'Nota: {{ $examen->nota ?? "Sin nota" }}\n' +
                     'Asistencia: {{ $examen->asistenciaTexto() ?? "Sin datos" }}\n\n' +
-                    'ESTA ACCIÓN NO SE PUEDE DESHACER.'
-                )"
-                        type="button">
+                    'ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                        class="btn_red_outline">
                         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
-                        Eliminar ficha de examen
+                        <span>Eliminar ficha de examen</span>
                     </button>
                 </form>
+            </div>
             @endif
+
         </div>
     </div>
+
 </div>
 
 <script src="{{ asset('js/confirmacion.js') }}"></script>

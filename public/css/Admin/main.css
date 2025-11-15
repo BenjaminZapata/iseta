@@ -991,8 +991,8 @@ ul .campo_info {
 
 .boton-eliminar {
   display: flex;
-  justify-content: right;
-  align-items: right;
+  justify-content: flex-end;
+  /* ✅ alinea a la derecha */
   padding: 0 27px 15px 1.5em;
 }
 

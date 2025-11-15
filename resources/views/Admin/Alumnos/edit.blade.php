@@ -1,111 +1,108 @@
 @extends('Admin.template')
 @php
-    use Illuminate\Support\Facades\Auth;
-    $admin = Auth::guard('admin')->user();
-    $rol = auth()->user()->rol ?? null;
-    $disabled = $rol === 'secretario' ? 'disabled' : false;
-    $mostrar_botones = $rol !== 'secretario';  // oculta botones si es secretario
+use Illuminate\Support\Facades\Auth;
+$admin = Auth::guard('admin')->user();
+$rol = auth()->user()->rol ?? null;
+$disabled = $rol === 'secretario' ? 'disabled' : false;
+$mostrar_botones = $rol !== 'secretario'; // oculta botones si es secretario
 @endphp
 @section(section: 'content')
-    <link rel="stylesheet" href="{{ asset('css/Admin/main.css') }}">
-    <div class="perfil_one br">
-        @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUMNO/A'])
-   <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
-    'Alumno' => [
-        $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno, [
-            'placeholder' => 'Ej: Juan',
-            $disabled => $disabled
-        ]),
-        $form->text('apellido', 'Apellido:', 'label-input-y-75', $alumno, [
-            'placeholder' => 'Ej: Pérez',
-            $disabled => $disabled
-        ]),
-        $form->text('dni', 'DNI:', 'label-input-y-75', $alumno, [
-            'placeholder' => 'Ej: 12345678',
-            $disabled => $disabled
-        ]),
-        $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $alumno, [
-            'default' => $alumno->fecha_nacimiento->format('Y-m-d'),
-            'inputclass' => 'p-1 w-75p',
-            'placeholder' => 'Formato: dd/mm/aaaa',
-            $disabled => $disabled
-        ]),
-        $form->text('lugar_nacimiento', 'Ciudad de nacimiento:', 'label-input-y-75', $alumno, [
-            'placeholder' => 'Ej: Córdoba',
-            $disabled => $disabled
-        ]),
-        $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, [
-            '' => 'Seleccione una opción',
-            'Soltero',
-            'Casado',
-            'Divorciado',
-            'Viudo',
-            'Conyuge',
-            'Otro',
-        ], [
-            $disabled => $disabled
-        ]),
-    ],
-    'Dirección' => [
-        $form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 9 de Julio', $disabled => $disabled]),
-        $form->text('codigo_postal', 'Código postal:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 6500', $disabled => $disabled]),
-        $form->text('calle', 'Calle:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Av. Eva Perón', $disabled => $disabled]),
-        $form->text('casa_numero', 'Altura:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 742', $disabled => $disabled]),
-        $form->text('dpto', 'Departamento:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: A', $disabled => $disabled]),
-        $form->text('piso', 'Piso:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 3', $disabled => $disabled]),
-    ],
-    'Contacto' => [
-        $form->text('email', 'Email:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: ejemplo@dominio.com', $disabled => $disabled]),
-        $form->text('telefono1', 'Teléfono 1:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2317-876544', $disabled => $disabled]),
-        $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2317-876543', $disabled => $disabled]),
-    ],
-    'Académico' => [
-        $form->text('titulo_anterior', 'Título anterior:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Técnico en Informática', $disabled => $disabled]),
-        $form->text('becas', 'Cantidad de becas:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2', $disabled => $disabled]),
-        $form->text('nombre_institucion_secundario', 'Nombre de institución Secundaria:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Escuela Nacional N°1', $disabled => $disabled]),
-        $form->select('titulo_secundario', 'Título secundario:', 'label-input-y-75', $alumno, [
-            '' => 'Seleccione una opción',
-            'No entregado',
-            'Certificado de constancia de título en trámite',
-            'Constancia de alumno del último año del nivel secundario',
-            'Fotocopia del título original secundario',
-        ], [
-            $disabled => $disabled
-        ]),
-    ],
-    'Otros' => [
-        $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno, [
-            'placeholder' => 'Notas o comentarios adicionales',
-            $disabled => $disabled
-        ]),
-    ]
-], false) ?>
+<link rel="stylesheet" href="{{ asset('css/Admin/main.css') }}">
+<div class="perfil_one br">
+    @include('components.header-avatar', ['tituloSeccion' => 'MODIFICAR ALUMNO/A'])
+    <?= $form->generate(route('admin.alumnos.update', ['alumno' => $alumno->id]), 'put', [
+        'Alumno' => [
+            $form->text('nombre', 'Nombre:', 'label-input-y-75', $alumno, [
+                'placeholder' => 'Ej: Juan',
+                $disabled => $disabled
+            ]),
+            $form->text('apellido', 'Apellido:', 'label-input-y-75', $alumno, [
+                'placeholder' => 'Ej: Pérez',
+                $disabled => $disabled
+            ]),
+            $form->text('dni', 'DNI:', 'label-input-y-75', $alumno, [
+                'placeholder' => 'Ej: 12345678',
+                $disabled => $disabled
+            ]),
+            $form->date('fecha_nacimiento', 'Fecha de nacimiento:', 'label-input-y-75', $alumno, [
+                'default' => $alumno->fecha_nacimiento->format('Y-m-d'),
+                'inputclass' => 'p-1 w-75p',
+                'placeholder' => 'Formato: dd/mm/aaaa',
+                $disabled => $disabled
+            ]),
+            $form->text('lugar_nacimiento', 'Ciudad de nacimiento:', 'label-input-y-75', $alumno, [
+                'placeholder' => 'Ej: Córdoba',
+                $disabled => $disabled
+            ]),
+            $form->select('estado_civil', 'Estado civil:', 'label-input-y-75', $alumno, [
+                '' => 'Seleccione una opción',
+                'Soltero',
+                'Casado',
+                'Divorciado',
+                'Viudo',
+                'Conyuge',
+                'Otro',
+            ], [
+                $disabled => $disabled
+            ]),
+        ],
+        'Dirección' => [
+            $form->text('ciudad', 'Ciudad:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 9 de Julio', $disabled => $disabled]),
+            $form->text('codigo_postal', 'Código postal:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 6500', $disabled => $disabled]),
+            $form->text('calle', 'Calle:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Av. Eva Perón', $disabled => $disabled]),
+            $form->text('casa_numero', 'Altura:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 742', $disabled => $disabled]),
+            $form->text('dpto', 'Departamento:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: A', $disabled => $disabled]),
+            $form->text('piso', 'Piso:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 3', $disabled => $disabled]),
+        ],
+        'Contacto' => [
+            $form->text('email', 'Email:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: ejemplo@dominio.com', $disabled => $disabled]),
+            $form->text('telefono1', 'Teléfono 1:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2317-876544', $disabled => $disabled]),
+            $form->text('telefono2', 'Teléfono 2:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2317-876543', $disabled => $disabled]),
+        ],
+        'Académico' => [
+            $form->text('titulo_anterior', 'Título anterior:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Técnico en Informática', $disabled => $disabled]),
+            $form->text('becas', 'Cantidad de becas:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: 2', $disabled => $disabled]),
+            $form->text('nombre_institucion_secundario', 'Nombre de institución Secundaria:', 'label-input-y-75', $alumno, ['placeholder' => 'Ej: Escuela Nacional N°1', $disabled => $disabled]),
+            $form->select('titulo_secundario', 'Título secundario:', 'label-input-y-75', $alumno, [
+                '' => 'Seleccione una opción',
+                'No entregado',
+                'Certificado de constancia de título en trámite',
+                'Constancia de alumno del último año del nivel secundario',
+                'Fotocopia del título original secundario',
+            ], [
+                $disabled => $disabled
+            ]),
+        ],
+        'Otros' => [
+            $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', $alumno, [
+                'placeholder' => 'Notas o comentarios adicionales',
+                $disabled => $disabled
+            ]),
+        ]
+    ], false) ?>
 
 
-     @if (in_array($admin->rol, [0,1]))
-        <div class="boton-eliminar">
-            @if (!$config['modo_seguro'])
-                <div>
-                    @if (!$config['modo_seguro'])
-                        <form id="form-eliminar-{{ $alumno->id }}"
-                            action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button"
-                                onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}',
+    @if (in_array($admin->rol, [0,1]))
+    <div class="boton-eliminar">
+        @if (!$config['modo_seguro'])
+        <div>
+            <form id="form-eliminar-{{ $alumno->id }}"
+                action="{{ route('admin.alumnos.destroy', $alumno->id) }}" method="POST" style="display: inline;">
+                @csrf
+                @method('DELETE')
+                <button type="button"
+                    onclick="openGeneralModal('form-eliminar-{{ $alumno->id }}',
                                     '¿Estás seguro de que querés eliminar al alumno: {{ strtoupper($alumno->apellido) }} {{ strtoupper($alumno->nombre) }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
-                                class="btn_red_outline">
-                                <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar alumno
-                            </button>
-
-                        </form>
-                    @endif
-                </div>
-            @endif
+                    class="btn_red_outline">
+                    <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar alumno
+                </button>
+            </form>
         </div>
+        @endif
+    </div>
     @endif
 
-        {{-- HEADER PARA VERIFICAR ALUMNO 
+    {{-- HEADER PARA VERIFICAR ALUMNO 
 
     @if ($alumno->verificado == 0)
     <div class="perfil_one br">
@@ -202,14 +199,14 @@
 
     <div class="accordion" id="accordionCursadas">
         @php
-            $agrupadasCursadas = collect($alumno->cursadas)->groupBy(fn($c) => $c->carrera);
+        $agrupadasCursadas = collect($alumno->cursadas)->groupBy(fn($c) => $c->carrera);
         @endphp
 
         @foreach ($agrupadasCursadas as $carrera => $porCarrera)
-            @php
-                // agrupamos por el año de la asignatura desde carrera_asignatura_profesor
-                $porAnio = $porCarrera->groupBy('anio_asignatura')->sortKeys();
-            @endphp
+        @php
+        // agrupamos por el año de la asignatura desde carrera_asignatura_profesor
+        $porAnio = $porCarrera->groupBy('anio_asignatura')->sortKeys();
+        @endphp
 
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCarreraCursadas{{ $loop->index }}">
@@ -219,10 +216,10 @@
                     </button>
                 </h2>
 
-                <div id="collapseCarreraCursadas{{ $loop->index }}" class="accordion-collapse collapse"
-                    data-bs-parent="#accordionCursadas">
-                    <div class="accordion-body p-2">
-                        <div class="accordion" id="anioAccordionCursadas{{ $loop->index }}">
+            <div id="collapseCarreraCursadas{{ $loop->index }}" class="accordion-collapse collapse"
+                data-bs-parent="#accordionCursadas">
+                <div class="accordion-body p-2">
+                    <div class="accordion" id="anioAccordionCursadas{{ $loop->index }}">
 
                             @foreach ($porAnio as $anio => $cursadasDelAnio)
                                 <div class="accordion-item">
@@ -235,8 +232,8 @@
                                             {{-- Texto del año --}}
                                             {{ $anio !== null ? (intval($anio) + 1) . '° año' : 'Año no definido' }}
 
-                                        </button>
-                                    </h3>
+                                </button>
+                            </h3>
 
                                     <div id="collapseCursada{{ $loop->parent->index }}-{{ $loop->index }}"
                                         class="accordion-collapse collapse"
@@ -284,15 +281,15 @@
                                 </div> {{-- Fin año --}}
                             @endforeach
 
-                        </div>
                     </div>
                 </div>
-            </div> {{-- Fin carrera --}}
+            </div>
+        </div> {{-- Fin carrera --}}
         @endforeach
     </div>
 </div>
 
-       {{-- EXÁMENES --}}
+{{-- EXÁMENES --}}
 <div class="table">
     <div class="table__header">
         <h2>Exámenes</h2>
@@ -304,13 +301,13 @@
         @endphp
 
         @foreach ($agrupadasExamenes as $carrera => $porCarrera)
-            @php
-                // agrupamos por el año de la asignatura (de carrera_asignatura_profesor)
-                $porAnio = $porCarrera
-                    ->groupBy('anio_asignatura')
-                    ->sortKeys()
-                    ->sortBy(fn($grupo, $anio) => $anio === null ? 999 : $anio); // los "sin año" al final
-            @endphp
+        @php
+        // agrupamos por el año de la asignatura (de carrera_asignatura_profesor)
+        $porAnio = $porCarrera
+        ->groupBy('anio_asignatura')
+        ->sortKeys()
+        ->sortBy(fn($grupo, $anio) => $anio === null ? 999 : $anio); // los "sin año" al final
+        @endphp
 
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingCarreraExamenes{{ $loop->index }}">
@@ -320,10 +317,10 @@
                     </button>
                 </h2>
 
-                <div id="collapseCarreraExamenes{{ $loop->index }}" class="accordion-collapse collapse"
-                    data-bs-parent="#accordionExamenes">
-                    <div class="accordion-body p-2">
-                        <div class="accordion" id="anioAccordionExamenes{{ $loop->index }}">
+            <div id="collapseCarreraExamenes{{ $loop->index }}" class="accordion-collapse collapse"
+                data-bs-parent="#accordionExamenes">
+                <div class="accordion-body p-2">
+                    <div class="accordion" id="anioAccordionExamenes{{ $loop->index }}">
 
                             @foreach ($porAnio as $anio => $examenesDelAnio)
                                 <div class="accordion-item">
@@ -391,12 +388,12 @@
                                 </div> {{-- Fin año --}}
                             @endforeach
 
-                        </div>
                     </div>
                 </div>
-            </div> {{-- Fin carrera --}}
+            </div>
+        </div> {{-- Fin carrera --}}
         @endforeach
     </div>
 </div>
 
-    @endsection
+@endsection
