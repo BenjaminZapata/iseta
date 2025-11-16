@@ -4,29 +4,39 @@ const presidenteSelect = _find('[name="prof_presidente"]')
 const vocal1Select = _find('[name="prof_vocal_1"]')
 const vocal2Select = _find('[name="prof_vocal_2"]')
 
-if (carreraSelect.element.value != 0) {
-    const url = new URL(window.location.href)
-    const parametros = new URLSearchParams(url.search)
-    const valorParametro1 = parametros.get('filter_asignatura_id')
-    callback(valorParametro1)
-}
+/* ============================================================
+   CARGA INICIAL CON OLD()
+   ============================================================ */
+document.addEventListener("DOMContentLoaded", () => {
+    const oldAsig = ASIGNATURA_OLD && ASIGNATURA_OLD !== "0" ? ASIGNATURA_OLD : 0
 
-carreraSelect.when('change', function () {
-    callback(0)
+    if (carreraSelect.element.value != 0) {
+        callback(oldAsig)   // ← SI HAY OLD DE ASIGNATURA, SE SELECCIONA
+    }
 })
 
+/* ============================================================
+   CAMBIO DE CARRERA
+   ============================================================ */
+carreraSelect.when('change', function () {
+    callback(0)   // limpiar asignatura
+})
+
+/* ============================================================
+   CAMBIO DE ASIGNATURA
+   ============================================================ */
 asignaturaSelect.when('change', function () {
     const idAsignatura = asignaturaSelect.value()
     if (!idAsignatura || idAsignatura === '0') return
 
-    // ⚠️ Validar carrera antes de seguir
+    // Validar carrera
     if (!carreraSelect.value() || carreraSelect.value() === '0') {
         alert('Debe seleccionar una carrera antes de elegir la asignatura.')
         asignaturaSelect.element.value = 0
         return
     }
 
-    // ✅ Evita asignar presidente vacío
+    // Presidente vinculado a la asignatura
     fetch(`/api/asignatura/${idAsignatura}/presidente`)
         .then(res => res.json())
         .then(data => {
@@ -38,6 +48,9 @@ asignaturaSelect.when('change', function () {
         .catch(e => console.log(e))
 })
 
+/* ============================================================
+   CARGA DE ASIGNATURAS SEGÚN CARRERA
+   ============================================================ */
 function callback(asigSelected) {
     asignaturaSelect.clear()
     if (carreraSelect.valueIs('any')) return
@@ -45,6 +58,7 @@ function callback(asigSelected) {
     fetch(`/api/a/${carreraSelect.value()}`)
         .then(asig => asig.json())
         .then(asig => {
+
             asignaturaSelect.createChild('<option>')
                 .withText('Cualquiera')
                 .withAttrs({ value: 0 })
@@ -54,22 +68,27 @@ function callback(asigSelected) {
                     .withText(asignatura.nombre)
                     .withAttrs({ value: asignatura.id })
 
-                if (asigSelected == asignatura.id) {
+                // === OLD() ===
+                if (parseInt(asigSelected) === parseInt(asignatura.id)) {
                     option.withAttrs({ selected: true })
                 }
             })
 
             asignaturaSelect.insert()
+
             actualizarVocales(carreraSelect.value())
         })
         .catch(e => console.log(e))
 }
 
+/* ============================================================
+   ACTUALIZA PROFESORES DISPONIBLES
+   ============================================================ */
 function actualizarVocales(idCarrera) {
     vocal1Select.clear()
     vocal2Select.clear()
 
-    // 🟢 Solo agrega la opción “Vacío / A confirmar” si no existe
+    // Agregar "Vacío / A confirmar" si no está
     if (!presidenteSelect.element.querySelector('option[value=""]')) {
         presidenteSelect.createChild('<option>')
             .withText('Vacío / A confirmar')
@@ -82,34 +101,48 @@ function actualizarVocales(idCarrera) {
         .then(profesores => {
             const presidenteId = presidenteSelect.value()
 
-            vocal1Select.createChild('<option>')
+            // Vocales: agregar vacío
+            const v1Empty = vocal1Select.createChild('<option>')
                 .withText('Vacío / A confirmar')
                 .withAttrs({ value: '' })
 
-            vocal2Select.createChild('<option>')
+            const v2Empty = vocal2Select.createChild('<option>')
                 .withText('Vacío / A confirmar')
                 .withAttrs({ value: '' })
+
+            // OLD → si old() es "", que quede seleccionado ese vacío
+            if (VOCAL1_OLD === "") v1Empty.withAttrs({ selected: true })
+            if (VOCAL2_OLD === "") v2Empty.withAttrs({ selected: true })
 
             profesores.forEach(profesor => {
                 const texto = `${profesor.apellido} ${profesor.nombre}`
 
-                // 🔹 No se borra el presidente ya asignado
+                // Presidente: no borrar si ya está
                 if (!presidenteSelect.element.querySelector(`option[value="${profesor.id}"]`)) {
                     presidenteSelect.createChild('<option>')
                         .withText(texto)
                         .withAttrs({ value: profesor.id })
                 }
 
-                // 🔹 Vocales (vocal2 puede quedar vacío)
+                // Vocales (evita repetir presidente)
                 if (profesor.id == presidenteId) return
 
-                vocal1Select.createChild('<option>')
+                const opt1 = vocal1Select.createChild('<option>')
                     .withText(texto)
                     .withAttrs({ value: profesor.id })
 
-                vocal2Select.createChild('<option>')
+                const opt2 = vocal2Select.createChild('<option>')
                     .withText(texto)
                     .withAttrs({ value: profesor.id })
+
+                // === OLD DE VOCALES ===
+                if (parseInt(VOCAL1_OLD) === profesor.id) {
+                    opt1.withAttrs({ selected: true })
+                }
+
+                if (parseInt(VOCAL2_OLD) === profesor.id) {
+                    opt2.withAttrs({ selected: true })
+                }
             })
 
             vocal1Select.insert()
@@ -118,7 +151,9 @@ function actualizarVocales(idCarrera) {
         .catch(e => console.log(e))
 }
 
-// ⚙️ Validación mínima al enviar el formulario
+/* ============================================================
+   VALIDACIÓN EN ENVÍO DEL FORM
+   ============================================================ */
 document.querySelector('form').addEventListener('submit', (e) => {
     const carreraVal = carreraSelect.element.value
     const presidenteVal = presidenteSelect.element.value
@@ -137,7 +172,9 @@ document.querySelector('form').addEventListener('submit', (e) => {
     }
 })
 
-// 🚫 Bloqueo absoluto de envío si el presidente está vacío (nivel botón)
+/* ============================================================
+   BLOQUEO EN BOTÓN
+   ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.querySelector('form')
     const submitBtn = form.querySelector('[type="submit"]')
@@ -155,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!presidenteVal || presidenteVal.trim() === '') {
                 e.preventDefault()
-                alert('Debe seleccionar un presidente de mesa válido (no puede quedar "Vacío / A confirmar").')
+                alert('Debe seleccionar un presidente de mesa válido.')
                 presidenteSelect.element.focus()
                 return false
             }
