@@ -11,7 +11,7 @@
         </button>
         <div id="ayuda-modal" class="modal-ayuda none">
             <div class="modal-content">
-                <h3>¿Cómo funciona la rematriculación?</h3>
+                <h3>¿Cómo funciona la contraseña?</h3>
                 <p>Formato: La contraseña debe tener mínimo un número, un carácter especial, una letra minúscula y una letra mayúscula. 
                     [Mínimo 8 caracteres] [Máximo 16 caracteres]</p>
                 <button id="cerrar-ayuda" class="btn-close">Cerrar</button>

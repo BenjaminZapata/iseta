@@ -117,16 +117,13 @@ class MesasCrudController extends BaseController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CrearMesaRequest $request)
+ public function store(CrearMesaRequest $request)
 {
     // Obtener datos validados
     $data = $request->validated();
 
-    // Validar que los tres profesores estén seleccionados
-    if (
-        empty($data['prof_presidente']) ||
-        empty($data['prof_vocal_1']) 
-    ) {
+    // Validar que los profesores obligatorios estén seleccionados
+    if (empty($data['prof_presidente']) || empty($data['prof_vocal_1'])) {
         return redirect()->back()
             ->with('error', 'Debe seleccionar un presidente de mesa y un profesor vocal 1 antes de crear la mesa.')
             ->withInput();
@@ -158,7 +155,7 @@ class MesasCrudController extends BaseController
     }
 
     // Si hay segundo llamado
-    if ($data['cantidad_llamados'] == 2) {
+    if (($data['cantidad_llamados'] ?? 1) == 2) {
         $esDiaValido = $this->mesasService->esDiaHabil($data['fecha_2']);
         if (!$esDiaValido['success']) {
             return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
@@ -173,7 +170,7 @@ class MesasCrudController extends BaseController
             return redirect()->back()->with('error', $llamadoYaExiste['mensaje'])->withInput();
         }
 
-        // Crear mesa del segundo llamado rotando los profesores
+        // Crear mesa del segundo llamado
         Mesa::create([
             'id_carrera' => $data['carrera'],
             'id_asignatura' => $data['id_asignatura'],
@@ -182,6 +179,7 @@ class MesasCrudController extends BaseController
             'prof_presidente' => $data['prof_presidente'],
             'prof_vocal_1' => $data['prof_vocal_1'],
             'prof_vocal_2' => $data['prof_vocal_2'],
+            'observaciones' => $data['observaciones'] ?? null,
             'estado' => 0
         ]);
     }
@@ -195,11 +193,13 @@ class MesasCrudController extends BaseController
         'prof_presidente' => $data['prof_presidente'],
         'prof_vocal_1' => $data['prof_vocal_1'],
         'prof_vocal_2' => $data['prof_vocal_2'],
+        'observaciones' => $data['observaciones'] ?? null,
         'estado' => 0
     ]);
 
     return redirect()->back()->with('mensaje', 'Se creó la mesa correctamente.');
 }
+
 
 
 
@@ -240,6 +240,7 @@ public function edit($id)
           ->where('id_carrera', $carrera_id)
           ->where('aprobada', 1);
     })->get();
+       
 
     // 🔹 Pasar todo a la vista
     return view('Admin.Mesas.edit', [
@@ -261,7 +262,7 @@ public function update(EditarMesaRequest $request, Mesa $mesa)
 {
     $data = $request->validated();
 
-    // Validaciones de día hábil...
+    // Validaciones de día hábil
     if (DiasHabiles::esFinDeSemana($data['fecha'])) {
         return redirect()->back()->with('error', 'La fecha es fin de semana');
     }
@@ -270,6 +271,7 @@ public function update(EditarMesaRequest $request, Mesa $mesa)
         return redirect()->back()->with('error', 'La fecha es un día no hábil');
     }
 
+    // Validar que no haya profesores repetidos
     if (
         $data['prof_presidente'] == $data['prof_vocal_1'] ||
         $data['prof_presidente'] == $data['prof_vocal_2'] ||
@@ -278,11 +280,21 @@ public function update(EditarMesaRequest $request, Mesa $mesa)
         return redirect()->back()->with('error', 'Hay profesores repetidos');
     }
 
-    // 🔹 Actualiza todos los campos validados (incluido llamado)
-    $mesa->update($data);
+    // Guardar mesa, conservando observaciones si no vienen
+    $mesa->update([
+        'prof_presidente' => $data['prof_presidente'],
+        'prof_vocal_1' => $data['prof_vocal_1'],
+        'prof_vocal_2' => $data['prof_vocal_2'],
+        'llamado' => $data['llamado'],
+        'fecha' => $data['fecha'],
+        'observaciones' => $data['observaciones'] ?? $mesa->observaciones,
+    ]);
 
-    return redirect()->back()->with('mensaje', 'Se editó la mesa');
+
+
+    return redirect()->back()->with('mensaje', 'Se editó la mesa correctamente');
 }
+
 
 
 

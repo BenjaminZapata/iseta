@@ -18,7 +18,7 @@ class EditarMesaRequest extends FormRequest
         $rules = [
             'prof_presidente' => 'required|not_in:,0',
             'prof_vocal_1' => ['required', 'not_in:,0'],
-            'prof_vocal_2' => ['nullable', 'not_in:,0'],
+            'prof_vocal_2' => ['nullable'],
             'llamado' => ['required', 'in:1,2'],
             'fecha' => ['required', 'date'],
             'observaciones' => ['nullable', 'max:150'],
