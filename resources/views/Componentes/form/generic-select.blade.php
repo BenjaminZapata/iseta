@@ -21,9 +21,21 @@
 
     <label>{{ $label }}</label>
 
-    <select id="{{ $id }}" name="{{ $name }}" class="{{ $options['inputclass'] ?? '' }}">
+    <select id="{{ $id }}"
+            name="{{ $name }}"
+            class="{{ $options['inputclass'] ?? '' }} @error($name) is-invalid @enderror">
+
         @foreach ($optionsE as $key => $value)
-            <option @selected((string) $default === (string) $key) value="{{ $key }}">{{ $value }}</option>
+            <option @selected((string) $default === (string) $key)
+                    value="{{ $key }}">
+                {{ $value }}
+            </option>
         @endforeach
     </select>
+
+    {{-- 🔴 MOSTRAR ERROR DE VALIDACIÓN DEBAJO --}}
+    @error($name)
+        <p class="campo-alert">{{ $message }}</p>
+    @enderror
+
 </div>

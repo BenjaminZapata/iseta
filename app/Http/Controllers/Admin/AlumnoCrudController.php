@@ -6,10 +6,10 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\crearAlumnoRequest;
 use App\Http\Requests\EditarAlumnoRequest;
 use App\Models\Alumno;
-use App\Models\Examen;
 use App\Repositories\Admin\AlumnoRepository;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Log;
 
 class AlumnoCrudController extends BaseController
 {
@@ -72,25 +72,8 @@ class AlumnoCrudController extends BaseController
     {
         $alumno = $alumno->load(['carreras', 'cursadas', 'examenes']);
 
-        $examenes = Examen::select(
-            'examenes.fecha',
-            'asignaturas.nombre as asignatura',
-            'examenes.nota',
-            'examenes.id',
-            'carreras.nombre as carrera',
-            'cap.anio as anio_asignatura'
-        )
-            ->join('asignaturas', 'examenes.id_asignatura', 'asignaturas.id')
-            ->join('carrera_asignatura_profesor as cap', 'asignaturas.id', 'cap.id_asignatura')
-            ->join('carreras', 'cap.id_carrera', 'carreras.id')
-            ->where('examenes.id_alumno', $alumno->id)
-            ->orderBy('carreras.id')
-            ->orderBy('examenes.fecha', 'desc')
-            ->get();
-
         return view('Admin.Alumnos.edit', [
             'alumno' => $alumno,
-            'examenes' => $examenes,
             'carreras' => $alumno->carrerasIncriptas(),
             'esAlumno' => true,
             'method' => 'put',
@@ -123,6 +106,16 @@ class AlumnoCrudController extends BaseController
 
             return redirect()->back()->with('mensajes', $mensajes)->withInput();
         }
+    }
+
+    public function cambiarEstadoInscripcion(Request $request, Alumno $alumno, int $id_carrera)
+    {
+        $inscripto = $alumno->egresadoinscripto()->where('id_carrera', $id_carrera)->first();
+        Log::debug($request->estados[$id_carrera]);
+        $inscripto->estado = $request->estado;
+        $inscripto->save();
+
+        return redirect()->route('admin.alumnos.edit', $alumno);
     }
 
     /**

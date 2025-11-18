@@ -69,6 +69,13 @@
             </div>
         </div>
     </div>
+<script>
+    const ASIGNATURA_OLD = "{{ old('id_asignatura', $mesa->id_asignatura ?? '') }}";
+    const PRESIDENTE_OLD = "{{ old('prof_presidente', $mesa->prof_presidente ?? '') }}";
+    const VOCAL1_OLD = "{{ old('prof_vocal_1', $mesa->prof_vocal_1 ?? '') }}";
+    const VOCAL2_OLD = "{{ old('prof_vocal_2', $mesa->prof_vocal_2 ?? '') }}";
+</script>
+
 
     <script src="{{ asset('js/obtener-materias.js') }}"></script>
     <script src="{{ asset('js/llamados.js') }}"></script>
