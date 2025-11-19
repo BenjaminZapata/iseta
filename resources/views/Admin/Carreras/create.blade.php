@@ -6,15 +6,19 @@
         @include('components.header-avatar', ['tituloSeccion' => 'CREAR NUEVA CARRERA'])
         <div class="perfil__info">
 
+            <p class="info-obligatorios">
+                Los campos marcados con <span style="color:red">*</span> son obligatorios.
+            </p>
+
             <?= $form->generate(route('admin.carreras.store'), 'post', [
                 'Información' => [
-                    $form->text('nombre', 'Nombre:*', 'label-input-y-75', null, [
+                    $form->text('nombre', 'Nombre: *', 'label-input-y-75', null, [
                         'placeholder' => 'Ej: Ingeniería en Sistemas'
                     ]),
-                    $form->text('resolucion', 'Resolución:*', 'label-input-y-75', null, [
+                    $form->text('resolucion', 'Resolución: *', 'label-input-y-75', null, [
                         'placeholder' => 'Ej: Res. 123/2020'
                     ]),
-                    $form->text('anio_apertura', 'Año de apertura:*', 'label-input-y-75', null, [
+                    $form->text('anio_apertura', 'Año de apertura: *', 'label-input-y-75', null, [
                         'placeholder' => 'Ej: 2024',
                         'inputmode'   => 'numeric'
                     ]),

@@ -17,6 +17,16 @@ return new class extends Migration
         });
         DB::statement('
             UPDATE cursadas
+            SET 
+                aprobada = CASE 
+                    WHEN condicion = 2 THEN 4
+                    WHEN condicion = 3 THEN 5
+                END,
+                condicion = 1
+            WHERE condicion IN (2, 3);
+        ');
+        DB::statement('
+            UPDATE cursadas
             INNER JOIN asignaturas ON cursadas.id_asignatura = asignaturas.id
             SET cursadas.id_carrera = asignaturas.id_carrera
             WHERE asignaturas.id_carrera IS NOT NULL

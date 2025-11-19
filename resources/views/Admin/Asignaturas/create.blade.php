@@ -1,46 +1,39 @@
 @extends('Admin.template')
 
 @section('content')
-    <div>
-        <div class="perfil_one br">
-            @include('components.header-avatar', ['tituloSeccion' => 'CREAR ASIGNATURA'])
+<div>
+    <div class="perfil_one br">
+        @include('components.header-avatar', ['tituloSeccion' => 'CREAR ASIGNATURA'])
 
-            <div class="perfil__info">
-                <form method="post" action="{{ route('admin.asignaturas.store') }}">
-                    @csrf
+        <div class="perfil__info">
 
-                    {{-- Nombre --}}
-                    <div class="perfil_dataname">
-                        <label>Asignatura:</label>
-                        <input class="campo_info rounded" name="nombre" value="{{ old('nombre') }}">
+            <form action="{{ route('admin.asignaturas.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
 
-                    </div>
+                <p class="info-obligatorios">
+                    Los campos marcados con <span style="color:red">*</span> son obligatorios.
+                </p>
 
+                <?= $form->generate(null, 'post', [
+                    'Asignatura' => [
+                        $form->text('nombre', 'Nombre: *', 'label-input-y-75', old('nombre'), [
+                            'placeholder' => 'Ej: Biología I',
+                            'maxlength' => 50,
+                        ]),
+                        $form->text('carga_horaria', 'Cantidad de modulos: *', 'label-input-y-75', old('carga_horaria'), [
+                            'placeholder' => 'Ej: 1',
+                        ]),
+                    ],
+                    'Otros' => [
+                        $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones'), [
+                            'placeholder' => 'Notas adicionales sobre el profesor/a',
+                            'maxlength' => 150,
+                        ]),
+                    ],
+                ]) ?>
 
-                    {{-- Carga horaria --}}
-                    <div class="perfil_dataname">
-                        <label>Cantidad de modulos:</label>
-                        <input class="campo_info rounded" name="carga_horaria" value="{{ old('carga_horaria') }}">
-
-                    </div>
-
-                    {{-- Observaciones --}}
-                    <div class="perfil_dataname">
-                        <label>Observaciones:</label>
-                        <input class="campo_info rounded" name="observaciones" value="{{ old('observaciones') }}">
-                    </div>
-
-                    {{-- Botones --}}
-                    <div class="botones-derecha">
-                        <x-botones-alumno />
-                        <x-btn-cancelar />
-                        <button type="submit" class="btn_blue">
-                            <i class="ti ti-circle-plus" style="font-size: 1.3em; margin-right: 8px;"></i>
-                            Guardar
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
+</div>
 @endsection
