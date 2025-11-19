@@ -20,10 +20,10 @@ class Examen extends Model
         'acta',
         'nota',
         'fecha',
-        'aprobado',     // 0 = Desaprobado, 1 = Aprobado
+        'aprobado',    
         'tipo_final',
         'estado',
-        'asistencia'    // 0 = Ausente, 1 = Presente
+        'asistencia'   
     ];
 
     public $timestamps = false;
@@ -69,15 +69,19 @@ class Examen extends Model
 
         return optional($this->mesa)->fecha;
     }
-
-    public function tipoFinalTexto()
+ public function tipoFinalTexto(): string
     {
-        return match ($this->tipo_final) {
-            1 => "Escrito",
-            2 => "Oral",
-            3 => "Promocionado",
-            4 => "Equivalencia",
-            default => "Sin especificar"
+        // Si es múltiple (99) mostramos Escrito + Oral
+        if ($this->tipo_final == 99) {
+            return 'Múltiple → Escrito + Oral';
+        }
+
+        return match($this->tipo_final) {
+            1 => 'Escrito',
+            2 => 'Oral',
+            3 => 'Promocionado',
+            4 => 'Equivalencia',
+            default => 'No definido',
         };
     }
 
@@ -116,6 +120,16 @@ class Examen extends Model
         return match ($this->aprobado) {
             0 => "Desaprobado",
             1 => "Aprobado",
+            default => "Desconocido"
+        };
+    }
+    
+    public function estadoTexto()
+    {
+        return match ($this->estado) {
+            1 => "Regular",
+            2 => "Libre",
+            3 => "Promocionado",
             default => "Desconocido"
         };
     }

@@ -129,7 +129,16 @@ class MesasCrudController extends BaseController
             ->withInput();
     }
 
-    // Validar que la fecha del primer llamado sea hábil
+    // Validar que no haya profesores repetidos
+    if (
+        $data['prof_presidente'] == $data['prof_vocal_1'] ||
+        $data['prof_presidente'] == $data['prof_vocal_2'] ||
+        ($data['prof_vocal_1'] == $data['prof_vocal_2'] && $data['prof_vocal_1'] != '0')
+    ) {
+        return redirect()->back()->with('error', 'Hay profesores repetidos')->withInput();
+    }
+
+    // Validar que el primer llamado sea hábil
     $esDiaValido = $this->mesasService->esDiaHabil($data['fecha_1']);
     if (!$esDiaValido['success']) {
         return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
@@ -145,17 +154,26 @@ class MesasCrudController extends BaseController
         return redirect()->back()->with('error', $llamadoYaExiste['mensaje'])->withInput();
     }
 
-    // Verificar que no haya profesores repetidos
-    if (
-        $data['prof_presidente'] == $data['prof_vocal_1'] ||
-        $data['prof_presidente'] == $data['prof_vocal_2'] ||
-        ($data['prof_vocal_1'] == $data['prof_vocal_2'] && $data['prof_vocal_1'] != '0')
-    ) {
-        return redirect()->back()->with('error', 'Hay profesores repetidos')->withInput();
+    // Validar disponibilidad de profesores para primer llamado
+    $profesores = [
+        'Presidente' => $data['prof_presidente'],
+        'Vocal 1' => $data['prof_vocal_1'],
+        'Vocal 2' => $data['prof_vocal_2'] ?? null,
+    ];
+
+    foreach ($profesores as $rol => $id) {
+        if ($id && !$this->mesasService->profesorDisponible($id, $data['fecha_1'])) {
+            return redirect()->back()->with('error', "El profesor $rol ya está asignado en otra mesa en esa fecha y hora")->withInput();
+        }
     }
 
     // Si hay segundo llamado
     if (($data['cantidad_llamados'] ?? 1) == 2) {
+        // Validar que las fechas no sean iguales
+        if ($data['fecha_1'] == $data['fecha_2']) {
+            return redirect()->back()->with('error', 'El segundo llamado no puede tener la misma fecha y hora que el primero')->withInput();
+        }
+
         $esDiaValido = $this->mesasService->esDiaHabil($data['fecha_2']);
         if (!$esDiaValido['success']) {
             return redirect()->back()->with('error', $esDiaValido['mensaje'])->withInput();
@@ -170,7 +188,14 @@ class MesasCrudController extends BaseController
             return redirect()->back()->with('error', $llamadoYaExiste['mensaje'])->withInput();
         }
 
-        // Crear mesa del segundo llamado
+        // Validar disponibilidad de profesores para segundo llamado
+        foreach ($profesores as $rol => $id) {
+            if ($id && !$this->mesasService->profesorDisponible($id, $data['fecha_2'])) {
+                return redirect()->back()->with('error', "El profesor $rol ya está asignado en otra mesa en la fecha del segundo llamado")->withInput();
+            }
+        }
+
+        // Crear mesa segundo llamado
         Mesa::create([
             'id_carrera' => $data['carrera'],
             'id_asignatura' => $data['id_asignatura'],
@@ -184,7 +209,7 @@ class MesasCrudController extends BaseController
         ]);
     }
 
-    // Crear mesa del primer llamado
+    // Crear mesa primer llamado
     Mesa::create([
         'id_carrera' => $data['carrera'],
         'id_asignatura' => $data['id_asignatura'],
@@ -199,9 +224,6 @@ class MesasCrudController extends BaseController
 
     return redirect()->back()->with('mensaje', 'Se creó la mesa correctamente.');
 }
-
-
-
 
     /**
      * Show the form for editing the specified resource.
@@ -260,6 +282,7 @@ public function edit($id)
      */
 public function update(EditarMesaRequest $request, Mesa $mesa)
 {
+ 
     $data = $request->validated();
 
     // Validaciones de día hábil
@@ -294,9 +317,6 @@ public function update(EditarMesaRequest $request, Mesa $mesa)
 
     return redirect()->back()->with('mensaje', 'Se editó la mesa correctamente');
 }
-
-
-
 
     /**
      * Remove the specified resource from storage.

@@ -50,7 +50,7 @@
                 </span>
             </div>
 
-            <div class="perfil_dataname border-none">
+            <div class="perfil_dataname">
                 <label>DNI:</label>
                 <span class="campo_info2">{{ $examen->alumno->dniPuntos() }}</span>
             </div>
@@ -60,65 +60,92 @@
              FORMULARIO DE EDICIÓN
         ================================ --}}
         <div class="perfil__info" style="margin:10px;">
+            @php
+                $TIPO_FINAL_MULTIPLE = 99;
+
+                // Normalizar tipo_final para mostrar
+                $valorTipoFinal = old('tipo_final', $examen->tipo_final);
+                if (!is_array($valorTipoFinal)) {
+                    $valorTipoFinal = [$valorTipoFinal];
+                }
+            @endphp
+
             <form method="POST" action="{{ route('admin.examenes.update', $examen->id) }}">
                 @csrf
                 @method('PUT')
 
                 {!! $form->generate($examen, 'put', [
-                'Datos del examen' => [
-                // Asistencia
-                $form->select(
-                'asistencia',
-                'Asistencia:',
-                'label-input-y-75',
-                old('asistencia', $examen->asistencia),
-                [
-                1 => 'Presente',
-                0 => 'Ausente'
-                ]
-                ),
 
-                // Nota
-                $form->text(
-                'nota',
-                'Nota:',
-                'label-input-y-75',
-                old('nota', $examen->nota),
-                ['type' => 'number', 'step' => '0.01', 'min' => '0', 'max' => '10']
-                ),
+                    'Datos del examen' => [
 
-                // Tipo de final
-                $form->select(
-                'tipo_final',
-                'Tipo de final:',
-                'label-input-y-75',
-                old('tipo_final', $examen->tipo_final),
-                [
-                1 => 'Escrito',
-                2 => 'Oral',
-                3 => 'Promocionado',
-                4 => 'Equivalencia'
-                ]
-                ),
+                        $form->select(
+                            'asistencia',
+                            'Asistencia:',
+                            'label-input-y-75',
+                            old('asistencia') ?? $examen,
+                            [
+                                '' => 'Seleccionar asistencia',
+                                '1' => 'Presente',
+                                '0' => 'Ausente'
+                            ],
+                        ),
 
-                // Libro
-                $form->text(
-                'libro',
-                'Libro:',
-                'label-input-y-75',
-                old('libro', $examen->libro),
-                ['type' => 'text', 'maxlength' => 20]
-                ),
+                        $form->text(
+                            'nota',
+                            'Nota:',
+                            'label-input-y-75',
+                            old('nota') ?? $examen,
+                            ['type' => 'number', 'min' => '1', 'max' => '10']
+                        ),
 
-                // Acta
-                $form->text(
-                'acta',
-                'Acta:',
-                'label-input-y-75',
-                old('acta', $examen->acta),
-                ['type' => 'text', 'maxlength' => 20]
-                ),
-                ],
+                        $form->select(
+                            'estado',
+                            'Estado del examen:',
+                            'label-input-y-75',
+                            old('estado') ?? $examen,
+                            [
+                                null => 'Seleccionar estado',
+                                1 => 'Regular',
+                                2 => 'Libre',
+                                3 => 'Promocionado'
+                            ],
+                            ['id' => 'estado']
+                        ),
+
+                        $form->select(
+                            'tipo_final',
+                            'Tipo de final:',
+                            'label-input-y-75',
+                             old('tipo_final') ?? $examen,
+                            [
+                                null => 'Seleccionar tipo de final',
+                                1 => 'Escrito',
+                                2 => 'Oral',
+                                3 => 'Promocionado',
+                                4 => 'Equivalencia',
+                                99 => 'Múltiple (Escrito + Oral)'
+                            ],
+                            ['id' => 'tipo_final']
+                        ),
+
+                        $form->text(
+                            'libro',
+                            'Libro:',
+                            'label-input-y-75',
+                            old('libro') ?? $examen,
+                            ['type' => 'number', 'maxlength' => 4]
+                        ),
+
+                        $form->text(
+                            'acta',
+                            'Acta:',
+                            'label-input-y-75',
+                            old('acta') ?? $examen,
+                            ['type' => 'number', 'maxlength' => 4]
+                        ),
+
+                    ],
+
                 ]) !!}
             </form>
         </div>
@@ -131,20 +158,21 @@
             @if (!$config['modo_seguro'])
             <div>
                 <form method="POST" id="form-eliminar-{{ $examen->id }}"
-                    action="{{ route('admin.examenes.destroy', ['examen' => $examen->id]) }}">
+                      action="{{ route('admin.examenes.destroy', ['examen' => $examen->id]) }}">
                     @csrf
                     @method('delete')
 
                     <button type="button" onclick="openGeneralModal(
-                    'form-eliminar-{{ $examen->id }}',
-                    '¿Estás seguro de que querés eliminar este examen?\n\n' +
-                    'Alumno: {{ $examen->alumno?->apellidoNombre() ?? "No asignado" }}\n' +
-                    'Carrera: {{ $examen->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
-                    'Asignatura: {{ $examen->asignatura?->nombre ?? "No asignada" }}\n' +
-                    'Fecha de Mesa: {{ $examen->mesa?->fecha ? \Carbon\Carbon::parse($examen->mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
-                    'Nota: {{ $examen->nota ?? "Sin nota" }}\n' +
-                    'Asistencia: {{ $examen->asistenciaTexto() ?? "Sin datos" }}\n\n' +
-                    'ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                        'form-eliminar-{{ $examen->id }}',
+                        '¿Estás seguro de que querés eliminar este examen?\n\n' +
+                        'Alumno: {{ $examen->alumno?->apellidoNombre() ?? "No asignado" }}\n' +
+                        'Carrera: {{ $examen->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
+                        'Asignatura: {{ $examen->asignatura?->nombre ?? "No asignada" }}\n' +
+                        'Fecha de Mesa: {{ $examen->mesa?->fecha ? \Carbon\Carbon::parse($examen->mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
+                        'Nota: {{ $examen->nota ?? "Sin nota" }}\n' +
+                        'Asistencia: {{ $examen->asistenciaTexto() ?? "Sin datos" }}\n\n' +
+                        'ESTA ACCIÓN NO SE PUEDE DESHACER.'
+                    )"
                         class="btn_red_outline">
                         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                         <span>Eliminar ficha de examen</span>
@@ -159,4 +187,32 @@
 </div>
 
 <script src="{{ asset('js/confirmacion.js') }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const asistenciaEl = document.querySelector('[name="asistencia"]');
+    const notaEl = document.querySelector('[name="nota"]');
+
+    function actualizarNota() {
+        if (!asistenciaEl) return;
+        const val = asistenciaEl.value ?? asistenciaEl.checked ? asistenciaEl.value : null;
+        if (val == "0" || val === '0') {
+            if (notaEl) {
+                notaEl.value = '';
+                notaEl.setAttribute('disabled', 'disabled');
+            }
+        } else {
+            if (notaEl) {
+                notaEl.removeAttribute('disabled');
+            }
+        }
+    }
+
+    if (asistenciaEl) {
+        asistenciaEl.addEventListener('change', actualizarNota);
+        actualizarNota();
+    }
+});
+</script> 
+
 @endsection
