@@ -12,6 +12,7 @@ use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
+use Log;
 
 class RegistrarCursada extends Component
 {
@@ -68,9 +69,12 @@ class RegistrarCursada extends Component
         $this->alumnos = $alumnos;
     }
 
-    public function seleccionarAlumno($id)
+    #[On('seleccionar-alumno')]
+    public function seleccionarAlumno($alumno)
     {
-        $this->alumnoSeleccionado = Alumno::find($id);
+        $alumno = new Alumno($alumno)->load('egresadoinscripto');
+        Log::debug('Seleccionando alumno', ['alumno' => $alumno]);
+        $this->alumnoSeleccionado = $alumno;
         $this->carreraSeleccionada = null;
         $this->materiasCarrera = [];
         $this->asignaturasSeleccionadas = [];
