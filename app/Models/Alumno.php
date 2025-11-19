@@ -24,6 +24,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'dni',
         'nombre',
         'apellido',
@@ -73,7 +74,7 @@ class Alumno extends Authenticatable implements MustVerifyEmail
 
     public function egresadoinscripto()
     {
-        return $this->hasMany(Egresado::class, 'id_alumno', 'id');
+        return $this->hasMany(Egresado::class, 'id_alumno', 'id')->chaperone();
     }
 
     public function carreraDefault()

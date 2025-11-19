@@ -28,6 +28,7 @@ class CursadaInfiniteScroll extends Component
         return Alumno::query()
              // -> ajustá 'egresados' si tu tabla tiene otro nombre
             ->select('alumnos.*')
+            ->has('egresadoinscripto')
             ->when(
                 $this->nombre_apellido,
                 fn ($q) => $q->where('nombre', 'like', "%{$this->nombre_apellido}%")
