@@ -15,20 +15,20 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($alumnos as $alumno)
-                    <tr wire:key="alumno-{{ $alumno->id }}">
+                @for ($i = 0; $i < count($alumnos_total); $i++) 
+                    <tr wire:key="alumno-{{ $alumnos_total[$i]->id }}"></tr>
                         <td class="bold">
-                            <div class="centrar">{{ $alumno->apellido }}</div>
+                            <div class="centrar">{{ $alumnos_total[$i]->apellido }}</div>
                         </td>
                         <td class="bold">
-                            <div class="centrar">{{ $alumno->nombre }}</div>
+                            <div class="centrar">{{ $alumnos_total[$i]->nombre }}</div>
                         </td>
                         <td class="bold">
-                            <div class="centrar">{{ $alumno->dni }}</div>
+                            <div class="centrar">{{ $alumnos_total[$i]->dni }}</div>
                         </td>
                         <td class="center">
                             <div class="centrar">
-                                <button type="button" wire:click="seleccionarAlumno({{ $alumno->id }})"
+                                <button type="button" wire:click="$parent.seleccionarAlumno({{ $alumnos_total[$i] }})"
                                     class="btn btn-modificar">
                                     Seleccionar
                                 </button>
@@ -36,18 +36,21 @@
 
                         </td>
                     </tr>
-                @empty
+                @endfor
+                @empty($alumnos_total)
                     <tr>
                         <td colspan="4" class="text-center text-muted">No se encontraron resultados</td>
                     </tr>
-                @endforelse
+                @endempty
+                @empty(!$alumnos_total)
                     <tr>
-                        <td colspan="4" class="text-center">
-                            <span x-intersect="$wire.nextPage">
+                        <td colspan="4" class="text-center" x-intersect="$wire.loadMore">
+                            <span wire:loading>
                                 Cargando alumnos...
                             </span>
                         </td>
                     </tr>
+                @endempty
             </tbody>
         </table>
     </div>

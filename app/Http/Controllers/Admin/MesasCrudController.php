@@ -260,6 +260,7 @@ public function edit($id)
      */
 public function update(EditarMesaRequest $request, Mesa $mesa)
 {
+ 
     $data = $request->validated();
 
     // Validaciones de día hábil
@@ -294,9 +295,6 @@ public function update(EditarMesaRequest $request, Mesa $mesa)
 
     return redirect()->back()->with('mensaje', 'Se editó la mesa correctamente');
 }
-
-
-
 
     /**
      * Remove the specified resource from storage.
