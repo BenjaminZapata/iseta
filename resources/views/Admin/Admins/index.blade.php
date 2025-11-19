@@ -11,7 +11,7 @@
         </button>
         <div id="ayuda-modal" class="modal-ayuda none">
             <div class="modal-content">
-                <h3>¿Cómo funciona la rematriculación?</h3>
+                <h3>¿Cómo funciona la contraseña?</h3>
                 <p>Formato: La contraseña debe tener mínimo un número, un carácter especial, una letra minúscula y una letra mayúscula. 
                     [Mínimo 8 caracteres] [Máximo 16 caracteres]</p>
                 <button id="cerrar-ayuda" class="btn-close">Cerrar</button>
@@ -22,10 +22,10 @@
     <div class="perfil_one br p-5">
         <?= $form->generate(route('admin.admins.store'), 'post', [
             'Nuevo administrador' => [
-                $form->text('username', 'Usuario:', 'label-input-y-100', old('username'), [
+                $form->text('username', 'Usuario:', 'label-input-y-75', old('username'), [
                     'placeholder' => 'Ej: adminrp'
                 ]),
-                $form->password('password', 'Contraseña:', 'label-input-y-100', old('password'), [
+                $form->password('password', 'Contraseña:', 'label-input-y-75', old('password'), [
                     'placeholder' => 'Mínimo 8 caracteres'
                 ]),
                 $form->select('rol', 'Rol del usuario:', 'label-input-y-75', old('rol'), [
@@ -34,7 +34,7 @@
                     'preceptor' => 'Preceptor',
                     'secretario' => 'Secretario',
                 ]),
-                $form->text('email', 'Email:', 'label-input-y-100', old('email'), [
+                $form->text('email', 'Email:', 'label-input-y-75', old('email'), [
                     'placeholder' => 'Ej: admin@instituto.edu.ar'
                 ]),
             ]
