@@ -60,4 +60,15 @@ class MesasCheckerService
         }
         return ['success' => false, 'mensaje' => 0];
     }
+
+    public function profesorDisponible($profesorId, $fecha)
+    {
+        return !Mesa::where('fecha', $fecha)
+            ->where(function($q) use ($profesorId) {
+                $q->where('prof_presidente', $profesorId)
+                ->orWhere('prof_vocal_1', $profesorId)
+                ->orWhere('prof_vocal_2', $profesorId);
+            })->exists();
+    }
+
 }

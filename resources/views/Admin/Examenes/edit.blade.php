@@ -63,20 +63,11 @@
             @php
                 $TIPO_FINAL_MULTIPLE = 99;
 
-                // Normalizar tipo_final como array para mostrar en select
+                // Normalizar tipo_final para mostrar
                 $valorTipoFinal = old('tipo_final', $examen->tipo_final);
-
-                if ($valorTipoFinal == $TIPO_FINAL_MULTIPLE) {
-                    // Mostrar Escrito + Oral seleccionados
-                    $valorTipoFinal = [1,2];
-                }
-
                 if (!is_array($valorTipoFinal)) {
                     $valorTipoFinal = [$valorTipoFinal];
                 }
-
-                $multiple = ($examen->estado == 2);
-                $name = $multiple ? 'tipo_final[]' : 'tipo_final';
             @endphp
 
             <form method="POST" action="{{ route('admin.examenes.update', $examen->id) }}">
@@ -122,10 +113,10 @@
                         ),
 
                         $form->select(
-                            $name,
+                            'tipo_final',
                             'Tipo de final:',
                             'label-input-y-75',
-                            $valorTipoFinal,
+                             old('tipo_final') ?? $examen,
                             [
                                 null => 'Seleccionar tipo de final',
                                 1 => 'Escrito',
@@ -134,11 +125,7 @@
                                 4 => 'Equivalencia',
                                 99 => 'Múltiple (Escrito + Oral)'
                             ],
-                            [
-                                'id' => 'tipo_final',
-                                'multiple' => $multiple ? 'multiple' : null,
-                                'size' => $multiple ? 3 : null
-                            ]
+                            ['id' => 'tipo_final']
                         ),
 
                         $form->text(
@@ -200,30 +187,6 @@
 </div>
 
 <script src="{{ asset('js/confirmacion.js') }}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const estado = document.getElementById('estado');
-    const tipoFinal = document.getElementById('tipo_final');
-
-    function actualizarTipoFinal() {
-        if (estado.value == "2") {
-            tipoFinal.setAttribute('multiple', 'multiple');
-            tipoFinal.setAttribute('size', 3);
-        } else {
-            tipoFinal.removeAttribute('multiple');
-            tipoFinal.removeAttribute('size');
-            const seleccionados = [...tipoFinal.options].filter(o => o.selected);
-            if (seleccionados.length > 1) {
-                [...tipoFinal.options].forEach(o => o.selected = false);
-                seleccionados[0].selected = true;
-            }
-        }
-    }
-
-    estado.addEventListener('change', actualizarTipoFinal);
-    actualizarTipoFinal();
-});
-</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
