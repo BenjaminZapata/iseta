@@ -152,9 +152,7 @@ $mostrar_botones = $rol !== 'secretario'; // oculta botones si es secretario
                             <form action="{{ route('admin.alumno.estadoinscripcion.post', ['alumno' => $alumno->id, 'carrera' => $carrera->carrera_id]) }}" method="POST">
                                 @csrf
                                 <select name="estados[{{ $carrera->carrera_id }}]" class="form-select text-center">
-                                    @php
-                                        Log
-                                    @endphp
+                                    
                                     <option value=0 {{ $carrera->estado == 0 ? 'selected' : '' }}>Cursando</option>
                                     <option value=1 {{ $carrera->estado == 1 ? 'selected' : '' }}>Egresado</option>
                                     <option value=2 {{ $carrera->estado == 2 ? 'selected' : '' }}>Desertor</option>

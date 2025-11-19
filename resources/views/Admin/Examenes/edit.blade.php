@@ -50,7 +50,7 @@
                 </span>
             </div>
 
-            <div class="perfil_dataname border-none">
+            <div class="perfil_dataname">
                 <label>DNI:</label>
                 <span class="campo_info2">{{ $examen->alumno->dniPuntos() }}</span>
             </div>
@@ -60,68 +60,107 @@
              FORMULARIO DE EDICIÓN
         ================================ --}}
         <div class="perfil__info" style="margin:10px;">
-           <form method="POST" action="{{ route('admin.examenes.update', $examen->id) }}">
-    @csrf
-    @method('PUT')
+            @php
+                $TIPO_FINAL_MULTIPLE = 99;
 
-    {!! $form->generate($examen, 'put', [
+                // Normalizar tipo_final como array para mostrar en select
+                $valorTipoFinal = old('tipo_final', $examen->tipo_final);
 
-        'Datos del examen' => [
+                if ($valorTipoFinal == $TIPO_FINAL_MULTIPLE) {
+                    // Mostrar Escrito + Oral seleccionados
+                    $valorTipoFinal = [1,2];
+                }
 
-           $form->select(
-    'asistencia',
-    'Asistencia:',
-    'label-input-y-75',
-    old('asistencia') ?? $examen,
-    [
-        '' => 'Seleccionar asistencia',
-        '1' => 'Presente',
-        '0' => 'Ausente'
-    ],
-),
+                if (!is_array($valorTipoFinal)) {
+                    $valorTipoFinal = [$valorTipoFinal];
+                }
 
-            $form->text(
-                'nota',
-                'Nota:',
-                'label-input-y-75',
-                old('nota') ?? $examen,
-                ['type' => 'number', 'step' => '1', 'min' => '1', 'max' => '10']
-            ),
+                $multiple = ($examen->estado == 2);
+                $name = $multiple ? 'tipo_final[]' : 'tipo_final';
+            @endphp
 
-            $form->select(
-                'tipo_final',
-                'Tipo de final:',
-                'label-input-y-75',
-                old('tipo_final') ?? $examen,
-                [
-                    null => 'Seleccionar tipo de final',
-                    1 => 'Escrito',
-                    2 => 'Oral',
-                    3 => 'Promocionado',
-                    4 => 'Equivalencia'
-                ]
-            ),
+            <form method="POST" action="{{ route('admin.examenes.update', $examen->id) }}">
+                @csrf
+                @method('PUT')
 
-            $form->text(
-                'libro',
-                'Libro:',
-                'label-input-y-75',
-                old('libro') ?? $examen,
-                ['type' => 'number', 'maxlength' => 4]
-            ),
+                {!! $form->generate($examen, 'put', [
 
-            $form->text(
-                'acta',
-                'Acta:',
-                'label-input-y-75',
-                old('acta') ?? $examen,
-                ['type' => 'number', 'maxlength' => 4]
-            ),
+                    'Datos del examen' => [
 
-        ],
+                        $form->select(
+                            'asistencia',
+                            'Asistencia:',
+                            'label-input-y-75',
+                            old('asistencia') ?? $examen,
+                            [
+                                '' => 'Seleccionar asistencia',
+                                '1' => 'Presente',
+                                '0' => 'Ausente'
+                            ],
+                        ),
 
-    ]) !!}
-</form>
+                        $form->text(
+                            'nota',
+                            'Nota:',
+                            'label-input-y-75',
+                            old('nota') ?? $examen,
+                            ['type' => 'number', 'min' => '1', 'max' => '10']
+                        ),
+
+                        $form->select(
+                            'estado',
+                            'Estado del examen:',
+                            'label-input-y-75',
+                            old('estado') ?? $examen,
+                            [
+                                null => 'Seleccionar estado',
+                                1 => 'Regular',
+                                2 => 'Libre',
+                                3 => 'Promocionado'
+                            ],
+                            ['id' => 'estado']
+                        ),
+
+                        $form->select(
+                            $name,
+                            'Tipo de final:',
+                            'label-input-y-75',
+                            $valorTipoFinal,
+                            [
+                                null => 'Seleccionar tipo de final',
+                                1 => 'Escrito',
+                                2 => 'Oral',
+                                3 => 'Promocionado',
+                                4 => 'Equivalencia',
+                                99 => 'Múltiple (Escrito + Oral)'
+                            ],
+                            [
+                                'id' => 'tipo_final',
+                                'multiple' => $multiple ? 'multiple' : null,
+                                'size' => $multiple ? 3 : null
+                            ]
+                        ),
+
+                        $form->text(
+                            'libro',
+                            'Libro:',
+                            'label-input-y-75',
+                            old('libro') ?? $examen,
+                            ['type' => 'number', 'maxlength' => 4]
+                        ),
+
+                        $form->text(
+                            'acta',
+                            'Acta:',
+                            'label-input-y-75',
+                            old('acta') ?? $examen,
+                            ['type' => 'number', 'maxlength' => 4]
+                        ),
+
+                    ],
+
+                ]) !!}
+            </form>
         </div>
 
         {{-- ===============================
@@ -161,4 +200,56 @@
 </div>
 
 <script src="{{ asset('js/confirmacion.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const estado = document.getElementById('estado');
+    const tipoFinal = document.getElementById('tipo_final');
+
+    function actualizarTipoFinal() {
+        if (estado.value == "2") {
+            tipoFinal.setAttribute('multiple', 'multiple');
+            tipoFinal.setAttribute('size', 3);
+        } else {
+            tipoFinal.removeAttribute('multiple');
+            tipoFinal.removeAttribute('size');
+            const seleccionados = [...tipoFinal.options].filter(o => o.selected);
+            if (seleccionados.length > 1) {
+                [...tipoFinal.options].forEach(o => o.selected = false);
+                seleccionados[0].selected = true;
+            }
+        }
+    }
+
+    estado.addEventListener('change', actualizarTipoFinal);
+    actualizarTipoFinal();
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const asistenciaEl = document.querySelector('[name="asistencia"]');
+    const notaEl = document.querySelector('[name="nota"]');
+
+    function actualizarNota() {
+        if (!asistenciaEl) return;
+        const val = asistenciaEl.value ?? asistenciaEl.checked ? asistenciaEl.value : null;
+        if (val == "0" || val === '0') {
+            if (notaEl) {
+                notaEl.value = '';
+                notaEl.setAttribute('disabled', 'disabled');
+            }
+        } else {
+            if (notaEl) {
+                notaEl.removeAttribute('disabled');
+            }
+        }
+    }
+
+    if (asistenciaEl) {
+        asistenciaEl.addEventListener('change', actualizarNota);
+        actualizarNota();
+    }
+});
+</script> 
+
 @endsection
