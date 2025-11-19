@@ -28,7 +28,7 @@
                         </td>
                         <td class="center">
                             <div class="centrar">
-                                <button type="button" wire:click="$parent.seleccionarAlumno({{ $alumnos_total[$i] }})"
+                                <button type="button" wire:click="$parent.seleccionarAlumno({{ $alumnos_total[$i]->id }})"
                                     class="btn btn-modificar">
                                     Seleccionar
                                 </button>

@@ -3,12 +3,10 @@
 namespace App\Livewire;
 
 use App\Models\Alumno;
-use App\Models\Carrera;
 use App\Models\Correlativa;
 use App\Models\Cursada;
 use Flasher\Laravel\Facade\Flasher as FlasherFacade;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
@@ -22,7 +20,7 @@ class RegistrarCursada extends Component
 
     public $dni = '';
 
-    public $alumnoSeleccionado = null;
+    public ?Alumno $alumnoSeleccionado = null;
 
     public $carreraSeleccionada = null;
 
@@ -63,18 +61,12 @@ class RegistrarCursada extends Component
         ]);
     }
 
-    #[On('alumnos-page')]
-    public function alumnosPage($alumnos)
+    public function seleccionarAlumno($alumno_id)
     {
-        $this->alumnos = $alumnos;
-    }
-
-    #[On('seleccionar-alumno')]
-    public function seleccionarAlumno($alumno)
-    {
-        $alumno = new Alumno($alumno)->load('egresadoinscripto');
-        Log::debug('Seleccionando alumno', ['alumno' => $alumno]);
+        Log::info('Seleccionando alumno con ID: '.$alumno_id);
+        $alumno = Alumno::find($alumno_id)->load('egresadoinscripto.carrera.asignaturas');
         $this->alumnoSeleccionado = $alumno;
+        Log::info('Alumno seleccionado: ', [$this->alumnoSeleccionado]);
         $this->carreraSeleccionada = null;
         $this->materiasCarrera = [];
         $this->asignaturasSeleccionadas = [];
@@ -100,8 +92,8 @@ class RegistrarCursada extends Component
     {
         if ($this->carreraSeleccionada) {
             $id_carrera = $this->carreraSeleccionada;
-            $this->materiasCarrera = Carrera::find($this->carreraSeleccionada)
-                ?->asignaturas()
+            $this->materiasCarrera = $this->alumnoSeleccionado->egresadoinscripto->firstWhere('id_carrera', $id_carrera)
+                ?->carrera->asignaturas()
                 ->with([
                     'correlativas' => function ($query) use ($id_carrera) {
                         $query->where('id_carrera', $id_carrera);
@@ -138,46 +130,6 @@ class RegistrarCursada extends Component
             }
         }
 
-    }
-
-    public function updated($propertyName)
-    {
-        if (in_array($propertyName, ['dni', 'nombre_apellido'])) {
-            $this->resetBusquedaSiVacia();
-        }
-    }
-
-    private function resetBusquedaSiVacia()
-    {
-        // 🧼 Si ambos filtros están vacíos, reseteamos todo
-        if (empty($this->dni) && empty($this->nombre_apellido)) {
-            $this->reset([
-                'alumnos',
-                'alumnoSeleccionado',
-                'carreraSeleccionada',
-                'materiasCarrera',
-                'asignaturasSeleccionadas',
-                'condiciones',
-                'erroresValidacion',
-                'mensaje',
-                'mostrarBoton',
-                'asignaturasBloqueadas',
-            ]);
-            $this->alumnos = collect(); // prevenir error si se itera en Blade
-        } else {
-            // 💡 Si el usuario empieza a escribir de nuevo,
-            // limpiamos solo la selección anterior, pero dejamos que busque de nuevo
-            $this->reset([
-                'alumnoSeleccionado',
-                'carreraSeleccionada',
-                'materiasCarrera',
-                'asignaturasSeleccionadas',
-                'condiciones',
-                'asignaturasBloqueadas',
-                'mostrarBoton',
-                'mensaje',
-            ]);
-        }
     }
 
     public function guardarCursada()

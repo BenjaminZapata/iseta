@@ -58,7 +58,8 @@
                             <select wire:model="carreraSeleccionada" wire:change="verMaterias" class="form-select">
                                 <option value="">Seleccionar una carrera...</option>
                                 @foreach ($alumnoSeleccionado->egresadoinscripto as $egresado)
-                                    <option value="{{ $egresado->id_carrera }}">{{ $egresado->carrera->nombre }}
+                                    <option value="{{ $egresado->id_carrera }}">
+                                        {{ $egresado->carrera->nombre }}
                                     </option>
                                 @endforeach
                             </select>
