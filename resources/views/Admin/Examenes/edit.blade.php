@@ -60,67 +60,68 @@
              FORMULARIO DE EDICIÓN
         ================================ --}}
         <div class="perfil__info" style="margin:10px;">
-            <form method="POST" action="{{ route('admin.examenes.update', $examen->id) }}">
-                @csrf
-                @method('PUT')
+           <form method="POST" action="{{ route('admin.examenes.update', $examen->id) }}">
+    @csrf
+    @method('PUT')
 
-                {!! $form->generate($examen, 'put', [
-                'Datos del examen' => [
-                // Asistencia
-                $form->select(
-                'asistencia',
-                'Asistencia:',
-                'label-input-y-75',
-                old('asistencia', $examen->asistencia),
-                [
-                1 => 'Presente',
-                0 => 'Ausente'
-                ]
-                ),
+    {!! $form->generate($examen, 'put', [
 
-                // Nota
-                $form->text(
+        'Datos del examen' => [
+
+           $form->select(
+    'asistencia',
+    'Asistencia:',
+    'label-input-y-75',
+    old('asistencia') ?? $examen,
+    [
+        '' => 'Seleccionar asistencia',
+        '1' => 'Presente',
+        '0' => 'Ausente'
+    ],
+),
+
+            $form->text(
                 'nota',
                 'Nota:',
                 'label-input-y-75',
-                old('nota', $examen->nota),
-                ['type' => 'number', 'step' => '0.01', 'min' => '0', 'max' => '10']
-                ),
+                old('nota') ?? $examen,
+                ['type' => 'number', 'step' => '1', 'min' => '1', 'max' => '10']
+            ),
 
-                // Tipo de final
-                $form->select(
+            $form->select(
                 'tipo_final',
                 'Tipo de final:',
                 'label-input-y-75',
-                old('tipo_final', $examen->tipo_final),
+                old('tipo_final') ?? $examen,
                 [
-                1 => 'Escrito',
-                2 => 'Oral',
-                3 => 'Promocionado',
-                4 => 'Equivalencia'
+                    null => 'Seleccionar tipo de final',
+                    1 => 'Escrito',
+                    2 => 'Oral',
+                    3 => 'Promocionado',
+                    4 => 'Equivalencia'
                 ]
-                ),
+            ),
 
-                // Libro
-                $form->text(
+            $form->text(
                 'libro',
                 'Libro:',
                 'label-input-y-75',
-                old('libro', $examen->libro),
-                ['type' => 'text', 'maxlength' => 20]
-                ),
+                old('libro') ?? $examen,
+                ['type' => 'number', 'maxlength' => 4]
+            ),
 
-                // Acta
-                $form->text(
+            $form->text(
                 'acta',
                 'Acta:',
                 'label-input-y-75',
-                old('acta', $examen->acta),
-                ['type' => 'text', 'maxlength' => 20]
-                ),
-                ],
-                ]) !!}
-            </form>
+                old('acta') ?? $examen,
+                ['type' => 'number', 'maxlength' => 4]
+            ),
+
+        ],
+
+    ]) !!}
+</form>
         </div>
 
         {{-- ===============================
@@ -131,20 +132,21 @@
             @if (!$config['modo_seguro'])
             <div>
                 <form method="POST" id="form-eliminar-{{ $examen->id }}"
-                    action="{{ route('admin.examenes.destroy', ['examen' => $examen->id]) }}">
+                      action="{{ route('admin.examenes.destroy', ['examen' => $examen->id]) }}">
                     @csrf
                     @method('delete')
 
                     <button type="button" onclick="openGeneralModal(
-                    'form-eliminar-{{ $examen->id }}',
-                    '¿Estás seguro de que querés eliminar este examen?\n\n' +
-                    'Alumno: {{ $examen->alumno?->apellidoNombre() ?? "No asignado" }}\n' +
-                    'Carrera: {{ $examen->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
-                    'Asignatura: {{ $examen->asignatura?->nombre ?? "No asignada" }}\n' +
-                    'Fecha de Mesa: {{ $examen->mesa?->fecha ? \Carbon\Carbon::parse($examen->mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
-                    'Nota: {{ $examen->nota ?? "Sin nota" }}\n' +
-                    'Asistencia: {{ $examen->asistenciaTexto() ?? "Sin datos" }}\n\n' +
-                    'ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                        'form-eliminar-{{ $examen->id }}',
+                        '¿Estás seguro de que querés eliminar este examen?\n\n' +
+                        'Alumno: {{ $examen->alumno?->apellidoNombre() ?? "No asignado" }}\n' +
+                        'Carrera: {{ $examen->asignatura->carrera->first()->nombre ?? "No asignada" }}\n' +
+                        'Asignatura: {{ $examen->asignatura?->nombre ?? "No asignada" }}\n' +
+                        'Fecha de Mesa: {{ $examen->mesa?->fecha ? \Carbon\Carbon::parse($examen->mesa->fecha)->format("d/m/Y") : "No definida" }}\n' +
+                        'Nota: {{ $examen->nota ?? "Sin nota" }}\n' +
+                        'Asistencia: {{ $examen->asistenciaTexto() ?? "Sin datos" }}\n\n' +
+                        'ESTA ACCIÓN NO SE PUEDE DESHACER.'
+                    )"
                         class="btn_red_outline">
                         <i class="ti ti-trash" style="font-size: 1.3em;"></i>
                         <span>Eliminar ficha de examen</span>

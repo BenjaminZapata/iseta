@@ -13,11 +13,19 @@ class MesasAlumnos extends Component
 
     public $mesa;
     public Collection $inscribibles;
+    public Collection $inscriptos;
 
     public function mount($mesa, $inscribibles)
     {
         $this->mesa = $mesa;
-        $this->inscribibles = collect($inscribibles);
+
+        // IDs de alumnos YA cargados en la mesa
+        $this->inscriptos = collect($mesa->examenes)->pluck('id_alumno');
+
+        // Filtrar los inscribibles EXCLUYENDO los ya inscriptos
+        $this->inscribibles = collect($inscribibles)->reject(
+            fn ($a) => $this->inscriptos->contains($a->id)
+        );
     }
 
     public function getFilteredProperty()

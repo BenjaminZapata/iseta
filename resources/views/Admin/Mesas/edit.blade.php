@@ -75,16 +75,13 @@ $selectedVocal2 = $selectedVocal2;
                         '),
                     ],
                     // Observaciones
-                 'Otros' => [
-    new HtmlString('
-        <div class="label-input-y-75">
-            <label for="observaciones">Observaciones:</label>
-            <textarea name="observaciones" class="campo_info rounded" placeholder="Notas adicionales" maxlength="150">'
-                . e(old('observaciones', $mesa->observaciones ?? '')) .
-            '</textarea>
-        </div>
-    '),
-],
+                  'Otros' => [
+                         $form->textarea('observaciones', 'Observaciones:', 'label-input-y-75', old('observaciones') ?? $mesa, [
+    'placeholder' => 'Notas adicionales sobre la mesa de examen',
+    'maxlength' => 150,
+])
+
+                        ]
 
                 ]) !!}
         </form>
