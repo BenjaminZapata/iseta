@@ -186,7 +186,7 @@ $soloLectura = $admin->rol == 2; // true si es secretario
                         @method('DELETE')
                         <button type="button"
                             onclick="openGeneralModal('form-eliminar-{{ $cursada->id }}',
-                                '¿Estás seguro de que querés eliminar la cursada de {{ strtoupper($cursada->asignatura->nombre) }} de {{ strtoupper($cursada->carrera->nombre) }}? ESTA ACCIÓN NO SE PUEDE DESHACER.')"
+                                '¿Estás seguro de que querés eliminar la cursada del alumno: {{ strtoupper($cursada->alumno->apellidoNombre()) }} de la asignatura:  {{ strtoupper($cursada->asignatura->nombre ?? 'Sin Asignatura') }} de la carrera {{ strtoupper($cursada->carrera->nombre ?? 'Sin Carrera') }}? \n \n ESTA ACCIÓN NO SE PUEDE DESHACER.')"
                             class="btn_red_outline">
                             <i class="ti ti-trash" style="font-size: 1.3em; margin-right: 8px;"></i> Eliminar cursada
                         </button>

@@ -7,6 +7,7 @@ use App\Models\Correlativa;
 use App\Models\Cursada;
 use Flasher\Laravel\Facade\Flasher as FlasherFacade;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
@@ -16,9 +17,13 @@ class RegistrarCursada extends Component
 {
     use AuthorizesRequests, WithoutUrlPagination, WithPagination;
 
-    public $nombre_apellido = '';
+    #[Validate('nullable|string|max:30')]
+    public $nombre_apellido;
 
-    public $dni = '';
+    #[Validate('nullable|integer|max_digits:10')]
+    public $dni;
+
+    public $isValid = false;
 
     public ?Alumno $alumnoSeleccionado = null;
 
@@ -52,8 +57,24 @@ class RegistrarCursada extends Component
         $this->alumnos = collect();
     }
 
+    public function validator()
+    {
+        $this->validate();
+        $this->isValid = true;
+    }
+
+    public function updating()
+    {
+        $this->validator();
+    }
+
     public function render()
     {
+        if (count($this->getErrorBag()->all()) > 0) {
+
+            $this->isValid = false;
+
+        }
 
         return view('livewire.registrar-cursada', [
             'alumnos' => $this->alumnos,

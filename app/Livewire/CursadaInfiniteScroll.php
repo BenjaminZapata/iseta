@@ -25,6 +25,7 @@ class CursadaInfiniteScroll extends Component
     #[Computed]
     public function alumnos()
     {
+
         return Alumno::query()
              // -> ajustá 'egresados' si tu tabla tiene otro nombre
             ->select('alumnos.*')
